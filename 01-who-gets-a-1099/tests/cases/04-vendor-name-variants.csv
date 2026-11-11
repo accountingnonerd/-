@@ -1,0 +1,16 @@
+Date,Transaction Type,Num,Name,Paid From,Category,Memo,Amount
+1/14/2026,Check,3001,Rivera Plumbing LLC,Checking 1150,Repairs & Maintenance,grease trap,700.00
+1/28/2026,Check,3101,Sysco,Checking 1150,Food Purchases,,2000.00
+2/11/2026,Check,3004,Mike Chen,Checking 1150,Contract Labor,patio wiring,1100.00
+3/5/2026,Check,3009,Delgado Janitorial,Checking 1150,Janitorial,deep clean,1000.00
+3/28/2026,Check,3103,Sysco,Checking 1150,Food Purchases,,2000.00
+4/22/2026,Check,3015,RIVERA PLUMBING,Checking 1150,Repairs & Maintenance,dish line,800.00
+5/13/2026,Check,3020,Smith Electric,Checking 1150,Repairs & Maintenance,hood fan,1200.00
+6/24/2026,Check,3024,Smith Roofing,Checking 1150,Repairs & Maintenance,patch over kitchen,1200.00
+6/28/2026,Check,3106,Sysco,Checking 1150,Food Purchases,,2000.00
+7/8/2026,Check,3027,Mike Chen Electric,Checking 1150,Repairs & Maintenance,panel upgrade,1200.00
+8/12/2026,Check,3033,Sysco Corporation,Checking 1150,Food Purchases,,500.00
+9/17/2026,Check,3036,Delgado Janitoral,Checking 1150,Janitorial,deep clean,1300.00
+9/28/2026,Check,3109,Sysco,Checking 1150,Food Purchases,,2000.00
+10/6/2026,Check,3040,"Rivera Plumbing, L.L.C.",Checking 1150,Repairs & Maintenance,water heater,900.00
+12/28/2026,Check,3112,Sysco,Checking 1150,Food Purchases,,2000.00

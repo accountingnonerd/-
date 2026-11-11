@@ -1,0 +1,21 @@
+﻿Fernhill Veterinary Clinic PLLC
+Check Detail
+"Jan 1 - Dec 31, 2026"
+
+Date,Num,Name,Memo,Category,Amount
+1/5/26,5501,"Whitfield, Dana","relief vet, 3 days",Contract Labor,"$1,200.00"
+01/19/2026,5504,Okafor Kennel Cleaning,,Janitorial,"1,300.00"
+2026-02-14,5509,"Whitfield, Dana",relief vet,Contract Labor,"$1,100.00"
+
+"Mar 3, 2026",DEP,"Whitfield, Dana",refund of overpayment,Contract Labor,(450.00)
+3/18/2026,5513,Pet Meds Direct,vaccines,Medical Supplies,"$3,150.40"
+4/2/2026,5517,Marsh Lab Courier,sample runs,Outside Services,400.00
+4/22/2026,5521,Marsh Lab Courier,sample runs,Outside Services,see note
+5/11/2026,5526,Tidewater Shredding,records purge,Outside Services,900.00
+6/30/2026,DEP,Idexx Labs,credit for returned kits,Lab Supplies,(125.00)
+
+07/20/2026,5540,Okafor Kennel Cleaning,,Janitorial," 1,300.00 "
+8/14/2026,5547,Tidewater Shredding,records purge,Outside Services,900.00
+"Sep 9, 2026",5552,Marsh Lab Courier,sample runs,Outside Services,500.00
+2026-12-04,CR,Tidewater Shredding,credit memo applied,Outside Services,300.00-
+TOTAL,,,,,"$9,875.40"

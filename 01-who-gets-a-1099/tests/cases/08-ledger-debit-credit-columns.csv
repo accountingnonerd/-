@@ -1,0 +1,24 @@
+Granite Peak Brewing Co
+Transaction Detail by Account
+January through December 2026
+
+Date,Type,Num,Name,Memo,Account,Split,Debit,Credit
+1/14/2026,Check,9200,Yakima Hop Farms,hops,5000 · Cost of Goods Sold,1000 · Operating Checking,"2,300.00",
+2/5/2026,Check,9100,Hopline Draft Services,line cleaning and repair,6400 · Repairs & Maintenance,1000 · Operating Checking,800.00,
+2/23/2026,Check,9300,Tessa Malloy,taproom music,6100 · Contract Labor,1000 · Operating Checking,400.00,
+3/9/2026,Credit Card Charge,,Cascade Label Printing,can labels,5100 · Packaging Supplies,2050 · Visa 7781,900.00,
+4/14/2026,Check,9201,Yakima Hop Farms,hops,5000 · Cost of Goods Sold,1000 · Operating Checking,"2,300.00",
+4/23/2026,Check,9301,Tessa Malloy,taproom music,6100 · Contract Labor,1000 · Operating Checking,400.00,
+5/27/2026,Check,9400,Ridgeline Refrigeration,glycol chiller repair,6400 · Repairs & Maintenance,1000 · Operating Checking,"2,900.00",
+6/5/2026,Check,9101,Hopline Draft Services,line cleaning and repair,6400 · Repairs & Maintenance,1000 · Operating Checking,700.00,
+6/14/2026,Check,9202,Yakima Hop Farms,hops,5000 · Cost of Goods Sold,1000 · Operating Checking,"2,300.00",
+6/23/2026,Check,9302,Tessa Malloy,taproom music,6100 · Contract Labor,1000 · Operating Checking,400.00,
+7/2/2026,Deposit,,Ridgeline Refrigeration,refund - warranty covered part,6400 · Repairs & Maintenance,1000 · Operating Checking,,"1,000.00"
+7/9/2026,Credit Card Charge,,Cascade Label Printing,can labels,5100 · Packaging Supplies,2050 · Visa 7781,900.00,
+8/23/2026,Check,9303,Tessa Malloy,taproom music,6100 · Contract Labor,1000 · Operating Checking,400.00,
+9/14/2026,Check,9203,Yakima Hop Farms,hops,5000 · Cost of Goods Sold,1000 · Operating Checking,"2,300.00",
+10/5/2026,Check,9102,Hopline Draft Services,line cleaning and repair,6400 · Repairs & Maintenance,1000 · Operating Checking,650.00,
+10/23/2026,Check,9304,Tessa Malloy,taproom music,6100 · Contract Labor,1000 · Operating Checking,400.00,
+11/9/2026,Credit Card Charge,,Cascade Label Printing,can labels,5100 · Packaging Supplies,2050 · Visa 7781,900.00,
+12/14/2026,Check,9204,Yakima Hop Farms,hops,5000 · Cost of Goods Sold,1000 · Operating Checking,"2,300.00",
+12/19/2026,Credit Card Charge,,Tessa Malloy,taproom music,6100 · Contract Labor,2050 · Visa 7781,400.00,

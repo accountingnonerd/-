@@ -1,0 +1,26 @@
+Date,Transaction Type,Num,Name,Paid From,Category,Memo,Amount
+1/20/2026,Check,2001,Bright Web Design,Checking 8841,Advertising & Marketing,site refresh deposit,800.00
+1/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+2/9/2026,Check,2010,Tomas Ortega,Checking 8841,Contract Labor,workshop teaching,1500.00
+2/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+3/16/2026,Bill Payment (Check),ACH,Keystone Consulting Group,Checking 8841,Professional Fees,pricing study,2000.00
+3/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+3/30/2026,Check,2015,Elena Park,Checking 8841,Contract Labor,sub teaching,1000.00
+4/11/2026,Credit Card Expense,,Bright Web Design,Amex Business 1009,Advertising & Marketing,site refresh balance,1500.00
+4/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+5/4/2026,Check,2022,Paloma Reyes,Checking 8841,Contract Labor,substitute teaching,1999.99
+5/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+6/6/2026,Expense,,Nadia Brooks Photography,PayPal,Advertising & Marketing,studio photo shoot,1300.00
+6/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+7/1/2026,Expense,Zelle,Marcus Lee,Checking 8841,Contract Labor,Zelle payment - retreat teaching,1200.00
+7/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+8/3/2026,Credit Card Expense,,Tomas Ortega,Visa 4432,Contract Labor,workshop teaching,900.00
+8/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+9/14/2026,Expense,Debit Card,Studio Supply Warehouse,Checking 8841,Supplies,mats and blocks,640.00
+9/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+10/17/2026,Expense,,Nadia Brooks Photography,PayPal,Advertising & Marketing,studio photo shoot,1300.00
+10/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+11/9/2026,Expense,,Elena Park,Checking 8841,Contract Labor,Venmo - sub teaching,1100.00
+11/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
+12/1/2026,Expense,Zelle,Marcus Lee,Checking 8841,Contract Labor,Zelle payment - retreat teaching,1200.00
+12/25/2026,Credit Card Expense,,Sparkle Cleaning Services,Visa 4432,Janitorial,monthly cleaning,250.00
