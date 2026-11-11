@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who gets a 1099?</title>
+<style id="page-style"></style>
+<style>
+:root {
+  --bg: #fbfaf6; --card: #ffffff; --ink: #111111; --muted: #3a3a3a; --line: #b9b6ad;
+  --accent: #0a4a94; --accent-ink: #ffffff; --red: #a8001c; --red-bg: #fde7ea;
+  --amber-bg: #fff4d6; --soft: #f1efe8;
+}
+* { box-sizing: border-box; }
+html { font-size: 19px; }
+body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.45;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 1240px; margin: 0 auto; padding: 28px 16px 64px; }
+h1 { font-size: 2.1rem; line-height: 1.15; margin: 0 0 .35em; }
+h2 { font-size: 1.45rem; margin: 1.6em 0 .3em; }
+a { color: var(--accent); }
+.lede { font-size: 1.15rem; margin: 0 0 1em; max-width: 46em; }
+.hidden { display: none !important; }
+.money { font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+
+/* start screen */
+#drop { display: block; position: relative; border: 3px dashed var(--accent); border-radius: 14px; background: var(--card);
+  padding: 56px 24px; text-align: center; cursor: pointer; font-size: 1.3rem; font-weight: 600; color: var(--accent); }
+#drop.over { background: #e8f0fb; }
+#drop input[type=file] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+#drop:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
+#error { margin: 14px 0 0; padding: 14px 16px; border-left: 6px solid var(--red); background: var(--red-bg); color: var(--red); }
+#error strong { display: block; }
+.notes { margin: 18px 0 0; padding: 0; list-style: none; max-width: 52em; }
+.notes li { margin: 0 0 .45em; color: var(--muted); }
+.notes b { color: var(--ink); }
+.sample { margin-top: 14px; font-size: .95rem; }
+.sample button { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; font: inherit; cursor: pointer; }
+
+/* worksheet */
+.toolbar { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin: 0 0 18px; }
+.btn { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px; padding: 12px 22px; font: inherit; font-weight: 700; cursor: pointer; }
+.linkbtn { background: none; border: 0; padding: 0; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
+.head { display: flex; gap: 24px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; }
+.head-main { flex: 1 1 560px; }
+.signoff { flex: 0 1 320px; display: grid; gap: 8px; }
+.signoff label { display: grid; grid-template-columns: 7.2em 1fr; align-items: center; gap: 8px; font-weight: 600; }
+.signoff input { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); min-width: 0; }
+.counts { font-size: 1.12rem; font-weight: 600; margin: 0 0 .4em; }
+.counts a { margin-right: .2em; }
+.counts .nc { color: var(--red); font-weight: 800; }
+.facts p { margin: .2em 0; }
+#tie-banner { margin: 18px 0; padding: 18px 20px; border: 3px solid var(--red); background: var(--red-bg); color: var(--red);
+  font-size: 1.3rem; font-weight: 800; border-radius: 10px; }
+#tie-banner span { display: block; font-size: 1rem; font-weight: 600; margin-top: 6px; }
+.checks { margin: 0; padding-left: 1.2em; }
+.checks li { margin: 0 0 .6em; }
+.code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .85em; background: var(--soft); padding: 1px 5px; border-radius: 4px; }
+.next { margin: 0 0 .7em; color: var(--muted); max-width: 60em; }
+table.ws { width: 100%; border-collapse: collapse; background: var(--card); }
+table.ws th, table.ws td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; text-align: left; }
+table.ws th { background: var(--soft); font-size: .92rem; }
+table.ws thead { display: table-header-group; }
+table.ws tr { break-inside: avoid; }
+table.ws tfoot td, table.ws tr.sub td { font-weight: 800; background: var(--soft); }
+.vname { font-weight: 700; }
+.small { font-size: .85rem; color: var(--muted); }
+.why { min-width: 16em; }
+.caution { display: block; margin-top: 4px; padding: 3px 6px; background: var(--amber-bg); }
+.w9 { white-space: nowrap; }
+.w9 input { width: 22px; height: 22px; vertical-align: middle; }
+textarea.decision { width: 100%; min-height: 3.2em; font: inherit; font-size: .95rem; padding: 6px; border: 1px solid var(--line); border-radius: 6px; resize: vertical; overflow: hidden; }
+.print-only { display: none; }
+.empty { color: var(--muted); font-style: italic; }
+details.src { margin-top: 1.6em; }
+details.src summary { font-size: 1.3rem; font-weight: 700; cursor: pointer; }
+.ctl td:first-child { width: 70%; }
+.ok { color: #0b6b2b; font-weight: 700; }
+.bad { color: var(--red); font-weight: 800; }
+footer { margin-top: 2.4em; padding-top: 1em; border-top: 2px solid var(--line); color: var(--muted); font-size: .95rem; }
+
+@media (max-width: 720px) {
+  html { font-size: 18px; }
+  table.ws thead { display: none; }
+  table.ws, table.ws tbody, table.ws tfoot, table.ws tr, table.ws td { display: block; width: 100%; }
+  table.ws tr { border: 1px solid var(--line); border-radius: 8px; margin: 0 0 12px; background: var(--card); }
+  table.ws td { border: 0; border-bottom: 1px solid var(--soft); text-align: left; }
+  table.ws td::before { content: attr(data-label); display: block; font-size: .8rem; font-weight: 700; color: var(--muted); }
+  table.ws td.money { text-align: left; }
+  .signoff label { grid-template-columns: 1fr; }
+}
+
+@media print {
+  html { font-size: 9.5pt; }
+  body { background: #fff; }
+  main { max-width: none; padding: 0; }
+  h1 { font-size: 16pt; }
+  h2 { font-size: 12pt; margin-top: 1.1em; break-after: avoid; }
+  .toolbar, #start, .sample, .noprint { display: none !important; }
+  .counts a { color: inherit; text-decoration: none; }
+  table.ws th, table.ws td { padding: 3px 5px; }
+  table.ws th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  textarea.decision { display: none; }
+  .print-only { display: block; white-space: pre-wrap; }
+  details.src:not([open]) { display: none; }
+  #tie-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 13pt; }
+  .signoff input { border: 0; border-bottom: 1px solid #000; border-radius: 0; }
+  .caution { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<main>
+  <section id="start">
+    <h1>Who gets a 1099?</h1>
+    <p class="lede">Give me the list of everything a client paid during the year, and I will make a printable worksheet saying which vendors need a Form 1099, whose W-9 to check, and why.</p>
+    <label id="drop">
+      Drop the client's payments file here, or click to choose it
+      <input type="file" id="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+    </label>
+    <div id="error" class="hidden" role="alert"></div>
+    <ul class="notes">
+      <li><b>What it adds.</b> Accounting software's 1099 report counts only vendors someone flagged for 1099. This reads every payment, so it also finds vendors nobody flagged, one vendor typed several ways, and checks entered twice.</li>
+      <li><b>Which file.</b> All payments for the tax year, one line per check or charge (.csv or .xlsx).</li>
+      <li><b>Which rule.</b> $2,000 for 2026 payments; $600 for 2025 and earlier.</li>
+      <li><b>Private.</b> The file never leaves this computer.</li>
+      <li><b>Your review.</b> The result is a worksheet you must review, not a filing.</li>
+    </ul>
+    <p class="sample"><button type="button" id="sample">Try it with a made-up sample</button></p>
+  </section>
+
+  <section id="sheet" class="hidden"></section>
+</main>
+
+<script>
+(function () {
+'use strict';
+var XLSX_URL = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+
+/* ---------- text helpers ---------- */
+function norm(s) {
+  return String(s == null ? '' : s).toLowerCase()
+    .replace(/[.'\u2019]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+function has(n, phrase) { return (' ' + n + ' ').indexOf(' ' + phrase + ' ') >= 0; }
+function hasAny(n, list) { for (var i = 0; i < list.length; i++) if (has(n, list[i])) return true; return false; }
+function firstHit(n, list) { for (var i = 0; i < list.length; i++) if (has(n, list[i])) return list[i]; return null; }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+/* ---------- money (whole cents) ---------- */
+function money(c) {
+  var neg = c < 0; c = Math.abs(c);
+  var d = Math.floor(c / 100), r = c % 100;
+  return (neg ? '-' : '') + '$' + String(d).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + pad2(r);
+}
+function moneyShort(c) { return c % 100 === 0 ? money(c).replace(/\.00$/, '') : money(c); }
+function dollars(c) { return c / 100; }
+function parseAmount(v) {
+  if (v == null) return null;
+  if (typeof v === 'number') return isFinite(v) ? Math.round(v * 100) : null;
+  if (typeof v === 'boolean') return null;
+  var s = String(v).replace(/\s+/g, '');
+  if (!s) return null;
+  var neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = !neg; s = s.slice(1, -1); }
+  if (/-$/.test(s)) { neg = !neg; s = s.slice(0, -1); }
+  if (/^-/.test(s)) { neg = !neg; s = s.slice(1); } else if (/^\+/.test(s)) { s = s.slice(1); }
+  s = s.replace(/^\$/, '').replace(/^usd/i, '').replace(/usd$/i, '');
+  if (/^-/.test(s)) { neg = !neg; s = s.slice(1); }
+  if (/^\(.*\)$/.test(s)) { neg = !neg; s = s.slice(1, -1); }
+  if (s === '' || s === '.' || !/^(\d{1,3}(,\d{3})+|\d+)?(\.\d+)?$/.test(s)) return null;
+  s = s.replace(/,/g, '');
+  var parts = s.split('.'), ip = parts[0], fp = parts[1] || '';
+  var c = (ip ? parseInt(ip, 10) : 0) * 100 + parseInt((fp + '00').slice(0, 2), 10);
+  if (fp.length > 2 && +fp.charAt(2) >= 5) c += 1;
+  return neg ? -c : c;
+}
+
+/* ---------- dates ---------- */
+var MONTHS = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12,
+  january: 1, february: 2, march: 3, april: 4, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
+function mkDate(y, m, d) {
+  if (!(m >= 1 && m <= 12 && d >= 1 && y >= 1900 && y <= 2200)) return null;
+  var dim = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  if (d > dim) return null;
+  return { y: y, m: m, d: d, iso: y + '-' + pad2(m) + '-' + pad2(d) };
+}
+function fromSerial(n) {
+  if (!(n >= 20000 && n <= 80000)) return null;
+  var dt = new Date(Date.UTC(1899, 11, 30) + Math.floor(n) * 86400000);
+  return mkDate(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+}
+function yr(s) { var y = +s; return s.length === 2 ? 2000 + y : y; }
+function parseDate(v) {
+  if (v == null) return null;
+  if (typeof v === 'number') return fromSerial(v);
+  if (v instanceof Date) return isNaN(v) ? null : mkDate(v.getFullYear(), v.getMonth() + 1, v.getDate());
+  var s = String(v).trim(), m;
+  if (!s) return null;
+  if (/^\d+(\.\d+)?$/.test(s)) return fromSerial(parseFloat(s));
+  if ((m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4}|\d{2})(?:[ T].*)?$/))) return mkDate(yr(m[3]), +m[1], +m[2]);
+  if ((m = s.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})(?:[ T].*)?$/))) return mkDate(+m[1], +m[2], +m[3]);
+  if ((m = s.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4}|\d{2})$/)) && MONTHS[m[1].toLowerCase()]) return mkDate(yr(m[3]), MONTHS[m[1].toLowerCase()], +m[2]);
+  if ((m = s.match(/^(\d{1,2})[\s\-]([A-Za-z]{3,9})\.?[\s\-,]+(\d{4}|\d{2})$/)) && MONTHS[m[2].toLowerCase()]) return mkDate(yr(m[3]), MONTHS[m[2].toLowerCase()], +m[1]);
+  return null;
+}
+function showDate(d) { return d ? d.m + '/' + d.d + '/' + d.y : ''; }
+var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+var MONTHNAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function dueDate(y, m, d) {
+  var dt = new Date(Date.UTC(y, m - 1, d)), moved = false, orig = dt.getUTCDay();
+  while (dt.getUTCDay() === 0 || dt.getUTCDay() === 6) { dt = new Date(dt.getTime() + 86400000); moved = true; }
+  return { text: MONTHNAMES[dt.getUTCMonth()] + ' ' + dt.getUTCDate() + ', ' + dt.getUTCFullYear(), moved: moved, origDay: DAYS[orig] };
+}
+
+/* ---------- CSV ---------- */
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  var rows = [], row = [], field = '', i = 0, q = false, n = text.length;
+  while (i < n) {
+    var ch = text[i];
+    if (q) {
+      if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i += 2; continue; } q = false; i++; continue; }
+      field += ch; i++; continue;
+    }
+    if (ch === '"') { q = true; i++; continue; }
+    if (ch === ',') { row.push(field); field = ''; i++; continue; }
+    if (ch === '\r' || ch === '\n') {
+      row.push(field); rows.push(row); row = []; field = '';
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      i++; continue;
+    }
+    field += ch; i++;
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+/* ---------- vocabulary ---------- */
+var H = {
+  date: ['date', 'transaction date', 'txn date', 'payment date', 'check date'],
+  amount: ['amount', 'paid amount', 'total'],
+  debit: ['debit', 'debits'], credit: ['credit', 'credits'],
+  payment: ['payment', 'payments', 'withdrawal', 'withdrawals', 'payment withdrawal', 'payments withdrawals'],
+  deposit: ['deposit', 'deposits', 'deposit credit'],
+  payee: ['name', 'payee', 'vendor', 'vendor name', 'paid to', 'supplier'],
+  type: ['type', 'transaction type'],
+  number: ['num', 'no', 'number', 'check', 'check no', 'check number', 'ref', 'reference'],
+  memo: ['memo', 'memo description', 'notes'],
+  paying: ['bank account', 'paid from', 'payment account'],
+  category: ['category', 'expense account'],
+  either: ['account', 'split']
+};
+var BANKISH = ['checking', 'savings', 'bank', 'cash', 'card', 'visa', 'mastercard', 'amex', 'discover', 'paypal'];
+var SETASIDE = ['bill', 'vendor credit', 'credit', 'purchase order', 'item receipt', 'journal entry', 'general journal', 'credit memo'];
+var DROPWORDS = ['llc', 'inc', 'incorporated', 'corp', 'corporation', 'co', 'company', 'ltd', 'pllc', 'pc', 'lp', 'llp', 'the', 'and'];
+var INCWORDS = ['inc', 'incorporated', 'corp', 'corporation', 'pc'];
+var NETWORK_ANY = ['paypal', 'venmo', 'stripe', 'square', 'cash app'];
+var NETWORK_MEMO = ['paypal', 'venmo', 'cash app'];
+var CARDW = ['card', 'ccard', 'visa', 'mastercard', 'amex', 'american express', 'discover', 'pos'];
+var KX = ['payroll', 'wages', 'salary', 'salaries', 'tax', 'taxes', 'owner', 'owners', 'draw', 'distribution', 'transfer', 'loan',
+  'credit card payment', 'interest', 'bank fees', 'insurance', 'license', 'licenses', 'permit', 'permits'];
+var KR = ['rent', 'rental', 'lease'];
+var KS = ['contract', 'contractor', 'subcontractor', 'subcontractors', 'labor', 'outside services', 'professional', 'consulting', 'repair',
+  'repairs', 'maintenance', 'janitorial', 'cleaning', 'landscaping', 'commission', 'commissions', 'marketing', 'advertising', 'accounting',
+  'bookkeeping', 'design', 'security', 'training', 'legal', 'preparation', 'service', 'services'];
+var KG = ['supplies', 'supply', 'materials', 'inventory', 'cost of goods', 'purchases', 'merchandise', 'equipment', 'tools', 'furniture',
+  'fuel', 'utilities', 'telephone', 'internet', 'freight', 'shipping', 'postage', 'storage', 'meals', 'travel', 'software', 'subscription',
+  'subscriptions', 'dues', 'parts', 'food'];
+var NR = ['realty', 'properties', 'leasing'];
+var NS = ['plumbing', 'electric', 'hvac', 'roofing', 'landscaping', 'cleaning', 'janitorial', 'consulting', 'design', 'photography', 'repair',
+  'construction', 'carpentry', 'painting', 'bookkeeping', 'accounting', 'cpa', 'marketing', 'staffing', 'towing', 'upholstery', 'service', 'services'];
+var NG = ['supply', 'supplies', 'hardware', 'lumber', 'wholesale', 'distributor', 'distributors', 'utility', 'utilities', 'power', 'energy', 'water',
+  'amazon', 'amazoncom', 'home depot', 'staples', 'office depot', 'costco', 'walmart', 'fedex', 'ups', 'verizon', 'comcast'];
+var EXCL = [
+  ['taxes or government', ['irs', 'internal revenue', 'treasury', 'department of', 'state of', 'city of', 'franchise tax']],
+  ['payroll', ['gusto', 'adp', 'paychex']],
+  ['transfer or bank', ['card services', 'bank', 'credit union']],
+  ['insurance', ['insurance', 'state farm']]
+];
+var XREASON = [
+  ['payroll', ['payroll', 'wages', 'salary', 'salaries']],
+  ['taxes or government', ['tax', 'taxes', 'license', 'licenses', 'permit', 'permits']],
+  ['owner draw', ['owner', 'owners', 'draw', 'distribution']],
+  ['loan or interest', ['loan', 'interest']],
+  ['transfer or bank', ['transfer', 'credit card payment', 'bank fees']],
+  ['insurance', ['insurance']]
+];
+var ATTY = ['law', 'attorney', 'attorneys', 'lawyer', 'esq', 'legal'];
+var MED = ['md', 'dds', 'dmd', 'medical', 'clinic', 'dental', 'chiropractic', 'physician', 'health', 'hospital'];
+
+function limitFor(y) { return y >= 2026 ? 200000 : 60000; }
+function vendorKey(name) {
+  var n = norm(name);
+  var k = n.split(' ').filter(function (w) { return w && DROPWORDS.indexOf(w) < 0; }).join(' ');
+  return k || n;
+}
+function catKind(catN) {
+  var x = hasAny(catN, KX), r = hasAny(catN, KR), s = hasAny(catN, KS), g = hasAny(catN, KG);
+  if (x && !s) return 'X';
+  if (r) return 'R';
+  if (s && !g) return 'S';
+  if (g && !s) return 'G';
+  return 'U';
+}
+function nameKind(n) {
+  if (hasAny(n, NR)) return 'R';
+  var s = hasAny(n, NS), g = hasAny(n, NG);
+  if (s && !g) return 'S';
+  if (g && !s) return 'G';
+  return 'U';
+}
+function ranges(nums) {
+  var a = nums.slice().sort(function (x, y) { return x - y; }).filter(function (x, i, arr) { return i === 0 || arr[i - 1] !== x; });
+  var out = [], i = 0;
+  while (i < a.length) { var j = i; while (j + 1 < a.length && a[j + 1] === a[j] + 1) j++; out.push(j > i ? a[i] + '\u2013' + a[j] : String(a[i])); i = j + 1; }
+  return out.join(', ');
+}
+function rowWord(nums) { return (nums.length === 1 ? 'row ' : 'rows ') + ranges(nums); }
+function lev(a, b) {
+  var m = a.length, n = b.length, prev = [], cur, i, j;
+  for (j = 0; j <= n; j++) prev[j] = j;
+  for (i = 1; i <= m; i++) { cur = [i]; for (j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n];
+}
+function lookAlike(k1, k2) {
+  var w1 = k1.split(' '), w2 = k2.split(' ');
+  function sub(a, b) { return a.every(function (w) { return b.indexOf(w) >= 0; }); }
+  if (sub(w1, w2) || sub(w2, w1)) {
+    if (w1.some(function (w) { return w.length >= 4 && w2.indexOf(w) >= 0; })) return true;
+  }
+  var s1 = k1.replace(/ /g, ''), s2 = k2.replace(/ /g, '');
+  return s1.length >= 8 && s2.length >= 8 && lev(s1, s2) <= 2;
+}
+
+/* ---------- analysis ---------- */
+function fatal(code, message) { return { fatal: code, message: message }; }
+
+function analyze(rows, fileName) {
+  rows = rows.map(function (r) { return (r || []).map(function (v) { return v == null ? '' : v; }); });
+  // 1. header row
+  var hdr = -1, hn = null;
+  function findCol(hnorm, list, used) { for (var i = 0; i < hnorm.length; i++) if (!used[i] && list.indexOf(hnorm[i]) >= 0) return i; return -1; }
+  for (var r = 0; r < Math.min(40, rows.length); r++) {
+    var cells = rows[r].map(norm);
+    var dc = findCol(cells, H.date, {});
+    if (dc < 0) continue;
+    if (findCol(cells, H.amount, {}) >= 0 || findCol(cells, H.debit, {}) >= 0 || findCol(cells, H.payment, {}) >= 0) { hdr = r; hn = cells; break; }
+  }
+  if (hdr < 0) return fatal('NO_COLUMNS', 'I could not find a heading row with a date column and an amount column in the first 40 rows.');
+  var used = {}, col = {};
+  function take(role, list) { var i = findCol(hn, list, used); if (i >= 0) used[i] = true; col[role] = i; }
+  take('date', H.date);
+  take('amount', H.amount);
+  if (col.amount < 0) { take('debit', H.debit); if (col.debit >= 0) take('credit', H.credit); else { col.credit = -1; take('payment', H.payment); take('deposit', H.deposit); } }
+  ['debit', 'credit', 'payment', 'deposit'].forEach(function (k) { if (col[k] == null) col[k] = -1; });
+  take('payee', H.payee);
+  take('type', H.type);
+  take('number', H.number);
+  take('memo', H.memo);
+  var descCol = findCol(hn, ['description'], used);
+  take('paying', H.paying);
+  take('category', H.category);
+
+  function cell(row, i) { return i >= 0 && i < row.length ? row[i] : ''; }
+  function txt(row, i) { return String(cell(row, i)).trim(); }
+  function rowAmount(row) {
+    if (col.amount >= 0) return parseAmount(cell(row, col.amount));
+    var a, b;
+    if (col.debit >= 0) { a = parseAmount(cell(row, col.debit)); b = col.credit >= 0 ? parseAmount(cell(row, col.credit)) : null; }
+    else { a = parseAmount(cell(row, col.payment)); b = col.deposit >= 0 ? parseAmount(cell(row, col.deposit)) : null; }
+    if (a == null && b == null) return null;
+    return (a || 0) - (b || 0);
+  }
+  function nonEmpty(row) { return row.filter(function (v) { return String(v).trim() !== ''; }); }
+
+  // "account" / "split" columns
+  for (var ci = 0; ci < hn.length; ci++) {
+    if (used[ci] || H.either.indexOf(hn[ci]) < 0) continue;
+    var vals = 0, bankish = 0;
+    for (var rr = hdr + 1; rr < rows.length; rr++) {
+      if (!parseDate(cell(rows[rr], col.date))) continue;
+      var vv = norm(cell(rows[rr], ci)); if (!vv) continue;
+      vals++; if (hasAny(vv, BANKISH)) bankish++;
+    }
+    if (bankish * 2 > vals && vals > 0) { if (col.paying < 0) { col.paying = ci; used[ci] = true; } }
+    else if (col.category < 0) { col.category = ci; used[ci] = true; }
+  }
+
+  // payee source: payee column, else grouped by vendor, else description
+  var grouped = false;
+  if (col.payee < 0) {
+    var sawHeading = false;
+    for (var g = hdr + 1; g < rows.length; g++) {
+      var row0 = rows[g], ne = nonEmpty(row0);
+      if (parseDate(cell(row0, col.date))) { if (sawHeading) break; continue; }
+      if (ne.length === 1 && rowAmount(row0) == null && !/^total\b|^grand total$/i.test(String(ne[0]).trim()) && typeof ne[0] !== 'number') sawHeading = true;
+    }
+    if (sawHeading || descCol < 0) grouped = true;
+    else { col.payee = descCol; used[descCol] = true; }
+  }
+  if (col.memo < 0 && descCol >= 0 && !used[descCol]) { col.memo = descCol; used[descCol] = true; }
+
+  // 3-5. walk the rows
+  var lines = [], fileTotal = null, fileTotalRow = null, subtotals = [], sinceSub = 0, sinceSubRows = [], current = '';
+  var writtenSum = 0;
+  for (var i = hdr + 1; i < rows.length; i++) {
+    var row = rows[i], rowNum = i + 1, ne2 = nonEmpty(row);
+    if (!ne2.length) continue;
+    var d = parseDate(cell(row, col.date));
+    var amt = rowAmount(row);
+    if (!d) {
+      var first = String(ne2[0]).trim();
+      if (/^(total|grand total)$/i.test(first)) {
+        var ft = amt;
+        if (ft == null) { for (var k = row.length - 1; k >= 0; k--) { var pa = parseAmount(row[k]); if (pa != null && String(row[k]).trim() !== first) { ft = pa; break; } } }
+        if (ft != null) { fileTotal = ft; fileTotalRow = rowNum; }
+      } else if (/^total\s/i.test(first)) {
+        var st = amt;
+        if (st == null) { for (var k2 = row.length - 1; k2 >= 0; k2--) { var pb = parseAmount(row[k2]); if (pb != null) { st = pb; break; } } }
+        if (st != null) subtotals.push({ row: rowNum, label: first, amount: st, sum: sinceSub, rows: sinceSubRows });
+        sinceSub = 0; sinceSubRows = [];
+      } else if (grouped && ne2.length === 1 && amt == null) {
+        current = first;
+      }
+      continue;
+    }
+    var payee = grouped ? current : txt(row, col.payee);
+    var line = {
+      row: rowNum, date: d, payee: payee, type: txt(row, col.type), number: txt(row, col.number), memo: txt(row, col.memo),
+      paying: txt(row, col.paying), category: txt(row, col.category), written: amt
+    };
+    line.typeN = norm(line.type);
+    if (amt != null) { writtenSum += amt; sinceSub += amt; sinceSubRows.push(rowNum); }
+    lines.push(line);
+  }
+
+  // 6-7. what each line is
+  var majorityPool = [];
+  lines.forEach(function (l) {
+    if (col.type >= 0 && SETASIDE.indexOf(l.typeN) >= 0) { l.status = 'setaside'; return; }
+    if (l.written == null) { l.status = 'unreadable'; return; }
+    l.status = 'counted';
+    if (col.type >= 0 && (has(l.typeN, 'bill payment') || has(l.typeN, 'bill pmt'))) { l.amt = Math.abs(l.written); return; }
+    if (col.type >= 0 && (has(l.typeN, 'refund') || has(l.typeN, 'deposit') || has(l.typeN, 'credit card credit'))) { l.amt = -Math.abs(l.written); return; }
+    majorityPool.push(l);
+  });
+  var pos = 0, negc = 0;
+  majorityPool.forEach(function (l) { if (l.written > 0) pos++; else if (l.written < 0) negc++; });
+  var sign = negc > pos ? -1 : 1;
+  majorityPool.forEach(function (l) { l.amt = l.written * sign; if (l.amt === 0) l.amt = 0; });
+
+  var counted = lines.filter(function (l) { return l.status === 'counted'; });
+  if (!counted.length) return fatal('NO_COLUMNS', 'I found the date and amount columns, but no payment lines with both a readable date and a readable amount.');
+
+  // 8. tax year
+  var yc = {};
+  counted.forEach(function (l) { yc[l.date.y] = (yc[l.date.y] || 0) + 1; });
+  var taxYear = null;
+  Object.keys(yc).forEach(function (y) { y = +y; if (taxYear == null || yc[y] > yc[taxYear] || (yc[y] === yc[taxYear] && y > taxYear)) taxYear = y; });
+  if (taxYear > 2026) return fatal('UNSUPPORTED_YEAR', 'Most payments in this file are dated ' + taxYear + '. This version only knows the 1099 rules through 2026, and it will not guess.');
+  var L = limitFor(taxYear);
+
+  // vendors
+  var vendors = {}, order = [];
+  function vfor(l, create) {
+    var blank = !String(l.payee).trim();
+    var key = blank ? '\u0000noname' : vendorKey(l.payee);
+    if (!vendors[key]) {
+      if (!create) return null;
+      vendors[key] = { key: key, noName: blank, spell: {}, spellOrder: [], lines: [], unread: [], setaside: [], bills: [] };
+      order.push(key);
+    }
+    return vendors[key];
+  }
+  function addSpelling(v, p) { var s = String(p).trim() || '(no name)'; if (!(s in v.spell)) { v.spell[s] = 0; v.spellOrder.push(s); } v.spell[s]++; }
+  var outside = [], unreadable = [], setaside = [];
+  counted.forEach(function (l) {
+    if (l.date.y !== taxYear) { outside.push(l); return; }
+    var v = vfor(l, true); v.lines.push(l); addSpelling(v, l.payee); l.vendor = v;
+  });
+  lines.forEach(function (l) {
+    if (l.status === 'unreadable') {
+      unreadable.push(l);
+      if (l.date.y === taxYear) { var v = vfor(l, true); v.unread.push(l); addSpelling(v, l.payee); l.vendor = v; }
+    }
+  });
+  lines.forEach(function (l) {
+    if (l.status !== 'setaside') return;
+    setaside.push(l);
+    var v = vfor(l, false);
+    if (v) { v.setaside.push(l); if (l.typeN === 'bill') v.bills.push(l); l.vendor = v; }
+  });
+
+  var keys = order.slice();
+  keys.forEach(function (key) {
+    var v = vendors[key];
+    var best = null;
+    v.spellOrder.forEach(function (s) { if (best == null || v.spell[s] > v.spell[best]) best = s; });
+    v.name = v.noName ? '(no name)' : best;
+    v.spellings = v.spellOrder.slice();
+    v.nameNs = v.spellings.map(norm);
+    v.nameN = norm(v.name);
+    v.nk = nameKind(v.nameN);
+    // bills decide accounts payable lines
+    var billK = {};
+    v.bills.forEach(function (b) {
+      var cn = norm(b.category);
+      var k = (!cn || has(cn, 'accounts payable')) ? v.nk : catKind(cn);
+      billK[k] = (billK[k] || 0) + Math.abs(b.written || 0);
+    });
+    var billKind = null;
+    Object.keys(billK).forEach(function (k) { if (billKind == null || billK[k] > billK[billKind]) billKind = k; });
+    v.R = 0; v.C = 0; v.N = 0;
+    v.sum = { S: {}, R: {}, G: {}, X: {}, U: {} };
+    ['S', 'R', 'G', 'X', 'U'].forEach(function (k) { v.sum[k] = { bank: 0, card: 0, network: 0, all: 0 }; });
+    v.bankRefunds = 0; v.bankPos = { S: 0, R: 0, G: 0, X: 0, U: 0 };
+    v.xWords = {};
+    v.lines.forEach(function (l) {
+      var t = l.typeN, p = norm(l.paying), nu = norm(l.number), me = norm(l.memo);
+      if (hasAny(t, NETWORK_ANY) || hasAny(p, NETWORK_ANY) || hasAny(nu, NETWORK_ANY) || hasAny(me, NETWORK_MEMO)) l.method = 'network';
+      else if (hasAny(t, CARDW) || hasAny(p, CARDW) || hasAny(nu, CARDW)) l.method = 'card';
+      else l.method = 'bank';
+      var cn = norm(l.category), k;
+      if (!cn) k = v.nk;
+      else if (has(cn, 'accounts payable')) k = billKind || v.nk;
+      else k = catKind(cn);
+      l.kind = k;
+      if (k === 'X') { var src = cn; XREASON.forEach(function (xr) { if (hasAny(src, xr[1])) v.xWords[xr[0]] = (v.xWords[xr[0]] || 0) + l.amt; }); }
+      if (l.method === 'bank') { v.R += l.amt; if (l.amt < 0) v.bankRefunds += -l.amt; else v.bankPos[k] += l.amt; }
+      else if (l.method === 'card') v.C += l.amt; else v.N += l.amt;
+      v.sum[k][l.method] += l.amt; v.sum[k].all += l.amt;
+    });
+    v.T = v.R + v.C + v.N;
+    var textLines = v.lines.concat(v.unread, v.bills);
+    v.catNs = textLines.map(function (l) { return norm(l.category); }).filter(Boolean);
+    v.memoNs = textLines.map(function (l) { return norm(l.memo); }).filter(Boolean);
+    var allText = v.catNs.concat(v.memoNs);
+    v.mentions = function (words) { return allText.some(function (s) { return hasAny(s, words); }); };
+    v.incorporated = v.nameNs.some(function (n) { return hasAny(n, INCWORDS); });
+
+    // kind of vendor
+    var exclName = null;
+    EXCL.forEach(function (e) { if (!exclName && v.nameNs.some(function (n) { return hasAny(n, e[1]); })) exclName = e[0]; });
+    v.disagree = false;
+    if (exclName) { v.kind = 'EXCLUDED'; v.exclReason = exclName; }
+    else {
+      var attyName = v.nameNs.some(function (n) { return hasAny(n, ATTY); });
+      var attyCat = v.catNs.some(function (c) { return has(c, 'legal') && !has(c, 'professional'); });
+      var medName = v.nameNs.some(function (n) { return hasAny(n, MED); });
+      var medCat = v.catNs.some(function (c) { return (has(c, 'medical') || has(c, 'dental') || has(c, 'health care')) && !has(c, 'supplies') && !has(c, 'insurance'); });
+      var kind = null, byName = false;
+      if (attyName || attyCat) { kind = 'ATTORNEY'; byName = attyName; }
+      else if (medName || medCat) { kind = 'MEDICAL'; byName = medName; }
+      if (kind && byName && v.sum.G.all > v.T - v.sum.G.all) { kind = 'U'; v.disagree = true; v.disagreeAs = attyName ? 'a law firm' : 'a medical provider'; }
+      if (!kind) {
+        if (v.bankPos.S > 0 && v.bankPos.G > 0) kind = 'MIXED';
+        else {
+          var bestK = null;
+          ['S', 'R', 'G', 'X', 'U'].forEach(function (k) { if (bestK == null || v.sum[k].all > v.sum[bestK].all) bestK = k; });
+          kind = bestK;
+        }
+      }
+      v.kind = kind;
+      if (kind === 'X') {
+        var bx = null; Object.keys(v.xWords).forEach(function (w) { if (bx == null || v.xWords[w] > v.xWords[bx]) bx = w; });
+        v.exclReason = bx || 'not a vendor payment';
+      }
+    }
+  });
+
+  // ---------- checks ----------
+  var ex = [];
+  function addEx(code, message) { ex.push({ code: code, message: message }); }
+  var subBad = subtotals.filter(function (s) { return Math.abs(s.amount) !== Math.abs(s.sum); });
+  var totalTies = fileTotal == null ? null : Math.abs(fileTotal) === Math.abs(writtenSum);
+  if (totalTies === false) addEx('TOTAL_MISMATCH', 'The file\u2019s own total on row ' + fileTotalRow + ' is ' + money(Math.abs(fileTotal)) + ', but its ' + lines.filter(function (l) { return l.written != null; }).length + ' dated lines, exactly as written, add up to ' + money(Math.abs(writtenSum)) + ' (a difference of ' + money(Math.abs(Math.abs(fileTotal) - Math.abs(writtenSum))) + '). Lines may be missing from the export.');
+  subBad.forEach(function (s) {
+    addEx('SUBTOTAL_MISMATCH', 'The subtotal \u201c' + s.label + '\u201d on row ' + s.row + ' is ' + money(Math.abs(s.amount)) + ', but the lines above it' + (s.rows.length ? ' (' + rowWord(s.rows) + ')' : '') + ' add up to ' + money(Math.abs(s.sum)) + '. Lines may be missing from the export.');
+  });
+  if (setaside.length) {
+    var byType = {}, typeOrder = [];
+    setaside.forEach(function (l) { var t = l.type || '(blank)'; if (!(t in byType)) { byType[t] = 0; typeOrder.push(t); } byType[t]++; });
+    var parts = typeOrder.map(function (t) { return byType[t] + ' ' + t; });
+    var list = setaside.map(function (l) { return (String(l.payee).trim() || '(no name)') + ', ' + (l.type || '(blank)') + ', ' + (l.written == null ? 'no amount' : money(l.written)) + ', row ' + l.row; });
+    var paidKeys = {}; counted.forEach(function (l) { paidKeys[String(l.payee).trim() ? vendorKey(l.payee) : '\u0000noname'] = true; });
+    var noPay = [], seenNP = {};
+    setaside.forEach(function (l) {
+      if (l.typeN !== 'bill') return;
+      var k = String(l.payee).trim() ? vendorKey(l.payee) : '\u0000noname';
+      if (!paidKeys[k] && !seenNP[k]) { seenNP[k] = true; noPay.push(String(l.payee).trim() || '(no name)'); }
+    });
+    addEx('NOT_PAYMENTS', setaside.length + (setaside.length === 1 ? ' line is' : ' lines are') + ' not payments and ' + (setaside.length === 1 ? 'was' : 'were') + ' set aside, not counted (' + parts.join(', ') + '): ' + list.join('; ') + '.' +
+      (noPay.length ? ' These vendors have bills but no payment in the file: ' + noPay.join(', ') + '. Were they paid some other way, or from another account?' : ''));
+  }
+  if (unreadable.length) {
+    addEx('UNREADABLE_LINES', unreadable.length + (unreadable.length === 1 ? ' line has' : ' lines have') + ' a date but no amount I could read, so ' + (unreadable.length === 1 ? 'it is' : 'they are') + ' in no total: ' +
+      unreadable.map(function (l) { return 'row ' + l.row + ' (' + (String(l.payee).trim() || '(no name)') + (l.date.y !== taxYear ? ', dated ' + l.date.y : '') + ')'; }).join(', ') + '.');
+  }
+  var outsideTotal = 0;
+  outside.forEach(function (l) { outsideTotal += l.amt; });
+  if (outside.length) {
+    var byYear = {};
+    outside.forEach(function (l) { (byYear[l.date.y] = byYear[l.date.y] || []).push(l); });
+    var msgs = Object.keys(byYear).sort().map(function (y) {
+      var ls = byYear[y], s = 0, vk = {}, vo = [];
+      ls.forEach(function (l) { s += l.amt; var k = String(l.payee).trim() ? vendorKey(l.payee) : '\u0000noname'; if (!vk[k]) { vk[k] = { name: String(l.payee).trim() || '(no name)', sum: 0 }; vo.push(k); } vk[k].sum += l.amt; });
+      var big = vo.filter(function (k) { return vk[k].sum >= limitFor(+y); }).map(function (k) { return vk[k].name + ' (' + money(vk[k].sum) + ')'; });
+      return ls.length + ' dated ' + y + ' (' + money(s) + ', ' + rowWord(ls.map(function (l) { return l.row; })) + ')' +
+        (big.length ? '; in ' + y + ' these reach that year\u2019s ' + moneyShort(limitFor(+y)) + ' limit: ' + big.join(', ') : '');
+    });
+    addEx('OUTSIDE_YEAR', outside.length + ' payment ' + (outside.length === 1 ? 'line is' : 'lines are') + ' outside ' + taxYear + ' and left out of every vendor: ' + msgs.join('; ') + '. Does another year\u2019s worksheet need them?');
+  }
+  var inYear = counted.filter(function (l) { return l.date.y === taxYear; }).sort(function (a, b) { return a.date.iso < b.date.iso ? -1 : a.date.iso > b.date.iso ? 1 : 0; });
+  var firstD = inYear[0].date, lastD = inYear[inYear.length - 1].date;
+  if (firstD.m > 1 || lastD.m < 12) {
+    addEx('PARTIAL_YEAR', 'The payments in ' + taxYear + ' run only from ' + showDate(firstD) + ' to ' + showDate(lastD) + '. Is part of the year missing from this file?');
+  }
+  var dupGroups = {}, dupOrder = [];
+  inYear.forEach(function (l) {
+    var k = l.vendor.key + '|' + l.date.iso + '|' + l.amt + '|' + norm(l.number);
+    if (!dupGroups[k]) { dupGroups[k] = []; dupOrder.push(k); }
+    dupGroups[k].push(l);
+  });
+  dupOrder.forEach(function (k) {
+    var g = dupGroups[k];
+    if (g.length < 2) return;
+    var l0 = g[0], v = l0.vendor;
+    v.dupExtra = (v.dupExtra || 0) + (l0.method === 'bank' && l0.amt > 0 ? l0.amt * (g.length - 1) : 0);
+    (v.dupRows = v.dupRows || []).push.apply(v.dupRows, g.map(function (l) { return l.row; }));
+    addEx('DUPLICATE', 'Rows ' + g.map(function (l) { return l.row; }).join(' and ') + ' look like the same payment entered ' + (g.length === 2 ? 'twice' : g.length + ' times') + ': ' + v.name + ', ' + showDate(l0.date) + ', ' + money(l0.amt) + ', ' + (l0.number ? 'number ' + l0.number : 'no number') + '. Every copy is kept in the totals. Was it paid more than once?');
+  });
+  var pairs = [];
+  var eligible = keys.filter(function (k) { var v = vendors[k]; return !v.noName && v.kind !== 'G' && v.kind !== 'EXCLUDED' && v.kind !== 'X'; });
+  for (var a = 0; a < eligible.length; a++) for (var b = a + 1; b < eligible.length; b++) {
+    var va = vendors[eligible[a]], vb = vendors[eligible[b]];
+    if (!lookAlike(va.key, vb.key)) continue;
+    if (!(va.R < L || vb.R < L)) continue;
+    if (va.R + vb.R < L) continue;
+    pairs.push([va, vb]);
+    (va.alike = va.alike || []).push(vb); (vb.alike = vb.alike || []).push(va);
+    addEx('SAME_VENDOR', '\u201c' + va.name + '\u201d (' + money(va.R) + ' by bank, ' + rowWord(va.lines.map(function (l) { return l.row; })) + ') and \u201c' + vb.name + '\u201d (' + money(vb.R) + ', ' + rowWord(vb.lines.map(function (l) { return l.row; })) + ') look like the same vendor, and together they come to ' + money(va.R + vb.R) + ', which reaches the ' + moneyShort(L) + ' limit. Are they the same payee?');
+  }
+  var refunds = inYear.filter(function (l) { return l.amt < 0 && l.vendor.lines.some(function (o) { return o.amt > 0; }); });
+  if (refunds.length) {
+    addEx('REFUND', refunds.length + ' refund or credit ' + (refunds.length === 1 ? 'line reduces' : 'lines reduce') + ' what a vendor was paid: ' + refunds.map(function (l) { return l.vendor.name + ' ' + money(l.amt) + ' on row ' + l.row; }).join('; ') + '. Is each one real money back from the vendor?');
+  }
+
+  // ---------- buckets ----------
+  var lim = moneyShort(L);
+  keys.forEach(function (key) {
+    var v = vendors[key], R = v.R, cautions = [];
+    var out = decide(v);
+    v.bucket = out[0]; v.reason = out[1];
+    if (v.bucket === 'NEC' || v.bucket === 'MISC_RENT' || v.bucket === 'MISC_MEDICAL' || v.bucket === 'CONFIRM_CORP') {
+      if (v.goodsCaution) cautions.push('Caution: the ' + money(R) + ' includes goods (' + money(v.bankPos.G) + ' by bank); report it all unless the invoices state the goods separately.');
+      if (v.dupExtra) cautions.push('Caution: ' + rowWord(v.dupRows) + ' may be duplicate entries (' + money(v.dupExtra) + '); the vendor is over the limit even without them, but the amount on the form may be too high.');
+      if (v.bankRefunds) cautions.push('Caution: ' + money(v.bankRefunds) + ' of refunds or credits were subtracted; confirm they were real money back.');
+      if (v.alike) cautions.push('Caution: may be the same vendor as ' + v.alike.map(function (o) { return '\u201c' + o.name + '\u201d'; }).join(', ') + '; if so, add their payments to this form.');
+    }
+    v.cautions = cautions;
+    if (v.bucket === 'NEC') { v.form = '1099-NEC'; v.box = taxYear >= 2026 ? '1a' : '1'; }
+    else if (v.bucket === 'MISC_RENT') { v.form = '1099-MISC'; v.box = '1'; }
+    else if (v.bucket === 'MISC_MEDICAL') { v.form = '1099-MISC'; v.box = '6'; }
+    else { v.form = null; v.box = null; }
+  });
+
+  function decide(v) {
+    var R = v.R, T = v.T, k = v.kind;
+    if (v.noName) return ['REVIEW', 'These payments have no payee name in the file, so I cannot tell who was paid. Who received the ' + money(T) + '?'];
+    if (k === 'EXCLUDED' || k === 'X') {
+      var why = { 'payroll': 'payroll', 'taxes or government': 'taxes or a government agency', 'insurance': 'insurance', 'owner draw': 'an owner draw', 'loan or interest': 'a loan or interest', 'transfer or bank': 'a transfer or a bank' }[v.exclReason] || v.exclReason;
+      return ['NOT_REPORTABLE', 'Not a vendor payment: this is ' + why + ' (' + (k === 'EXCLUDED' ? 'from the name' : 'from the category') + '), so no 1099.'];
+    }
+    if (T <= 0 && v.lines.length) return ['NOT_REPORTABLE', 'Refunds, credits or deposits only: the net paid is ' + money(T) + ', so no 1099.'];
+    if (v.mentions(['royalty', 'royalties']) && R >= 1000) return ['REVIEW', 'A category or memo mentions royalties, and royalties go on 1099-MISC box 2 from $10. ' + money(R) + ' was paid by bank. Is this a royalty payment?'];
+    if (k === 'G') return ['NOT_REPORTABLE', 'Goods, not services (from the ' + (v.lines.some(function (l) { return norm(l.category) && !has(norm(l.category), 'accounts payable'); }) ? 'category' : 'name') + '), so no 1099. ' + money(T) + ' paid in all.'];
+    if (v.unread.length) return ['REVIEW', rowWord(v.unread.map(function (l) { return l.row; })).replace(/^r/, 'R') + (v.unread.length === 1 ? ' has' : ' have') + ' a date but no readable amount, so the true total is unknown (' + money(R) + ' by bank without ' + (v.unread.length === 1 ? 'it' : 'them') + '). What was paid?'];
+    if (v.bankPos.R > 0 && v.bankPos.S > 0 && R >= L && k !== 'ATTORNEY' && k !== 'MEDICAL') return ['REVIEW', 'Paid ' + money(R) + ' by bank for both rent (' + money(v.bankPos.R) + ') and services (' + money(v.bankPos.S) + '), which go on two different forms (1099-MISC box 1 and 1099-NEC). How much of it was rent and how much services?'];
+    var asService = false;
+    if (k === 'MIXED') {
+      var Sb = v.bankPos.S, Gb = v.bankPos.G;
+      if (Sb < L && Sb + Gb >= L) return ['REVIEW', 'Services paid by bank come to ' + money(Sb) + ', under the ' + lim + ' limit, but services plus goods come to ' + money(Sb + Gb) + ', over it. Did the invoices state the goods separately, or was it all one charge for services?'];
+      if (Sb >= L) { asService = true; v.goodsCaution = true; }
+    }
+    if (R >= L) {
+      if (v.dupExtra && R - v.dupExtra < L) return ['REVIEW', money(R) + ' was paid by bank, but ' + money(v.dupExtra) + ' of it may be duplicate entries (' + rowWord(v.dupRows) + '); without them it is under the ' + lim + ' limit. Was it really paid twice?'];
+      if (k === 'ATTORNEY') {
+        if (v.mentions(['settlement'])) return ['REVIEW', 'Paid ' + money(R) + ' by bank to an attorney, and a memo or category mentions a settlement. Is any of it settlement money (1099-MISC box 10) rather than legal fees (1099-NEC)?'];
+        return ['NEC', 'Paid ' + money(R) + ' by bank for legal services. Attorneys get a 1099-NEC even when incorporated.'];
+      }
+      if (k === 'MEDICAL') return ['MISC_MEDICAL', 'Paid ' + money(R) + ' by bank for medical or health care services, which go on 1099-MISC box 6 even when incorporated. Tax-exempt and government hospitals are excepted.'];
+      if (v.incorporated) {
+        if (v.mentions(['legal', 'attorney', 'law'])) return ['REVIEW', 'Paid ' + money(R) + ' by bank. The name looks incorporated, which is usually exempt, but a category or memo mentions legal work, and law firms are not exempt. Is this vendor a law firm?'];
+        return ['CONFIRM_CORP', 'Paid ' + money(R) + ' by bank. The name looks incorporated, so it is probably exempt. Does the W-9 show a C or S corporation?'];
+      }
+      if (k === 'R') return ['MISC_RENT', 'Paid ' + money(R) + ' by bank for rent. Not required if the rent was paid to a real estate agent or property manager.'];
+      if (k === 'U' || (k === 'MIXED' && !asService)) {
+        if (v.disagree) return ['REVIEW', 'The name says ' + v.disagreeAs + ', but the books say mostly goods (' + money(v.sum.G.all) + ' of ' + money(T) + '): the name and the books disagree. ' + money(R) + ' was paid by bank. What was it for?'];
+        return ['REVIEW', 'Paid ' + money(R) + ' by bank, but I cannot tell from the categories or the name what the payments were for. Were they for services, rent or goods?'];
+      }
+      return ['NEC', 'Paid ' + money(R) + ' by bank for services.'];
+    }
+    // under the limit
+    var state = '';
+    if (taxYear === 2026 && R >= 60000) state = ' Check whether your state still uses the $600 limit for 2026.';
+    if (v.bankRefunds > 0 && R + v.bankRefunds >= L) return ['REVIEW', 'Paid ' + money(R + v.bankRefunds) + ' by bank before ' + money(v.bankRefunds) + ' of refunds or credits, which bring it to ' + money(R) + ', under the ' + lim + ' limit. Were the refunds real money back from this vendor?'];
+    if (k === 'ATTORNEY' && R >= 60000) return ['REVIEW', 'Legal fees of ' + money(R) + ' are under the ' + lim + ' limit and need no form, but settlement money paid to an attorney goes on 1099-MISC box 10 from $600. Was any of it settlement money?'];
+    if (v.N > 0 && R + v.N >= L) return ['REVIEW', 'Paid ' + money(R) + ' by bank and ' + money(v.N) + ' through PayPal, Venmo or a similar network; together they reach the ' + lim + ' limit. Network payments count only if sent as personal payments. Were any of them?'];
+    if (v.alike) {
+      var partner = v.alike.filter(function (o) { return o.R + R >= L; })[0];
+      if (partner) return ['REVIEW', 'Paid ' + money(R) + ' by bank; this looks like the same vendor as \u201c' + partner.name + '\u201d (' + money(partner.R) + '), and together they reach the ' + lim + ' limit. Are they the same payee?'];
+    }
+    if (R * 4 >= L * 3) return ['CLOSE', 'Paid ' + money(R) + ' by bank, within 25% of the ' + lim + ' limit. Nothing to file as the file stands.' + state];
+    var tail = '';
+    if (T >= L) tail = ' The ' + money(T) + ' total reaches the limit only because ' + money(v.C + v.N) + ' was paid by card or payment network, which the card company or network reports on a 1099-K.';
+    return ['NOT_REPORTABLE', 'Paid ' + money(R) + ' by bank, under the ' + lim + ' limit.' + tail + state];
+  }
+
+  // ---------- controls ----------
+  var totalPayments = 0; counted.forEach(function (l) { totalPayments += l.amt; });
+  var bank = 0, card = 0, network = 0, vt = 0;
+  keys.forEach(function (k) { var v = vendors[k]; bank += v.R; card += v.C; network += v.N; vt += v.T; });
+  var accountedFor = vt + outsideTotal;
+  var report = {
+    taxYear: taxYear, threshold: L / 100,
+    controls: {
+      linesRead: counted.length, totalPayments: dollars(totalPayments), accountedFor: dollars(accountedFor), ties: accountedFor === totalPayments,
+      byMethod: { bank: dollars(bank), card: dollars(card), network: dollars(network) },
+      outsideYearTotal: dollars(outsideTotal), outsideYearLines: outside.length, unreadableLines: unreadable.length,
+      notPaymentLines: setaside.length, fileTotal: fileTotal == null ? null : dollars(Math.abs(fileTotal)), fileTotalTies: totalTies
+    },
+    exceptions: ex,
+    vendors: keys.map(function (k) {
+      var v = vendors[k];
+      return { name: v.name, spellings: v.spellings.slice(), bucket: v.bucket, form: v.form, box: v.box, reportable: dollars(v.R), card: dollars(v.C), network: dollars(v.N), total: dollars(v.T),
+        why: [v.reason].concat(v.cautions).join(' '),
+        rows: v.lines.concat(v.unread).map(function (l) { return l.row; }).sort(function (x, y) { return x - y; }) };
+    })
+  };
+  return {
+    report: report, fileName: fileName, vendors: keys.map(function (k) { return vendors[k]; }), L: L, taxYear: taxYear,
+    firstD: firstD, lastD: lastD, inYearCount: inYear.length, writtenSum: writtenSum, fileTotal: fileTotal, fileTotalRow: fileTotalRow,
+    subBad: subBad, cents: { bank: bank, card: card, network: network, outside: outsideTotal, totalPayments: totalPayments, accountedFor: accountedFor }
+  };
+}
+
+/* ---------- sample ---------- */
+function sampleCSV() {
+  var r = [
+    ['Date', 'Type', 'Num', 'Name', 'Memo', 'Account', 'Split', 'Amount'],
+    ['01/05/2026', 'Check', '1001', 'Oak Street Properties', 'January rent', 'Checking', 'Rent or Lease', '1,500.00'],
+    ['01/09/2026', 'Check', '1002', 'Rivera Plumbing LLC', 'Water heater', 'Checking', 'Repairs & Maintenance', '1,400.00'],
+    ['01/15/2026', 'Expense', 'ACH', 'Gusto', 'Payroll', 'Checking', 'Payroll Expenses', '6,200.00'],
+    ['01/22/2026', 'Expense', 'POS', 'Home Depot', 'Pipe and fittings', 'Chase Visa', 'Supplies', '412.37'],
+    ['02/05/2026', 'Check', '1003', 'Oak Street Properties', 'February rent', 'Checking', 'Rent or Lease', '1,500.00'],
+    ['02/11/2026', 'Bill', '', 'Brightline Consulting Inc', 'Q1 strategy', 'Accounts Payable', 'Consulting', '2,500.00'],
+    ['02/20/2026', 'Bill Payment (Check)', '1004', 'Brightline Consulting Inc', 'Q1 strategy', 'Checking', 'Accounts Payable', '-2,500.00'],
+    ['03/02/2026', 'Check', '1005', 'Rivera Plumbing', 'Drain repair', 'Checking', 'Repairs & Maintenance', '650.00'],
+    ['03/02/2026', 'Check', '1005', 'Rivera Plumbing', 'Drain repair', 'Checking', 'Repairs & Maintenance', '650.00'],
+    ['03/05/2026', 'Check', '1006', 'Oak Street Properties', 'March rent', 'Checking', 'Rent or Lease', '1,500.00'],
+    ['03/18/2026', 'Expense', '', 'Dana Kim Design', 'Logo', 'PayPal', 'Advertising & Marketing', '900.00'],
+    ['04/06/2026', 'Check', '1007', 'Oak Street Properties', 'April rent', 'Checking', 'Rent or Lease', '1,500.00'],
+    ['04/14/2026', 'Check', '1008', 'Dana Kim Design', 'Website', 'Checking', 'Advertising & Marketing', '1,250.00'],
+    ['04/30/2026', 'Check', '1009', 'Shaw Law Group', 'Lease review', 'Checking', 'Legal Fees', '2,750.00'],
+    ['05/12/2026', 'Check', '1010', 'Green Leaf Landscaping', 'Spring cleanup', 'Checking', 'Landscaping', '950.00'],
+    ['06/03/2026', 'Check', '1011', 'Lakeside Dental', 'Employee exam program', 'Checking', 'Medical', '2,400.00'],
+    ['06/19/2026', 'Check', '1012', 'Green Leaf Landscaping', 'Summer mowing', 'Checking', 'Landscaping', '800.00'],
+    ['07/08/2026', 'Deposit', '', 'Green Leaf Landscaping', 'Refund, missed visit', 'Checking', 'Landscaping', '-150.00'],
+    ['07/21/2026', 'Expense', 'POS', 'Staples', 'Toner', 'Chase Visa', 'Office Supplies', '238.15'],
+    ['08/14/2026', 'Check', '1013', 'Brightline Consulting Inc.', 'Q3 strategy', 'Checking', 'Consulting', '2,500.00'],
+    ['09/09/2026', 'Check', '1014', 'Patel Bookkeeping', 'Cleanup', 'Checking', 'Bookkeeping', '1,100.00'],
+    ['09/30/2026', 'Check', '1015', 'Patel Bookkeeping Services', 'Monthly', 'Checking', 'Bookkeeping', '1,000.00'],
+    ['10/15/2026', 'Check', '1016', 'Internal Revenue Service', 'Q3 estimate', 'Checking', 'Taxes', '3,000.00'],
+    ['11/10/2026', 'Check', '1017', '', 'Cash withdrawal', 'Checking', '', '300.00'],
+    ['12/01/2026', 'Check', '1018', 'Metro Electric', 'Panel upgrade', 'Checking', 'Contract Labor', ''],
+    ['12/01/2026', 'Check', '1019', 'Metro Electric', 'Wiring', 'Checking', 'Contract Labor', '1,800.00'],
+    ['12/28/2026', 'Check', '1020', 'Oak Street Properties', 'Year-end rent', 'Checking', 'Rent or Lease', '1,500.00'],
+    ['01/04/2027', 'Check', '1021', 'Oak Street Properties', 'January 2027 rent', 'Checking', 'Rent or Lease', '1,500.00']
+  ];
+  var sum = 0;
+  r.slice(1).forEach(function (x) { var a = parseAmount(x[7]); if (a != null && parseDate(x[0])) sum += a; });
+  var out = [['Sample Co. (made up)  -  Transaction list by date'], [''], ].concat(r);
+  out.push(['TOTAL', '', '', '', '', '', '', money(sum).replace('$', '')]);
+  return out.map(function (row) { return row.map(function (c) { return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(','); }).join('\r\n');
+}
+
+window.__analyze = analyze;
+window.__parseCSV = parseCSV;
+window.__sampleCSV = sampleCSV;
+if (typeof document === 'undefined' || !document.getElementById) return;
+
+/* ---------- UI ---------- */
+var $ = function (id) { return document.getElementById(id); };
+var meta = { client: '', prepared: '', reviewed: '' };
+var startEl = $('start'), sheetEl = $('sheet'), errEl = $('error'), fileEl = $('file'), dropEl = $('drop');
+
+function showError(msg) {
+  errEl.innerHTML = '<strong>I could not use that file.</strong>' + esc(msg);
+  errEl.classList.remove('hidden');
+  startEl.classList.remove('hidden'); sheetEl.classList.add('hidden');
+}
+function failWith(code, msg) { window.__report = { fatal: code, message: msg }; showError(msg); }
+
+function loadXLSX() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return new Promise(function (res, rej) {
+    var s = document.createElement('script');
+    s.src = XLSX_URL;
+    s.onload = function () { window.XLSX ? res(window.XLSX) : rej(new Error('no XLSX')); };
+    s.onerror = function () { rej(new Error('load')); };
+    document.head.appendChild(s);
+  });
+}
+
+function handleFile(file) {
+  if (!file) return;
+  errEl.classList.add('hidden');
+  var name = file.name || 'file', ext = (name.match(/\.([^.]+)$/) || [, ''])[1].toLowerCase();
+  if (ext !== 'csv' && ext !== 'xlsx') { failWith('UNREADABLE_FILE', 'It is ' + (ext ? 'a .' + ext + ' file' : 'not a .csv or .xlsx file') + '. Export the payments as .csv or .xlsx and try again.'); return; }
+  var reader = new FileReader();
+  reader.onerror = function () { failWith('UNREADABLE_FILE', 'The computer would not let me open it.'); };
+  reader.onload = function () {
+    var buf = reader.result;
+    if (ext === 'csv') {
+      var text;
+      try { text = new TextDecoder('utf-8').decode(new Uint8Array(buf)); } catch (e) { failWith('UNREADABLE_FILE', 'The text in it could not be read.'); return; }
+      if (/\u0000/.test(text.slice(0, 2000)) || /^PK\u0003\u0004/.test(text)) { failWith('UNREADABLE_FILE', 'It is named .csv but is not a text file. Export it again as CSV.'); return; }
+      run(parseCSV(text), name);
+    } else {
+      loadXLSX().then(function (X) {
+        var rows;
+        try {
+          var wb = X.read(new Uint8Array(buf), { type: 'array' });
+          var ws = wb.Sheets[wb.SheetNames[0]];
+          if (!ws || !ws['!ref']) { rows = []; }
+          else {
+            var rg = X.utils.decode_range(ws['!ref']); rg.s.r = 0; rg.s.c = 0;
+            rows = X.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '', blankrows: true, range: rg });
+          }
+        } catch (e) { failWith('UNREADABLE_FILE', 'The spreadsheet would not open. It may be damaged or password-protected; try saving it again, or export it as .csv.'); return; }
+        run(rows, name);
+      }, function () { failWith('UNREADABLE_FILE', 'The spreadsheet reader could not be loaded (it needs an internet connection the first time). Save the file as .csv and drop that instead.'); });
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function run(rows, name) {
+  var res;
+  try { res = analyze(rows, name); } catch (e) { failWith('UNREADABLE_FILE', 'Something in the file stopped me from reading it (' + (e && e.message || 'unknown problem') + ').'); return; }
+  if (res.fatal) { failWith(res.fatal, res.message); return; }
+  window.__report = res.report;
+  render(res);
+}
+
+var TABLES = [
+  { id: 'sec-file', title: 'File a 1099', buckets: ['NEC', 'MISC_RENT', 'MISC_MEDICAL'] },
+  { id: 'sec-exempt', title: 'Probably exempt', buckets: ['CONFIRM_CORP'] },
+  { id: 'sec-review', title: 'Needs your judgment', buckets: ['REVIEW'] },
+  { id: 'sec-close', title: 'Close to the limit', buckets: ['CLOSE'] },
+  { id: 'sec-none', title: 'No 1099', buckets: ['NOT_REPORTABLE'] }
+];
+
+function setPageStyle(fileName, warn) {
+  var q = function (s) { return '"' + String(s).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/[\r\n]/g, ' ') + '"'; };
+  $('page-style').textContent = '@media print { @page { size: auto; margin: 16mm 11mm 14mm 11mm; ' +
+    '@top-left { content: ' + q('Who gets a 1099? \u2014 ' + fileName) + '; font: 8.5pt system-ui, sans-serif; } ' +
+    (warn ? '@top-center { content: ' + q('TOTALS DO NOT TIE \u2014 DO NOT FILE FROM THIS') + '; font: bold 8.5pt system-ui, sans-serif; color: #a8001c; } ' : '') +
+    '@top-right { content: "Page " counter(page) " of " counter(pages); font: 8.5pt system-ui, sans-serif; } } }';
+}
+
+function render(res) {
+  var rep = res.report, c = res.cents, L = res.L, y = res.taxYear, lim = moneyShort(L);
+  var groups = TABLES.map(function (t) { return res.vendors.filter(function (v) { return t.buckets.indexOf(v.bucket) >= 0; }).sort(function (a, b) { return b.R - a.R || (a.name < b.name ? -1 : 1); }); });
+  var tieBad = rep.controls.fileTotalTies === false || res.subBad.length > 0;
+  setPageStyle(res.fileName, tieBad);
+  var sum = function (vs) { var s = 0; vs.forEach(function (v) { s += v.R; }); return s; };
+  var nec = dueDate(y + 1, 1, 31), miscPaper = dueDate(y + 1, 2, 28), miscE = dueDate(y + 1, 3, 31);
+  var h = [];
+  h.push('<div class="toolbar"><button type="button" class="btn" id="print">Print or save as PDF</button><button type="button" class="linkbtn" id="restart">Start over</button></div>');
+  h.push('<div class="head"><div class="head-main"><h1>Who gets a 1099? \u2014 tax year ' + y + '</h1>');
+  h.push('<p class="counts">' + (tieBad ? '<span class="nc">Not confirmed:</span> ' : '') +
+    '<a href="#sec-file">' + groups[0].length + ' to file (' + money(sum(groups[0])) + ')</a> \u00b7 ' +
+    '<a href="#sec-exempt">' + groups[1].length + ' probably exempt</a> \u00b7 ' +
+    '<a href="#sec-review">' + groups[2].length + ' need' + (groups[2].length === 1 ? 's' : '') + ' judgment</a> \u00b7 ' +
+    '<a href="#sec-close">' + groups[3].length + ' close to the limit</a> \u00b7 ' +
+    '<a href="#sec-none">' + groups[4].length + ' no 1099</a></p>');
+  var acc = rep.controls.ties ? 'Every payment line is accounted for (' + rep.controls.linesRead + ' lines, ' + money(c.totalPayments) + ').' : '<span class="bad">Not every payment line is accounted for</span> (' + money(c.accountedFor) + ' placed of ' + money(c.totalPayments) + ').';
+  var ft = rep.controls.fileTotal == null ? 'The file has no total row to check against.' :
+    rep.controls.fileTotalTies ? 'The file\u2019s own total (' + money(Math.abs(res.fileTotal)) + ') agrees with its lines.' :
+      '<span class="bad">The file\u2019s own total (' + money(Math.abs(res.fileTotal)) + ') does not agree with its lines (' + money(Math.abs(res.writtenSum)) + ').</span>';
+  if (res.subBad.length) ft += ' <span class="bad">' + res.subBad.length + ' vendor subtotal' + (res.subBad.length === 1 ? ' does' : 's do') + ' not agree.</span>';
+  h.push('<p>' + acc + ' ' + ft + '</p>');
+  h.push('<div class="facts"><p>Source file: <b>' + esc(res.fileName) + '</b> \u00b7 ' + res.inYearCount + ' payment lines in ' + y + ' (' + rep.controls.linesRead + ' read in all) \u00b7 payments run from ' + showDate(res.firstD) + ' to ' + showDate(res.lastD) + '.</p>');
+  h.push('<p>Limit applied: <b>' + lim + '</b> of bank payments (' + (y >= 2026 ? 'the rule for 2026 payments' : 'the rule for ' + y + ' payments') + ').' +
+    (y === 2026 ? ' Nonemployee compensation is box 1a on the 2026 Form 1099-NEC; it was box 1 before.' : '') + '</p>');
+  h.push('<p>Due: 1099-NEC to the IRS and to the payee by January 31' + (nec.moved ? ', which is ' + nec.text + ' because January 31, ' + (y + 1) + ' is a ' + nec.origDay : ', ' + (y + 1)) + '. ' +
+    '1099-MISC to the payee by ' + nec.text + '; to the IRS by ' + miscPaper.text + ' on paper or ' + miscE.text + ' if filed electronically.</p></div></div>');
+  h.push('<div class="signoff"><label>Client <input id="m-client" value="' + esc(meta.client) + '"></label>' +
+    '<label>Prepared by <input id="m-prepared" value="' + esc(meta.prepared) + '"></label>' +
+    '<label>Reviewed by <input id="m-reviewed" value="' + esc(meta.reviewed) + '"></label></div></div>');
+  if (tieBad) {
+    h.push('<div id="tie-banner" role="alert">Do not file from this worksheet. The file\u2019s ' + (rep.controls.fileTotalTies === false ? 'own total' : '') + (rep.controls.fileTotalTies === false && res.subBad.length ? ' and ' : '') + (res.subBad.length ? 'vendor subtotals' : '') + ' do not tie to its lines, so lines may be missing.<span>Ask the client for a new export of every payment for ' + y + ', then start over.</span></div>');
+  }
+  // check these first
+  h.push('<h2 id="sec-checks">Check these first</h2>');
+  var items = [];
+  rep.exceptions.forEach(function (e) { items.push('<li><span class="code">' + esc(e.code) + '</span> ' + esc(e.message) + '</li>'); });
+  if (groups[2].length) items.push('<li><b>Needs your judgment:</b> ' + groups[2].map(function (v) { return esc(v.name); }).join(', ') + '. See <a href="#sec-review">the table below</a>.</li>');
+  groups[0].concat(groups[1]).forEach(function (v) { if (v.cautions.length) items.push('<li><b>' + esc(v.name) + ':</b> ' + esc(v.cautions.join(' ')) + '</li>'); });
+  h.push(items.length ? '<ul class="checks">' + items.join('') + '</ul>' : '<p class="empty">Nothing to check: no exceptions, no judgment calls and no cautions.</p>');
+
+  var NEXT = [
+    'Next: compare this list with the client\u2019s 1099 report in the accounting software; a vendor here and not there was probably never flagged for 1099. Then confirm each W-9 and file by ' + nec.text + '.',
+    'Next: get each vendor\u2019s W-9. If it shows a C or S corporation, no 1099 is needed; otherwise, file a 1099-NEC.',
+    'Next: answer the question in each row and write your decision; file a 1099 where the answer makes the vendor reportable.',
+    'Next: ask the client whether any payments to these vendors are missing from this file, since a little more would reach the limit.',
+    'Next: skim this list for anything mislabeled; as the file stands, none of these needs a form.'
+  ];
+  TABLES.forEach(function (t, ti) {
+    var vs = groups[ti], review = t.id === 'sec-review';
+    h.push('<h2 id="' + t.id + '">' + t.title + ' (' + vs.length + ')</h2><p class="next">' + NEXT[ti] + '</p>');
+    if (!vs.length) { h.push('<p class="empty">None.</p>'); return; }
+    h.push('<table class="ws"><thead><tr><th>Vendor</th><th>Form and box</th><th class="money">Bank dollars</th><th>Why</th><th>W-9 on file</th>' + (review ? '<th>Your decision</th>' : '') + '</tr></thead><tbody>');
+    vs.forEach(function (v, vi) {
+      var rowsTxt = v.lines.concat(v.unread).map(function (l) { return l.row; });
+      var also = v.spellings.length > 1 ? '<div class="small">Combined spellings: ' + v.spellings.map(esc).join('; ') + '</div>' : '';
+      var extra = (v.C || v.N) ? '<div class="small">Also ' + (v.C ? money(v.C) + ' by card' : '') + (v.C && v.N ? ', ' : '') + (v.N ? money(v.N) + ' via network' : '') + ' (not counted)</div>' : '';
+      var cid = t.id + '-' + vi;
+      h.push('<tr><td data-label="Vendor"><span class="vname">' + esc(v.name) + '</span><div class="small">' + esc(rowWord(rowsTxt)) + '</div>' + also + '</td>' +
+        '<td data-label="Form and box">' + (v.form ? esc(v.form) + ' box ' + esc(v.box) : '\u2014') + '</td>' +
+        '<td data-label="Bank dollars" class="money">' + money(v.R) + extra + '</td>' +
+        '<td data-label="Why" class="why">' + esc(v.reason) + v.cautions.map(function (cc) { return '<span class="caution">' + esc(cc) + '</span>'; }).join('') + '</td>' +
+        '<td data-label="W-9 on file" class="w9"><label><input type="checkbox" aria-label="W-9 on file for ' + esc(v.name) + '"> on file</label></td>' +
+        (review ? '<td data-label="Your decision"><textarea class="decision" id="' + cid + '" rows="2" aria-label="Your decision for ' + esc(v.name) + '"></textarea><div class="print-only" data-mirror="' + cid + '"></div></td>' : '') + '</tr>');
+    });
+    h.push('</tbody><tfoot><tr><td data-label="">Subtotal, ' + vs.length + ' vendor' + (vs.length === 1 ? '' : 's') + '</td><td></td><td class="money" data-label="Bank dollars">' + money(sum(vs)) + '</td><td></td><td></td>' + (review ? '<td></td>' : '') + '</tr></tfoot></table>');
+  });
+
+  // control totals
+  var ctl = [];
+  function crow(label, val, cls) { ctl.push('<tr' + (cls ? ' class="' + cls + '"' : '') + '><td data-label="">' + label + '</td><td class="money" data-label="Amount">' + val + '</td></tr>'); }
+  crow('Bank (checks, ACH, wire, cash and other) \u2014 the dollars that count toward the limit', money(c.bank));
+  crow('Card', money(c.card));
+  crow('PayPal, Venmo and other networks', money(c.network));
+  crow('Outside ' + y + ' (' + rep.controls.outsideYearLines + ' lines)', money(c.outside));
+  crow('Sum', money(c.bank + c.card + c.network + c.outside), 'sub');
+  crow('Payment lines read (' + rep.controls.linesRead + ' lines, refunds subtracted)', money(c.totalPayments));
+  crow('Do the two tie?', rep.controls.ties ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>');
+  crow('Lines that were not payments (bills, credits and similar; not counted)', String(rep.controls.notPaymentLines));
+  crow('Lines with a date but no readable amount (not counted)', String(rep.controls.unreadableLines));
+  if (rep.controls.fileTotal == null) crow('The file\u2019s own total', 'none in file');
+  else {
+    crow('The file\u2019s own total (row ' + res.fileTotalRow + ')', money(Math.abs(res.fileTotal)));
+    crow('Its lines exactly as written, bills included', money(Math.abs(res.writtenSum)));
+    crow('Does the file\u2019s total tie to its lines?', rep.controls.fileTotalTies ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>');
+  }
+  h.push('<h2 id="sec-controls">Control totals</h2>');
+  h.push('<table class="ws ctl"><tbody>' + ctl.join('') + '</tbody></table>');
+  h.push('<p class="small">The file\u2019s own total can differ from the payments total because it adds every line as written: bills and credits that are not payments, refunds with their signs as written, and payments outside ' + y + '.</p>');
+  var bt = [];
+  TABLES.forEach(function (t, ti) { bt.push('<tr><td data-label="">' + t.title + '</td><td class="money" data-label="Bank dollars">' + money(sum(groups[ti])) + '</td></tr>'); });
+  bt.push('<tr class="sub"><td data-label="">Bank total</td><td class="money" data-label="Bank dollars">' + money(c.bank) + '</td></tr>');
+  h.push('<h2>Bank dollars by table</h2><table class="ws ctl"><tbody>' + bt.join('') + '</tbody></table>');
+
+  // source lines
+  var src = [];
+  groups.slice(0, 4).forEach(function (vs) {
+    vs.forEach(function (v) {
+      var ls = v.lines.map(function (l) { return { l: l, counted: 'Counted (' + l.method + ')', amt: money(l.amt) }; })
+        .concat(v.unread.map(function (l) { return { l: l, counted: 'Not counted: no readable amount', amt: '\u2014' }; }))
+        .concat(v.setaside.map(function (l) { return { l: l, counted: 'Not counted: ' + (l.type || 'not a payment'), amt: l.written == null ? '\u2014' : money(l.written) }; }))
+        .sort(function (a, b) { return a.l.row - b.l.row; });
+      src.push('<tr class="sub"><td colspan="7" data-label="">' + esc(v.name) + '</td></tr>');
+      ls.forEach(function (x) {
+        src.push('<tr><td data-label="Row">' + x.l.row + '</td><td data-label="Date">' + showDate(x.l.date) + '</td><td data-label="Number">' + esc(x.l.number) + '</td><td class="money" data-label="Amount">' + x.amt + '</td><td data-label="Counted">' + esc(x.counted) + '</td><td data-label="Category">' + esc(x.l.category) + '</td><td data-label="Memo">' + esc(x.l.memo) + '</td></tr>');
+      });
+    });
+  });
+  h.push('<details class="src"><summary>Source lines</summary><p class="small">Every line of every vendor outside the No 1099 table. This prints only while it is open.</p>' +
+    (src.length ? '<table class="ws"><thead><tr><th>Row</th><th>Date</th><th>Number</th><th class="money">Amount</th><th>Counted?</th><th>Category</th><th>Memo</th></tr></thead><tbody>' + src.join('') + '</tbody></table>' : '<p class="empty">No vendors outside the No 1099 table.</p>') + '</details>');
+
+  h.push('<footer><p><b>What this does not do.</b> It has seen no W-9. It does no TIN checks, applies no state rules, does not handle backup withholding, and does not cover 1099-INT, 1099-DIV, 1099-K or 1042-S. It cannot spot an employee paid as a contractor or a tax-exempt payee. It knows only the payments in this file, and it assumes a calendar-year client.</p>' +
+    '<p>This is a worksheet, not a filing. The accountant who signs it is responsible for reviewing every line.</p></footer>');
+
+  sheetEl.innerHTML = h.join('');
+  startEl.classList.add('hidden'); errEl.classList.add('hidden'); sheetEl.classList.remove('hidden');
+  window.scrollTo(0, 0);
+  $('print').onclick = function () { window.print(); };
+  $('restart').onclick = restart;
+  ['client', 'prepared', 'reviewed'].forEach(function (k) { $('m-' + k).addEventListener('input', function (e) { meta[k] = e.target.value; }); });
+  Array.prototype.forEach.call(sheetEl.querySelectorAll('textarea.decision'), function (ta) {
+    var mirror = sheetEl.querySelector('[data-mirror="' + ta.id + '"]');
+    ta.addEventListener('input', function () { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; mirror.textContent = ta.value; });
+  });
+}
+
+function restart() {
+  meta.client = '';
+  sheetEl.innerHTML = ''; sheetEl.classList.add('hidden');
+  startEl.classList.remove('hidden'); errEl.classList.add('hidden');
+  fileEl.value = '';
+  $('page-style').textContent = '';
+  window.scrollTo(0, 0);
+}
+
+fileEl.addEventListener('change', function () { handleFile(fileEl.files && fileEl.files[0]); });
+['dragenter', 'dragover'].forEach(function (t) { dropEl.addEventListener(t, function (e) { e.preventDefault(); dropEl.classList.add('over'); }); });
+['dragleave', 'drop'].forEach(function (t) { dropEl.addEventListener(t, function () { dropEl.classList.remove('over'); }); });
+dropEl.addEventListener('drop', function (e) { e.preventDefault(); handleFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]); });
+document.addEventListener('dragover', function (e) { e.preventDefault(); });
+document.addEventListener('drop', function (e) { e.preventDefault(); });
+$('sample').addEventListener('click', function () { errEl.classList.add('hidden'); run(parseCSV(sampleCSV()), 'sample-payments.csv'); });
+})();
+</script>
+</body>
+</html>

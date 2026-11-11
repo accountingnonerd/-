@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.cover{width:960px;height:540px;background:var(--ground);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 400px;align-items:center;padding:0 56px}
+.left .kicker{font-size:13px}
+.left h1{font-size:52px;margin-top:16px}
+.left p{font:400 19px/1.45 var(--text);color:var(--soft);margin-top:18px;max-width:23em}
+.stack{position:relative;height:360px}
+.stub{position:absolute;left:10px;width:370px;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:16px 20px;box-shadow:0 1px 0 rgba(20,32,28,.06)}
+.stub .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.stub .who{font:500 17px/1.2 var(--mono);color:var(--ink)}
+.stub .amt{font:600 18px/1 var(--mono)}
+.stub .meta{font:400 13px/1 var(--text);color:var(--faint);margin-top:8px;letter-spacing:.02em}
+.s1{top:0;transform:rotate(-2deg)} .s2{top:92px;transform:rotate(1.2deg)} .s3{top:184px;transform:rotate(-.8deg)}
+.sum{position:absolute;left:10px;top:286px;width:370px;display:flex;justify-content:space-between;align-items:baseline;border-top:3px solid var(--ink);padding-top:12px}
+.sum .lbl{font:600 15px/1.2 var(--text);color:var(--ink)}
+.sum .amt{font:700 30px/1 var(--mono);color:var(--accent)}
+.tag{position:absolute;right:0;top:346px;font:600 13px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--paper);background:var(--accent);padding:7px 10px;border-radius:4px}
+</style></head><body>
+<div class="cover">
+  <div class="left">
+    <div class="kicker">One Painful Problem · Procure-to-Pay · Episode 1</div>
+    <h1>The 1099 your software won't find</h1>
+    <p>Three checks, three spellings, one vendor nobody flagged. A free tool that reads every payment, and the tests it had to pass.</p>
+  </div>
+  <div class="stack">
+    <div class="stub s1"><div class="row"><span class="who">Rivera Plumbing LLC</span><span class="amt num">$700.00</span></div><div class="meta">CHECK 3001 · JAN 14, 2026 · REPAIRS</div></div>
+    <div class="stub s2"><div class="row"><span class="who">RIVERA PLUMBING</span><span class="amt num">$800.00</span></div><div class="meta">CHECK 3015 · APR 22, 2026 · REPAIRS</div></div>
+    <div class="stub s3"><div class="row"><span class="who">Rivera Plumbing, L.L.C.</span><span class="amt num">$900.00</span></div><div class="meta">CHECK 3040 · OCT 6, 2026 · REPAIRS</div></div>
+    <div class="sum"><span class="lbl">One vendor, 2026</span><span class="amt num">$2,400.00</span></div>
+    <div class="tag">Over the $2,000 limit</div>
+  </div>
+</div>
+</body></html>

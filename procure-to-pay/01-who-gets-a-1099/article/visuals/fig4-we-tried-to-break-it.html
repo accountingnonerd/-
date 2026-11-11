@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+.tile{background:var(--ground);border-radius:10px;padding:22px 24px}
+.tile .n{font:700 48px/1 var(--display);letter-spacing:-.02em}
+.tile .t{font:400 17px/1.4 var(--text);color:var(--soft);margin-top:8px}
+h2{font:700 24px/1.25 var(--display);margin-top:40px}
+.h2s{font:400 17px/1.45 var(--text);color:var(--soft);margin-top:6px;max-width:58em}
+table{width:100%;border-collapse:collapse;margin-top:18px}
+th{font:600 13px/1.2 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--soft);text-align:left;padding:0 12px 10px;border-bottom:2px solid var(--ink)}
+td{font:400 18px/1.35 var(--text);padding:12px;border-bottom:1px solid var(--rule)}
+td.miss{color:var(--alarm);font-weight:600;background:var(--alarm-tint)}
+td.hit{color:var(--accent);font-weight:600;background:var(--accent-tint)}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">The test came first</div>
+  <h1>We tried to break it</h1>
+  <div class="tiles">
+    <div class="tile"><div class="n">15</div><div class="t">test files written before the tool, answers worked by hand from the IRS instructions</div></div>
+    <div class="tile"><div class="n">476 / 476</div><div class="t">checks passed by the final version: every vendor, form, amount and control total</div></div>
+    <div class="tile"><div class="n">5 / 5</div><div class="t">planted errors caught, including a check entered twice and a file that does not add up</div></div>
+  </div>
+  <h2>Then we broke the tool on purpose, five ways</h2>
+  <p class="h2s">A test that cannot fail proves nothing. The first time, all five broken copies passed. Our test runner had been checking the wrong file. We fixed it and ran them again.</p>
+  <table>
+    <thead><tr><th>Broken copy</th><th>First run</th><th>After the fix</th></tr></thead>
+    <tbody>
+      <tr><td>Uses the old $600 limit</td><td class="miss">&#10007; passed</td><td class="hit">&#10003; caught, failed 12 of 15 files</td></tr>
+      <tr><td>Counts card payments</td><td class="miss">&#10007; passed</td><td class="hit">&#10003; caught, failed 4 files</td></tr>
+      <tr><td>Treats every LLC as a corporation</td><td class="miss">&#10007; passed</td><td class="hit">&#10003; caught, failed 4 files</td></tr>
+      <tr><td>Counts bills as well as payments</td><td class="miss">&#10007; passed</td><td class="hit">&#10003; caught, failed 1 file</td></tr>
+      <tr><td>Stops merging spellings</td><td class="miss">&#10007; passed</td><td class="hit">&#10003; caught, failed 1 file</td></tr>
+    </tbody>
+  </table>
+  <p class="source">All figures from tests/RESULTS.md in the repository. Test files are invented; no client data.</p>
+</div>
+</body></html>

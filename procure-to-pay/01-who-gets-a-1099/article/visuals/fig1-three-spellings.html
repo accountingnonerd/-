@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+svg text{font-family:var(--text);fill:var(--ink)}
+.v{font:600 20px var(--mono)}
+.lab{font:500 14px var(--mono);fill:var(--ink)}
+.labs{font:400 14px var(--text);fill:var(--soft)}
+.note{font:600 18px var(--text)}
+.notes{font:400 16px var(--text);fill:var(--soft)}
+.lim{font:600 15px var(--text)}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">What the tool sees</div>
+  <h1>One plumber, three spellings</h1>
+  <p class="sub">Each check on its own is far under this year's $2,000 limit. Typed three ways, the vendor never adds up, so no 1099 is issued. Combined, it is over.</p>
+  <svg id="c" width="1072" height="560" viewBox="0 0 1072 560" role="img" aria-label="Three bars of $700, $800 and $900 under a $2,000 line, combined into one $2,400 bar over it"></svg>
+  <p class="source">Payments to Rivera Plumbing in test file 04 (Larkspur Cafe). Both companies are invented. Limit: IRS Instructions for Forms 1099-MISC and 1099-NEC (12/2026), payments made in 2026.</p>
+</div>
+<script>
+const svg=document.getElementById("c"), NS="http://www.w3.org/2000/svg";
+const T0=40, base=420, max=2600, y=v=>base-(base-T0)*v/max;
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e;}
+function bar(x,w,y0,y1,fill,roundTop){ // y0 bottom, y1 top; 4px rounded data end at the top only
+  const r=roundTop?4:0;
+  el("path",{d:`M${x},${y0} L${x},${y1+r} Q${x},${y1} ${x+r},${y1} L${x+w-r},${y1} Q${x+w},${y1} ${x+w},${y1+r} L${x+w},${y0} Z`,fill});
+}
+// baseline
+el("line",{x1:0,x2:1072,y1:base,y2:base,stroke:"var(--ink)","stroke-width":1.5});
+// three separate checks
+const items=[["Rivera Plumbing LLC","Jan 14",700],["RIVERA PLUMBING","Apr 22",800],["Rivera Plumbing, L.L.C.","Oct 6",900]];
+items.forEach(([n,d,v],i)=>{const cx=105+i*195,w=64;bar(cx-w/2,w,base,y(v),"var(--accent-3)",true);
+  el("text",{x:cx,y:y(v)-12,"text-anchor":"middle",class:"v"},"$"+v.toLocaleString());
+  el("text",{x:cx,y:base+28,"text-anchor":"middle",class:"lab"},n);
+  el("text",{x:cx,y:base+50,"text-anchor":"middle",class:"labs"},d+", 2026");});
+// limit line, drawn over everything
+// arrow
+el("path",{d:"M620,300 L720,300",stroke:"var(--ink)","stroke-width":2,fill:"none"});
+el("path",{d:"M720,300 l-10,-6 l0,12 z",fill:"var(--ink)"});
+el("text",{x:670,y:286,"text-anchor":"middle",class:"labs"},"same vendor");
+// one combined bar, segments with a 2px surface gap
+const bx=820,bw=104; let yb=base;
+[[700,"Jan"],[800,"Apr"],[900,"Oct"]].forEach(([v,m],i,a)=>{const yt=yb-(base-T0)*v/max;
+  bar(bx,bw,yb,yt+(i<a.length-1?2:0),"var(--accent)",i===a.length-1);
+  el("text",{x:bx+bw+14,y:(yb+yt)/2+(i===a.length-1?18:5),class:"labs"},m+"  $"+v);yb=yt;});
+el("text",{x:bx+bw/2,y:y(2400)-14,"text-anchor":"middle",class:"v",style:"font-size:24px"},"$2,400");
+el("text",{x:bx+bw/2,y:base+28,"text-anchor":"middle",class:"lab"},"Rivera Plumbing");
+el("text",{x:bx+bw/2,y:base+50,"text-anchor":"middle",class:"labs"},"3 spellings combined");
+// limit
+el("line",{x1:0,x2:1072,y1:y(2000),y2:y(2000),stroke:"var(--alarm)","stroke-width":2,"stroke-dasharray":"7 6"});
+el("text",{x:0,y:y(2000)-10,class:"lim",style:"fill:var(--alarm)"},"2026 limit: $2,000");
+// notes
+el("text",{x:0,y:base+96,class:"note"},"Seen separately: no 1099");
+el("text",{x:0,y:base+120,class:"notes"},"The software's report misses all three if none is flagged for 1099.");
+el("text",{x:1072,y:base+96,"text-anchor":"end",class:"note",style:"fill:var(--accent)"},"Seen together: file a 1099-NEC");
+el("text",{x:1072,y:base+120,"text-anchor":"end",class:"notes"},"The tool merges the spellings and shows the rows.");
+</script>
+</body></html>

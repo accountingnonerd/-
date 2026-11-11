@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Who Gets a 1099?</title>
-<!-- Agent 01 of "One Painful Problem". Version 1.0.0. One file. Open it in any browser. -->
+<!-- One Painful Problem, Procure-to-Pay episode 01. Version 1.1.0. One file. Open it in any browser. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><!--XLSX: build.py replaces this line with the library itself-->
 <style>
 /* Layout: one column, like a workpaper. Start screen is a single drop target; the report prints as-is. */
@@ -131,6 +131,7 @@ table.src td.vname{font-weight:700;background:#f6f8f7}
   </label>
   <div id="problem" class="stopbox" hidden role="alert"></div>
 
+  <p class="how"><b>What it adds.</b> Your accounting software's 1099 report counts only the vendors someone flagged for 1099. This page reads every payment in the file, so it also finds the vendors nobody flagged, the same vendor typed three ways, and checks entered twice.</p>
   <p class="how"><b>Which file?</b> All payments for the tax year, for example January to December 2026, one line per check or charge. In QuickBooks: Reports, then "Transaction List by Vendor", set the dates to the whole year, Export to Excel. A check register or expense ledger works too.</p>
   <p class="how"><b>Which rule?</b> $2,000 per vendor for payments made in 2026. $600 for 2025 and earlier. It will not guess at 2027.</p>
   <p class="how">No file handy? <button class="linkish" id="sample" type="button">See it work on a made-up sample.</button></p>
@@ -139,7 +140,7 @@ table.src td.vname{font-weight:700;background:#f6f8f7}
     <p><b>Where your data goes: nowhere.</b> This page reads the file on this computer. Nothing is uploaded, stored or sent.</p>
     <p><b>You stay in charge.</b> The result is a worksheet to review, not a filing. It has not seen any W-9.</p>
   </div>
-  <p class="made">Who Gets a 1099?, version 1.0.0. Agent 01 of the One Painful Problem series. The tests it passed and the prompt that rebuilds it are published with it.</p>
+  <p class="made">Who Gets a 1099?, version 1.1.0. One Painful Problem series, Procure-to-Pay, episode 1. The tests it passed and the prompt that rebuilds it are published with it.</p>
 </section>
 
 <!-- ============ REPORT ============ -->
@@ -601,7 +602,7 @@ function analyzeGrid(rows, fileName, firstRowNumber){
 
   var sumM = function(m){ return order.reduce(function(s, v){ return s + v[m]; }, 0); };
   return {
-    version: "1.0.0", fileName: fileName, taxYear: taxYear, threshold: LIMIT / 100,
+    version: "1.1.0", fileName: fileName, taxYear: taxYear, threshold: LIMIT / 100,
     period: { from: fmtDate(numDate(firstDay)), to: fmtDate(numDate(lastDay)) }, rowsInFile: base + rows.length - 1,
     controls: {
       linesRead: lines.length, totalPayments: sumAll / 100, accountedFor: accounted / 100, ties: accounted === sumAll,
@@ -718,7 +719,7 @@ function run(rows, name, firstRow, isSample){
 
 var SECTIONS = [
   { id: "file", title: "File a 1099", buckets: ["NEC", "MISC_RENT", "MISC_MEDICAL"], w9: true,
-    next: "Make sure a W-9 is on file for each, and request one where it is missing. If a W-9 shows a C or S corporation, including an LLC taxed as one, no 1099 is needed, except for law firms and medical providers." },
+    next: "Compare this list with your accounting software's 1099 report. A vendor here and not there was probably never flagged for 1099. Make sure a W-9 is on file for each, and request one where it is missing. If a W-9 shows a C or S corporation, including an LLC taxed as one, no 1099 is needed, except for law firms and medical providers." },
   { id: "corp", title: "Probably exempt", buckets: ["CONFIRM_CORP"], w9: true,
     next: "No 1099 if the vendor really is a corporation. Look at the W-9 if you have any doubt. Law firms and medical providers get a 1099 even when incorporated." },
   { id: "review", title: "Needs your judgment", buckets: ["REVIEW"], w9: true, decide: true,

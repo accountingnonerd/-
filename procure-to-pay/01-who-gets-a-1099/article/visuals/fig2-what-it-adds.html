@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.cols{display:grid;grid-template-columns:1fr 1.25fr;gap:28px;margin-top:34px}
+.col{border-radius:10px;padding:26px 28px}
+.have{background:var(--ground)}
+.adds{background:var(--accent-tint);outline:2px solid var(--accent);outline-offset:-2px}
+.col h2{font:700 21px/1.25 var(--display)}
+.col .h2s{font:400 15px/1.4 var(--text);color:var(--soft);margin-top:4px}
+ul{list-style:none;margin-top:18px;display:grid;gap:12px}
+li{display:grid;grid-template-columns:26px 1fr;gap:8px;font:400 18px/1.4 var(--text)}
+li .i{font:700 17px/1.4 var(--text);color:var(--accent)}
+.have li .i{color:var(--soft)}
+.bottom{margin-top:26px;font:600 20px/1.45 var(--text)}
+.bottom span{color:var(--accent)}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">In addition to what you have</div>
+  <h1>Your software's 1099 report, and what this adds</h1>
+  <div class="cols">
+    <div class="col have">
+      <h2>Your accounting software's 1099 report</h2>
+      <div class="h2s">QuickBooks Online and Xero</div>
+      <ul>
+        <li><span class="i">&#10003;</span><span>Counts vendors someone flagged for 1099</span></li>
+        <li><span class="i">&#10003;</span><span>Counts payments from accounts mapped to a 1099 box (QuickBooks) or matching your 1099 rules (Xero)</span></li>
+        <li><span class="i">&#10003;</span><span>Leaves out card payments</span></li>
+        <li><span class="i">&#10003;</span><span>Feeds your filing service</span></li>
+      </ul>
+    </div>
+    <div class="col adds">
+      <h2>Also checked by this tool</h2>
+      <div class="h2s">From the year's payments, exported from any ledger</div>
+      <ul>
+        <li><span class="i">+</span><span><b>Every payment, flagged or not</b></span></li>
+        <li><span class="i">+</span><span>One vendor typed several ways</span></li>
+        <li><span class="i">+</span><span>A check entered twice</span></li>
+        <li><span class="i">+</span><span>A refund that pulls a vendor under the limit</span></li>
+        <li><span class="i">+</span><span>Law firms and medical providers that are incorporated</span></li>
+        <li><span class="i">+</span><span>Whether the file adds up to its own totals</span></li>
+        <li><span class="i">+</span><span>A reason for every vendor, on a workpaper you sign</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="bottom">Use both. <span>A vendor on this list and not on your software's list was probably never flagged.</span></p>
+  <p class="source">Software column: QuickBooks Online and Xero help pages, November 2026. The tool reads a CSV or Excel export, on your computer; nothing is uploaded.</p>
+</div>
+</body></html>

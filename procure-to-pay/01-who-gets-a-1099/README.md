@@ -1,6 +1,6 @@
-# 01. Who gets a 1099?
+# Procure-to-Pay, episode 01: Who gets a 1099?
 
-Version 1.0.0, 2026-11-11.
+Version 1.1.0, 2026-11-11. Part of [Series 1: Procure-to-Pay](../README.md), which also holds the value test this tool had to pass.
 
 ## The problem
 
@@ -17,6 +17,15 @@ filing season under a new limit. For payments made in 2026 the general limit is 
 not $600 ([IRS instructions, Rev. December 2026](https://www.irs.gov/instructions/i1099mec)).
 
 This agent does that one job: a payments file in, a 1099 worksheet out.
+
+## What it adds to what she already has
+
+QuickBooks Online and Xero have 1099 reports, but they count only vendors someone flagged
+for 1099 (and, in QuickBooks, accounts mapped to a 1099 box). This tool reads every
+payment in the export, flagged or not. It also catches what flags cannot: one vendor
+typed several ways, a check entered twice, a refund that pulls a vendor under the limit,
+and a file whose totals do not tie. Use it beside the software's report: a vendor on this
+worksheet and not on that report was probably never flagged.
 
 ## How to use it
 
@@ -89,7 +98,8 @@ Positions it takes that a practitioner may want to know:
 | `tests/MANUAL-BASELINE.md` | The same files by hand: steps and estimated minutes. |
 | `ACCOUNTANT-TEST-SCRIPT.md` | A 25-minute script for testing with a real accountant. |
 | `REBUILD-PROMPT.md` | One prompt that rebuilds the agent from nothing. |
-| `ARTICLE.md` | The LinkedIn article. |
+| `article/ARTICLE.md` | The LinkedIn article (draft). `article/PREVIEW.html` shows it with its images. |
+| `article/images/` | The cover and the five figures, rendered from `article/visuals/` with `node render.js`. |
 
 ## Run the tests
 
@@ -98,7 +108,7 @@ cd tools && npm install
 ```
 
 ```bash
-cd 01-who-gets-a-1099/tests && node run-tests.js
+cd procure-to-pay/01-who-gets-a-1099/tests && node run-tests.js
 ```
 
 To test a rebuilt agent, pass its path:

@@ -1,4 +1,6 @@
-# Test results: Who gets a 1099? version 1.0.0
+# Test results: Who gets a 1099?
+
+Version 1.1.0 changed only wording: the start screen and the "File a 1099" section now say what the tool adds to the software's own 1099 report. Every test below was rerun on 1.1.0 with the same result.
 
 Run on 2026-11-11 in headless Chromium. Rerun with `node run-tests.js`.
 
@@ -69,10 +71,11 @@ the tests above.
 |---|---|---|---|---|
 | 1 | First draft | Original 14 cases | 14 of 14 | 394 of 394 |
 | 2 | Revised after the tax review and cold-user check 1 | Final 15 cases | 15 of 15 | 476 of 476 |
-| 3 | Final, as published | Final 15 cases | 15 of 15 | 476 of 476 |
+| 3 | Version 1.0.0 prompt | Final 15 cases | 15 of 15 | 476 of 476 |
+| 4 | Version 1.1.0 prompt, as published | Final 15 cases | 15 of 15 | 476 of 476 |
 
 Each rebuild passed on its first attempt. The prompt was revised between rebuilds because
-the tests and the agent grew, not because a rebuild failed. Rebuild 3 is kept in
+the tests and the agent grew, not because a rebuild failed. Rebuild 4 is kept in
 `tests/rebuild-check/rebuilt-from-final-prompt.html` so anyone can rerun it. It loads its
 spreadsheet reader from a CDN, as the prompt says, so it needs internet for Excel files.
 

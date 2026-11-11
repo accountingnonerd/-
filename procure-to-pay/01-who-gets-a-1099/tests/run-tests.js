@@ -9,7 +9,7 @@
  * (see make_cases.py); this script only compares. Any agent that passes is "the same agent".
  *
  * Needs: playwright, and the xlsx package (served locally in place of the CDN copy, so the
- * test runs without internet):  npm install xlsx@0.18.5   in ../../tools
+ * test runs without internet):  npm install xlsx@0.18.5   in ../../../tools
  */
 const fs = require("fs");
 const path = require("path");
@@ -24,7 +24,7 @@ const agentPath = path.resolve(positional[0] || path.join(HERE, "../agent/who-ge
 if (!fs.existsSync(agentPath)) { console.error("No such agent file: " + agentPath); process.exit(2); }
 console.log("Testing: " + agentPath + "\n");
 const KEY = JSON.parse(fs.readFileSync(path.join(HERE, "answer-key.json"), "utf8"));
-const XLSX_LOCAL = [path.join(HERE, "../../tools/node_modules/xlsx/dist/xlsx.full.min.js")].find(fs.existsSync);
+const XLSX_LOCAL = [path.join(HERE, "../../../tools/node_modules/xlsx/dist/xlsx.full.min.js")].find(fs.existsSync);
 
 const near = (a, b) => typeof a === "number" && typeof b === "number" && Math.abs(a - b) < 0.005;
 const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, "");

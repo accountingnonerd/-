@@ -1,7 +1,81 @@
+<!--
+DRAFT FOR APPROVAL. Not published.
+Series: One Painful Problem. Process: Procure-to-Pay. Episode 1.
+Body: 1,087 words (from "It is the second week" to the closing question). The rebuild prompt is an appendix and not counted.
+Cover image: images/cover.png (1920 x 1080). Inline images: images/fig1 to fig5, each placed where it appears below.
+-->
+
+# The 1099 your software won't find
+
+![Cover: three checks to Rivera Plumbing, typed three ways, adding up to $2,400](images/cover.png)
+
+It is the second week of January. The client's books are clean, the software's 1099 report is printed, and the plumber is not on it. Rivera Plumbing was paid three times in 2026: $700 in January, $800 in April, $900 in October. Someone typed the name three different ways, and nobody ticked the box that tells the software to track that vendor for 1099.
+
+Rivera Plumbing is invented. It lives in one of our test files. The way it slips through is not invented: Intuit keeps a help page on [fixing missing contractors and wrong 1099 amounts](https://quickbooks.intuit.com/learn-support/en-us/help-article/electronic-tax-filing/fix-missing-contractors-wrong-amounts-1099s/L0MspaDKN_US_en_US). This article is about a free tool that catches it, and it opens a series. Each episode takes one step of an accounting process and builds a tool that works alongside the software accountants already have. We start with Procure-to-Pay, because 1099s are due February 1, 2027, and because this is the first season under a new number.
+
+## The number changed. The habit didn't.
+
+For payments made in 2026, the general limit for Forms 1099-NEC and 1099-MISC is $2,000, not $600 ([IRS instructions, 12/2026](https://www.irs.gov/instructions/i1099mec)). The IRS expects the change to matter: it projects Forms 1099-NEC falling from 68.9 million in 2026 to 56.7 million in 2027 ([Publication 6961](https://www.irs.gov/pub/irs-pdf/p6961.pdf)). Getting it wrong costs $60 to $340 per form for returns due in 2027, and $690 for intentional disregard ([IRS](https://www.irs.gov/payments/information-return-penalties)).
+
+The work itself has not changed. On write-up software with no 1099 report, one accountant described it plainly: "We print out the GL for the year or YTD and manually search the transactions for Vendors eligible for 1099's" ([Intuit Accountants Community](https://accountants.intuit.com/community/easyacct-discussions/discussion/how-to-print-1099-vendor-list/00/229893)).
+
+## The gap between the apps
+
+Accountants do not need another app. The [2026 Intuit QuickBooks Accountant Technology Survey](https://www.cpapracticeadvisor.com/2026/07/02/the-2026-accountant-technology-survey-turning-data-revelations-into-a-firm-of-the-future/185807/) of 725 professionals found the average firm already runs on about 10. It also found they lose about five hours a week "moving, re-entering, or reconciling data across disconnected systems."
+
+That is where these tools go: into the gap. QuickBooks Online and Xero both have a 1099 report, and both leave out card payments on their own. But each counts only the vendors someone flagged for 1099. QuickBooks also needs the payment account mapped to a 1099 box. A vendor nobody flagged is invisible.
+
+![Your software's 1099 report, and what this tool adds](images/fig2-what-it-adds.png)
+
+## Three checks, one vendor
+
+The tool is one web page. The accountant exports the client's payments for the year from whatever ledger the client uses, drops the file in, and gets back a worksheet. It reads every payment, flagged or not. It treats "Rivera Plumbing LLC", "RIVERA PLUMBING" and "Rivera Plumbing, L.L.C." as one vendor, adds them in code, and finds $2,400.
+
+![One plumber, three spellings: $700, $800 and $900 combine to $2,400, over the $2,000 limit](images/fig1-three-spellings.png)
+
+It is careful about what it merges. The same test file pays "Mike Chen" $1,100 and "Mike Chen Electric" $1,200. The tool does not decide those are the same person. It lists them under "Check these first" and says that together they come to $2,300. "Smith Electric" and "Smith Roofing" it leaves alone.
+
+Every vendor lands in exactly one list: file a 1099, probably exempt, needs your judgment, close to the limit, or no 1099. Each one comes with a sentence saying why. The worksheet prints with her name on it and the W-9 boxes ticked. Nothing leaves her computer, and no AI runs when she uses it. An AI wrote the page; what runs is ordinary code, so the same file always gives the same answer.
+
+![The worksheet: the answer first, the look-alikes to check, a reason for every vendor](images/fig3-worksheet.png)
+
+## We tried to break it
+
+We wrote the test before the tool: 15 files, 510 payment lines, 99 vendors, each answer worked out by hand from the IRS instructions. Five files hide planted errors, among them a check entered twice, a subtotal that does not match its lines, and last December's payments mixed into this year. The final version passes all 476 checks and catches all five errors.
+
+Getting there was not tidy. A separate AI session, told to play a skeptical tax reviewer, found that we had the box number wrong: on the 2026 Form 1099-NEC, nonemployee compensation moved to box 1a. Another, told to play a 60-year-old partner with no patience for software, typed her client's name into a line that only looked like a box. She also found the list of who gets a 1099 sitting below the fold. Both were fixed.
+
+The best catch came last. To prove the tests could fail, we broke the tool on purpose, five ways. All five broken copies passed. The tests were fine; our test runner had been testing the wrong file. Once that was fixed, all five failed, as they should.
+
+![We tried to break it: five broken copies, all caught once the test runner was fixed](images/fig4-we-tried-to-break-it.png)
+
+How much time does it save? Reading the 518 lines in our test files by hand would take, by our estimate, about two hours. The tool reads them in about a second. That estimate is ours, not a measurement, and the judgment calls still take her time. A practicing accountant will time both in the next round.
+
+## What it won't do
+
+It has not seen a W-9, so it cannot know that an LLC is taxed as a corporation. It does not check taxpayer ID numbers, state rules or backup withholding. It refuses 2027 files, because the 2027 limit has not been set. It judges what a payment was for from the account it was coded to and the vendor's name, so a contractor coded to Supplies lands in "no 1099". That list is printed with a reason for each vendor, so the accountant can skim it.
+
+## The series
+
+![Five processes, one tool at a time](images/fig5-series-map.png)
+
+The series follows the five processes accountants run for clients: Procure-to-Pay, Hire-to-Retire, Record-to-Report, Order-to-Cash and Acquire-to-Retire. Each starts in the season its work peaks. Payroll is next, in January, when the W-2s and the fourth-quarter 941 land on the same desk.
+
+Every tool comes with its test files, its results, and one prompt that rebuilds it from nothing. A fresh AI session, given only that prompt, built a page that passed the same 476 checks on its first try. "The same tool" here means it passes the same tests; the code is different. The prompt is below. The repository is at [link to be added].
+
+## Your turn
+
+Which step in those five processes still eats your afternoon? Tell me the step, the document it starts from, and how many minutes it takes. The next episodes come from the replies.
+
+---
+
+## Appendix: the rebuild prompt, in full
+
+````text
 Build a single self-contained HTML file called `who-gets-a-1099.html`. It is a tool for a US accountant who is expert in tax, impatient with software, and working on a desktop. She gives it one file, the list of everything a client paid during the year, and gets back a printable worksheet saying which vendors need a Form 1099, whose W-9 to check, and why. Everything runs in the browser. Nothing is uploaded. Do all arithmetic in whole cents, in code.
 
 ## Screen
-- Start screen: the title "Who gets a 1099?", one sentence saying what it does, and one large drop area ("Drop the client's payments file here, or click to choose it") wrapping an `<input type="file">` for .csv and .xlsx. Under it, in a few short lines: which file to bring (all payments for the tax year, one line per check or charge), which rule applies ($2,000 for 2026 payments, $600 for 2025 and earlier), that the file never leaves the computer, and that the result is a worksheet she must review. No settings. The only other control is a small link that runs a built-in made-up sample.
+- Start screen: the title "Who gets a 1099?", one sentence saying what it does, and one large drop area ("Drop the client's payments file here, or click to choose it") wrapping an `<input type="file">` for .csv and .xlsx. Under it, in a few short lines: what it adds (accounting software's 1099 reports count only vendors someone flagged for 1099; this reads every payment, so it also finds vendors nobody flagged, one vendor typed several ways, and checks entered twice), which file to bring (all payments for the tax year, one line per check or charge), which rule applies ($2,000 for 2026 payments, $600 for 2025 and earlier), that the file never leaves the computer, and that the result is a worksheet she must review. No settings. The only other control is a small link that runs a built-in made-up sample.
 - After a file is read, replace the start screen with the worksheet, one main button "Print or save as PDF" (`window.print()`), and a small "Start over" link. Add print styles: compact type, table headers repeated, a running page header with the file name and page numbers.
 - Large type (18px or more), plain words, high contrast, light background. Stack table rows as cards on a phone.
 - Read .csv with your own parser (quoted fields, commas inside quotes, a leading BOM, blank lines, CRLF). Read .xlsx with SheetJS from `https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js`, first sheet, raw cell values. Excel dates arrive as serial numbers (days since 1899-12-30): treat a number between 20000 and 80000 in the date column as a date.
@@ -95,7 +169,7 @@ Raise each as an exception with a code and a plain-English message that gives ro
 1. Heading with the tax year. Directly under it, one line of counts that link to the sections: vendors to file and their dollar total, probably exempt, needs judgment, close to the limit, no 1099. Then one line saying whether every payment line is accounted for and whether the file's own total agrees. Then the source file name, the number of payment lines, the dates the payments run from and to, the limit applied, and the due dates (1099-NEC to the IRS and the payee by January 31, which is February 1 in 2027 because the 31st is a Sunday). For 2026 say that nonemployee compensation is box 1a on the 2026 form and was box 1 before. Beside the heading, three text inputs she can type in and that print: Client, Prepared by, Reviewed by. Keep Prepared by and Reviewed by when she starts over with another file.
 2. If the file's total or a subtotal does not tie: a large red warning in an element with `id="tie-banner"` telling her not to file from this worksheet and to ask the client for a new export. Mark the counts line "not confirmed" and repeat a short warning in the running header of every printed page. No element with that id otherwise.
 3. "Check these first": every exception, then the names of the `REVIEW` vendors, then any vendor in the first two tables that carries a caution. If there is nothing, say so. The `NOT_PAYMENTS` message lists each set-aside line with vendor, type, amount and row, and names any vendor that has bills but no payment in the file.
-4. Tables in this order: File a 1099; Probably exempt; Needs your judgment; Close to the limit; No 1099. Under each heading, one sentence beginning "Next:" that says what to do. Columns: vendor (with its row numbers as ranges), form and box, bank dollars, the reason as a full sentence that ends in a question when it is a judgment call, and a real checkbox "W-9 on file". In Needs your judgment, each row also has a multi-line text box "Your decision" that grows as she types and prints in full. Each table ends with a subtotal row.
+4. Tables in this order: File a 1099; Probably exempt; Needs your judgment; Close to the limit; No 1099. Under each heading, one sentence beginning "Next:" that says what to do. For File a 1099 it starts by telling her to compare the list with her accounting software's 1099 report, because a vendor here and not there was probably never flagged for 1099. Columns: vendor (with its row numbers as ranges), form and box, bank dollars, the reason as a full sentence that ends in a question when it is a judgment call, and a real checkbox "W-9 on file". In Needs your judgment, each row also has a multi-line text box "Your decision" that grows as she types and prints in full. Each table ends with a subtotal row.
 5. Control totals: bank, card, network and outside-year dollars; their sum; the sum of the payment lines read and whether the two tie; the count of lines that were not payments; the file's own total and whether it ties to the lines as written (say in words why this can differ from the payments total). Then bank dollars for each table above, summing to the bank total.
 6. A collapsed "Source lines" table listing every line of every vendor outside the No 1099 table: row, date, number, amount, counted or not, category, memo. It prints only while open.
 7. Footer: what the tool does not do (it has seen no W-9; no TIN checks, state rules, backup withholding, 1099-INT/DIV/K or 1042-S; cannot spot an employee paid as a contractor or a tax-exempt payee; knows only the payments in the file; assumes a calendar-year client), and that the accountant is responsible for review.
@@ -112,3 +186,4 @@ After each file, set `window.__report` to:
 ```
 Dollar values are numbers in dollars. `linesRead` counts payment lines only (not set-aside bills, not unreadable lines), including outside-year ones, and `totalPayments` is their sum. `outsideYearLines`, `unreadableLines` and `notPaymentLines` are counts. `accountedFor` is every vendor's `total` plus `outsideYearTotal`. `reportable` is R. `rows` are file row numbers. `form` and `box` are strings or null. `fileTotal` is positive, and it and `fileTotalTies` are null when the file has no total row.
 If the file cannot be used, show no worksheet and set `window.__report = { fatal, message }`, with `fatal` equal to `NO_COLUMNS` (no date and amount headings, or no payment lines), `UNSUPPORTED_YEAR`, or `UNREADABLE_FILE` (wrong file type or a file that will not open).
+````

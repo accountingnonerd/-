@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.lanes{margin-top:30px;display:grid;gap:14px}
+.lane{display:grid;grid-template-columns:232px 1fr;gap:18px;align-items:center;padding:14px 18px;border-radius:10px;background:var(--ground)}
+.lane.on{background:var(--accent-tint);outline:2px solid var(--accent);outline-offset:-2px}
+.name{font:700 19px/1.2 var(--display)}
+.when{font:400 14px/1.3 var(--text);color:var(--soft);margin-top:4px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.step{font:500 14.5px/1 var(--text);padding:9px 10px;border-radius:6px;background:var(--paper);color:var(--soft);border:1px solid var(--rule)}
+.lane.on .step{color:var(--ink)}
+.lane.on .step.built{color:var(--paper)}
+.step.built{background:var(--accent);color:var(--paper);border-color:var(--accent);font-weight:700}
+.step.cand{border:1.5px dashed var(--accent)}
+.arrow{color:var(--faint);font:400 15px/1 var(--text)}
+.legend{display:flex;gap:26px;margin-top:20px;font:400 15px/1 var(--text);color:var(--soft);align-items:center}
+.legend .step{padding:6px 10px}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">The series</div>
+  <h1>Five processes. One tool at a time.</h1>
+  <p class="sub">Each tool takes an export from software you already use and hands back something you file, import or send to the client.</p>
+  <div class="lanes">
+    <div class="lane on"><div><div class="name">1 · Procure-to-Pay</div><div class="when">Now · 1099s due Feb 1, 2027</div></div>
+      <div class="steps"><span class="step">Vendor and W-9</span><span class="arrow">&rarr;</span><span class="step">Bill</span><span class="arrow">&rarr;</span><span class="step">Payment</span><span class="arrow">&rarr;</span><span class="step cand">Vendor statement</span><span class="arrow">&rarr;</span><span class="step built">Year end: who gets a 1099?</span></div></div>
+    <div class="lane"><div><div class="name">2 · Hire-to-Retire</div><div class="when">January 2027 · W-2s and 941s</div></div>
+      <div class="steps"><span class="step">Payroll run</span><span class="arrow">&rarr;</span><span class="step">Tax deposits</span><span class="arrow">&rarr;</span><span class="step">Quarterly 941</span><span class="arrow">&rarr;</span><span class="step">Year end: W-2, W-3</span><span class="arrow">&rarr;</span><span class="step">Payroll on the books</span></div></div>
+    <div class="lane"><div><div class="name">3 · Record-to-Report</div><div class="when">February 2027 · year-end close</div></div>
+      <div class="steps"><span class="step">Bank recs</span><span class="arrow">&rarr;</span><span class="step">Accruals</span><span class="arrow">&rarr;</span><span class="step">Review and questions</span><span class="arrow">&rarr;</span><span class="step">Financial statements</span></div></div>
+    <div class="lane"><div><div class="name">4 · Order-to-Cash</div><div class="when">March 2027</div></div>
+      <div class="steps"><span class="step">Invoice</span><span class="arrow">&rarr;</span><span class="step">Payments and payouts</span><span class="arrow">&rarr;</span><span class="step">Receivables</span><span class="arrow">&rarr;</span><span class="step">Sales tax</span></div></div>
+    <div class="lane"><div><div class="name">5 · Acquire-to-Retire</div><div class="when">April 2027 · fixed assets</div></div>
+      <div class="steps"><span class="step">Purchase</span><span class="arrow">&rarr;</span><span class="step">Capitalize or expense</span><span class="arrow">&rarr;</span><span class="step">Depreciation</span><span class="arrow">&rarr;</span><span class="step">Disposal</span></div></div>
+  </div>
+  <div class="legend"><span><span class="step built">Built</span> this episode</span><span><span class="step cand">Dashed</span> next candidate</span><span>Later series pick their episode from readers' replies and the evidence.</span></div>
+</div>
+</body></html>

@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.wrap{display:grid;grid-template-columns:1fr 300px;gap:34px;margin-top:30px;align-items:start}
+.shot{border:1px solid var(--rule);border-radius:8px;overflow:hidden;box-shadow:0 2px 0 rgba(20,32,28,.05)}
+.shot img{display:block;width:100%}
+ol{list-style:none;display:grid;gap:22px;counter-reset:n}
+li{display:grid;grid-template-columns:36px 1fr;gap:12px;font:400 17px/1.45 var(--text)}
+li b{display:block;font-weight:700;margin-bottom:2px}
+.badge{width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--paper);font:700 16px/32px var(--text);text-align:center}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">What comes back</div>
+  <h1>A worksheet to sign, not a black box</h1>
+  <div class="wrap">
+    <div class="shot"><img src="_worksheet.png" alt="The worksheet for test file 04"></div>
+    <ol>
+      <li><span class="badge">1</span><span><b>The answer first.</b>How many vendors to file and the total, linked to each list.</span></li>
+      <li><span class="badge">2</span><span><b>Check these first.</b>Names that look alike but that it will not merge on its own. You decide.</span></li>
+      <li><span class="badge">3</span><span><b>Every vendor has a reason.</b>The form and box, the amount, the spellings it combined, and the file rows behind it.</span></li>
+      <li><span class="badge">4</span><span><b>Type, tick, print.</b>Your name, the W-9 boxes and your decisions print with it.</span></li>
+    </ol>
+  </div>
+  <p class="source">Screenshot of the tool on test file 04 (Larkspur Cafe, an invented client). Cropped; the full worksheet continues with control totals and the vendors that get no 1099.</p>
+</div>
+</body></html>
