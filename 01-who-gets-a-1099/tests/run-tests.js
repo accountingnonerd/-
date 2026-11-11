@@ -19,7 +19,10 @@ const HERE = __dirname;
 const args = process.argv.slice(2);
 const mdAt = args.indexOf("--md");
 const mdOut = mdAt >= 0 ? args[mdAt + 1] : null;
-const agentPath = path.resolve(args.find((a, i) => !a.startsWith("--") && i !== mdAt + 1) || path.join(HERE, "../agent/who-gets-a-1099.html"));
+const positional = args.filter((a, i) => !a.startsWith("--") && !(mdAt >= 0 && i === mdAt + 1));
+const agentPath = path.resolve(positional[0] || path.join(HERE, "../agent/who-gets-a-1099.html"));
+if (!fs.existsSync(agentPath)) { console.error("No such agent file: " + agentPath); process.exit(2); }
+console.log("Testing: " + agentPath + "\n");
 const KEY = JSON.parse(fs.readFileSync(path.join(HERE, "answer-key.json"), "utf8"));
 const XLSX_LOCAL = [path.join(HERE, "../../tools/node_modules/xlsx/dist/xlsx.full.min.js")].find(fs.existsSync);
 
