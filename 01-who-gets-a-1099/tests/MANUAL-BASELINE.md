@@ -1,4 +1,4 @@
-# Manual baseline: doing the same 12 files by hand
+# Manual baseline: doing the same 13 files by hand
 
 **Status: estimated, not measured.** No accountant has been timed yet. The counts below
 are exact (they come from the test files). The minutes are those counts multiplied by
@@ -29,18 +29,19 @@ subtotal and write up a vendor that is not an obvious "no".
 | Case | Lines to read | Vendors to judge | Vendors needing a subtotal and write-up | Estimated minutes by hand |
 |---|---|---|---|---|
 | 01 | 36 | 8 | 5 | 10 |
-| 02 | 25 | 9 | 6 | 11 |
+| 02 | 26 | 10 | 7 | 12 |
 | 03 | 268 | 18 | 7 | 31 |
 | 04 | 15 | 8 | 5 | 9 |
-| 05 | 55 | 13 | 7 | 15 |
-| 06 | 12 | 6 | 3 | 6 |
+| 05 | 59 | 16 | 10 | 19 |
+| 06 | 13 | 7 | 5 | 8 |
 | 07 | 21 | 7 | 4 | 8 |
 | 08 | 19 | 5 | 3 | 6 |
 | 09 | 8 | 4 | 3 | 5 |
 | 10 | 9 | 3 | 2 | 4 |
 | 11 | 8 | 3 | 1 | 3 |
-| 12 | 18 | 4 | 3 | 6 |
-| **All 12** | **494** | **88** | **49** | **111** |
+| 12 | 19 | 5 | 3 | 6 |
+| 15 | 17 | 5 | 2 | 5 |
+| **All 13** | **518** | **99** | **57** | **125** |
 
 Cases 13 and 14 are files the agent must refuse; by hand they take a glance.
 
@@ -61,3 +62,5 @@ the estimate above includes no time for looking.
 | 10 | Vendor subtotal says $4,300, lines add to $3,100 | A 1099 issued for the wrong amount, or a missing payment never found |
 | 11 | Three December 2025 payments in a 2026 file | A vendor paid $1,300 in 2026 treated as $2,200 |
 | 05 | "Hartwell & Dunn, P.C." coded to Legal & Professional | A law firm skipped because it is a corporation |
+| 15 | The report lists each bill and also its payment | Every vendor counted twice: a $1,200 vendor looks like $3,300 |
+| 02 | $180 of royalties | Missed, because royalties are reportable from $10, not $2,000 |

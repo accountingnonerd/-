@@ -44,6 +44,7 @@ function compare(key, rep) {
   check("outside-year total", kc.outsideYearTotal, rc.outsideYearTotal, near(kc.outsideYearTotal, rc.outsideYearTotal));
   check("outside-year lines", kc.outsideYearLines, rc.outsideYearLines);
   check("unreadable lines", kc.unreadableLines, rc.unreadableLines);
+  check("lines that are not payments (bills, credits)", kc.notPaymentLines || 0, rc.notPaymentLines || 0);
   check("worksheet ties to the file's lines", true, rc.ties);
   check("file's own total line", kc.fileTotal, rc.fileTotal, kc.fileTotal === null ? rc.fileTotal == null : near(kc.fileTotal, rc.fileTotal));
   check("file's own total ties", kc.fileTotalTies, rc.fileTotalTies, kc.fileTotalTies === null ? rc.fileTotalTies == null : kc.fileTotalTies === rc.fileTotalTies);
@@ -62,6 +63,8 @@ function compare(key, rep) {
     const v = vendors.find((x) => (x.spellings || [x.name]).some((s) => norm(s) === norm(e.vendor)));
     if (!v) { check(e.vendor + ": listed", "listed", "missing"); continue; }
     check(e.vendor + ": bucket", e.bucket, v.bucket);
+    const want = { NEC: ["1099-NEC", key.taxYear >= 2026 ? "1a" : "1"], MISC_RENT: ["1099-MISC", "1"], MISC_MEDICAL: ["1099-MISC", "6"] }[e.bucket];
+    if (want) check(e.vendor + ": form and box", want.join(" box "), [v.form, v.box].join(" box "));
     check(e.vendor + ": check/transfer dollars", e.reportable, v.reportable, near(e.reportable, v.reportable));
     if (e.total !== undefined) check(e.vendor + ": paid in all", e.total, v.total, near(e.total, v.total));
     if (e.spellings) check(e.vendor + ": spellings combined", e.spellings, (v.spellings || []).length);

@@ -75,10 +75,10 @@
   "taxYear": 2026,
   "threshold": 2000,
   "controls": {
-   "linesRead": 25,
-   "totalPayments": 19439.99,
+   "linesRead": 26,
+   "totalPayments": 19619.99,
    "byMethod": {
-    "bank": 9699.99,
+    "bank": 9879.99,
     "card": 6040.0,
     "network": 3700.0
    },
@@ -92,6 +92,11 @@
   "exceptions": [],
   "noOtherExceptions": true,
   "vendors": [
+   {
+    "vendor": "Lotus Flow Music",
+    "bucket": "REVIEW",
+    "reportable": 180.0
+   },
    {
     "vendor": "Bright Web Design",
     "bucket": "NOT_REPORTABLE",
@@ -344,10 +349,10 @@
   "taxYear": 2026,
   "threshold": 2000,
   "controls": {
-   "linesRead": 55,
-   "totalPayments": 187150.75,
+   "linesRead": 59,
+   "totalPayments": 193650.75,
    "byMethod": {
-    "bank": 187150.75,
+    "bank": 193650.75,
     "card": 0.0,
     "network": 0.0
    },
@@ -425,6 +430,21 @@
     "vendor": "Oakline Drywall",
     "bucket": "NEC",
     "reportable": 15500.0
+   },
+   {
+    "vendor": "Summit Health & Safety Supply",
+    "bucket": "REVIEW",
+    "reportable": 2600.0
+   },
+   {
+    "vendor": "Brannock Law Group",
+    "bucket": "REVIEW",
+    "reportable": 1200.0
+   },
+   {
+    "vendor": "Delmar Equipment Leasing",
+    "bucket": "REVIEW",
+    "reportable": 2700.0
    }
   ],
   "notes": ""
@@ -437,10 +457,10 @@
   "taxYear": 2026,
   "threshold": 2000,
   "controls": {
-   "linesRead": 12,
-   "totalPayments": 9875.4,
+   "linesRead": 13,
+   "totalPayments": 10225.4,
    "byMethod": {
-    "bank": 9875.4,
+    "bank": 10225.4,
     "card": 0.0,
     "network": 0.0
    },
@@ -448,7 +468,7 @@
    "outsideYearLines": 0,
    "unreadableLines": 1,
    "ties": true,
-   "fileTotal": 9875.4,
+   "fileTotal": 10225.4,
    "fileTotalTies": true
   },
   "exceptions": [
@@ -459,7 +479,7 @@
   "vendors": [
    {
     "vendor": "Whitfield, Dana",
-    "bucket": "CLOSE",
+    "bucket": "REVIEW",
     "reportable": 1850.0,
     "rows": [
      6,
@@ -483,7 +503,7 @@
    },
    {
     "vendor": "Marsh Lab Courier",
-    "bucket": "NOT_REPORTABLE",
+    "bucket": "REVIEW",
     "reportable": 900.0
    },
    {
@@ -495,6 +515,11 @@
     "vendor": "Idexx Labs",
     "bucket": "NOT_REPORTABLE",
     "reportable": -125.0
+   },
+   {
+    "vendor": "(no name)",
+    "bucket": "REVIEW",
+    "reportable": 350.0
    }
   ],
   "notes": ""
@@ -614,7 +639,7 @@
    },
    {
     "vendor": "Ridgeline Refrigeration",
-    "bucket": "CLOSE",
+    "bucket": "REVIEW",
     "reportable": 1900.0
    }
   ],
@@ -765,16 +790,16 @@
  },
  "12": {
   "file": "12-prior-year-600-limit.csv",
-  "title": "A 2025 file: the old $600 limit must apply",
+  "title": "A 2025 check register with Payment and Deposit columns: the old $600 limit must apply",
   "kind": "rules",
   "payer": "Old Mill Antiques",
   "taxYear": 2025,
   "threshold": 600,
   "controls": {
-   "linesRead": 18,
-   "totalPayments": 12350.0,
+   "linesRead": 19,
+   "totalPayments": 9350.0,
    "byMethod": {
-    "bank": 12350.0,
+    "bank": 9350.0,
     "card": 0.0,
     "network": 0.0
    },
@@ -788,6 +813,11 @@
   "exceptions": [],
   "noOtherExceptions": true,
   "vendors": [
+   {
+    "vendor": "Hall family estate sale",
+    "bucket": "NOT_REPORTABLE",
+    "reportable": -3000.0
+   },
    {
     "vendor": "Gabe Linden",
     "bucket": "NEC",
@@ -824,5 +854,63 @@
   "kind": "planted",
   "payer": "-",
   "fatal": "NO_COLUMNS"
+ },
+ "15": {
+  "file": "15-bills-and-bill-payments.xlsx",
+  "title": "Report lists bills AND their payments: only payments may count",
+  "kind": "ugly",
+  "payer": "Harrow & Finch Cabinetry",
+  "taxYear": 2026,
+  "threshold": 2000,
+  "controls": {
+   "linesRead": 9,
+   "totalPayments": 19000.0,
+   "byMethod": {
+    "bank": 16200.0,
+    "card": 2800.0,
+    "network": 0.0
+   },
+   "outsideYearTotal": 0.0,
+   "outsideYearLines": 0,
+   "unreadableLines": 0,
+   "ties": true,
+   "fileTotal": 3000.0,
+   "fileTotalTies": true,
+   "notPaymentLines": 8
+  },
+  "exceptions": [
+   "NOT_PAYMENTS"
+  ],
+  "noOtherExceptions": true,
+  "vendors": [
+   {
+    "vendor": "Kestrel Fabrication",
+    "bucket": "NEC",
+    "reportable": 2900.0
+   },
+   {
+    "vendor": "Pine Hollow Graphics",
+    "bucket": "NOT_REPORTABLE",
+    "reportable": 1200.0
+   },
+   {
+    "vendor": "Marlow Finishing",
+    "bucket": "NEC",
+    "reportable": 2100.0
+   },
+   {
+    "vendor": "Baxter Lumber",
+    "bucket": "NOT_REPORTABLE",
+    "reportable": 10000.0,
+    "total": 10300.0
+   },
+   {
+    "vendor": "Odell Pruitt",
+    "bucket": "NOT_REPORTABLE",
+    "reportable": 0.0,
+    "total": 2500.0
+   }
+  ],
+  "notes": "The file's own total (3,000) is the net of bills and payments as written; it must tie to the lines as written."
  }
 }

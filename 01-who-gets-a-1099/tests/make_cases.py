@@ -161,7 +161,7 @@ c.want("Rivera Plumbing", "NEC", 2250)             # 900+750+600, repairs = serv
 c.want("Dana Whitfield", "NEC", 2500)              # 1,200+1,300 contract labor
 c.want("Office Depot", "NOT_REPORTABLE", 2400)     # merchandise
 c.want("Pacific Gas & Electric", "NOT_REPORTABLE", "3723.00")  # 12 x 310.25 utilities
-c.want("Lin & Park LLP", "NEC", 3000)              # attorney fees, box 1
+c.want("Lin & Park LLP", "NEC", 3000)              # attorney fees, 1099-NEC box 1a on the 2026 form
 c.want("Greenleaf Landscaping", "NOT_REPORTABLE", 1200)  # under the limit and under $1,500
 c.want("Summit Realty Holdings LLC", "MISC_RENT", 18000)
 c.want("Coastal Sign Co", "CLOSE", 1750)           # service, 1,500 <= 1,750 < 2,000
@@ -194,8 +194,10 @@ c.pay("Elena Park", date(2026, 11, 9), 1100, "n", Category="Contract Labor", Mem
       **{"Transaction Type": "Expense", "Paid From": "Checking 8841"})
 for m in range(1, 13):
     c.pay("Sparkle Cleaning Services", date(2026, m, 25), 250, "c", Category="Janitorial", Memo="monthly cleaning", **VISA)
+c.pay("Lotus Flow Music", date(2026, 8, 20), 180, Num="2031", Category="Music Royalties", Memo="class playlist licence - royalty", **CK)
 c.lines.sort(key=lambda l: l["date"])
 write_csv(c.filename, flat_rows(c, H, H))
+c.want("Lotus Flow Music", "REVIEW", 180)                        # royalties have a $10 limit (1099-MISC box 2), not $2,000
 c.want("Bright Web Design", "NOT_REPORTABLE", 800, total=2300)   # $2,300 in all, only $800 by check
 c.want("Tomas Ortega", "CLOSE", 1500, total=2400)                # $1,500 by check: on the close-call list
 c.want("Keystone Consulting Group", "NEC", 2000)                 # "at least $2,000": exactly at the limit counts
@@ -205,7 +207,7 @@ c.want("Marcus Lee", "NEC", 2400)                                # Zelle is a ba
 c.want("Studio Supply Warehouse", "NOT_REPORTABLE", 0)           # goods, and paid by debit card
 c.want("Elena Park", "REVIEW", 1000, total=2100)                 # under only because $1,100 went by Venmo
 c.want("Sparkle Cleaning Services", "NOT_REPORTABLE", 0, total=3000)  # all on a credit card
-c.finish(2026, 2000, [], hand_total="19439.99")
+c.finish(2026, 2000, [], hand_total="19619.99")
 
 # =====================================================================================
 # CASE 03 - realistic size. QuickBooks-style report grouped by vendor, Excel, 300+ lines.
@@ -287,12 +289,12 @@ def grouped_rows(case, order, header, bad_subtotal=None):
 GH = ["Date", "Transaction Type", "Num", "Memo/Description", "Account", "Split", "Amount"]
 rows, grand03 = grouped_rows(c, order03, GH)
 write_xlsx(c.filename, rows)
-c.want("Harlan HVAC Service", "NEC", 3000)          # $2,600 of service clears the limit; report parts too ($3,000)
+c.want("Harlan HVAC Service", "NEC", 3000)          # service with incidental parts: the whole $3,000 is reportable
 c.want("Miller Hardware & Repair", "REVIEW", 2200)  # $300 service + $1,900 goods: judgment call
 c.want("Ines Calderon", "NEC", 12480)               # 26 x 480
 c.want("Tri-County Towing LLC", "NEC", 2410)        # 350+425+275+510+390+460
 c.want("Whitaker Properties LLC", "MISC_RENT", 38400)
-c.want("Apex Diagnostics Inc", "CONFIRM_CORP", 3500)  # "Inc": exempt only if the W-9 says so
+c.want("Apex Diagnostics Inc", "CONFIRM_CORP", 3500)  # "Inc": corporations are generally exempt; a W-9 settles it
 c.want("Ortiz Mobile Detailing", "NOT_REPORTABLE", 1100, total=2500)  # $1,400 was on the card
 c.want("Priya Nair CPA", "CLOSE", 1800)             # 4 x 450
 for v in ["NAPA Auto Parts", "AutoZone", "Verizon Wireless", "Shell Fleet"]:
@@ -368,6 +370,10 @@ for m in (3, 6, 9, 12):
     f5("Sam Cedar", date(2026, m, 30), 5000, str(7200 + m), "Owner's Draw", "")
 for i, (m, a) in enumerate([(2, 4000), (5, 5500), (8, 6000)]):
     f5("Oakline Drywall", date(2026, m, 24), a, str(7300 + i), "Subcontractors", "hang and finish")
+f5("Brannock Law Group", date(2026, 3, 19), 1200, "7012", "Legal & Professional Fees", "demand letter")
+f5("Delmar Equipment Leasing", date(2026, 5, 5), 1800, "7028", "Equipment Rental", "skid steer, 2 weeks")
+f5("Delmar Equipment Leasing", date(2026, 5, 22), 900, "7031", "Repairs & Maintenance", "operator and repair call")
+f5("Summit Health & Safety Supply", date(2026, 7, 14), 2600, "7048", "Safety Supplies", "harnesses, hard hats")
 c.lines.sort(key=lambda l: l["date"])
 rows = [H5]
 for ln in c.lines:
@@ -376,7 +382,7 @@ for ln in c.lines:
 write_xlsx(c.filename, rows)
 c.want("Hartwell & Dunn, P.C.", "REVIEW", 4500)             # "P.C." + a legal account: could be a law firm, which is NOT exempt
 c.want("Law Offices of Maria Santos, Inc.", "NEC", 4500)    # attorneys get a 1099 even when incorporated
-c.want("Lakeside Occupational Health Inc", "MISC_MEDICAL", 2800)  # medical: reportable even when incorporated
+c.want("Lakeside Occupational Health Inc", "MISC_MEDICAL", 2800)  # medical: reportable even when incorporated (tax-exempt hospitals aside)
 c.want("Apex Staffing Inc", "CONFIRM_CORP", 9000)
 c.want("Northgate Properties Inc", "CONFIRM_CORP", 24000)
 c.want("Jordan Avery", "REVIEW", 3200)                      # no way to tell what the payment was for
@@ -387,7 +393,10 @@ c.want("Chase Card Services", "NOT_REPORTABLE", 30000)
 c.want("Ferguson Supply", "NOT_REPORTABLE", "14250.75")
 c.want("Sam Cedar", "NOT_REPORTABLE", 20000)
 c.want("Oakline Drywall", "NEC", 15500)
-c.finish(2026, 2000, [], hand_total="187150.75")
+c.want("Summit Health & Safety Supply", "REVIEW", 2600)     # name says health care, books say supplies: flag, do not guess
+c.want("Brannock Law Group", "REVIEW", 1200)                # fees under $2,000 need no 1099, but attorney settlement money is reportable from $600
+c.want("Delmar Equipment Leasing", "REVIEW", 2700)          # $1,800 rent + $900 service: two different forms, neither over the limit alone
+c.finish(2026, 2000, [], hand_total="193650.75")
 
 # =====================================================================================
 # CASE 06 - messy CSV: title lines, $ signs, parentheses, trailing minus, mixed dates,
@@ -419,16 +428,18 @@ raw.append([])
 m6("Okafor Kennel Cleaning", "07/20/2026", date(2026, 7, 20), "5540", "Okafor Kennel Cleaning", "", "Janitorial", " 1,300.00 ", 1300)
 m6("Tidewater Shredding", "8/14/2026", date(2026, 8, 14), "5547", "Tidewater Shredding", "records purge", "Outside Services", "900.00", 900)
 m6("Marsh Lab Courier", "Sep 9, 2026", date(2026, 9, 9), "5552", "Marsh Lab Courier", "sample runs", "Outside Services", "500.00", 500)
+m6("(no name)", "10/2/2026", date(2026, 10, 2), "5560", "", "cash - weekend helper", "Contract Labor", "350.00", 350)
 m6("Tidewater Shredding", "2026-12-04", date(2026, 12, 4), "CR", "Tidewater Shredding", "credit memo applied", "Outside Services", "300.00-", -300)
-raw.append(["TOTAL", "", "", "", "", "$9,875.40"])
+raw.append(["TOTAL", "", "", "", "", "$10,225.40"])
 write_csv(c.filename, raw, bom=True)
-c.want("Whitfield, Dana", "CLOSE", 1850, rows=[6, 8, 10])       # 1,200 + 1,100 - 450 refund
+c.want("Whitfield, Dana", "REVIEW", 1850, rows=[6, 8, 10])      # 1,200 + 1,100 - 450: under the limit ONLY because of the refund
 c.want("Okafor Kennel Cleaning", "NEC", 2600, rows=[7, 17])
 c.want("Pet Meds Direct", "NOT_REPORTABLE", "3150.40")           # supplies
-c.want("Marsh Lab Courier", "NOT_REPORTABLE", 900)               # the "see note" line cannot be counted
-c.want("Tidewater Shredding", "CLOSE", 1500)                     # 900 + 900 - 300 credit
+c.want("Marsh Lab Courier", "REVIEW", 900)                       # one of its lines has no readable amount: total unknown
+c.want("Tidewater Shredding", "CLOSE", 1500)                     # 900 + 900 - 300 credit; even without the credit, 1,800 is under
 c.want("Idexx Labs", "NOT_REPORTABLE", -125)                     # a credit only
-c.finish(2026, 2000, ["REFUND", "UNREADABLE_LINES"], hand_total="9875.40", file_total="9875.40",
+c.want("(no name)", "REVIEW", 350)                               # a payment with no payee cannot be left in a "no 1099" pile
+c.finish(2026, 2000, ["REFUND", "UNREADABLE_LINES"], hand_total="10225.40", file_total="10225.40",
          file_total_ties=True, unreadable=1)
 
 # =====================================================================================
@@ -504,7 +515,7 @@ c.want("Hopline Draft Services", "NEC", 2150)
 c.want("Yakima Hop Farms", "NOT_REPORTABLE", 11500)
 c.want("Tessa Malloy", "NEC", 2000, total=2400)        # 5 checks x 400 = exactly $2,000; the sixth was on the card
 c.want("Cascade Label Printing", "NOT_REPORTABLE", 0)
-c.want("Ridgeline Refrigeration", "CLOSE", 1900)       # 2,900 less 1,000 refund
+c.want("Ridgeline Refrigeration", "REVIEW", 1900)      # 2,900 less 1,000: under the limit ONLY because of the refund
 c.finish(2026, 2000, ["REFUND"], hand_total=20650)
 
 # =====================================================================================
@@ -564,7 +575,7 @@ c.pay("Amira Haddad", date(2026, 4, 17), 700, Num="622", Category="Contract Labo
 c.pay("Brightpath Curriculum", date(2026, 6, 5), 1000, Num="630", Category="Supplies", Memo="workbooks", **CK)
 c.pay("Leo Grant", date(2026, 9, 28), 1100, Num="641", Category="Contract Labor", Memo="test prep", **CK)
 write_csv(c.filename, flat_rows(c, H, H))
-c.want("Amira Haddad", "NOT_REPORTABLE", 1300)     # the $900 from December 2025 belongs to last year
+c.want("Amira Haddad", "NOT_REPORTABLE", 1300)     # the $900 from December 2025 belongs to last year (and was over 2025's $600 limit: the agent should say so)
 c.want("Leo Grant", "NEC", 2100)
 c.want("Brightpath Curriculum", "NOT_REPORTABLE", 1000)
 c.finish(2026, 2000, ["OUTSIDE_YEAR", "PARTIAL_YEAR"], hand_total=5950)
@@ -572,7 +583,7 @@ c.finish(2026, 2000, ["OUTSIDE_YEAR", "PARTIAL_YEAR"], hand_total=5950)
 # =====================================================================================
 # CASE 12 - a 2025 file. The old $600 limit applies to 2025 payments.
 # =====================================================================================
-c = Case("12", "12-prior-year-600-limit.csv", "A 2025 file: the old $600 limit must apply", "rules", "Old Mill Antiques")
+c = Case("12", "12-prior-year-600-limit.csv", "A 2025 check register with Payment and Deposit columns: the old $600 limit must apply", "rules", "Old Mill Antiques")
 CK = {"Transaction Type": "Check", "Paid From": "Checking 7090"}
 c.pay("Gabe Linden", date(2025, 1, 22), 650, Num="300", Category="Contract Labor", Memo="furniture repair", **CK)
 c.pay("Nora Fitch", date(2025, 5, 9), 500, Num="318", Category="Contract Labor", Memo="appraisals", **CK)
@@ -580,13 +591,20 @@ for m in (2, 5, 8, 11):
     c.pay("Wren Cleaning", date(2025, m, 3), 100, Num=str(330 + m), Category="Janitorial", Memo="", **CK)
 for m in range(1, 13):
     c.pay("Old Mill Plaza LLC", date(2025, m, 1), 900, Num=str(350 + m), Category="Rent", Memo="booth rent", **CK)
+c.pay("Hall family estate sale", date(2025, 6, 14), -3000, Num="", Category="Sales", Memo="consignment proceeds")   # money IN
 c.lines.sort(key=lambda l: l["date"])
-write_csv(c.filename, flat_rows(c, H, H))
+H12 = ["Date", "Check No", "Payee", "Payment", "Deposit", "Category"]
+rows = [H12]
+for ln in c.lines:
+    a_ = ln["amount"]
+    rows.append([us(ln["date"]), ln["cols"].get("Num", ""), ln["name"], f"{a_:.2f}" if a_ > 0 else "", f"{-a_:.2f}" if a_ < 0 else "", ln["cols"]["Category"]])
+write_csv(c.filename, rows)
+c.want("Hall family estate sale", "NOT_REPORTABLE", -3000)   # a deposit, not a payment; and not a "refund" either
 c.want("Gabe Linden", "NEC", 650)           # $650 >= $600
 c.want("Nora Fitch", "CLOSE", 500)          # $450 <= 500 < $600
 c.want("Wren Cleaning", "NOT_REPORTABLE", 400)
 c.want("Old Mill Plaza LLC", "MISC_RENT", 10800)
-c.finish(2025, 600, [], hand_total=12350)
+c.finish(2025, 600, [], hand_total=9350)
 
 # =====================================================================================
 # CASE 13 - a 2027 file. The agent does not know the 2027 limit and must say so.
@@ -606,6 +624,66 @@ write_csv("14-not-a-payments-file.csv", [
 ])
 KEY["14"] = dict(file="14-not-a-payments-file.csv", title="A vendor contact list, not payments: must refuse", kind="planted",
                  payer="-", fatal="NO_COLUMNS")
+
+# =====================================================================================
+# CASE 15 - a vendor report that lists BILLS as well as the payments of those bills.
+#           Counting both would double every vendor. Bill payments are negative, as
+#           QuickBooks-style vendor reports show them. One bill is still unpaid at year end.
+# =====================================================================================
+c = Case("15", "15-bills-and-bill-payments.xlsx", "Report lists bills AND their payments: only payments may count", "ugly", "Harrow & Finch Cabinetry")
+BK, CC = "Checking 4471", "Visa 0338"
+raw15 = {}   # vendor -> list of rows exactly as written in the file
+
+
+def w15(v, d, typ, num, memo, acct, split, written, paid=None, method="b"):
+    """`written` is the number in the file. `paid` is the true cash paid (None = not a payment)."""
+    raw15.setdefault(v, []).append([d, typ, num, memo, acct, split, float(written)])
+    if paid is not None:
+        c.pay(v, d, paid, method)
+
+
+K = "Kestrel Fabrication"
+w15(K, date(2026, 1, 10), "Bill", "INV-88", "drawer boxes", "Accounts Payable", "Subcontractors", 1500)
+w15(K, date(2026, 1, 25), "Bill Payment (Check)", "6001", "", BK, "Accounts Payable", -1500, paid=1500)
+w15(K, date(2026, 6, 3), "Bill", "INV-131", "drawer boxes", "Accounts Payable", "Subcontractors", 1400)
+w15(K, date(2026, 6, 20), "Bill Payment (Check)", "6040", "", BK, "Accounts Payable", -1400, paid=1400)
+P = "Pine Hollow Graphics"
+w15(P, date(2026, 2, 2), "Bill", "2211", "showroom signs", "Accounts Payable", "Advertising", 1200)
+w15(P, date(2026, 2, 20), "Bill Payment (Check)", "6010", "", BK, "Accounts Payable", -1200, paid=1200)
+w15(P, date(2026, 3, 1), "Vendor Credit", "CM-4", "reprint credit", "Accounts Payable", "Advertising", -300)
+w15(P, date(2026, 12, 15), "Bill", "2390", "holiday mailer - unpaid at year end", "Accounts Payable", "Advertising", 900)
+M = "Marlow Finishing"
+w15(M, date(2026, 4, 4), "Check", "6022", "lacquer work", BK, "Subcontractors", 1000, paid=1000)
+w15(M, date(2026, 9, 9), "Check", "6071", "lacquer work", BK, "Subcontractors", 1100, paid=1100)
+B = "Baxter Lumber"
+w15(B, date(2026, 3, 12), "Bill", "77102", "maple and birch", "Accounts Payable", "Materials", 5000)
+w15(B, date(2026, 3, 30), "Bill Payment (Check)", "6018", "", BK, "Accounts Payable", -5000, paid=5000)
+w15(B, date(2026, 8, 5), "Expense", "", "hardware", CC, "Materials", 300, paid=300, method="c")
+w15(B, date(2026, 11, 14), "Bill", "80455", "walnut", "Accounts Payable", "Materials", 5000)
+w15(B, date(2026, 12, 8), "Bill Payment (Check)", "6090", "", BK, "Accounts Payable", -5000, paid=5000)
+O = "Odell Pruitt"
+w15(O, date(2026, 7, 7), "Bill", "OP-3", "install crew, Henley kitchen", "Accounts Payable", "Contract Labor", 2500)
+w15(O, date(2026, 7, 21), "Bill Payment (Credit Card)", "", "", CC, "Accounts Payable", -2500, paid=2500, method="c")
+rows = [[c.payer], ["Transaction List by Vendor"], ["January - December 2026"], [], [""] + GH]
+grand = 0.0
+for v in sorted(raw15):
+    rows.append([v])
+    sub = 0.0
+    for r in raw15[v]:
+        rows.append([""] + r)
+        sub += r[-1]
+    rows.append([f"Total for {v}"] + [""] * (len(GH) - 1) + [sub])
+    grand += sub
+rows.append(["TOTAL"] + [""] * (len(GH) - 1) + [grand])
+write_xlsx(c.filename, rows)
+c.want("Kestrel Fabrication", "NEC", 2900)                 # paid 1,500 + 1,400. Bills + payments would wrongly give 5,800
+c.want("Pine Hollow Graphics", "NOT_REPORTABLE", 1200)     # paid 1,200. The unpaid 900 bill and the 300 credit are not cash
+c.want("Marlow Finishing", "NEC", 2100)                    # plain checks
+c.want("Baxter Lumber", "NOT_REPORTABLE", 10000, total=10300)
+c.want("Odell Pruitt", "NOT_REPORTABLE", 0, total=2500)    # the bill was paid by credit card
+c.finish(2026, 2000, ["NOT_PAYMENTS"], hand_total=19000, file_total=3000, file_total_ties=True,
+         notes="The file's own total (3,000) is the net of bills and payments as written; it must tie to the lines as written.")
+KEY["15"]["controls"]["notPaymentLines"] = 8
 
 with open(os.path.join(HERE, "answer-key.json"), "w") as f:
     json.dump(KEY, f, indent=1)

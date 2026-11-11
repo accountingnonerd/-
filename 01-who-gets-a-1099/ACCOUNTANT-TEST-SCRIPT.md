@@ -4,7 +4,7 @@ About 25 minutes. One accountant, one observer (you). The point is to watch wher
 stops, not to teach her the tool. Do not explain anything unless the script says to.
 
 ## Before she arrives
-- A laptop with a mouse, internet on, browser open on a blank tab.
+- A laptop with a mouse and a printer or "Save as PDF". No internet is needed.
 - On the desktop: `who-gets-a-1099.html`, and from `tests/cases/` these three files,
   renamed so they look like client work:
   - `03-quickbooks-style-by-vendor.xlsx` as `Northwind Auto Repair 2026.xlsx`
@@ -36,15 +36,19 @@ Start the stopwatch when she double-clicks the file.
 - [ ] Anything she read aloud with a question in her voice: ______
 - [ ] Seconds from the worksheet appearing until she can name one vendor that gets a
       1099: ______
+- [ ] Did she type on the Client / Prepared by lines without being told? ______
+- [ ] Did she tick any "W-9 on file" box? ______
 - [ ] Did she find the print button without being told? ______
-- [ ] Did she open "Show the lines behind this" on any vendor? ______
+- [ ] Did she open "Source lines" at the bottom? ______
 
 Then ask, and write her words:
 1. "Which of these would you file without looking further?"
 2. "What would you do about Apex Diagnostics Inc?" (It is in "Probably exempt": the right
-   answer is "check the W-9".)
+   answer is "check the W-9 if in doubt".)
 3. "What would you do about Miller Hardware & Repair?" (Judgment section: parts or a
-   separate sale.)
+   separate sale.) Ask her to write her decision on the line, then print. Did the decision print in full?
+3a. "The worksheet says box 1a. Is that what you expected?" (The 2026 form renumbered it.
+   Note whether the explanation near the top was enough.)
 4. "Do you believe the totals? Why?"
 5. Compare with her Part 1 list. Any vendor on one and not the other: ask her which is right.
 
