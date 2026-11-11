@@ -61,7 +61,7 @@ It has not seen a W-9, so it cannot know that an LLC is taxed as a corporation. 
 
 The series follows the five processes accountants run for clients: Procure-to-Pay, Hire-to-Retire, Record-to-Report, Order-to-Cash and Acquire-to-Retire. Each starts in the season its work peaks. Payroll is next, in January, when the W-2s and the fourth-quarter 941 land on the same desk.
 
-Every tool comes with its test files, its results, and one prompt that rebuilds it from nothing. A fresh AI session, given only that prompt, built a page that passed the same 476 checks on its first try. "The same tool" here means it passes the same tests; the code is different. The prompt is below. The repository is at [link to be added].
+Every tool comes with its test files, its results, and one prompt that rebuilds it from nothing. A fresh AI session, given only that prompt, built a page that passed the same 476 checks on its first try. "The same tool" here means it passes the same tests; the code is different. The prompt is below. The repository is at [github.com/accountingnonerd/-](https://github.com/accountingnonerd/-).
 
 ## Your turn
 
