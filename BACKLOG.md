@@ -59,8 +59,10 @@ killed ideas. A candidate is chosen only after it passes Stage 1 and the value t
   fails value test question 5.
 
 ## Reader suggestions
-None yet. Replies to each article's closing question go here, with the date, the process
-they belong to, and a link.
+Replies to each article's closing question go here, with the date, the process they
+belong to, and a link.
+
+- Procure-to-Pay 01 published 2026-11-11: [LinkedIn post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526375179346870272). No replies collected yet.
 
 ## Sources we could not read
 Reddit (r/Accounting, r/taxpros, r/Bookkeeping), TaxProTalk, Fishbowl, Going Concern,

@@ -1,6 +1,6 @@
 # Procure-to-Pay, episode 01: Who gets a 1099?
 
-Version 1.1.0, 2026-11-11. Part of [Series 1: Procure-to-Pay](../README.md), which also holds the value test this tool had to pass.
+Version 1.1.0, 2026-11-11. Published on LinkedIn on 2026-11-11: [the post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526375179346870272), with the full article attached as a PDF. Part of [Series 1: Procure-to-Pay](../README.md), which also holds the value test this tool had to pass.
 
 ## The problem
 
