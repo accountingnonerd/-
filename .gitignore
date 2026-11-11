@@ -1,3 +1,5 @@
 node_modules/
 *.log
 .DS_Store
+one-painful-problem.bundle
+one-painful-problem-v1.0.0.zip
