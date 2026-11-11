@@ -26,13 +26,21 @@ Every tool in this repository:
 
 ## How to get any past build
 
-Each release is tagged `<process>/<episode>/v<version>`. For example:
+Each release is recorded by its commit:
+
+| Episode | Version | Commit |
+|---|---|---|
+| Procure-to-Pay 01, Who gets a 1099? | 1.1.0 | `a2f00b20007b931f654214c2783b4f2662e7406f` |
+| Procure-to-Pay 01, Who gets a 1099? | 1.0.0 (before the series structure) | `e9c23172b253bc0f8c1a76bcf97f2d6d1040dfb2` |
 
 ```bash
-git checkout procure-to-pay/01-who-gets-a-1099/v1.1.0
+git checkout a2f00b20007b931f654214c2783b4f2662e7406f
 ```
 
-Version 1.0.0 of episode 01 predates the series structure and is tagged `01-who-gets-a-1099/v1.0.0`.
+Then open the agent file in that folder, or rerun its tests as its README describes.
+Version tags (`procure-to-pay/01-who-gets-a-1099/v1.1.0`) exist in the working copy but
+could not be pushed from the build environment; they can be added on GitHub as releases
+pointing at the commits above.
 
 ## Other files
 
