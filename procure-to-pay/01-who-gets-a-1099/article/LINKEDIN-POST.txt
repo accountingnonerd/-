@@ -1,0 +1,13 @@
+The 1099 your software won't find.
+
+Three checks to one plumber: $700, $800, $900. Typed three different ways, and none flagged for 1099, so the software's 1099 report shows nothing. Combined, it is $2,400: over the new $2,000 limit for payments made in 2026. (The plumber is an invented test case. The way it slips through is not.)
+
+I built a free tool that reads every payment in a client's export, flagged or not, and hands back a 1099 worksheet with a reason for every vendor. It runs on your own computer; nothing is uploaded.
+
+It is episode 1 of a series: five accounting processes, one tool at a time, each built to work alongside the software you already have.
+
+Then we tried to break it, and our own tests fooled us for a while. That story is in the article.
+
+Which step in your month still eats your afternoon? Tell me the step, the document it starts from, and the minutes.
+
+#Accounting #Bookkeeping #CPA #1099 #SmallBusiness
