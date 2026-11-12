@@ -1,0 +1,16 @@
+/* Shared look for every image in the series. One accent (ledger green), warm-neutral ink,
+   one alarm red used only for "missed / slipped through", always with an icon and a word. */
+:root{
+  --paper:#ffffff; --ground:#f2f5f3; --ink:#14201c; --soft:#56635e; --faint:#8a9692; --rule:#d3dbd8;
+  --accent:#15614a; --accent-2:#2e7d63; --accent-3:#5a9b84; --accent-tint:#e2efe9;
+  --alarm:#a3211b; --alarm-tint:#f9e6e4;
+  --display:"Inter Display","Inter",sans-serif; --text:"Inter",sans-serif; --mono:"JetBrains Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--text);-webkit-font-smoothing:antialiased}
+.frame{width:1200px;padding:56px 64px 44px;background:var(--paper)}
+.kicker{font:600 15px/1 var(--text);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 44px/1.1 var(--display);letter-spacing:-.015em;margin-top:14px;text-wrap:balance}
+.sub{font:400 20px/1.45 var(--text);color:var(--soft);margin-top:12px;max-width:52em}
+.source{font:400 14px/1.4 var(--text);color:var(--faint);margin-top:26px;padding-top:14px;border-top:1px solid var(--rule)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}

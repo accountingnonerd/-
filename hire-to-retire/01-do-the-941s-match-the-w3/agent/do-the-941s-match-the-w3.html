@@ -113,6 +113,7 @@ td.what{font-weight:700}
 td.what small{display:block;font-weight:400;color:var(--soft);font-size:.85rem}
 tr.bad td{background:var(--stop-tint)}
 tr.sum td{border-top:2px solid var(--ink);font-weight:700}
+table.recon{font-size:.9rem} table.recon td,table.recon th{padding:8px 6px} table.recon td.what{width:22%}
 .tie-ok{color:var(--ledger);font-weight:700;white-space:nowrap}.tie-bad{color:var(--stop);font-weight:700;white-space:nowrap}
 .note{color:var(--soft);font-size:.95rem}
 .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--soft);font-size:.95rem}
@@ -526,16 +527,12 @@ function analyze(files){
     recon.tax = { total941: tax941 / 100, w3: expect / 100, diff: td / 100, agrees: Math.abs(td) <= 100, line7: tax7 / 100, addl: addl / 100 };
     report.recon = recon;
     if (bad.length || !recon.tax.agrees) {
-      var msgs = bad.map(function(r){
-        var s = "W-3 box " + r.line.replace(/./, "") + "";
-        return "box " + RECON.find(function(x){ return x[1] === r.line; })[0].slice(1) + " (" + r.name.toLowerCase() + "): the W-3 shows " + money(Math.round(r.w3 * 100)) + ", the 941s add to " + money(Math.round(r.total941 * 100)) +
-          ", a difference of " + money(Math.round(r.diff * 100)) + (r.pattern ? ", exactly the figure for quarter" + (r.pattern.length > 1 ? "s " : " ") + r.pattern.join(" + ") : "");
-      });
-      if (!recon.tax.agrees) msgs.push("the 941 social security and Medicare tax (" + money(tax941) + ") should be about twice the W-3 boxes 4 and 6, less the employee-only Additional Medicare Tax (" + money(expect) + "), but differs by " + money(td));
+      var names = bad.map(function(r){ return "box " + RECON.find(function(x){ return x[1] === r.line; })[0].slice(1) + " (" + money(Math.round(r.diff * 100)) + ")"; });
+      if (!recon.tax.agrees) names.push("the tax check (" + money(td) + ")");
       var pat = bad.length && bad.every(function(r){ return r.pattern; }) && bad.every(function(r){ return JSON.stringify(r.pattern) === JSON.stringify(bad[0].pattern); }) ? bad[0].pattern : null;
-      var hint = pat ? " Every difference equals quarter" + (pat.length > 1 ? "s " : " ") + pat.join(" + ") + " exactly. The W-3 probably leaves out those quarters' wages (common after a change of payroll provider), or those 941s were filed twice." :
-        (missing.length ? " Part of this is the missing quarter." : "");
-      exceptions.push({ code: "MISMATCH", message: "The 941s and the W-3 do not agree: " + msgs.join("; ") + "." + hint +
+      var hint = pat ? " Every difference equals quarter" + (pat.length > 1 ? "s " : " ") + pat.join(" + ") + " exactly. The W-3 probably leaves out those quarters' wages, which is common after a change of payroll provider, or those 941s were filed twice." :
+        (missing.length ? " Part of this is the missing quarter." : amended.length ? " Check whether the difference is the 941-X's change." : "");
+      exceptions.push({ code: "MISMATCH", message: "The W-3 does not agree with the 941s on " + names.join(", ") + ". The amounts are in the reconciliation table below." + hint +
         " If the W-2s and W-3 are wrong, file Forms W-2c and W-3c. If a 941 is wrong, file Form 941-X for that quarter. Either way, keep this reconciliation for a possible IRS Letter 99C." });
     }
   }
@@ -603,10 +600,9 @@ function render(rep){
   // reconciliation table
   h.push('<h2 id="sec-recon">The reconciliation <small>each W-3 box against the four quarters</small></h2>');
   if (R) {
-    h.push('<div class="scroll"><table><thead><tr><th>W-3 box</th><th>941 line</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Q4</th><th class="num">941 total</th><th class="num">W-3</th><th class="num">Difference</th><th></th></tr></thead><tbody>' +
-      RECON.map(function(X){ var r = R[X[0]]; return '<tr' + (r.agrees ? "" : ' class="bad"') + '><td class="what">' + X[0].slice(1) + ". " + esc(X[2]) + (CAWR[X[0]] ? "<small>IRS and SSA match this box</small>" : "<small>should agree; not matched by the IRS</small>") + "</td><td>" + LINE_NAME[X[1]] +
-        "</td>" + r.byQuarter.map(function(v){ return '<td class="num">' + usd(v) + "</td>"; }).join("") + '<td class="num">' + usd(r.total941) + '</td><td class="num">' + usd(r.w3) + '</td><td class="num">' + usd(r.diff) + "</td><td>" +
-        (r.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; does not</span>') + "</td></tr>"; }).join("") + "</tbody></table></div>");
+    h.push('<div class="scroll"><table class="recon"><thead><tr><th>W-3 box and 941 line</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Q4</th><th class="num">941 total</th><th class="num">W-3</th><th class="num">Difference</th><th></th></tr></thead><tbody>' +
+      RECON.map(function(X){ var r = R[X[0]]; return '<tr' + (r.agrees ? "" : ' class="bad"') + '><td class="what">' + X[0].slice(1) + ". " + esc(X[2]) + "<small>941 " + LINE_NAME[X[1]] + (CAWR[X[0]] ? "; the IRS matches this box" : "; should agree, but the IRS does not match it") + "</small></td>" + r.byQuarter.map(function(v){ return '<td class="num">' + usd(v) + "</td>"; }).join("") + '<td class="num">' + usd(r.total941) + '</td><td class="num">' + usd(r.w3) + '</td><td class="num">' + usd(r.diff) + "</td><td>" +
+        (r.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; differs</span>') + "</td></tr>"; }).join("") + "</tbody></table></div>");
     var T = R.tax;
     h.push('<h2 id="sec-tax">The tax check <small>941 taxes against twice the W-3 withholding</small></h2>' +
       '<div class="scroll"><table><tbody>' +

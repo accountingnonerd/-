@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:30px}
+.card{display:flex;flex-direction:column;gap:12px}
+.card img{width:100%;border:1px solid var(--rule);border-radius:4px;display:block}
+.card.no img{filter:blur(.4px) grayscale(.3);opacity:.85}
+.t{font:700 18px/1.25 var(--display)} .d{font:400 15px/1.4 var(--text);color:var(--soft)}
+.s{font:700 15px/1 var(--text);padding:8px 10px;border-radius:5px;align-self:flex-start}
+.s.ok{background:var(--accent-tint);color:var(--accent)} .s.bad{background:var(--alarm-tint);color:var(--alarm)}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">What it reads</div>
+  <h1>Four ways a 941 reaches your desk</h1>
+  <p class="sub">The tool reads what was filed, not a summary someone retyped. Separate files or one year-end packet both work.</p>
+  <div class="grid">
+    <div class="card"><img src="_t-fillable-1.png" alt=""><div class="t">Filled-in IRS form</div><div class="d">Values live in the PDF's form fields.</div><span class="s ok">&#10003; read</span></div>
+    <div class="card"><img src="_t-printed-01.png" alt=""><div class="t">Printed copy</div><div class="d">The IRS form with the numbers printed on, as most providers deliver it.</div><span class="s ok">&#10003; read</span></div>
+    <div class="card"><img src="_t-provider-1.png" alt=""><div class="t">Provider's own layout</div><div class="d">A "filed copy" page in the provider's design, using the IRS line wording.</div><span class="s ok">&#10003; read</span></div>
+    <div class="card no"><img src="_t-scan-1.png" alt=""><div class="t">Scan or photo</div><div class="d">No text inside. The tool says so, names the file, and asks for the filed PDF.</div><span class="s bad">&#10007; cannot read</span></div>
+  </div>
+  <p class="source">Pages from the test files: official 2026 IRS Form 941, invented employers.</p>
+</div>
+</body></html>
