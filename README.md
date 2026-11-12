@@ -30,6 +30,7 @@ Each release is recorded by its commit:
 
 | Episode | Version | Commit |
 |---|---|---|
+| Hire-to-Retire 01, Do the 941s match the W-3? | 1.0.0 | `92f777018c6e9c4627ab063f56aa2f4ce4e9a15f` |
 | Procure-to-Pay 01, Who gets a 1099? | 1.1.0 | `a2f00b20007b931f654214c2783b4f2662e7406f` |
 | Procure-to-Pay 01, Who gets a 1099? | 1.0.0 (before the series structure) | `e9c23172b253bc0f8c1a76bcf97f2d6d1040dfb2` |
 
