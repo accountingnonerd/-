@@ -38,11 +38,13 @@ The files are read on your computer. Nothing is uploaded, stored or sent.
 - A one-sentence verdict: agrees, does not agree, not complete, or not reconciled.
 - **Check these first.** Missing, duplicated or wrong-year quarters; scans it cannot read; a
   941 that does not add up; a W-3 that does not agree with itself; an EIN missing from W-3
-  box h; an amended 941-X.
-- **The reconciliation.** W-3 boxes 1, 2, 3, 5 and 7 against the four quarters, with the
-  difference. If a difference equals one or more quarters exactly, it says which.
-- **The tax check.** 941 lines 5e plus 7, against twice W-3 boxes 4 and 6 less the
-  employee-only Additional Medicare Tax.
+  box h. Also, as information: a 941-X for the year (added into its quarter), two W-3s after a
+  change of provider (added together), uncollected tax on tips (line 9) and third-party sick pay.
+- **The reconciliation.** W-3 boxes 2 (less box 14), 3, 5 and 7 against the four quarters, with
+  the difference. Box 1 is shown too, but the IRS does not compare it. If a difference equals one
+  or more quarters exactly, it says which, and what to ask for.
+- **The tax check.** 941 lines 5e, 7 and 9, against W-3 boxes 4 and 6 plus the employer's share
+  worked out from boxes 3, 5 and 7.
 - **What I read from each 941.** Every figure, by quarter, with the file and page it came from.
 - **Every page I was given,** and whether it was used.
 
@@ -52,13 +54,14 @@ It does not:
 - check the individual W-2s (wage base by employee, box 12 codes, 2% shareholder health
   insurance). That is a separate, planned episode;
 - read scans or photos. A person can read them; this tool cannot;
-- add a 941-X's corrections into a quarter. It flags the 941-X and says the difference
-  should equal the correction;
-- know about valid differences it cannot see: third-party sick pay (W-3 boxes 13 and 14),
-  prior-year adjustments on a 941, or a successor employer's wages. When it flags a
-  difference, the reason is yours to confirm;
-- handle Form 944, 943, CT-1 or Schedule H filers, state forms, Form 940, or deposits against
-  the IRS account;
+- read a 941-X in a provider's own layout; it reads the IRS form;
+- handle third-party sick pay where the insurer issued its own W-2s (it assumes your W-2s
+  include the sick pay and W-3 box 14 is filled in);
+- know about valid differences it cannot see, such as a successor employer's wages. When it
+  flags a difference, the reason is yours to confirm;
+- handle aggregate filers (section 3504 agents, PEOs), Form 944, 943, CT-1 or Schedule H
+  filers, state forms, Form 940, or deposits against the IRS account;
+- check the forms against the IRS's records. It compares the PDFs you give it with each other;
 - read a 941 or W-3 from a revision other than 2025 or 2026 with certainty. It reads the
   official IRS layout by column position, and provider layouts by their line labels.
 
@@ -69,7 +72,7 @@ It does not:
 | `agent/do-the-941s-match-the-w3.html` | The tool. One file, works offline. |
 | `agent/do-the-941s-match-the-w3.src.html` | The readable source. It loads its PDF reader from a CDN. |
 | `agent/build.py` | Pastes the PDF reader into the source to make the offline file. |
-| `tests/cases/` | 15 test cases, 60 PDFs. Invented employers; official IRS blank forms. |
+| `tests/cases/` | 17 test cases, 71 PDFs. Invented employers; official IRS blank forms. |
 | `tests/forms/` | The official blank IRS forms the test files are built from. |
 | `tests/make_cases.py` | Builds the test files from a payroll model, and writes the answer key. |
 | `tests/answer-key.json` | The answer key. |

@@ -60,7 +60,7 @@ All coordinates are PDF points, with the origin at the bottom left. A "row" mean
 - Official IRS layout: each amount is a dollars part and a cents part in fixed columns. The IRS also prints the line number just left of the dollars column, so the columns must exclude it.
   - Ordinary lines: dollars between x = 443 and 550, cents between 550 and 582.
   - Lines 5a to 5d: column 1 dollars 212 to 285 and cents 285 to 313; column 2 dollars 350 to 421 and cents 421 to 449.
-  - A token is in a dollars column if it overlaps it and looks like a number (digits, commas, optional minus or parentheses).
+  - A token is in a dollars column only if its right edge is more than 2 points past the column's left edge, its left edge is more than 2 points before the column's right edge, and it looks like a number (digits, commas, optional minus or parentheses). The 2-point margin matters: the printed two-digit line numbers "10", "11" and "12" just touch the dollars column and must not be read as digits.
   - A cents token starts inside the cents column and has one to three digits; take its first two.
   - A dollars token that already contains a decimal point is the whole amount.
   - A line with nothing in its columns is zero.
@@ -69,7 +69,7 @@ All coordinates are PDF points, with the origin at the bottom left. A "row" mean
 - Quarter:
   - Official layout: find the labels `1: January`, `2: April`, `3: July`, `4: October`. The marked one has an `X` or a check token on its row that starts within 30 points to the left of the label.
   - Otherwise, or if none or several are marked: look for `Quarter\s*:?\s*([1-4])` or `\bQ([1-4])\b` in the page text.
-- EIN: on the row of "Employer identification number", join the digit tokens more than 60 points right of the label. If that gives nine digits, format as `NN-NNNNNNN`. Otherwise use the first `\d{2}-\d{7}` in the page text.
+- EIN: take every token, text runs and form-field values alike, whose `yc` is within 8 points of the "Employer identification number" label and whose left edge is more than 60 points right of the label's start, and which consists only of digits and hyphens. Join them in left-to-right order without the hyphens. If that gives nine digits, format as `NN-NNNNNNN`. Otherwise use the first `\d{2}-\d{7}` in the page text.
 - Name: the tokens right of "Name (not your trade name)" or "Name:".
 
 ### Reading a Form 941-X (amended return)
@@ -197,4 +197,6 @@ After the files are read, set `window.__report` to:
 - Dollar values are numbers in dollars. `quartersFound` lists the quarters actually used, in order.
 - Quarter lines include any current-year 941-X corrections. `recon.b2.w3` is box 2 less box 14.
 - On `ARITHMETIC`, put the quarter number in `quarter`.
-- If the files cannot be used, set `window.__report = { fatal, message }`, with `fatal` equal to `NO_FORMS` or `FORM_944`.
+- If the files cannot be used, set `window.__report = { fatal, message }`, with `fatal` equal to `NO_FORMS` or `FORM_944`, and show the message in a visible element with `id="problem"` on the start screen.
+- A quarter with two different 941s still counts in `quartersFound`; only the reconciliation is withheld.
+- Set `window.__report` to `undefined` when new files are given, and set it once the result (or refusal) is on screen.

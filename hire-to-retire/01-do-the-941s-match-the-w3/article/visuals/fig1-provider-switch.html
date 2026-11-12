@@ -6,17 +6,17 @@ svg text{font-family:var(--text);fill:var(--ink)}
 </style></head><body>
 <div class="frame">
   <div class="kicker">What the tool found</div>
-  <h1>Where $107,227.60 of wages went</h1>
+  <h1>Where $110,167.66 of wages went</h1>
   <p class="sub">The client changed payroll providers in July. Each provider filed its own 941s, and each 941 is right. But the new provider's W-3 only covers the wages it paid.</p>
-  <svg id="c" width="1072" height="400" viewBox="0 0 1072 400" role="img" aria-label="Four quarterly 941 wage bars totalling $220,021.88 against a W-3 of $112,794.28 that covers only quarters 3 and 4"></svg>
-  <p class="source">Box 1 / line 2 wages from test case 04 (Harbor Freight Forwarding, an invented employer). Boxes 2, 3 and 5 show the same pattern. The tool reports: "Every difference equals quarters 1 + 2 exactly."</p>
+  <svg id="c" width="1072" height="400" viewBox="0 0 1072 400" role="img" aria-label="Four quarterly 941 social security wage bars totalling $225,902.00 against a W-3 box 3 of $115,734.34 that covers only quarters 3 and 4"></svg>
+  <p class="source">Social security wages from test case 04 (Harbor Freight Forwarding, an invented employer). This is one of the four amounts the IRS and SSA match. Boxes 2 and 5 show the same pattern. The tool reports that the W-3 leaves out the wages of quarters 1 and 2.</p>
 </div>
 <script>
 const svg=document.getElementById("c"),NS="http://www.w3.org/2000/svg";
 function el(t,a,x){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;svg.appendChild(e);return e;}
-const q=[50513.80,56713.80,59813.81,52980.47], X0=230, W=820, tot=q.reduce((a,b)=>a+b,0), sx=v=>v/tot*W, fmt=v=>"$"+v.toLocaleString("en-US",{minimumFractionDigits:2});
-const rows=[[60,"941s, four quarters","filed with the IRS"],[200,"W-3","filed with the SSA"]];
-rows.forEach(([y,a,b])=>{el("text",{x:0,y:y+30,class:"lab"},a);el("text",{x:0,y:y+52,class:"labs"},b);});
+const q=[51983.83,58183.83,61283.84,54450.50], X0=230, W=820, tot=q.reduce((a,b)=>a+b,0), sx=v=>v/tot*W, fmt=v=>"$"+v.toLocaleString("en-US",{minimumFractionDigits:2});
+const rows=[[60,"941 line 5a","social security wages, filed with the IRS"],[200,"W-3 box 3","social security wages, filed with the SSA"]];
+rows.forEach(([y,a,b])=>{el("text",{x:0,y:y+26,class:"lab"},a);const [l1,l2]=b.split(", ");el("text",{x:0,y:y+48,class:"labs"},l1);el("text",{x:0,y:y+68,class:"labs"},l2);});
 let x=X0;
 q.forEach((v,i)=>{const w=sx(v);el("rect",{x:x,y:60,width:w-2,height:70,rx:4,fill:i<2?"var(--accent-3)":"var(--accent)"});
   el("text",{x:x+(w-2)/2,y:90,"text-anchor":"middle",class:"vw"},"Q"+(i+1));el("text",{x:x+(w-2)/2,y:112,"text-anchor":"middle",class:"vw",style:"font-weight:400;font-size:13px"},fmt(v));x+=w;});
@@ -26,9 +26,9 @@ const gx=X0+sx(q[0]+q[1]), gw=sx(q[2]+q[3]);
 el("rect",{x:X0,y:200,width:sx(q[0]+q[1])-2,height:70,rx:4,fill:"var(--alarm-tint)",stroke:"var(--alarm)","stroke-width":2,"stroke-dasharray":"7 5"});
 el("text",{x:X0+sx(q[0]+q[1])/2,y:232,"text-anchor":"middle",class:"bigl"},"Not on the W-3");
 el("rect",{x:gx,y:200,width:gw-2,height:70,rx:4,fill:"var(--accent)"});
-el("text",{x:gx+gw/2,y:240,"text-anchor":"middle",class:"vw"},fmt(112794.28));
+el("text",{x:gx+gw/2,y:240,"text-anchor":"middle",class:"vw"},fmt(115734.34));
 el("path",{d:`M${X0},300 l0,10 l${sx(q[0]+q[1])-2},0 l0,-10`,stroke:"var(--alarm)","stroke-width":2,fill:"none"});
-el("text",{x:X0+sx(q[0]+q[1])/2,y:340,"text-anchor":"middle",class:"big"},"−"+fmt(107227.60));
+el("text",{x:X0+sx(q[0]+q[1])/2,y:340,"text-anchor":"middle",class:"big"},"−"+fmt(110167.66));
 el("text",{x:X0+sx(q[0]+q[1])/2,y:366,"text-anchor":"middle",class:"bigl"},"exactly Q1 + Q2");
 </script>
 </body></html>

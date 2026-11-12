@@ -662,7 +662,7 @@ function render(rep){
   h.push('<div class="wp-head"><div><h1>941 to W-3 reconciliation, ' + (rep.year || "") + "</h1>" +
     '<p class="verdict ' + verdict[0] + '" id="verdict">' + esc(verdict[1]) + "</p>" +
     '<p class="meta">Employer: ' + esc(rep.employer || "not shown") + " &middot; EIN " + esc(rep.ein || "not shown") + " &middot; prepared " + today() + "</p>" +
-    '<p class="meta">Rule applied: IRS General Instructions for Forms W-2 and W-3 (2026), "Reconciling Forms W-2, W-3, 941...": boxes 2, 3, 5 and 7 must agree with the year\'s 941s (the IRS and SSA match these in their Combined Annual Wage Reporting program); box 1 should agree with line 2; 941 social security and Medicare taxes should be about twice boxes 4 and 6.</p></div>' +
+    '<p class="meta">Rule applied: IRS General Instructions for Forms W-2 and W-3 (2026), "Reconciling Forms W-2, W-3, 941...". W-3 boxes 2, 3, 5 and 7 must agree with the year\'s 941s; the IRS and SSA compare these in their Combined Annual Wage Reporting program. The 941 social security and Medicare tax must agree with W-3 boxes 4 and 6 plus the employer\'s share. Box 1 is shown, but the IRS does not compare it.</p></div>' +
     '<div class="sign"><label for="preparedBy">Prepared by<input id="preparedBy" type="text" autocomplete="off"></label>' +
     '<label for="reviewedBy">Reviewed by<input id="reviewedBy" type="text" autocomplete="off"></label></div></div>');
   var firstStop = rep.exceptions.find(function(e){ return STOPS[e.code]; });
