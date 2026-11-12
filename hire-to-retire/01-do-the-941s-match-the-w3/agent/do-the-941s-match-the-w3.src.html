@@ -46,7 +46,7 @@ a{color:var(--ledger)}
 .verdict{font-size:1.35rem;font-weight:700;margin:6px 0 12px;padding:12px 16px;border-left:8px solid var(--ledger);background:var(--ledger-tint)}
 .verdict.bad{border-color:var(--stop);background:var(--stop-tint);color:var(--stop)}
 .verdict.care{border-color:var(--care);background:var(--care-tint);color:var(--care)}
-.sign{display:grid;gap:8px;font-size:.95rem;color:var(--soft)}
+.sign{display:grid;grid-template-columns:1fr 110px;gap:8px 10px;font-size:.95rem;color:var(--soft)}
 .sign label{display:block}
 .sign input{display:block;width:100%;font:inherit;font-size:1.05rem;color:var(--ink);border:0;border-bottom:2px solid var(--ink);background:#f6f8f7;padding:4px 6px;border-radius:0}
 .sample-flag{display:inline-block;background:var(--care-tint);border:2px solid var(--care);color:var(--care);font-weight:700;padding:2px 10px;border-radius:4px}
@@ -82,7 +82,7 @@ table.recon{font-size:.9rem} table.recon td,table.recon th{padding:8px 6px} tabl
   .no-print{display:none!important}
   th,td{padding:4px 6px}
   h1{font-size:20pt} h2{margin-top:16pt;break-after:avoid;font-size:13pt}
-  tr,ul.first li,.stopbox,table{break-inside:avoid}
+  tr,ul.first li,.stopbox{break-inside:avoid}
   thead{display:table-header-group}
   .scroll{overflow:visible}
   .sign input{background:none}
@@ -121,6 +121,7 @@ table.recon{font-size:.9rem} table.recon td,table.recon th{padding:8px 6px} tabl
 <section id="report" hidden>
   <div class="bar no-print">
     <button class="main-btn" id="print" type="button">Print or save as PDF</button>
+    <label class="main-btn" id="addlabel" for="addfile" style="background:#fff;color:var(--ledger);border:3px solid var(--ledger);padding:13px 22px">Add another file<input type="file" id="addfile" accept=".pdf,application/pdf" multiple style="position:absolute;width:1px;height:1px;opacity:0"></label>
     <button class="linkish" id="again" type="button">Start over with other files</button>
     <span class="hint">To keep a PDF, choose "Save as PDF" as the printer. What you type on the lines prints with it.</span>
   </div>
@@ -420,7 +421,7 @@ function analyze(files){
         ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b14"].forEach(function(b){ sum.boxes[b] = w3s.reduce(function(t, w){ return t + (w.boxes[b] || 0); }, 0); });
         w3s.forEach(function(w){ w.rec.used = true; });
         exceptions.push({ code: "W3_ADDED", message: "There are " + w3s.length + " W-3s for this employer (" + w3s.map(function(w){ return "\"" + w.file + "\""; }).join(" and ") +
-          "), usually one from each payroll provider after a change during the year. I added them together, box by box. Make sure each was actually filed, and that no W-2 is on both." });
+          "), usually one from each payroll provider after a change during the year. I added them together, box by box; each is listed below. Ask each provider for proof that it filed (the SSA's acknowledgment). Also check employees near the $184,500 social security wage base: if the new provider started their year-to-date at zero, the 941s and the W-2s can both overstate social security wages and still agree." });
         W3 = sum;
       } else exceptions.push({ code: "TWO_W3", message: "There are " + w3s.length + " W-3s for different EINs. I used the first one (\"" + w3s[0].file + "\", EIN " + (w3s[0].ein || "not shown") + "). Reconcile each EIN separately." });
     }
@@ -453,7 +454,8 @@ function analyze(files){
     }
     quarters[q] = list[0]; list.forEach(function(f){ f.rec.used = true; });
   });
-  if (missing.length) exceptions.push({ code: "MISSING_QUARTER", quarters: missing, message: "No Form 941 for quarter " + missing.join(" or ") + " of " + year + ". The totals below cover only the quarters I have, so they will not agree with the W-3. Add the missing quarter and run this again." });
+  if (missing.length === 4) exceptions.push({ code: "MISSING_QUARTER", quarters: missing, message: "There are no Forms 941 for " + year + " in these files" + (w3s.length ? ", only a W-3" : "") + ". Add the four quarterly 941s with \"Add another file\"." });
+  else if (missing.length) exceptions.push({ code: "MISSING_QUARTER", quarters: missing, message: "No Form 941 for quarter" + (missing.length > 1 ? "s " : " ") + missing.join(", ").replace(/, (\d)$/, " and $1") + " of " + year + ". The totals below cover only the quarters I have, so they will not agree with the W-3. Add the missing quarter with \"Add another file\"." });
 
   if (f944.length) exceptions.push({ code: "FORM_944_TOO", message: "There is also a Form 944 in these files. It was not used." });
 
@@ -501,7 +503,7 @@ function analyze(files){
     if (W3 && f.ein && W3.ein && f.ein !== W3.ein) {
       if (W3.otherEin === f.ein) exceptions.push({ code: "OTHER_EIN_LISTED", message: "Quarter " + q + " was filed under EIN " + f.ein + ", which the W-3 lists in box h. That is correct." });
       else exceptions.push({ code: "EIN_MISMATCH", message: "Quarter " + q + " was filed under EIN " + f.ein + ", but the W-3 is for EIN " + W3.ein + " and box h (other EIN used this year) " + (W3.otherEin ? "shows " + W3.otherEin : "is blank") +
-        ". The totals below agree only if both EINs are counted together, and the IRS matches by EIN, so expect a letter unless the W-3 shows " + f.ein + " in box h (other EIN used this year). Correct the W-3 before it is filed, or file a W-3c." });
+        ". The amounts below agree only if both EINs are counted together, and the IRS matches by EIN. First find out why quarter " + q + " used " + f.ein + ". If it was properly used (for example an earlier entity's EIN after a reorganization), the W-3 should show it in box h, other EIN used this year. If the 941 went in under the wrong EIN by mistake, that is fixed with the IRS on the 941 side, not on the W-3." });
     }
   });
 
@@ -510,11 +512,12 @@ function analyze(files){
     quarters: {}, w3: null, recon: null, exceptions: exceptions };
   found.forEach(function(q){
     var L = quarters[q].lines, o = {}; Object.keys(L).forEach(function(k){ o[k] = L[k] === null ? null : L[k] / 100; });
-    report.quarters[q] = { file: quarters[q].file, page: quarters[q].page, lines: o };
+    report.quarters[q] = { file: quarters[q].file, page: quarters[q].page, ein: quarters[q].ein, lines: o };
   });
   if (W3) {
     W3.rec.used = true;
-    report.w3 = { file: W3.file, page: W3.page, year: W3.year, yearAssumed: !!W3.yearAssumed, count: W3.count, otherEin: W3.otherEin, boxes: {} };
+    report.w3 = { file: W3.file, page: W3.page, year: W3.year, yearAssumed: !!W3.yearAssumed, count: W3.count, otherEin: W3.otherEin, boxes: {},
+      parts: (W3.parts || [W3]).map(function(w){ var bx = {}; Object.keys(w.boxes).forEach(function(b){ bx[b] = w.boxes[b] / 100; }); return { file: w.file, page: w.page, boxes: bx }; }) };
     Object.keys(W3.boxes).forEach(function(b){ report.w3.boxes[b] = W3.boxes[b] / 100; });
     var B = W3.boxes, probs = [];
     if ((B.b5 || 0) < (B.b3 || 0) + (B.b7 || 0)) probs.push("box 5 (" + money(B.b5 || 0) + ") is less than boxes 3 and 7 together (" + money((B.b3 || 0) + (B.b7 || 0)) + "); the IRS says it must not be");
@@ -554,12 +557,13 @@ function analyze(files){
     if (!recon.b1.agrees && !bad.length) exceptions.push({ code: "BOX1_DIFFERS", message: "Only box 1 differs from line 2 (by " + money(Math.round(recon.b1.diff * 100)) + "). The IRS does not compare box 1, and there can be valid reasons, such as third-party sick pay. Make sure you know the reason." });
     if (bad.length || !recon.tax.agrees) {
       var all = bad.concat(recon.b1.agrees ? [] : [recon.b1]);
-      var names = all.map(function(r){ return "box " + RECON.find(function(x){ return x[1] === r.line; })[0].slice(1) + " (" + money(Math.round(r.diff * 100)) + ")"; });
-      if (!recon.tax.agrees) names.push("the tax check (" + money(td) + ")");
+      var dir = function(c){ return money(Math.abs(c)) + (c < 0 ? " lower" : " higher") + " on the W-3"; };
+      var names = all.map(function(r){ return "box " + RECON.find(function(x){ return x[1] === r.line; })[0].slice(1) + " (" + dir(Math.round(r.diff * 100)) + ")"; });
+      if (!recon.tax.agrees) names.push("the tax check (" + dir(td) + ")");
       var pat = bad.length && bad.every(function(r){ return r.pattern; }) && bad.every(function(r){ return JSON.stringify(r.pattern) === JSON.stringify(bad[0].pattern); }) ? bad[0].pattern : null;
       var qs = pat ? "quarter" + (pat.length > 1 ? "s " : " ") + pat.join(" and ") : "";
       var lead = pat ? (bad[0].diff < 0 ? "The W-3 leaves out the wages of " + qs + ": every difference equals " + (pat.length > 1 ? "those quarters" : "that quarter") + " exactly. " +
-          "Most likely the client changed payroll providers, and the earlier provider filed its own W-2s and W-3 for " + qs + ". Ask it for that W-3 and add it here. If it never filed one, those employees' W-2s and a W-3 still have to be filed. " :
+          "Most likely the client changed payroll providers, and the earlier provider filed its own W-2s and W-3 for " + qs + ". Ask it for that W-3 and add it with \"Add another file\" at the top of this page. If it never filed one, those employees' W-2s and a W-3 still have to be filed. " :
           "The W-3 has more than the 941s by exactly " + qs + ". Check whether a 941 for " + qs + " is missing or was filed under another EIN. ") :
         missing.length ? "Part of this is the missing quarter. " : amended.length ? "Check whether the difference equals the 941-X's change. " : "";
       exceptions.push({ code: "MISMATCH", message: lead + "Differences: " + names.join(", ") + ". The amounts are in the table below." +
@@ -582,9 +586,11 @@ function showProblem(msg){
   $("busy").hidden = true; $("problem").innerHTML = "<b>I could not use those files.</b><br>" + esc(msg);
   $("problem").hidden = false; $("start").hidden = false; $("report").hidden = true;
 }
-function handleFiles(list){
+var given = [];
+function handleFiles(list, keep){
   window.__report = undefined; $("problem").hidden = true;
-  var files = Array.prototype.slice.call(list);
+  var files = (keep ? given : []).concat(Array.prototype.slice.call(list).filter(function(f){ return !(keep && given.some(function(g){ return g.name === f.name && g.size === f.size; })); }));
+  given = files;
   if (!files.length) return;
   var notPdf = files.filter(function(f){ return !/\.pdf$/i.test(f.name); });
   if (notPdf.length === files.length) { window.__report = { fatal: "NO_FORMS", message: "not PDF" }; return showProblem("This page reads PDF files. " + notPdf.map(function(f){ return "\"" + f.name + "\""; }).join(", ") + " " + (notPdf.length > 1 ? "are" : "is") + " not a PDF. Ask the payroll provider for the filed copies as PDFs."); }
@@ -611,22 +617,23 @@ var INFO = { OTHER_EIN_LISTED: 1, DUPLICATE_SAME: 1, W3_ADDED: 1, AMENDED_INCLUD
 function render(rep){
   var h = [], st = rep.status, R = rep.recon;
   var verdict = { AGREES: ["", "Agrees. In the forms you gave me, W-3 boxes 2, 3, 5 and 7 match the four 941s to the cent, and the 941 taxes are about twice W-3 boxes 4 and 6."],
-    DOES_NOT_AGREE: ["bad", "Does not agree. Fix this before the W-3 is filed, or before the IRS finds it."],
+    DOES_NOT_AGREE: ["bad", (rep.recon && RECON.every(function(R){ return R[0] === "b1" || rep.recon[R[0]].agrees; }) && rep.recon.tax.agrees) ?
+      "The amounts agree, but not every quarter was filed under the W-3's EIN, and the IRS matches by EIN." : "Does not agree. Find the cause before the W-3 is filed."],
     INCOMPLETE: ["bad", "Not complete. A quarter is missing, so these totals cannot agree yet."],
     NOT_RECONCILED: ["care", rep.w3 ? "Not reconciled. Two different 941s for one quarter: you need to say which was filed." : "Not reconciled. There is no W-3 to compare with."] }[st];
   h.push('<div class="wp-head"><div><h1>941 to W-3 reconciliation, ' + (rep.year || "") + "</h1>" +
     '<p class="verdict ' + verdict[0] + '" id="verdict">' + esc(verdict[1]) + "</p>" +
     '<p class="meta">Employer: ' + esc(rep.employer || "not shown") + " &middot; EIN " + esc(rep.ein || "not shown") + " &middot; prepared " + today() + "</p>" +
     '<p class="meta">Rule applied: IRS General Instructions for Forms W-2 and W-3 (2026), "Reconciling Forms W-2, W-3, 941...". W-3 boxes 2, 3, 5 and 7 must agree with the year\'s 941s; the IRS and SSA compare these in their Combined Annual Wage Reporting program. The 941 social security and Medicare tax must agree with W-3 boxes 4 and 6 plus the employer\'s share. Box 1 is shown, but the IRS does not compare it.</p></div>' +
-    '<div class="sign"><label for="preparedBy">Prepared by<input id="preparedBy" type="text" autocomplete="off"></label>' +
-    '<label for="reviewedBy">Reviewed by<input id="reviewedBy" type="text" autocomplete="off"></label></div></div>');
+    '<div class="sign"><label for="preparedBy">Prepared by<input id="preparedBy" type="text" autocomplete="off"></label><label for="preparedOn">Date<input id="preparedOn" type="text" autocomplete="off"></label>' +
+    '<label for="reviewedBy">Reviewed by<input id="reviewedBy" type="text" autocomplete="off"></label><label for="reviewedOn">Date<input id="reviewedOn" type="text" autocomplete="off"></label></div></div>');
   var firstStop = rep.exceptions.find(function(e){ return STOPS[e.code]; });
   if (st !== "AGREES") h.push('<div class="stopbox" id="stop-banner" role="alert"><b>What to do</b><br>' + esc(firstStop ? firstStop.message : "See the list below.") + "</div>");
 
   h.push("<h2>Check these first</h2>");
   var ex = rep.exceptions.slice().sort(function(a, b){ return (STOPS[b.code] ? 1 : 0) - (STOPS[a.code] ? 1 : 0); });
   ex = ex.filter(function(e){ return e !== firstStop; });
-  if (!ex.length) h.push('<p class="ok">' + (st === "AGREES" ? "Nothing unusual. Four quarters, one W-3, one EIN, and every 941 adds up." : "Nothing else.") + "</p>");
+  if (!ex.length) h.push('<p class="ok">' + (st === "AGREES" ? "Nothing unusual. Four quarters, one W-3, one EIN, and every 941 adds up." : "Nothing else to check.") + "</p>");
   else h.push('<ul class="first">' + ex.map(function(e){ return '<li class="' + (STOPS[e.code] ? "stop" : INFO[e.code] ? "info" : "") + '"><span class="tag">' + LABEL[e.code] + ".</span> " + esc(e.message) + "</li>"; }).join("") + "</ul>");
 
   // reconciliation table
@@ -640,7 +647,7 @@ function render(rep){
       '<div class="scroll"><table><tbody>' +
       '<tr><td>From the 941s: line 5e (social security and Medicare tax) plus line 7 (fractions of cents) plus line 9 (uncollected tax on tips and group-term life), four quarters' + (T.line8 ? '. Line 8 (third-party sick pay) is left out because the insurer\'s withholding is in W-3 boxes 4 and 6' : "") + '</td><td class="num">' + usd(T.total941) + "</td></tr>" +
       '<tr><td>From the W-3: employee tax withheld (box 4, ' + usd(rep.w3.boxes.b4) + ", plus box 6, " + usd(rep.w3.boxes.b6) + ") plus the employer's share (6.2% of boxes 3 and 7, plus 1.45% of box 5: " + usd(T.employer) + ")</td><td class=\"num\">" + usd(T.w3) + "</td></tr>" +
-      '<tr class="sum"><td>Difference ' + '<span class="note">(up to ' + usd(T.tolerance) + ' is rounding)</span></td><td class="num">' + usd(T.diff) + " " + (T.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; does not agree</span>') +"</td></tr></tbody></table></div>");
+      '<tr class="sum"><td>Difference ' + '<span class="note">(up to ' + usd(T.tolerance) + ' is rounding: $1.00 plus 2 cents for each of the ' + (rep.w3.count || 0) + ' W-2s)</span></td><td class="num">' + usd(T.diff) + " " + (T.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; does not agree</span>') +"</td></tr></tbody></table></div>");
   } else h.push('<p class="note">Not done: ' + (rep.w3 ? "two different 941s for one quarter." : "no W-3.") + " The 941 totals are below.</p>");
 
   // the quarters as read
@@ -650,8 +657,12 @@ function render(rep){
     ["5e", "Line 5e total social security and Medicare tax"], ["7", "Line 7 fractions of cents"], ["8", "Line 8 third-party sick pay"], ["9", "Line 9 tips and group-term life"], ["10", "Line 10 total taxes after adjustments"]];
   h.push('<div class="scroll"><table><thead><tr><th>941 line</th>' + [1, 2, 3, 4].map(function(q){ return '<th class="num">Q' + q + "</th>"; }).join("") + '<th class="num">Total</th></tr></thead><tbody>' +
     lines.map(function(L){ var tot = 0; return "<tr><td>" + L[1] + "</td>" + [1, 2, 3, 4].map(function(q){ var Q = rep.quarters[q]; var v = Q ? Q.lines[L[0]] : null; tot += v || 0; return '<td class="num">' + (Q ? usd(v || 0) : "missing") + "</td>"; }).join("") + '<td class="num">' + usd(tot) + "</td></tr>"; }).join("") +
+    "<tr><td>EIN on the 941</td>" + [1, 2, 3, 4].map(function(q){ var Q = rep.quarters[q]; var bad = Q && Q.ein && rep.ein && Q.ein !== rep.ein; return '<td class="num"' + (bad ? ' style="color:var(--stop);font-weight:700"' : "") + ">" + (Q ? esc(Q.ein || "not shown") + (bad ? " (differs)" : "") : "") + "</td>"; }).join("") + "<td></td></tr>" +
     "<tr><td>Source</td>" + [1, 2, 3, 4].map(function(q){ var Q = rep.quarters[q]; return '<td class="note">' + (Q ? esc(Q.file) + ", page " + Q.page : "") + "</td>"; }).join("") + "<td></td></tr></tbody></table></div>");
-  if (rep.w3) h.push('<p class="note">W-3 read from "' + esc(rep.w3.file) + '", page ' + rep.w3.page + (rep.w3.count ? ", covering " + rep.w3.count + " Forms W-2" : "") + (rep.w3.yearAssumed ? ". Its year is not printed as text; I assumed " + rep.year : "") + ".</p>");
+  if (rep.w3 && rep.w3.parts && rep.w3.parts.length > 1) h.push('<h2 id="sec-w3s">The W-3s, one by one <small>added together above</small></h2><div class="scroll"><table><thead><tr><th>W-3</th>' +
+      ["1", "2", "3", "4", "5", "6", "7", "14"].map(function(b){ return '<th class="num">Box ' + b + "</th>"; }).join("") + "</tr></thead><tbody>" +
+      rep.w3.parts.map(function(w){ return "<tr><td>" + esc(w.file) + ", page " + w.page + "</td>" + ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b14"].map(function(b){ return '<td class="num">' + usd(w.boxes[b] || 0) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>");
+  else if (rep.w3) h.push('<p class="note">W-3 read from "' + esc(rep.w3.file) + '", page ' + rep.w3.page + (rep.w3.count ? ", covering " + rep.w3.count + " Forms W-2" : "") + (rep.w3.yearAssumed ? ". Its year is not printed as text; I assumed " + rep.year : "") + ".</p>");
 
   // pages read
   h.push('<h2 id="sec-pages">Every page I was given</h2><div class="scroll"><table><thead><tr><th>File</th><th class="num">Page</th><th>What it is</th><th>Used</th></tr></thead><tbody>' +
@@ -671,6 +682,7 @@ function render(rep){
 function today(){ var t = new Date(); return String(t.getMonth() + 1).padStart(2, "0") + "/" + String(t.getDate()).padStart(2, "0") + "/" + t.getFullYear(); }
 
 $("file").addEventListener("change", function(){ if (this.files && this.files.length) handleFiles(this.files); this.value = ""; });
+$("addfile").addEventListener("change", function(){ if (this.files && this.files.length) handleFiles(this.files, true); this.value = ""; });
 $("print").addEventListener("click", function(){ window.print(); });
 $("again").addEventListener("click", function(){ $("report").hidden = true; $("start").hidden = false; $("problem").hidden = true; window.scrollTo(0, 0); });
 ["dragenter", "dragover"].forEach(function(ev){ document.addEventListener(ev, function(e){ e.preventDefault(); $("drop").classList.add("over"); }); });
