@@ -19,7 +19,7 @@ Every tool in this repository:
 | Series | Process | Episode | Tool | What it does | Date | Version |
 |---|---|---|---|---|---|---|
 | 1 | [Procure-to-Pay](procure-to-pay/) | 01 | [Who gets a 1099?](procure-to-pay/01-who-gets-a-1099/) | Reads a client's year of payments and produces the 1099 worksheet: who to file, whose W-9 to check, and why, including vendors the software's 1099 report misses because nobody flagged them. | 2026-11-11 | 1.1.0 |
-| 2 | Hire-to-Retire (payroll) | | next, January 2027 | | | |
+| 2 | [Hire-to-Retire (payroll)](hire-to-retire/) | 01 | [Do the 941s match the W-3?](hire-to-retire/01-do-the-941s-match-the-w3/) | Reads the filed 941s and W-3 (PDFs) and produces the reconciliation the IRS says to keep, with every difference explained or flagged, including the W-3 that leaves out a previous provider's quarters. | 2026-11-12 | 1.0.0 |
 | 3 | Record-to-Report (close) | | February 2027 | | | |
 | 4 | Order-to-Cash | | March 2027 | | | |
 | 5 | Acquire-to-Retire (fixed assets) | | April 2027 | | | |

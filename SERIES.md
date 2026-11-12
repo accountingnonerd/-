@@ -42,7 +42,7 @@ The order is the release order. Each series starts in the season when its work p
 | No. | Process | What the accountant does for clients | Starts | Why then |
 |---|---|---|---|---|
 | 1 | [Procure-to-Pay](procure-to-pay/) | vendors, bills, payments, vendor statements, 1099s | Dec 2026 | 1099s are due February 1, 2027 |
-| 2 | Hire-to-Retire (payroll) | payroll runs, tax deposits, 941s, W-2s, payroll on the books | Jan 2027 | W-2s and the fourth-quarter 941 |
+| 2 | [Hire-to-Retire (payroll)](hire-to-retire/) | payroll runs, tax deposits, 941s, W-2s, payroll on the books | Jan 2027 | W-2s and the fourth-quarter 941 |
 | 3 | Record-to-Report (close) | bank recs, accruals, review, financial statements | Feb 2027 | year-end close before tax returns |
 | 4 | Order-to-Cash | invoices, customer payments, card and platform payouts, receivables, sales tax | Mar 2027 | year-end receivables and sales tax |
 | 5 | Acquire-to-Retire (fixed assets) | purchases, capitalize or expense, depreciation, disposals | Apr 2027 | the depreciation schedule on the return |
@@ -64,9 +64,10 @@ The order is the release order. Each series starts in the season when its work p
   payroll) that files the returns.
 - **Left by hand:** proving the books agree with what the provider filed, above all when
   the client switched providers mid-year or booked payroll by hand.
-- **Candidates:**
-  - the four 941s against the W-3;
-  - the payroll provider's annual report against the general ledger.
+- **Episodes:**
+  - 01 [Do the 941s match the W-3?](hire-to-retire/01-do-the-941s-match-the-w3/), built, version 1.0.0;
+  - candidate: W-2 review before filing (wage base, box 12 codes, 2% shareholder health insurance);
+  - candidate: the payroll provider's annual report against the general ledger.
 
 ### 3. Record-to-Report (close)
 - **She already has:** bank reconciliation in the ledger, a close checklist in her

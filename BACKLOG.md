@@ -11,12 +11,15 @@ killed ideas. A candidate is chosen only after it passes Stage 1 and the value t
   liabilities at year end). Not yet researched.
 
 ## 2. Hire-to-Retire (payroll)
-- **The four 941s against the W-3, and the provider's annual report against the general
-  ledger.** January work, once per payroll client. Open question for Stage 1: payroll
-  providers produce both sides, so how often does it actually fail to tie? Likely answer:
-  when the client switched providers mid-year or booked payroll by hand. Evidence on why
-  totals differ: the [IRS exempt-organization training on year-end reporting](https://www.stayexempt.irs.gov/se/files/downloads/ITG%20L11%20Year%20End%20Reporting.pdf)
-  and a [QuickBooks community thread, "941 does not agree to W3"](https://quickbooks.intuit.com/community/employees-and-payroll-2/941-does-not-agree-to-w3-742).
+- **Built:** 01 Do the 941s match the W-3? (version 1.0.0).
+- **W-2 review before filing.** Check each employee against the wage base, box 5 against
+  boxes 3 and 7, box 12 codes, and 2% S corporation shareholder health insurance in box 1.
+  Needs a list of 2% shareholders, which the provider's export does not carry.
+- **Payroll provider's annual report against the general ledger.** Two inputs; may belong
+  in Record-to-Report.
+- **Read real providers' filed copies.** Episode 01 was tested on the IRS forms and one
+  provider layout drawn by us. Collect one filed 941 and W-3 each from Gusto, ADP, Paychex and
+  QuickBooks Payroll (with client data removed) and add them to the tests.
 
 ## 3. Record-to-Report (close)
 - **Month-over-month changes with client questions.** Flux software exists (FloQast,

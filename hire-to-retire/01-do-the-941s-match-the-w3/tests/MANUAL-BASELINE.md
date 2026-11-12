@@ -26,13 +26,14 @@ each case that has one.
 
 | Case | Figures to copy | Comparisons | A difference to explain? | Estimated minutes by hand |
 |---|---|---|---|---|
-| 01, 02, 03, 11 (agree) | 47 | 6 | no | 19 each |
-| 04, 07, 08, 12 (do not agree) | 47 | 6 | yes | 29 each |
+| 01, 02, 03, 12 (agree) | 47 to 52 | 6 | no | 19 to 20 each |
+| 04, 07, 08, 11 (do not agree) | 47 | 6 | yes | 29 each |
 | 06, 09, 10 (a quarter missing or unusable) | 37 to 47 | 6 | yes | 27 to 29 each |
 | 05 (two different Q2 941s) | 57 | 6 | yes | 30 |
 | 15 (no W-3) | 40 | 0 | no | 12 |
+| 16, 17 (two W-3s; third-party sick pay) | 54 and 48 | 6 | no | 20 each |
 
-That is about **5 hours** for the 13 cases that contain payroll forms. A single clean client
+That is about **6 hours** for the 15 cases that contain payroll forms. A single clean client
 takes about 20 minutes.
 
 ## What the manual method is exposed to in these files
@@ -43,4 +44,5 @@ takes about 20 minutes.
 | 07 | A 941's Medicare tax is $90 more than 2.9% of its wages | An overstated 941 that nobody notices because line 5e adds up |
 | 08 | Two digits swapped in W-3 box 3 | SSA records $27,000 less in social security wages than the 941s |
 | 11 | The first quarter was filed under an old EIN, and W-3 box h is blank | The IRS cannot match that quarter to the W-3 |
-| 12 | A 941-X is on file, and the W-3 includes its correction | A difference that looks like an error but is explained by the amendment |
+| 12 | A 941-X is on file, and the W-3 includes its correction | A $2,500 difference that looks like an error unless the 941-X is added in |
+| 17 | Third-party sick pay: box 2 includes the insurer's withholding | A box 2 difference that is not an error, unless box 14 is subtracted |
