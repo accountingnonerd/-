@@ -53,18 +53,21 @@ def payroll_year(staff, year=2026):
     Returns per-quarter 941 lines and the W-3 boxes."""
     base = SS_BASE[year]
     q = [dict(emps=0, l2=D(0), l3=D(0), ss_w=D(0), ss_t=D(0), med=D(0), addl_w=D(0),
-              emp_ss=D(0), emp_med=D(0), emp_addl=D(0)) for _ in range(4)]
-    w3 = dict(b1=D(0), b2=D(0), b3=D(0), b4=D(0), b5=D(0), b6=D(0), b7=D(0), c=0)
+              emp_ss=D(0), emp_med=D(0), emp_addl=D(0), unc=D(0), tp_fit=D(0), tp_fica=D(0)) for _ in range(4)]
+    w3 = dict(b1=D(0), b2=D(0), b3=D(0), b4=D(0), b5=D(0), b6=D(0), b7=D(0), b14=D(0), c=0)
     for e in staff:
         cum_ss = D(0); cum_med = D(0); paid = False
         e_b = dict(b1=D(0), b2=D(0), b3=D(0), b4=D(0), b5=D(0), b6=D(0), b7=D(0))
         for i in range(4):
-            gross = D(str(e["pay"][i])); k = D(str(e.get("k401", [0] * 4)[i])); tips = D(str(e.get("tips", [0] * 4)[i]))
+            gross = r2(D(str(e["pay"][i]))); k = r2(D(str(e.get("k401", [0] * 4)[i]))); tips = r2(D(str(e.get("tips", [0] * 4)[i])))
             if gross == 0 and tips == 0:
                 continue
             paid = True
+            tp = e.get("third_party", {}).get(i)          # (income tax withheld by the insurer, sick pay wages)
+            sick = r2(D(str(tp[1]))) if tp else D(0)
+            gross += sick
             box1 = gross + tips - k
-            fit = r2(box1 * D(str(e["fit_rate"])))
+            fit = r2((box1 - sick) * D(str(e["fit_rate"])))  # withheld by the employer; the insurer withholds on the sick pay
             room = max(D(0), base - cum_ss)
             ss_w = min(gross, room); ss_t = min(tips, max(D(0), room - ss_w))
             cum_ss += ss_w + ss_t
@@ -74,10 +77,19 @@ def payroll_year(staff, year=2026):
             over_after = max(D(0), cum_med - ADDL_THRESHOLD)
             addl_w = over_after - over_before
             emp_ss = r2((ss_w + ss_t) * D("0.062")); emp_med = r2(med * D("0.0145")); emp_addl = r2(addl_w * D("0.009"))
+            # uncollected employee tax on tips (941 line 9; W-2 box 12 codes A and B; not in boxes 4 and 6)
+            unc_ss, unc_med = [D(str(x)) for x in e.get("uncollected", {}).get(i, (0, 0))]
+            emp_ss -= unc_ss; emp_med -= unc_med
+            # third-party sick pay: the insurer withholds income tax and the employee's FICA (941 line 8; W-3 box 14)
+            tp_fit = r2(D(str(tp[0]))) if tp else D(0)
+            tp_fica = (r2(sick * D("0.062")) + r2(sick * D("0.0145"))) if tp else D(0)   # employee FICA the insurer withheld (in boxes 4 and 6)
             Q = q[i]
             Q["emps"] += 1; Q["l2"] += box1; Q["l3"] += fit; Q["ss_w"] += ss_w; Q["ss_t"] += ss_t; Q["med"] += med
             Q["addl_w"] += addl_w; Q["emp_ss"] += emp_ss; Q["emp_med"] += emp_med; Q["emp_addl"] += emp_addl
-            e_b["b1"] += box1; e_b["b2"] += fit; e_b["b3"] += ss_w; e_b["b7"] += ss_t; e_b["b4"] += emp_ss
+            Q["unc"] += unc_ss + unc_med; Q["tp_fit"] += tp_fit; Q["tp_fica"] += tp_fica
+
+            w3["b14"] += tp_fit
+            e_b["b1"] += box1; e_b["b2"] += fit + tp_fit; e_b["b3"] += ss_w; e_b["b7"] += ss_t; e_b["b4"] += emp_ss
             e_b["b5"] += med; e_b["b6"] += emp_med + emp_addl
         if paid:
             w3["c"] += 1
@@ -92,9 +104,13 @@ def payroll_year(staff, year=2026):
         L["5d1"] = Q["addl_w"]; L["5d2"] = r2(Q["addl_w"] * D("0.009"))
         L["5e"] = L["5a2"] + L["5b2"] + L["5c2"] + L["5d2"]; L["5f"] = D(0)
         L["6"] = L["3"] + L["5e"] + L["5f"]
-        actual = 2 * Q["emp_ss"] + 2 * Q["emp_med"] + Q["emp_addl"]     # what was really withheld and owed
-        L["7"] = actual - L["5e"]                                        # fractions of cents
-        L["8"] = D(0); L["9"] = D(0)
+        L["9"] = -Q["unc"]                                               # uncollected employee tax on tips
+        L["8"] = -Q["tp_fica"]                                           # employee FICA withheld by the third-party payer
+        # Line 7, as the 941 instructions describe it: the employer's share is the rate times the
+        # quarter's totals; the employee's share is what was actually withheld, paycheck by paycheck.
+        employer = r2((Q["ss_w"] + Q["ss_t"]) * D("0.062")) + r2(Q["med"] * D("0.0145"))
+        employee = Q["emp_ss"] + Q["emp_med"] + Q["emp_addl"] + Q["unc"]   # all employee FICA owed, incl. the insurer's part
+        L["7"] = (employer + employee) - L["5e"]                         # fractions of cents
         L["10"] = L["6"] + L["7"] + L["8"] + L["9"]; L["11"] = D(0); L["12"] = L["10"] - L["11"]
         L["13"] = L["12"]; L["14"] = D(0)
         quarters.append(L)
@@ -102,7 +118,7 @@ def payroll_year(staff, year=2026):
 
 
 AMOUNT_LINES = ["2", "3", "5a1", "5a2", "5b1", "5b2", "5c1", "5c2", "5d1", "5d2", "5e", "5f", "6", "7", "8", "9", "10", "11", "12", "13", "14"]
-RECON = [("b1", "2"), ("b2", "3"), ("b3", "5a1"), ("b5", "5c1"), ("b7", "5b1")]
+RECON = [("b1", "2"), ("b2", "3"), ("b3", "5a1"), ("b5", "5c1"), ("b7", "5b1")]   # box 2 is compared net of box 14
 
 # =====================================================================================
 # 2. Writers
@@ -328,17 +344,20 @@ def key_for(cid, title, kind, files, year, quarters_read, w3=None, ein=None, exc
     if fatal:
         k["fatal"] = fatal; KEY[cid] = k; return
     k.update(year=year, ein=ein, exceptions=sorted(set(exceptions)), quartersFound=sorted(quarters_read))
-    k["quarters"] = {str(qn): {ln: money(v) for ln, v in L.items() if ln in ("2", "3", "5a1", "5a2", "5b1", "5b2", "5c1", "5c2", "5d1", "5d2", "5e", "7")}
+    k["quarters"] = {str(qn): {ln: money(v) for ln, v in L.items() if ln in ("2", "3", "5a1", "5a2", "5b1", "5b2", "5c1", "5c2", "5d1", "5d2", "5e", "7", "8", "9")}
                      for qn, L in quarters_read.items()}
     if w3 is not None and dup_quarter is None:
         rows = {}
         for b, ln in RECON:
             tot = sum((quarters_read[qn][ln] for qn in quarters_read), D(0))
-            rows[b] = dict(line=ln, total941=money(tot), w3=money(w3[b]), diff=money(w3[b] - tot), agrees=r2(w3[b] - tot) == 0)
-        tax941 = sum((quarters_read[qn]["5e"] + quarters_read[qn]["7"] for qn in quarters_read), D(0))
-        addl = sum((quarters_read[qn]["5d2"] for qn in quarters_read), D(0))
-        expect = 2 * w3["b4"] + 2 * w3["b6"] - addl
-        rows["tax"] = dict(total941=money(tax941), w3=money(expect), diff=money(expect - tax941), agrees=abs(expect - tax941) <= D("1.00"))
+            w = w3[b] - (w3.get("b14", D(0)) if b == "b2" else 0)
+            rows[b] = dict(line=ln, total941=money(tot), w3=money(w), diff=money(w - tot), agrees=r2(w - tot) == 0)
+        # Line 8 stays out: the insurer's withholding of the employee's FICA is in W-3 boxes 4 and 6 but taken off the 941 on line 8.
+        # Line 9 stays in: uncollected employee tax on tips is in neither W-3 box 4 nor box 6.
+        tax941 = sum((quarters_read[qn]["5e"] + quarters_read[qn]["7"] + quarters_read[qn]["9"] for qn in quarters_read), D(0))
+        expect = w3["b4"] + w3["b6"] + r2((w3["b3"] + w3["b7"]) * D("0.062")) + r2(w3["b5"] * D("0.0145"))
+        tol = D("1.00") + D("0.02") * w3["c"]
+        rows["tax"] = dict(total941=money(tax941), w3=money(expect), diff=money(expect - tax941), agrees=abs(expect - tax941) <= tol)
         k["recon"] = rows
         k["w3"] = {b: money(w3[b]) for b in ["b1", "b2", "b3", "b4", "b5", "b6", "b7"]}
     else:
@@ -360,7 +379,8 @@ def staff_office():
 def staff_restaurant():
     s = []
     for i, (p, t) in enumerate([(9100, 6450.25), (8800, 5980.4), (8650, 6120.15), (9900, 0), (7400.5, 4310.6), (6350, 3990.35), (12500, 0)]):
-        s.append(dict(name=f"R{i}", pay=[p, p * 1.05, p * 1.1, p], tips=[t, t * 1.08, t * 1.15, t * 1.2], fit_rate="0.07"))
+        s.append(dict(name=f"R{i}", pay=[p, round(p * 1.05, 2), round(p * 1.1, 2), p], tips=[t, round(t * 1.08, 2), round(t * 1.15, 2), round(t * 1.2, 2)], fit_rate="0.07"))
+    s[1]["uncollected"] = {3: (85.10, 19.90)}
     return s
 
 
@@ -385,8 +405,8 @@ pages = []
 for i in range(4): pages += printed_941("f941-2026.pdf", qs[i], EIN, NAME, i + 1)
 pages += [PdfReader(os.path.join(FORMS, "fw3-2026.pdf")).pages[0]] + printed_w3(w3, EIN, NAME)
 write_pages("02-year-end-packet.pdf", pages)
-key_for("02", "One year-end packet, printed copies, tips, extra pages to ignore", "ugly", ["02-year-end-packet.pdf"],
-        year, {i + 1: qs[i] for i in range(4)}, w3, EIN, status="AGREES")
+key_for("02", "Year-end packet, printed copies, tips, uncollected tip tax, extra pages to ignore", "ugly", ["02-year-end-packet.pdf"],
+        year, {i + 1: qs[i] for i in range(4)}, w3, EIN, exceptions=["UNCOLLECTED_TAX"], status="AGREES")
 
 # ---- 03 a firm with one partner over the wage base and over $200,000: Additional Medicare, fractions of cents
 qs, w3 = payroll_year(staff_firm()); EIN, NAME = "61-5520147", "Okafor & Lindqvist CPAs PLLC"
@@ -407,7 +427,7 @@ write_pages("04-w3-ledgerline.pdf", provider_w3(w3_h2, EIN, NAME))
 key_for("04", "PLANTED: switched providers mid-year; the new W-3 leaves out January to June", "planted",
         ["04-q1-941-old-provider.pdf", "04-q2-941-old-provider.pdf", "04-q3-941-ledgerline.pdf", "04-q4-941-ledgerline.pdf", "04-w3-ledgerline.pdf"],
         year, {i + 1: qs[i] for i in range(4)}, w3_h2, EIN, exceptions=["MISMATCH"], status="DOES_NOT_AGREE",
-        notes="Every wage difference equals Q1 + Q2 exactly; the tool should say so.")
+        notes="Every wage difference equals Q1 + Q2 exactly; the tool should say so and ask for the old provider's W-3.")
 KEY["04"]["patternQuarters"] = [1, 2]
 
 # ---- 05 two different Forms 941 for the second quarter
@@ -440,7 +460,7 @@ for i in range(4): write_writer(f"07-q{i+1}-941.pdf", fill_941_fields("f941-2026
 write_writer("07-w3.pdf", fill_w3_fields(w3, EIN, NAME))
 key_for("07", "PLANTED: a third-quarter 941 whose Medicare tax is not 2.9% of its wages", "planted",
         [f"07-q{i}-941.pdf" for i in range(1, 5)] + ["07-w3.pdf"], year, {i + 1: quarters_printed[i] for i in range(4)}, w3, EIN,
-        exceptions=["ARITHMETIC", "MISMATCH"], status="DOES_NOT_AGREE")
+        exceptions=["ARITHMETIC", "MISMATCH", "UNCOLLECTED_TAX"], status="DOES_NOT_AGREE")
 KEY["07"]["arithmeticQuarter"] = 3
 
 # ---- 08 PLANTED: W-3 box 3 digits transposed
@@ -481,20 +501,38 @@ for i in range(1, 4): write_writer(f"11-q{i+1}-941.pdf", fill_941_fields("f941-2
 write_writer("11-w3.pdf", fill_w3_fields(w3, EIN, NAME))
 key_for("11", "First quarter filed under an old EIN; W-3 box h is blank", "rules",
         [f"11-q{i}-941.pdf" for i in range(1, 5)] + ["11-w3.pdf"], year, {i + 1: qs[i] for i in range(4)}, w3, EIN,
-        exceptions=["EIN_MISMATCH"], status="AGREES")
+        exceptions=["EIN_MISMATCH"], status="DOES_NOT_AGREE",
+        notes="The totals agree only when both EINs are combined. The IRS matches by EIN, so this draws a letter unless box h shows the other EIN.")
 
-# ---- 12 an amended second quarter (941-X) in the pile, and the W-3 includes the correction
+# ---- 12 a filled-in 941-X correcting the 2026 second quarter (a $2,500 bonus left off); the W-3 includes it
 qs, w3 = payroll_year(staff_office()); EIN, NAME = "36-7741209", "Harbor Freight Forwarding LLC"
-bonus = D("2500.00")
-w3x = dict(w3); w3x["b1"] += bonus; w3x["b2"] += r2(bonus * D("0.22")); w3x["b3"] += bonus; w3x["b5"] += bonus
+bonus = D("2500.00"); fitb = r2(bonus * D("0.22"))
+w3x = dict(w3); w3x["b1"] += bonus; w3x["b2"] += fitb; w3x["b3"] += bonus; w3x["b5"] += bonus
 w3x["b4"] += r2(bonus * D("0.062")); w3x["b6"] += r2(bonus * D("0.0145"))
 for i in range(4): write_writer(f"12-q{i+1}-941.pdf", fill_941_fields("f941-2026.pdf", qs[i], EIN, NAME, i + 1))
-xr = PdfReader(os.path.join(FORMS, "f941x.pdf")); xw = PdfWriter(clone_from=xr); xw.set_need_appearances_writer(True)
+xr = PdfReader(os.path.join(FORMS, "f941x.pdf")); xw = PdfWriter(clone_from=xr)
+w1 = widgets(xw.pages[0]); w2 = widgets(xw.pages[1])
+set_text(w1, "f1_1[0]", EIN.split("-")[0]); set_text(w1, "f1_2[0]", EIN.split("-")[1]); set_text(w1, "f1_3[0]", NAME); set_text(w1, "f1_12[0]", "2026")
+set_text(w2, "f2_1[0]", "2")
+if "f1_12[0]" in w2: set_text(w2, "f1_12[0]", "2026")
+X941 = {"2": ["f2_2[0]", "f2_3[0]", "f2_4[0]", "f2_5[0]", "f2_6[0]", "f2_7[0]", None, None],
+        "3": ["f2_8[0]", "f2_9[0]", "f2_10[0]", "f2_11[0]", "f2_12[0]", "f2_13[0]", "f2_14[0]", "f2_15[0]"],
+        "5a": ["f2_16[0]", "f2_17[0]", "f2_18[0]", "f2_19[0]", "f2_20[0]", "f2_21[0]", "f2_22[0]", "f2_23[0]"],
+        "5c": ["f2_48[0]", "f2_49[0]", "f2_50[0]", "f2_51[0]", "f2_52[0]", "f2_53[0]", "f2_54[0]", "f2_55[0]"]}
+orig = qs[1]
+for ln, corr, was, tax in [("2", orig["2"] + bonus, orig["2"], None), ("3", orig["3"] + fitb, orig["3"], fitb),
+                           ("5a", orig["5a1"] + bonus, orig["5a1"], r2(bonus * D("0.124"))), ("5c", orig["5c1"] + bonus, orig["5c1"], r2(bonus * D("0.029")))]:
+    f = X941[ln]
+    for (fd, fc), v in [((f[0], f[1]), corr), ((f[2], f[3]), was), ((f[4], f[5]), corr - was)] + ([((f[6], f[7]), tax)] if tax is not None else []):
+        d_, c_ = split_amount(v, True); set_text(w2, fd, d_); set_text(w2, fc, c_)
+xw.set_need_appearances_writer(True)
 write_writer("12-q2-941-x.pdf", xw)
 write_writer("12-w3.pdf", fill_w3_fields(w3x, EIN, NAME))
-key_for("12", "A 941-X for the second quarter: must flag it, not silently add it", "rules",
-        [f"12-q{i}-941.pdf" for i in range(1, 5)] + ["12-q2-941-x.pdf", "12-w3.pdf"], year, {i + 1: qs[i] for i in range(4)}, w3x, EIN,
-        exceptions=["AMENDED_RETURN", "MISMATCH"], status="DOES_NOT_AGREE")
+q2x = dict(qs[1]); q2x["2"] += bonus; q2x["3"] += fitb; q2x["5a1"] += bonus; q2x["5c1"] += bonus
+q2x["5a2"] += r2(bonus * D("0.124")); q2x["5c2"] += r2(bonus * D("0.029")); q2x["5e"] += r2(bonus * D("0.124")) + r2(bonus * D("0.029"))
+key_for("12", "A filled-in 2026 941-X for the second quarter: must add it in, and then agree", "rules",
+        [f"12-q{i}-941.pdf" for i in range(1, 5)] + ["12-q2-941-x.pdf", "12-w3.pdf"], year, {1: qs[0], 2: q2x, 3: qs[2], 4: qs[3]}, w3x, EIN,
+        exceptions=["AMENDED_INCLUDED"], status="AGREES")
 
 # ---- 13 an annual Form 944 filer: out of scope
 write_pages("13-form-944.pdf", PdfReader(os.path.join(FORMS, "f944.pdf")).pages[:2])
@@ -515,6 +553,31 @@ for i in range(4): write_writer(f"15-q{i+1}-941.pdf", fill_941_fields("f941-2026
 key_for("15", "Four 941s but no W-3: must total the 941s and say there is nothing to compare", "ugly",
         [f"15-q{i}-941.pdf" for i in range(1, 5)], year, {i + 1: qs[i] for i in range(4)}, None, EIN,
         exceptions=["NO_W3"], status="NOT_RECONCILED")
+
+# ---- 16 the provider switch again, this time with both providers' W-3s: must add them and agree
+staff = staff_office(); qs, w3_full = payroll_year(staff); EIN, NAME = "36-7741209", "Harbor Freight Forwarding LLC"
+h1 = [dict(s, pay=s["pay"][:2] + [0, 0], k401=s.get("k401", [0] * 4)[:2] + [0, 0]) for s in staff]
+h2 = [dict(s, pay=[0, 0] + s["pay"][2:], k401=[0, 0] + s.get("k401", [0] * 4)[2:]) for s in staff]
+_, w3_h1 = payroll_year(h1); _, w3_h2 = payroll_year(h2)
+for i in range(2): write_writer(f"16-q{i+1}-941-old-provider.pdf", fill_941_fields("f941-2026.pdf", qs[i], EIN, NAME, i + 1))
+for i in range(2, 4): write_pages(f"16-q{i+1}-941-ledgerline.pdf", provider_941(qs[i], EIN, NAME, i + 1))
+write_writer("16-w3-old-provider.pdf", fill_w3_fields(w3_h1, EIN, NAME))
+write_pages("16-w3-ledgerline.pdf", provider_w3(w3_h2, EIN, NAME))
+w3_sum = {b: w3_h1[b] + w3_h2[b] for b in w3_h1}
+key_for("16", "Provider switch with both providers' W-3s: must add them together and agree", "ugly",
+        ["16-q1-941-old-provider.pdf", "16-q2-941-old-provider.pdf", "16-q3-941-ledgerline.pdf", "16-q4-941-ledgerline.pdf", "16-w3-old-provider.pdf", "16-w3-ledgerline.pdf"],
+        year, {i + 1: qs[i] for i in range(4)}, w3_sum, EIN, exceptions=["W3_ADDED"], status="AGREES")
+
+# ---- 17 third-party sick pay: box 2 includes the insurer's withholding (box 14); line 3 does not
+staff = staff_firm(); staff[2]["third_party"] = {1: (640.00, 4200.00)}
+qs, w3 = payroll_year(staff); EIN, NAME = "61-5520147", "Okafor & Lindqvist CPAs PLLC"
+assert w3["b14"] > 0 and qs[1]["8"] != 0
+for i in range(4): write_writer(f"17-q{i+1}-941.pdf", fill_941_fields("f941-2026.pdf", qs[i], EIN, NAME, i + 1, commas=True))
+w3w = fill_w3_fields(w3, EIN, NAME, commas=True); set_text(widgets(w3w.pages[1]), "f1_22[0]", f"{r2(w3['b14']):,.2f}")
+write_writer("17-w3.pdf", w3w)
+key_for("17", "Third-party sick pay: W-3 box 2 less box 14 must agree with line 3", "rules",
+        [f"17-q{i}-941.pdf" for i in range(1, 5)] + ["17-w3.pdf"], year, {i + 1: qs[i] for i in range(4)}, w3, EIN,
+        exceptions=["THIRD_PARTY_SICK_PAY"], status="AGREES")
 
 with open(os.path.join(HERE, "answer-key.json"), "w") as f:
     json.dump(KEY, f, indent=1)

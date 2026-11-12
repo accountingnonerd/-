@@ -82,7 +82,7 @@ table.recon{font-size:.9rem} table.recon td,table.recon th{padding:8px 6px} tabl
   .no-print{display:none!important}
   th,td{padding:4px 6px}
   h1{font-size:20pt} h2{margin-top:16pt;break-after:avoid;font-size:13pt}
-  tr,ul.first li,.stopbox{break-inside:avoid}
+  tr,ul.first li,.stopbox,table{break-inside:avoid}
   thead{display:table-header-group}
   .scroll{overflow:visible}
   .sign input{background:none}
@@ -108,7 +108,7 @@ table.recon{font-size:.9rem} table.recon td,table.recon th{padding:8px 6px} tabl
 
   <p class="how"><b>What it adds.</b> Your payroll provider files both forms, but proving they agree is left to you. When the client changed providers, amended a quarter or ran some payroll by hand, they often don't agree. The IRS matches them about two years later and sends a letter.</p>
   <p class="how"><b>Which files?</b> The filed copies from the payroll provider, or the IRS forms you filled in. A provider's year-end packet with everything in one PDF works too. Scans cannot be read.</p>
-  <p class="how"><b>Which rule?</b> The IRS General Instructions for Forms W-2 and W-3 (2026): W-3 boxes 2, 3, 5 and 7 must agree with the year's 941s, and the 941 taxes should be about twice W-3 boxes 4 and 6.</p>
+  <p class="how"><b>Which rule?</b> The IRS General Instructions for Forms W-2 and W-3 (2026): W-3 boxes 2, 3, 5 and 7 must agree with the year's 941s, and the 941's social security and Medicare tax should be about twice W-3 boxes 4 and 6 (employer plus employee). If the client changed providers, drop in both W-3s.</p>
 
   <div class="promise">
     <p><b>Where your data goes: nowhere.</b> This page reads the files on this computer. Nothing is uploaded, stored or sent.</p>
@@ -194,6 +194,7 @@ function money(c){
 function classify(page){
   var t = page.text;
   if (t.length < 25 && !page.fields.length) return "scan";
+  if (/Correcting quarter/i.test(t) && /Correcting calendar year/i.test(t)) return "941Xdata";
   if (/941-X/.test(t) && /Adjusted Employer/i.test(t)) return "941X";
   if (/Form\s*944\b|\b944 for \d{4}/.test(t) && /ANNUAL Federal Tax Return/i.test(t)) return "944";
   if (/941-V/.test(t) && /Payment Voucher/i.test(t)) return "voucher";
@@ -204,9 +205,9 @@ function classify(page){
   if (/Wage and Tax Statement/i.test(t)) return "W2";
   return "other";
 }
-var KIND_TEXT = { "941": "Form 941", "941p2": "Form 941, page 2 or 3 (not needed)", voucher: "Form 941-V payment voucher (not needed)",
+var KIND_TEXT = { "941": "Form 941", "941p2": "Form 941 page 2: deposit schedule and signature (not needed)", voucher: "Form 941-V payment voucher (not needed)",
   W3: "Form W-3", W3info: "W-3 instructions page (not needed)", W2: "Form W-2 (not needed: the W-3 carries the totals)",
-  "941X": "Form 941-X (amended return)", "944": "Form 944 (annual return)", scan: "A scan: no readable text", other: "Not a payroll form" };
+  "941X": "Form 941-X, page 1 (amended return)", "941Xdata": "Form 941-X, page 2: the corrections", "944": "Form 944 (annual return)", scan: "A scan: no readable text", other: "Not one of the forms this reconciles" };
 
 /* ---------- rows and labels ---------- */
 function allTokens(page){ return page.items.concat(page.fields); }
@@ -321,21 +322,43 @@ function read941(page){
   return out;
 }
 
+/* ---------- Form 941-X, page 2: column 3 (difference) and column 4 (tax correction) ---------- */
+var L941X = [["2", /^compensation \(Form 941, line 2\)/i, false], ["3", /^from wages, tips, and other/i, false], ["5a", /^\(Form 941 or 941-SS, line 5a,/i, true],
+  ["5b", /^941 or 941-SS, line 5b/i, true], ["5c", /^941 or 941-SS, line 5c/i, true], ["5d", /^Additional Medicare Tax\s*$/i, true]];
+var IRS941X = { col3: [[376, 434], [434, 458]], col4: [[498, 556], [556, 580]] };
+function read941X(page){
+  var tokens = allTokens(page), out = { year: null, quarter: null, diff: {}, found: false };
+  tokens.forEach(function(k){
+    if (k.yc > 700 && /^20\d\d$/.test(k.str)) out.year = +k.str;
+    if (k.yc > 700 && /^[1-4]$/.test(k.str) && k.x0 > 512 && k.x0 < 548) out.quarter = +k.str;
+  });
+  L941X.forEach(function(L){
+    var lab = findLabel(page, L[1]); if (!lab) return;
+    var row = tokens.filter(function(k){ return Math.abs(k.yc - lab.yc) < 7; });
+    var d = amountFrom(row, IRS941X.col3[0], IRS941X.col3[1]);
+    if (d.found && d.value !== null) { out.diff[L[0] === "2" || L[0] === "3" ? L[0] : L[0] + "1"] = d.value; out.found = true; }
+    if (L[2]) { var t = amountFrom(row, IRS941X.col4[0], IRS941X.col4[1]); if (t.found && t.value !== null) out.diff[L[0] + "2"] = t.value; }
+  });
+  return out;
+}
+
 /* ---------- Form W-3 ---------- */
 var W3BOX = [["b1", /^1 Wages, tips, other compensation/i], ["b2", /^2 Federal income tax withheld/i], ["b3", /^3 Social security wages/i],
-  ["b4", /^4 Social security tax withheld/i], ["b5", /^5 Medicare wages and tips/i], ["b6", /^6 Medicare tax withheld/i], ["b7", /^7 Social security tips/i]];
+  ["b4", /^4 Social security tax withheld/i], ["b5", /^5 Medicare wages and tips/i], ["b6", /^6 Medicare tax withheld/i], ["b7", /^7 Social security tips/i],
+  ["b14", /^14 Income tax withheld by payer of third-party sick pay/i]];
 function readW3(page){
   var t = page.text, out = { boxes: {}, unread: [], year: null, ein: null, otherEin: null, name: "", count: null };
   var ym = t.match(/Transmittal of Wage and Tax Statements\s*(\d{4})/i) || t.match(/W-3[^0-9]{0,60}(20\d\d)/);
   out.year = ym ? +ym[1] : null;
   var irs = /33333/.test(t) || page.fields.length > 0, tokens = allTokens(page);
   function near(lab){                           // the value printed in this box: below the label (IRS) or to its right (provider)
-    if (irs) return tokens.filter(function(k){ var xc = (k.x0 + k.x1) / 2; return k.yc < lab.yc - 2 && k.yc > lab.yc - 20 && xc > lab.x0 - 6 && xc < lab.x0 + 148; });
+    if (irs) return tokens.filter(function(k){ var xc = (k.x0 + k.x1) / 2; return k.yc < lab.yc - 2 && k.yc > lab.yc - 20 && xc > lab.x0 - 6 && xc < lab.x0 + (lab.wide ? 310 : 148); });
     return tokens.filter(function(k){ return Math.abs(k.yc - lab.yc) < 6 && k.x0 > lab.x0 + 150; });
   }
   W3BOX.forEach(function(B){
     var lab = findLabel(page, B[1]);
-    if (!lab) { out.unread.push(B[0]); return; }
+    if (!lab) { if (B[0] !== "b14") out.unread.push(B[0]); return; }
+    lab.wide = B[0] === "b14";
     var v = near(lab).filter(function(k){ return cents(k.str) !== null; });
     out.boxes[B[0]] = v.length ? cents(v[v.length - 1].str) : 0;
   });
@@ -350,23 +373,29 @@ function readW3(page){
 /* =====================================================================================
    PART 2 - THE RECONCILIATION. All arithmetic in whole cents.
    ===================================================================================== */
-var RECON = [["b1", "2", "Wages, tips, other compensation"], ["b2", "3", "Federal income tax withheld"], ["b3", "5a1", "Social security wages"],
+var RECON = [["b1", "2", "Wages, tips, other compensation"], ["b2", "3", "Federal income tax withheld (less box 14)"], ["b3", "5a1", "Social security wages"],
   ["b5", "5c1", "Medicare wages and tips"], ["b7", "5b1", "Social security tips"]];
 var LINE_NAME = { "2": "line 2", "3": "line 3", "5a1": "line 5a, column 1", "5c1": "line 5c, column 1", "5b1": "line 5b, column 1" };
 var CAWR = { b2: 1, b3: 1, b5: 1, b7: 1 };
 
+function tax9Total(quarters){ return Object.keys(quarters).reduce(function(t, q){ return t + (quarters[q].lines["9"] || 0); }, 0); }
+function tax8Total(quarters){ return Object.keys(quarters).reduce(function(t, q){ return t + (quarters[q].lines["8"] || 0); }, 0); }
 function analyze(files){
-  var pages = [], exceptions = [], forms941 = [], w3s = [], amended = [], f944 = [];
+  var pages = [], exceptions = [], forms941 = [], w3s = [], amended = [], amendedData = [], f944 = [];
   files.forEach(function(f){
     if (f.error) { pages.push({ file: f.name, page: 0, kind: "unreadable", used: false }); exceptions.push({ code: "UNREADABLE_FILE", message: "\"" + f.name + "\" could not be opened as a PDF (" + f.error + "). Export it again from the payroll provider." }); return; }
     var scans = 0;
     f.pages.forEach(function(p){
-      var kind = classify(p), rec = { file: f.name, page: p.n, kind: kind, used: false };
+      var kind = classify(p), rec = { file: f.name, page: p.n, kind: kind, used: false, first: kind === "other" ? p.text.slice(0, 70) : "" };
       pages.push(rec);
       if (kind === "scan") scans++;
       if (kind === "941") { var r = read941(p); r.file = f.name; r.page = p.n; r.rec = rec; forms941.push(r); }
       if (kind === "W3") { var w = readW3(p); w.file = f.name; w.page = p.n; w.rec = rec; w3s.push(w); }
-      if (kind === "941X") amended.push({ file: f.name, page: p.n });
+      if (kind === "941X") {
+        var yx = allTokens(p).find(function(k){ return /^20\d\d$/.test(k.str) && k.x0 > 415 && k.x0 < 495 && k.yc > 540 && k.yc < 590; });
+        amended.push({ file: f.name, page: p.n, rec: rec, year: yx ? +yx.str : null });
+      }
+      if (kind === "941Xdata") { var x = read941X(p); x.file = f.name; x.page = p.n; x.rec = rec; amendedData.push(x); }
       if (kind === "944") f944.push({ file: f.name, page: p.n });
     });
     if (scans) exceptions.push({ code: "SCANNED", file: f.name, message: "\"" + f.name + "\" has " + (scans === f.pages.length ? "no readable text at all" : scans + " page(s) with no readable text") +
@@ -374,15 +403,30 @@ function analyze(files){
   });
   if (!forms941.length && !w3s.length) {
     if (f944.length) return { fatal: "FORM_944", pages: pages, message: "This is a Form 944, the annual return for very small employers. This tool reconciles the four quarterly Forms 941 with the W-3. For a 944 filer, compare Form 944 directly with the W-3." };
-    if (exceptions.some(function(e){ return e.code === "SCANNED"; })) return { fatal: "NO_FORMS", pages: pages, message: "These files are scans with no readable text. Ask the payroll provider for the PDFs it filed." };
+    var sc = exceptions.filter(function(e){ return e.code === "SCANNED"; });
+    if (sc.length) return { fatal: "NO_FORMS", pages: pages, message: (sc.length === 1 ? "\"" + sc[0].file + "\" is a scan" : sc.length + " of these files are scans") + " with no readable text, so I cannot read its numbers. Ask the payroll provider for the PDF it filed, or download the filed copy from its website. If there is no provider, an IRS account transcript has the 941 figures. You will need all four 941s and the W-3." };
     return { fatal: "NO_FORMS", pages: pages, message: "I could not find a Form 941 or a Form W-3 in these files. Drop in the filed 941s and the W-3 (the IRS forms or the payroll provider's filed copies)." };
   }
 
   // ---- which year
-  var W3 = w3s[0] || null, years = {};
+  var W3 = null, years = {};
+  if (w3s.length) {
+    W3 = w3s[0];
+    if (w3s.length > 1) {
+      var sameEin = w3s.every(function(w){ return !w.ein || !W3.ein || w.ein === W3.ein || w.ein === W3.otherEin || W3.ein === w.otherEin; });
+      if (sameEin) {
+        var sum = { boxes: {}, unread: [], year: W3.year, ein: W3.ein || w3s[1].ein, otherEin: W3.otherEin || w3s.slice(1).map(function(w){ return w.otherEin; }).find(Boolean) || null,
+          name: W3.name, count: w3s.reduce(function(t, w){ return t + (w.count || 0); }, 0) || null, file: w3s.map(function(w){ return w.file; }).join(" + "), page: W3.page, rec: W3.rec, parts: w3s };
+        ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b14"].forEach(function(b){ sum.boxes[b] = w3s.reduce(function(t, w){ return t + (w.boxes[b] || 0); }, 0); });
+        w3s.forEach(function(w){ w.rec.used = true; });
+        exceptions.push({ code: "W3_ADDED", message: "There are " + w3s.length + " W-3s for this employer (" + w3s.map(function(w){ return "\"" + w.file + "\""; }).join(" and ") +
+          "), usually one from each payroll provider after a change during the year. I added them together, box by box. Make sure each was actually filed, and that no W-2 is on both." });
+        W3 = sum;
+      } else exceptions.push({ code: "TWO_W3", message: "There are " + w3s.length + " W-3s for different EINs. I used the first one (\"" + w3s[0].file + "\", EIN " + (w3s[0].ein || "not shown") + "). Reconcile each EIN separately." });
+    }
+  }
   forms941.forEach(function(f){ if (f.year) years[f.year] = (years[f.year] || 0) + 1; });
   var year = (W3 && W3.year) || +Object.keys(years).sort(function(a, b){ return years[b] - years[a]; })[0] || null;
-  if (w3s.length > 1) exceptions.push({ code: "TWO_W3", message: "There are " + w3s.length + " W-3 pages. I used the first one (" + w3s[0].file + ", page " + w3s[0].page + "). If the client filed more than one W-3 for the year, the W-3 totals must be added together by hand." });
   if (W3 && !W3.year) W3.yearAssumed = true;
 
   // ---- sort the 941s into quarters
@@ -410,8 +454,7 @@ function analyze(files){
     quarters[q] = list[0]; list.forEach(function(f){ f.rec.used = true; });
   });
   if (missing.length) exceptions.push({ code: "MISSING_QUARTER", quarters: missing, message: "No Form 941 for quarter " + missing.join(" or ") + " of " + year + ". The totals below cover only the quarters I have, so they will not agree with the W-3. Add the missing quarter and run this again." });
-  if (amended.length) exceptions.push({ code: "AMENDED_RETURN", message: "There is a Form 941-X (amended return) in these files: " + amended.map(function(a){ return "\"" + a.file + "\""; }).join(", ") +
-    ". I did not add its corrections to the quarter's figures. If the W-3 includes the correction, the difference below should equal the 941-X's change. Check that it does." });
+
   if (f944.length) exceptions.push({ code: "FORM_944_TOO", message: "There is also a Form 944 in these files. It was not used." });
 
   // ---- arithmetic inside each 941
@@ -430,6 +473,27 @@ function analyze(files){
     if (probs.length) exceptions.push({ code: "ARITHMETIC", quarter: +q, message: "The quarter " + q + " Form 941 does not add up: " + probs.join("; ") + ". If this is what was filed, the quarter may need a Form 941-X." });
   });
 
+  // ---- amended returns: a current-year 941-X belongs in the year's totals; another year's does not
+  var unreadX = amended.filter(function(a){ return !amendedData.some(function(x){ return x.file === a.file; }); });
+  amendedData.forEach(function(x){
+    if (!x.year) { var p1 = amended.find(function(a){ return a.file === x.file && a.year; }); if (p1) x.year = p1.year; }
+    if (!x.found || !x.quarter || !x.year) {   // later pages of a 941-X repeat the header but carry no corrections
+      if (!amendedData.some(function(y){ return y !== x && y.file === x.file && y.found; }) && unreadX.indexOf(x) < 0 && !unreadX.some(function(u){ return u.file === x.file; })) unreadX.push(x);
+      return;
+    }
+    if (year && x.year !== year) { exceptions.push({ code: "AMENDED_OTHER_YEAR", message: "\"" + x.file + "\" is a Form 941-X correcting quarter " + x.quarter + " of " + x.year + ". It was left out: corrections to another year do not belong on this year's W-3." }); return; }
+    var Q = quarters[x.quarter];
+    if (!Q) { exceptions.push({ code: "AMENDED_RETURN", message: "\"" + x.file + "\" corrects quarter " + x.quarter + ", but there is no 941 for that quarter here. Add the original 941 too." }); return; }
+    Q.lines = Object.assign({}, Q.lines);
+    var parts = [];
+    Object.keys(x.diff).forEach(function(k){ Q.lines[k] = (Q.lines[k] || 0) + x.diff[k]; if (/2$/.test(k) && k.length === 3) Q.lines["5e"] = (Q.lines["5e"] || 0) + x.diff[k]; if (!/^5.2$/.test(k)) parts.push((LINE_NAME[k] || "line " + k) + " " + (x.diff[k] >= 0 ? "+" : "") + money(x.diff[k])); });
+    Q.amendedBy = x.file; x.rec.used = true;
+    amended.forEach(function(a){ if (a.file === x.file) a.rec.used = true; });
+    exceptions.push({ code: "AMENDED_INCLUDED", quarter: x.quarter, message: "\"" + x.file + "\" is a Form 941-X correcting quarter " + x.quarter + " of " + x.year + ". I added its corrections to that quarter: " + parts.join(", ") + ". The IRS says current-year adjustments belong in the reconciliation." });
+  });
+  if (unreadX.length) exceptions.push({ code: "AMENDED_RETURN", message: "There is a Form 941-X in " + unreadX.map(function(a){ return "\"" + a.file + "\""; }).join(", ") +
+    ", but I could not read which quarter it corrects or its figures. Its corrections are not included. If it corrects this year, add its column 3 differences by hand." });
+
   // ---- EINs
   var ein = (W3 && W3.ein) || (forms941[0] && forms941[0].ein) || null;
   Object.keys(quarters).forEach(function(q){
@@ -437,7 +501,7 @@ function analyze(files){
     if (W3 && f.ein && W3.ein && f.ein !== W3.ein) {
       if (W3.otherEin === f.ein) exceptions.push({ code: "OTHER_EIN_LISTED", message: "Quarter " + q + " was filed under EIN " + f.ein + ", which the W-3 lists in box h. That is correct." });
       else exceptions.push({ code: "EIN_MISMATCH", message: "Quarter " + q + " was filed under EIN " + f.ein + ", but the W-3 is for EIN " + W3.ein + " and box h (other EIN used this year) " + (W3.otherEin ? "shows " + W3.otherEin : "is blank") +
-        ". The IRS matches by EIN, so this quarter may look unreported. The W-3 should show " + f.ein + " in box h." });
+        ". The totals below agree only if both EINs are counted together, and the IRS matches by EIN, so expect a letter unless the W-3 shows " + f.ein + " in box h (other EIN used this year). Correct the W-3 before it is filed, or file a W-3c." });
     }
   });
 
@@ -454,11 +518,14 @@ function analyze(files){
     Object.keys(W3.boxes).forEach(function(b){ report.w3.boxes[b] = W3.boxes[b] / 100; });
     var B = W3.boxes, probs = [];
     if ((B.b5 || 0) < (B.b3 || 0) + (B.b7 || 0)) probs.push("box 5 (" + money(B.b5 || 0) + ") is less than boxes 3 and 7 together (" + money((B.b3 || 0) + (B.b7 || 0)) + "); the IRS says it must not be");
-    var ss = Math.round(((B.b3 || 0) + (B.b7 || 0)) * 62 / 1000), tol = 100 + (W3.count || 0);
-    if (Math.abs((B.b4 || 0) - ss) > tol) probs.push("box 4 (" + money(B.b4 || 0) + ") should be about 6.2% of boxes 3 and 7 (" + money(ss) + "), a difference of " + money((B.b4 || 0) - ss));
+    var ss = Math.round(((B.b3 || 0) + (B.b7 || 0)) * 62 / 1000), tol = 100 + 2 * (W3.count || 0), unc = tax9Total(quarters) !== 0;
+    if (!unc && Math.abs((B.b4 || 0) - ss) > tol) probs.push("box 4 (" + money(B.b4 || 0) + ") should be about 6.2% of boxes 3 and 7 (" + money(ss) + "), a difference of " + money((B.b4 || 0) - ss));
     var med = Math.round((B.b5 || 0) * 145 / 10000);
-    if ((B.b6 || 0) < med - tol) probs.push("box 6 (" + money(B.b6 || 0) + ") is less than 1.45% of box 5 (" + money(med) + ")");
+    if (!unc && (B.b6 || 0) < med - tol) probs.push("box 6 (" + money(B.b6 || 0) + ") is less than 1.45% of box 5 (" + money(med) + ")");
     if (probs.length) exceptions.push({ code: "W3_INTERNAL", message: "The W-3 does not agree with itself: " + probs.join("; ") + ". One of these boxes was probably typed wrong." });
+    if (tax9Total(quarters) !== 0) exceptions.push({ code: "UNCOLLECTED_TAX", message: "The 941s show " + money(-tax9Total(quarters)) + " on line 9: social security and Medicare tax on tips or group-term life insurance that was not collected from employees. It is not in W-3 boxes 4 and 6, so the tax check allows for it. W-2 box 12 codes A and B (tips) or M and N (group-term life) should add up to it." });
+    if ((W3.boxes.b14 || 0) !== 0 || tax8Total(quarters) !== 0) exceptions.push({ code: "THIRD_PARTY_SICK_PAY", message: "Third-party sick pay: W-3 box 14 shows " + money(W3.boxes.b14 || 0) + " of income tax withheld by the insurer, and the 941s show " + money(tax8Total(quarters)) +
+      " on line 8. I compared W-3 box 2 less box 14 with 941 line 3, and left line 8 out of the tax check. This assumes your W-2s include the sick pay; if the insurer issued its own W-2s, expect differences in boxes 3 and 5." });
   } else exceptions.push({ code: "NO_W3", message: "There is no Form W-3 in these files, so there is nothing to compare the 941s with. The 941 totals for the year are below. Add the W-3 and run this again." });
 
   // ---- the reconciliation itself
@@ -466,34 +533,42 @@ function analyze(files){
     var recon = {}, bad = [];
     RECON.forEach(function(R){
       var by = [1, 2, 3, 4].map(function(q){ return quarters[q] ? (quarters[q].lines[R[1]] || 0) : null; });
-      var tot = by.reduce(function(s, v){ return s + (v || 0); }, 0), w = W3.boxes[R[0]] || 0, d = w - tot;
+      var tot = by.reduce(function(s, v){ return s + (v || 0); }, 0), w = (W3.boxes[R[0]] || 0) - (R[0] === "b2" ? (W3.boxes.b14 || 0) : 0), d = w - tot;
       var row = { line: R[1], name: R[2], byQuarter: by.map(function(v){ return v === null ? null : v / 100; }), total941: tot / 100, w3: w / 100, diff: d / 100, agrees: d === 0 };
       if (d !== 0) {
         var subs = [];
         for (var m = 1; m < 16; m++) { var s = 0, qs = [], ok = true; for (var q = 1; q <= 4; q++) if (m & (1 << (q - 1))) { if (by[q - 1] === null) ok = false; s += by[q - 1] || 0; qs.push(q); } if (ok && s !== 0 && Math.abs(d) === s) subs.push(qs); }
         if (subs.length) row.pattern = subs[0];
-        bad.push(row);
+        if (R[0] === "b1") row.noteOnly = true; else bad.push(row);
       }
       recon[R[0]] = row;
     });
-    var tax941 = 0, addl = 0, tax7 = 0;
-    found.forEach(function(q){ var L = quarters[q].lines; tax941 += (L["5e"] || 0) + (L["7"] || 0); addl += L["5d2"] || 0; tax7 += L["7"] || 0; });
-    var expect = 2 * (W3.boxes.b4 || 0) + 2 * (W3.boxes.b6 || 0) - addl, td = expect - tax941;
-    recon.tax = { total941: tax941 / 100, w3: expect / 100, diff: td / 100, agrees: Math.abs(td) <= 100, line7: tax7 / 100, addl: addl / 100 };
+    // 941: lines 5e + 7 + 9 = employer share + employee tax withheld. Line 8 stays out: tax the insurer withheld on
+    // third-party sick pay is in W-3 boxes 4 and 6 but taken off the 941 on line 8.
+    var tax941 = 0, tax7 = 0, tax8 = 0, tax9 = 0;
+    found.forEach(function(q){ var L = quarters[q].lines; tax941 += (L["5e"] || 0) + (L["7"] || 0) + (L["9"] || 0); tax7 += L["7"] || 0; tax8 += L["8"] || 0; tax9 += L["9"] || 0; });
+    var B3 = W3.boxes, employer = Math.round(((B3.b3 || 0) + (B3.b7 || 0)) * 62 / 1000) + Math.round((B3.b5 || 0) * 145 / 10000);
+    var expect = (B3.b4 || 0) + (B3.b6 || 0) + employer, td = expect - tax941, tol = 100 + 2 * (W3.count || 0);
+    recon.tax = { total941: tax941 / 100, w3: expect / 100, employer: employer / 100, diff: td / 100, agrees: Math.abs(td) <= tol, tolerance: tol / 100, line7: tax7 / 100, line8: tax8 / 100, line9: tax9 / 100 };
     report.recon = recon;
+    if (!recon.b1.agrees && !bad.length) exceptions.push({ code: "BOX1_DIFFERS", message: "Only box 1 differs from line 2 (by " + money(Math.round(recon.b1.diff * 100)) + "). The IRS does not compare box 1, and there can be valid reasons, such as third-party sick pay. Make sure you know the reason." });
     if (bad.length || !recon.tax.agrees) {
-      var names = bad.map(function(r){ return "box " + RECON.find(function(x){ return x[1] === r.line; })[0].slice(1) + " (" + money(Math.round(r.diff * 100)) + ")"; });
+      var all = bad.concat(recon.b1.agrees ? [] : [recon.b1]);
+      var names = all.map(function(r){ return "box " + RECON.find(function(x){ return x[1] === r.line; })[0].slice(1) + " (" + money(Math.round(r.diff * 100)) + ")"; });
       if (!recon.tax.agrees) names.push("the tax check (" + money(td) + ")");
       var pat = bad.length && bad.every(function(r){ return r.pattern; }) && bad.every(function(r){ return JSON.stringify(r.pattern) === JSON.stringify(bad[0].pattern); }) ? bad[0].pattern : null;
-      var hint = pat ? " Every difference equals quarter" + (pat.length > 1 ? "s " : " ") + pat.join(" + ") + " exactly. The W-3 probably leaves out those quarters' wages, which is common after a change of payroll provider, or those 941s were filed twice." :
-        (missing.length ? " Part of this is the missing quarter." : amended.length ? " Check whether the difference is the 941-X's change." : "");
-      exceptions.push({ code: "MISMATCH", message: "The W-3 does not agree with the 941s on " + names.join(", ") + ". The amounts are in the reconciliation table below." + hint +
-        " If the W-2s and W-3 are wrong, file Forms W-2c and W-3c. If a 941 is wrong, file Form 941-X for that quarter. Either way, keep this reconciliation for a possible IRS Letter 99C." });
+      var qs = pat ? "quarter" + (pat.length > 1 ? "s " : " ") + pat.join(" and ") : "";
+      var lead = pat ? (bad[0].diff < 0 ? "The W-3 leaves out the wages of " + qs + ": every difference equals " + (pat.length > 1 ? "those quarters" : "that quarter") + " exactly. " +
+          "Most likely the client changed payroll providers, and the earlier provider filed its own W-2s and W-3 for " + qs + ". Ask it for that W-3 and add it here. If it never filed one, those employees' W-2s and a W-3 still have to be filed. " :
+          "The W-3 has more than the 941s by exactly " + qs + ". Check whether a 941 for " + qs + " is missing or was filed under another EIN. ") :
+        missing.length ? "Part of this is the missing quarter. " : amended.length ? "Check whether the difference equals the 941-X's change. " : "";
+      exceptions.push({ code: "MISMATCH", message: lead + "Differences: " + names.join(", ") + ". The amounts are in the table below." +
+        (pat ? "" : " If the W-2s and W-3 are wrong, the fix is Forms W-2c and W-3c. If a 941 is wrong, it is Form 941-X for that quarter.") + " Keep this reconciliation in case the IRS sends a Letter 99C." });
     }
   }
   var codes = exceptions.map(function(e){ return e.code; });
   report.status = dupQ !== null || !W3 ? "NOT_RECONCILED" : missing.length ? "INCOMPLETE" :
-    (report.recon && RECON.every(function(R){ return report.recon[R[0]].agrees; }) && report.recon.tax.agrees ? "AGREES" : "DOES_NOT_AGREE");
+    (report.recon && RECON.every(function(R){ return R[0] === "b1" || report.recon[R[0]].agrees; }) && report.recon.tax.agrees && codes.indexOf("EIN_MISMATCH") < 0 ? "AGREES" : "DOES_NOT_AGREE");
   return report;
 }
 
@@ -525,17 +600,18 @@ function handleFiles(list){
   }).catch(function(e){ window.__report = { fatal: "CRASH", message: String(e) }; showProblem("The PDF reader failed: " + e); });
 }
 
-var LABEL = { MISMATCH: "Does not agree", MISSING_QUARTER: "A quarter is missing", DUPLICATE_QUARTER: "Two different 941s for one quarter", DUPLICATE_SAME: "A quarter appears twice",
+var LABEL = { W3_ADDED: "Two W-3s added together", UNCOLLECTED_TAX: "Uncollected tax on tips or group-term life", BOX1_DIFFERS: "Box 1 differs", AMENDED_INCLUDED: "An amended 941-X, added in",
+  AMENDED_OTHER_YEAR: "A 941-X for another year, left out", THIRD_PARTY_SICK_PAY: "Third-party sick pay", MISMATCH: "Does not agree", MISSING_QUARTER: "A quarter is missing", DUPLICATE_QUARTER: "Two different 941s for one quarter", DUPLICATE_SAME: "A quarter appears twice",
   SCANNED: "A file I cannot read", WRONG_YEAR: "A 941 from another year", QUARTER_UNKNOWN: "Quarter not marked", UNREAD_LINES: "Lines I could not read",
   ARITHMETIC: "A 941 that does not add up", W3_INTERNAL: "A W-3 that does not add up", EIN_MISMATCH: "A quarter under another EIN", OTHER_EIN_LISTED: "Another EIN, listed correctly",
   AMENDED_RETURN: "An amended return (941-X)", NO_W3: "No W-3", TWO_W3: "More than one W-3", UNREADABLE_FILE: "A file that would not open", FORM_944_TOO: "A Form 944" };
-var STOPS = { MISSING_QUARTER: 1, DUPLICATE_QUARTER: 1, NO_W3: 1, SCANNED: 1, MISMATCH: 1 };
-var INFO = { OTHER_EIN_LISTED: 1, DUPLICATE_SAME: 1 };
+var STOPS = { MISSING_QUARTER: 1, DUPLICATE_QUARTER: 1, NO_W3: 1, SCANNED: 1, MISMATCH: 1, EIN_MISMATCH: 1 };
+var INFO = { OTHER_EIN_LISTED: 1, DUPLICATE_SAME: 1, W3_ADDED: 1, AMENDED_INCLUDED: 1, AMENDED_OTHER_YEAR: 1, UNCOLLECTED_TAX: 1, THIRD_PARTY_SICK_PAY: 1 };
 
 function render(rep){
   var h = [], st = rep.status, R = rep.recon;
-  var verdict = { AGREES: ["", "Agrees. W-3 boxes 1, 2, 3, 5 and 7 match the four 941s to the cent, and the 941 taxes are about twice W-3 boxes 4 and 6, as they should be."],
-    DOES_NOT_AGREE: ["bad", "Does not agree. Check the differences below before the IRS does."],
+  var verdict = { AGREES: ["", "Agrees. In the forms you gave me, W-3 boxes 2, 3, 5 and 7 match the four 941s to the cent, and the 941 taxes are about twice W-3 boxes 4 and 6."],
+    DOES_NOT_AGREE: ["bad", "Does not agree. Fix this before the W-3 is filed, or before the IRS finds it."],
     INCOMPLETE: ["bad", "Not complete. A quarter is missing, so these totals cannot agree yet."],
     NOT_RECONCILED: ["care", rep.w3 ? "Not reconciled. Two different 941s for one quarter: you need to say which was filed." : "Not reconciled. There is no W-3 to compare with."] }[st];
   h.push('<div class="wp-head"><div><h1>941 to W-3 reconciliation, ' + (rep.year || "") + "</h1>" +
@@ -544,33 +620,34 @@ function render(rep){
     '<p class="meta">Rule applied: IRS General Instructions for Forms W-2 and W-3 (2026), "Reconciling Forms W-2, W-3, 941...": boxes 2, 3, 5 and 7 must agree with the year\'s 941s (the IRS and SSA match these in their Combined Annual Wage Reporting program); box 1 should agree with line 2; 941 social security and Medicare taxes should be about twice boxes 4 and 6.</p></div>' +
     '<div class="sign"><label for="preparedBy">Prepared by<input id="preparedBy" type="text" autocomplete="off"></label>' +
     '<label for="reviewedBy">Reviewed by<input id="reviewedBy" type="text" autocomplete="off"></label></div></div>');
-  if (st !== "AGREES") h.push('<div class="stopbox" id="stop-banner" role="alert"><b>' + (st === "DOES_NOT_AGREE" ? "STOP: the forms do not agree." : "STOP: this reconciliation is not finished.") + "</b><br>" +
-    (st === "DOES_NOT_AGREE" ? "The first item below says by how much and the likely reason." : "The first item below says what is missing and what to do.") + "</div>");
+  var firstStop = rep.exceptions.find(function(e){ return STOPS[e.code]; });
+  if (st !== "AGREES") h.push('<div class="stopbox" id="stop-banner" role="alert"><b>What to do</b><br>' + esc(firstStop ? firstStop.message : "See the list below.") + "</div>");
 
   h.push("<h2>Check these first</h2>");
   var ex = rep.exceptions.slice().sort(function(a, b){ return (STOPS[b.code] ? 1 : 0) - (STOPS[a.code] ? 1 : 0); });
-  if (!ex.length) h.push('<p class="ok">Nothing unusual. Four quarters, one W-3, one EIN, and every 941 adds up.</p>');
+  ex = ex.filter(function(e){ return e !== firstStop; });
+  if (!ex.length) h.push('<p class="ok">' + (st === "AGREES" ? "Nothing unusual. Four quarters, one W-3, one EIN, and every 941 adds up." : "Nothing else.") + "</p>");
   else h.push('<ul class="first">' + ex.map(function(e){ return '<li class="' + (STOPS[e.code] ? "stop" : INFO[e.code] ? "info" : "") + '"><span class="tag">' + LABEL[e.code] + ".</span> " + esc(e.message) + "</li>"; }).join("") + "</ul>");
 
   // reconciliation table
   h.push('<h2 id="sec-recon">The reconciliation <small>each W-3 box against the four quarters</small></h2>');
   if (R) {
     h.push('<div class="scroll"><table class="recon"><thead><tr><th>W-3 box and 941 line</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Q4</th><th class="num">941 total</th><th class="num">W-3</th><th class="num">Difference</th><th></th></tr></thead><tbody>' +
-      RECON.map(function(X){ var r = R[X[0]]; return '<tr' + (r.agrees ? "" : ' class="bad"') + '><td class="what">' + X[0].slice(1) + ". " + esc(X[2]) + "<small>941 " + LINE_NAME[X[1]] + (CAWR[X[0]] ? "; the IRS matches this box" : "; should agree, but the IRS does not match it") + "</small></td>" + r.byQuarter.map(function(v){ return '<td class="num">' + usd(v) + "</td>"; }).join("") + '<td class="num">' + usd(r.total941) + '</td><td class="num">' + usd(r.w3) + '</td><td class="num">' + usd(r.diff) + "</td><td>" +
-        (r.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; differs</span>') + "</td></tr>"; }).join("") + "</tbody></table></div>");
+      RECON.map(function(X){ var r = R[X[0]]; return '<tr' + (r.agrees ? "" : ' class="bad"') + '><td class="what">' + X[0].slice(1) + ". " + esc(X[2]) + "<small>941 " + LINE_NAME[X[1]] + (CAWR[X[0]] ? "; the IRS compares this box" : "; should agree; the IRS does not compare this box") + "</small></td>" + r.byQuarter.map(function(v){ return '<td class="num">' + usd(v) + "</td>"; }).join("") + '<td class="num">' + usd(r.total941) + '</td><td class="num">' + usd(r.w3) + '</td><td class="num">' + usd(r.diff) + "</td><td>" +
+        (r.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : r.noteOnly ? '<span class="tie-bad" style="color:var(--care)">! check</span>' : '<span class="tie-bad">&#10007; differs</span>') + "</td></tr>"; }).join("") + "</tbody></table></div>");
     var T = R.tax;
-    h.push('<h2 id="sec-tax">The tax check <small>941 taxes against twice the W-3 withholding</small></h2>' +
+    h.push('<h2 id="sec-tax">The tax check <small>941 social security and Medicare tax against the W-3</small></h2>' +
       '<div class="scroll"><table><tbody>' +
-      '<tr><td>941 lines 5e (social security and Medicare tax) plus line 7 (fractions of cents), four quarters</td><td class="num">' + usd(T.total941) + "</td></tr>" +
-      '<tr><td>Twice W-3 box 4 (' + usd(rep.w3.boxes.b4) + ") plus twice box 6 (" + usd(rep.w3.boxes.b6) + "), less the Additional Medicare Tax on 941 line 5d (" + usd(T.addl) + "), which only the employee pays</td><td class=\"num\">" + usd(T.w3) + "</td></tr>" +
-      '<tr class="sum"><td>Difference ' + '<span class="note">(up to $1.00 is rounding)</span></td><td class="num">' + usd(T.diff) + " " + (T.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; does not</span>') + "</td></tr></tbody></table></div>");
+      '<tr><td>From the 941s: line 5e (social security and Medicare tax) plus line 7 (fractions of cents) plus line 9 (uncollected tax on tips and group-term life), four quarters' + (T.line8 ? '. Line 8 (third-party sick pay) is left out because the insurer\'s withholding is in W-3 boxes 4 and 6' : "") + '</td><td class="num">' + usd(T.total941) + "</td></tr>" +
+      '<tr><td>From the W-3: employee tax withheld (box 4, ' + usd(rep.w3.boxes.b4) + ", plus box 6, " + usd(rep.w3.boxes.b6) + ") plus the employer's share (6.2% of boxes 3 and 7, plus 1.45% of box 5: " + usd(T.employer) + ")</td><td class=\"num\">" + usd(T.w3) + "</td></tr>" +
+      '<tr class="sum"><td>Difference ' + '<span class="note">(up to ' + usd(T.tolerance) + ' is rounding)</span></td><td class="num">' + usd(T.diff) + " " + (T.agrees ? '<span class="tie-ok">&#10003; agrees</span>' : '<span class="tie-bad">&#10007; does not agree</span>') +"</td></tr></tbody></table></div>");
   } else h.push('<p class="note">Not done: ' + (rep.w3 ? "two different 941s for one quarter." : "no W-3.") + " The 941 totals are below.</p>");
 
   // the quarters as read
   h.push('<h2 id="sec-quarters">What I read from each 941 <small>so you can tick it against the forms</small></h2>');
   var lines = [["2", "Line 2 wages, tips, other compensation"], ["3", "Line 3 federal income tax withheld"], ["5a1", "Line 5a social security wages"], ["5a2", "Line 5a tax"],
     ["5b1", "Line 5b social security tips"], ["5b2", "Line 5b tax"], ["5c1", "Line 5c Medicare wages and tips"], ["5c2", "Line 5c tax"], ["5d1", "Line 5d wages subject to Additional Medicare Tax"], ["5d2", "Line 5d tax"],
-    ["5e", "Line 5e total social security and Medicare tax"], ["7", "Line 7 fractions of cents"], ["10", "Line 10 total taxes after adjustments"]];
+    ["5e", "Line 5e total social security and Medicare tax"], ["7", "Line 7 fractions of cents"], ["8", "Line 8 third-party sick pay"], ["9", "Line 9 tips and group-term life"], ["10", "Line 10 total taxes after adjustments"]];
   h.push('<div class="scroll"><table><thead><tr><th>941 line</th>' + [1, 2, 3, 4].map(function(q){ return '<th class="num">Q' + q + "</th>"; }).join("") + '<th class="num">Total</th></tr></thead><tbody>' +
     lines.map(function(L){ var tot = 0; return "<tr><td>" + L[1] + "</td>" + [1, 2, 3, 4].map(function(q){ var Q = rep.quarters[q]; var v = Q ? Q.lines[L[0]] : null; tot += v || 0; return '<td class="num">' + (Q ? usd(v || 0) : "missing") + "</td>"; }).join("") + '<td class="num">' + usd(tot) + "</td></tr>"; }).join("") +
     "<tr><td>Source</td>" + [1, 2, 3, 4].map(function(q){ var Q = rep.quarters[q]; return '<td class="note">' + (Q ? esc(Q.file) + ", page " + Q.page : "") + "</td>"; }).join("") + "<td></td></tr></tbody></table></div>");
@@ -578,12 +655,17 @@ function render(rep){
 
   // pages read
   h.push('<h2 id="sec-pages">Every page I was given</h2><div class="scroll"><table><thead><tr><th>File</th><th class="num">Page</th><th>What it is</th><th>Used</th></tr></thead><tbody>' +
-    rep.pages.map(function(p){ return "<tr><td>" + esc(p.file) + '</td><td class="num">' + (p.page || "") + "</td><td>" + esc(KIND_TEXT[p.kind] || p.kind) + "</td><td>" + (p.used ? "yes" : "no") + "</td></tr>"; }).join("") + "</tbody></table></div>");
+    rep.pages.map(function(p){ return "<tr><td>" + esc(p.file) + '</td><td class="num">' + (p.page || "") + "</td><td>" + esc(KIND_TEXT[p.kind] || p.kind) + (p.first ? '<br><span class="note">Starts: "' + esc(p.first) + '"</span>' : "") + "</td><td>" + (p.used ? "yes" : "no") + "</td></tr>"; }).join("") + "</tbody></table></div>");
 
   h.push('<div class="foot"><p><b>What this is.</b> A reconciliation of the filed forms, made on this computer. Nothing was uploaded. The IRS says to keep it in case the IRS or SSA asks. The accountant signing above is responsible for the review.</p>' +
-    "<p><b>What it does not do.</b> It does not check the individual W-2s, state forms, Form 940, deposits against the IRS account, or Schedule B. It cannot read scans. It does not add a 941-X's corrections into a quarter; it flags them. Some differences are valid (for example third-party sick pay or a prior-year adjustment on a 941); when it flags one, the reason is yours to confirm.</p>" +
+    "<p><b>What it does not do.</b> It compares the forms you gave it with each other, not with the IRS's records. It does not check the individual W-2s, state forms, Form 940, deposits, or Schedule B, and it cannot read scans. It is not for aggregate filers (section 3504 agents, PEOs), successor-employer arrangements, household employers, or Forms 943, 944 and CT-1. Some differences are valid; when it flags one, the reason is yours to confirm.</p>" +
     '<p class="note">Do the 941s Match the W-3?, version ' + rep.version + ".</p></div>");
   $("out").innerHTML = h.join("");
+  var ps = $("page-style") || document.head.appendChild(Object.assign(document.createElement("style"), { id: "page-style" }));
+  var q = function(t){ return '"' + String(t).replace(/[\\"\n]/g, " ") + '"'; };
+  ps.textContent = "@page{margin:16mm 12mm;@top-left{content:" + q("941 to W-3 reconciliation " + (rep.year || "") + " - " + (rep.employer || "") + " - EIN " + (rep.ein || "")) + ";font:9pt Arial,sans-serif;color:#444}" +
+    (st !== "AGREES" ? "@top-right{content:" + q(st === "DOES_NOT_AGREE" ? "DOES NOT AGREE" : "NOT FINISHED") + ";font:bold 10pt Arial,sans-serif;color:#a3211b}" : "") +
+    "@bottom-right{content:\"Page \" counter(page) \" of \" counter(pages);font:9pt Arial,sans-serif;color:#444}}";
   $("start").hidden = true; $("report").hidden = false; window.scrollTo(0, 0);
 }
 function today(){ var t = new Date(); return String(t.getMonth() + 1).padStart(2, "0") + "/" + String(t.getDate()).padStart(2, "0") + "/" + t.getFullYear(); }
