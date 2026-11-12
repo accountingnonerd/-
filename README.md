@@ -2,7 +2,7 @@
 
 A series of small tools for accountants who do client work, and one article per tool.
 
-The series follows the five processes accountants run for clients. Each episode takes
+Each series is five agents, one for each of the five processes accountants run for clients. Each agent takes
 one step of one process and builds a tool that works **alongside** the software the
 accountant already has: it starts from an export she can already produce and hands back
 a workpaper, an importable entry or a client request. See [SERIES.md](SERIES.md) for the
@@ -16,7 +16,7 @@ Every tool in this repository:
 
 ## Series and episodes
 
-| Series | Process | Episode | Tool | What it does | Date | Version |
+| Series 1 agent | Process | Folder no. | Tool | What it does | Date | Version |
 |---|---|---|---|---|---|---|
 | 1 | [Procure-to-Pay](procure-to-pay/) | 01 | [Who gets a 1099?](procure-to-pay/01-who-gets-a-1099/) | Reads a client's year of payments and produces the 1099 worksheet: who to file, whose W-9 to check, and why, including vendors the software's 1099 report misses because nobody flagged them. | 2026-11-11 | 1.1.0 |
 | 2 | [Hire-to-Retire (payroll)](hire-to-retire/) | 01 | [Do the 941s match the W-3?](hire-to-retire/01-do-the-941s-match-the-w3/) | Reads the filed 941s and W-3 (PDFs) and produces the reconciliation the IRS says to keep, with every difference explained or flagged, including the W-3 that leaves out a previous provider's quarters. | 2026-11-12 | 1.0.0 |

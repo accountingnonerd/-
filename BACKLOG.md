@@ -65,7 +65,8 @@ killed ideas. A candidate is chosen only after it passes Stage 1 and the value t
 Replies to each article's closing question go here, with the date, the process they
 belong to, and a link.
 
-- Procure-to-Pay 01 published 2026-11-11: [LinkedIn post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526375179346870272). No replies collected yet.
+- Series 1, Agent 2 (Hire-to-Retire 01) published 2026-11-12: [LinkedIn post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526706866022699008). No replies collected yet.
+- Series 1, Agent 1 (Procure-to-Pay 01) published 2026-11-11: [LinkedIn post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526375179346870272). No replies collected yet.
 
 ## Sources we could not read
 Reddit (r/Accounting, r/taxpros, r/Bookkeeping), TaxProTalk, Fishbowl, Going Concern,

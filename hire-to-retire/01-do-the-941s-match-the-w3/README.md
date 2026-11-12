@@ -1,6 +1,6 @@
 # Hire-to-Retire, episode 01: Do the 941s match the W-3?
 
-Version 1.0.0, 2026-11-12. Part of [Series 2: Hire-to-Retire](../README.md), which holds the
+Version 1.0.0, 2026-11-12. Published on LinkedIn on 2026-11-12 as Series 1, Agent 2: [the post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526706866022699008), with the full article attached as a PDF. Part of [Series 2: Hire-to-Retire](../README.md), which holds the
 Stage 1 evidence and the value test this tool had to pass.
 
 ## The problem
