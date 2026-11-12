@@ -26,7 +26,7 @@ td.now{color:var(--accent);font-weight:600}
       <tr><td class="who">The first test run<small>15 cases</small></td><td class="found">The tool read the printed line number as a digit: line 2's <span class="num">$50,513.80</span> became <span class="num">$250,513.80</span>. 2 of 15 cases passed.</td><td class="now">Fixed</td></tr>
       <tr><td class="who">A tax reviewer<small>AI session told to find fault, with the IRS text</small></td><td class="found">Four rules did not follow the IRS instructions: box 1, box 14, the tax check, the 941-X. Our own test data made the old tax check pass by design.</td><td class="now">Fixed; 3 cases added</td></tr>
       <tr><td class="who">A first-time user<small>AI session playing a 60-year-old partner</small></td><td class="found">After a provider switch, the advice could have reported the same wages twice. "Add it here" had no way to add a file.</td><td class="now">Fixed</td></tr>
-      <tr><td class="who">A stranger with the prompt<small>fresh AI session, prompt only</small></td><td class="found">Read line 10's <span class="num">$13,321.95</span> as <span class="num">$1,013,321.95</span>: the prompt never said where the dollars column starts.</td><td class="now">REBUILD3_NOW</td></tr>
+      <tr><td class="who">A stranger with the prompt<small>fresh AI session, prompt only</small></td><td class="found">Read line 10's <span class="num">$13,321.95</span> as <span class="num">$1,013,321.95</span>: the prompt never said where the dollars column starts.</td><td class="now">Prompt tightened; third rebuild under test</td></tr>
     </tbody>
   </table>
   <p class="source">All figures from tests/RESULTS.md in the repository. Test files use invented employers; no client data.</p>

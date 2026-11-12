@@ -71,7 +71,15 @@ failed.
 Each rebuild was written by a fresh AI session given only `REBUILD-PROMPT.md`, then run
 through the same tests.
 
-REBUILD_TABLE_PLACEHOLDER
+| Rebuild | Prompt version | Cases passed | What the prompt was missing |
+|---|---|---|---|
+| 1 | First draft, 15-case test set | 0 of 15 | Two-digit line numbers ("10") touch the dollars column and were read as digits ($13,321.95 became $1,013,321.95). The refusal had to appear in an element with id `problem`. A duplicated quarter still counts as found. |
+| 2 | After the tax review | 0 of 17 | The same gaps (written before they were known). |
+| 3 | With those gaps closed | 5 of 17 | On the IRS W-3, the box number "1" and its label are separate runs that almost touch; the rebuild joined them without a space and never found "1 Wages...". |
+| 4 | With that closed | pending | |
+
+None has yet passed. Each failure was a gap in the prompt, not in the tool: the prompt has been
+revised each time, and the next rebuild will be recorded here.
 
 ## 4. Time against the manual baseline
 

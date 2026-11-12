@@ -17,7 +17,7 @@ For every page, collect:
 - the text runs from `getTextContent()`. Each has `str`, `x0 = transform[4]`, `x1 = x0 + width`, and a vertical centre `yc = transform[5] + 0.32 * fontSize`, where `fontSize = hypot(transform[0], transform[1])`;
 - the form fields from `getAnnotations()`. Take widgets whose `fieldValue` is a non-empty string, as tokens at their rectangle (`x0`, `x1`, `yc` = rectangle middle). Checked checkboxes become the token `X`.
 
-All coordinates are PDF points, with the origin at the bottom left. A "row" means tokens whose `yc` is within 7 points of a label's `yc`. To find a label, group text runs into lines (runs whose `yc` are within 2.5 points), and look for a line where the label pattern starts at one of its runs.
+All coordinates are PDF points, with the origin at the bottom left. A "row" means tokens whose `yc` is within 7 points of a label's `yc`. To find a label, group text runs into lines (runs whose `yc` are within 2.5 points), sort each line's runs left to right, and join them with exactly one space between runs (then collapse repeated spaces). Look for a line where the label pattern starts at one of its runs. The space matters: on the IRS W-3, the box number "1" and its label "Wages, tips, other compensation" are separate runs that almost touch, and the label patterns below expect "1 Wages".
 
 ### What each page is (first match wins)
 1. Under 25 characters of text and no filled fields: a scan.
