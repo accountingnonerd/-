@@ -76,10 +76,18 @@ through the same tests.
 | 1 | First draft, 15-case test set | 0 of 15 | Two-digit line numbers ("10") touch the dollars column and were read as digits ($13,321.95 became $1,013,321.95). The refusal had to appear in an element with id `problem`. A duplicated quarter still counts as found. |
 | 2 | After the tax review | 0 of 17 | The same gaps (written before they were known). |
 | 3 | With those gaps closed | 5 of 17 | On the IRS W-3, the box number "1" and its label are separate runs that almost touch; the rebuild joined them without a space and never found "1 Wages...". |
-| 4 | With that closed | pending | |
+| 4 | Final, as published in the repository | **17 of 17 (1,207 of 1,207 checks)** | nothing |
 
-None has yet passed. Each failure was a gap in the prompt, not in the tool: the prompt has been
-revised each time, and the next rebuild will be recorded here.
+Rebuild 4 passed on its first attempt and is kept in `tests/rebuild-check/rebuilt-from-final-prompt.html`.
+It loads pdf.js from a CDN, as the prompt says, so it needs internet. Each earlier failure was a gap in the
+prompt, not in the tool: each time, the prompt was revised and a fresh session rebuilt from nothing.
+
+The prompt still leaves room for judgment in places the tests do not cover. Rebuild 4's own list:
+- an identical second W-3 is counted once rather than added;
+- a one-digit cents token is read as "05";
+- a 941 with no readable year is kept.
+
+None changed a result here; they could on other files.
 
 ## 4. Time against the manual baseline
 

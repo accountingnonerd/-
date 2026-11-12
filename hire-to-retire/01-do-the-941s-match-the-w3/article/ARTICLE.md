@@ -50,7 +50,7 @@ It also found that our test data had been built so the old tax check would alway
 
 Another session, playing a 60-year-old partner with no patience for software, found the most dangerous line. After a provider switch, the tool advised filing corrected W-2s, which could have reported the same wages twice. It now asks for the other W-3 first.
 
-The last check is still running. We give the rebuild prompt at the end of this article to a fresh AI session with nothing else, then run what it builds through the same tests. The first two rebuilds failed. Both read line 10's $13,321.95 as $1,013,321.95, because the prompt never said exactly where the dollars column starts. The prompt is now tighter, and the third rebuild's result will be in the repository.
+The last check was the rebuild prompt at the end of this article. We gave it to a fresh AI session with nothing else, then ran what it built through the same tests. The first three rebuilds failed, each on a gap in the prompt. One read line 10's $13,321.95 as $1,013,321.95, because the prompt never said exactly where the dollars column starts. The fourth passed all 1,207 checks. (Updated after posting: when this went live, the fourth rebuild was still running.)
 
 ![Every check found something](images/fig4-every-check-found-something.png)
 
