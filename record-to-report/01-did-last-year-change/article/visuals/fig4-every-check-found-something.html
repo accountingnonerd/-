@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+.tile{background:var(--ground);border-radius:10px;padding:22px 24px}
+.tile .n{font:700 46px/1 var(--display);letter-spacing:-.02em}
+.tile .t{font:400 17px/1.4 var(--text);color:var(--soft);margin-top:8px}
+table{width:100%;border-collapse:collapse;margin-top:30px}
+th{font:600 13px/1.2 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--soft);text-align:left;padding:0 12px 10px;border-bottom:2px solid var(--ink)}
+td{font:400 17px/1.4 var(--text);padding:14px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+td.who{font-weight:700;width:24%} td.who small{display:block;font-weight:400;color:var(--soft);font-size:14px;margin-top:2px}
+td.found{width:54%}
+td.now{color:var(--accent);font-weight:600}
+.num{font-family:var(--mono);font-size:15px;background:var(--alarm-tint);color:var(--alarm);padding:1px 5px;border-radius:3px}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">The test came first</div>
+  <h1>Every check found something</h1>
+  <div class="tiles">
+    <div class="tile"><div class="n">22 · 43</div><div class="t">test cases and files, built from a ledger model before the tool</div></div>
+    <div class="tile"><div class="n">343 / 343</div><div class="t">checks passed by the final version</div></div>
+    <div class="tile"><div class="n">17 / 18</div><div class="t">deliberately broken copies caught; the one missed is listed as unproved</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Who checked</th><th>What they found</th><th>Now</th></tr></thead>
+    <tbody>
+      <tr><td class="who">The first test run<small>16 cases</small></td><td class="found">Our answer key miscounted one company's accounts. The title <span class="num">Trial balance, final, December 31, 2025</span> was read as the column headings. 10 of 16 passed.</td><td class="now">Fixed</td></tr>
+      <tr><td class="who">A skeptical CPA<small>AI session told to find fault</small></td><td class="found">Twelve problems. The entry could count a re-entered deposit twice; a distribution added to last year was treated as an ordinary balance sheet change; meals moved into office expenses passed as a harmless merge.</td><td class="now">Fixed; 6 cases added</td></tr>
+      <tr><td class="who">A first-time user<small>AI session playing a 60-year-old partner</small></td><td class="found">The warning on the entry was generic and sat under the table. Box 1 did not say which file, or that a PDF will not work.</td><td class="now">Fixed</td></tr>
+      <tr><td class="who">A stranger with the prompt<small>fresh AI session, prompt only</small></td><td class="found">Named the entry's accounts <span class="num">1000 Checking</span>, not <span class="num">Checking</span>: 18 of 22 cases. The prompt never said.</td><td class="now">Prompt fixed; second rebuild passes 22 of 22</td></tr>
+    </tbody>
+  </table>
+  <p class="source">All figures from tests/RESULTS.md in the repository. Test files use invented companies; no client data.</p>
+</div>
+</body></html>

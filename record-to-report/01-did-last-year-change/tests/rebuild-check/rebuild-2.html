@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Did last year change?</title>
+<style>
+/* Layout: one centred working column, like a workpaper on a desk. Light, high-contrast, large type. */
+:root {
+  --paper: #fbfbf8;
+  --ink: #15191d;
+  --muted: #4a535c;
+  --rule: #c9cdd1;
+  --accent: #1f4e79;
+  --accent-soft: #e6eef6;
+  --stop: #9b1c1c;
+  --stop-soft: #fbeaea;
+  --care: #7a4b00;
+  --care-soft: #fdf3e1;
+  --info: #2c4a63;
+  --info-soft: #eaf1f7;
+  --ok: #1d5e2f;
+  --ok-soft: #e7f3ea;
+  --font-body: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-num: "Consolas", "SFMono-Regular", "Menlo", "Liberation Mono", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { font-size: 18px; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.5;
+}
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1 { font-size: 2.1rem; line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 1.35rem; margin: 32px 0 10px; text-wrap: balance; border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
+h3 { font-size: 1.1rem; margin: 18px 0 6px; }
+p { margin: 0 0 10px; max-width: 70ch; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, label.drop:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
+.lead { font-size: 1.15rem; color: var(--muted); margin-bottom: 22px; }
+.boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 720px) { .boxes { grid-template-columns: 1fr; } }
+label.drop {
+  display: flex; flex-direction: column; gap: 8px; min-height: 230px; min-width: 0;
+  border: 3px dashed var(--rule); border-radius: 10px; background: #fff;
+  padding: 22px; cursor: pointer; position: relative;
+}
+label.drop:hover, label.drop.over { border-color: var(--accent); background: var(--accent-soft); }
+label.drop.has { border-style: solid; border-color: var(--ok); background: var(--ok-soft); }
+.drop .n { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 1.3rem; }
+.drop .t { font-size: 1.3rem; font-weight: 700; }
+.drop .h { color: var(--muted); }
+.drop .f { font-weight: 700; color: var(--ok); word-break: break-word; }
+.vh { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0 0 0 0); }
+#error { margin-top: 16px; padding: 14px 16px; border: 2px solid var(--stop); background: var(--stop-soft); color: var(--stop); font-weight: 600; border-radius: 6px; }
+.help { margin-top: 30px; display: grid; gap: 4px; }
+.help ul { margin: 0 0 10px; padding-left: 22px; max-width: 75ch; }
+.help li { margin-bottom: 6px; }
+.sample { font-size: 1.1rem; font-weight: 700; }
+footer { margin-top: 40px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--rule); padding-top: 10px; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-bottom: 20px; }
+button.main { font: inherit; font-size: 1.1rem; font-weight: 700; padding: 12px 22px; background: var(--accent); color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+button.main:hover { filter: brightness(1.15); }
+.meta { display: grid; grid-template-columns: max-content 1fr; gap: 2px 16px; margin: 8px 0 12px; }
+.meta dt { color: var(--muted); }
+.meta dd { margin: 0; min-width: 0; word-break: break-word; }
+.signoff { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 30px; margin: 14px 0 6px; max-width: 760px; }
+.signoff div { border-bottom: 1px solid var(--ink); padding-top: 18px; color: var(--muted); font-size: 0.9rem; }
+#verdict { margin: 18px 0; padding: 18px 20px; border-radius: 8px; border: 3px solid var(--ink); }
+#verdict .big { font-size: 1.5rem; font-weight: 800; line-height: 1.25; margin-bottom: 6px; }
+#verdict.agrees { border-color: var(--ok); background: var(--ok-soft); }
+#verdict.changed { border-color: var(--care); background: var(--care-soft); }
+#verdict.nc { border-color: var(--stop); background: var(--stop-soft); }
+#stop-banner { border: 3px solid var(--stop); background: var(--stop-soft); padding: 14px 18px; border-radius: 8px; margin: 16px 0; }
+#stop-banner h2 { border: 0; margin: 0 0 6px; color: var(--stop); }
+#stop-banner ul { margin: 0; padding-left: 22px; }
+.ex { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.ex li { padding: 10px 14px; border-left: 6px solid var(--info); background: var(--info-soft); border-radius: 0 6px 6px 0; }
+.ex li.stop { border-color: var(--stop); background: var(--stop-soft); }
+.ex li.care { border-color: var(--care); background: var(--care-soft); }
+.lvl { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 8px; }
+.scroll { overflow-x: auto; max-width: 100%; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; margin: 6px 0 12px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { border-bottom: 2px solid var(--ink); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+td.num, th.num { text-align: right; white-space: nowrap; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+tr.tot td { border-top: 2px solid var(--ink); font-weight: 700; }
+.small { font-size: 0.88rem; color: var(--muted); }
+.cond { margin: 0 0 12px; padding-left: 22px; max-width: 80ch; }
+.cond li { margin-bottom: 6px; }
+details { margin-top: 30px; }
+details > summary { font-size: 1.35rem; font-weight: 700; cursor: pointer; border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; background: var(--info-soft); color: var(--info); white-space: nowrap; }
+.pill.changed, .pill.new, .pill.missing { background: var(--stop-soft); color: var(--stop); }
+.pill.aje, .pill.merged\? , .pill.renamed\? { background: var(--care-soft); color: var(--care); }
+.pill.same, .pill.renamed { background: var(--ok-soft); color: var(--ok); }
+.good { color: var(--ok); font-weight: 700; }
+.bad { color: var(--stop); font-weight: 700; }
+@media print {
+  html { font-size: 11pt; }
+  .noprint, #start { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  details { display: block; }
+  details > summary { list-style: none; }
+  details:not([open]) > *:not(summary) { display: block; }
+  #verdict, #stop-banner, .ex li { break-inside: avoid; }
+  tr { break-inside: avoid; }
+  a { color: var(--ink); text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="start">
+  <h1>Did last year change?</h1>
+  <p class="lead">Give me your final trial balance for last year and the client's trial balance for the same date exported today, and I will tell you whether last year's books still agree with your figures, what changed, and what it means for the return.</p>
+  <div class="boxes">
+    <label class="drop" id="drop-final" for="final">
+      <input class="vh" type="file" id="final" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+      <span class="n">1</span>
+      <span class="t">Last year's final trial balance</span>
+      <span class="h">Your adjusted trial balance, after your adjusting entries: the one the return was prepared from. Excel or CSV. Drop it here, or click to choose it.</span>
+      <span class="f" id="name-final"></span>
+    </label>
+    <label class="drop" id="drop-today" for="today">
+      <input class="vh" type="file" id="today" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+      <span class="n">2</span>
+      <span class="t">The same date, from the client's books today</span>
+      <span class="h">A trial balance for the last day of last year, exported today. Excel or CSV.</span>
+      <span class="f" id="name-today"></span>
+    </label>
+  </div>
+  <div id="error" role="alert" hidden></div>
+
+  <div class="help">
+    <h2>How to export the client's trial balance</h2>
+    <ul>
+      <li><b>QuickBooks Online:</b> Reports, search for "Trial Balance". Set the report period to the last day of last year (for example 12/31/2025 to 12/31/2025), choose the same accounting method as your return (accrual or cash), Run report, then Export to Excel.</li>
+      <li><b>QuickBooks Desktop:</b> Reports, Accountant &amp; Taxes, Trial Balance. Set From and To to the last day of last year, set the basis under Customize Report if needed, then Excel, Create New Worksheet.</li>
+      <li><b>Xero:</b> Accounting, Reports, Trial Balance. Set the date to the last day of last year, Update, then Export, Excel.</li>
+    </ul>
+    <h2>What this adds</h2>
+    <p>QuickBooks and Xero can list the transactions that were changed. This compares the books with your own final figures, including the adjustments that exist only in your workpapers, and tells you what each difference means for last year's return.</p>
+    <p class="sample"><a href="#" id="sample">See it work on a made-up sample</a></p>
+    <h2>Where your data goes: nowhere</h2>
+    <p>The files are read and compared inside this browser window. Nothing is uploaded or stored.</p>
+    <h2>You stay in charge</h2>
+    <p>You stay in charge: whether to post the entry, reverse the client's change or amend last year's return is your decision.</p>
+  </div>
+  <footer>Version 1.0.0.</footer>
+</section>
+
+<section id="result" hidden>
+  <div class="bar noprint">
+    <button type="button" class="main" id="print">Print or save as PDF</button>
+    <a href="#" id="restart">Start over with other files</a>
+  </div>
+  <div id="workpaper"></div>
+</section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+"use strict";
+var VERSION = "1.0.0";
+
+/* ---------------------------------------------------------------- amounts */
+function roundCents(n) {
+  var a = Math.round(Number((Math.abs(n) * 100).toFixed(6)));
+  return n < 0 ? -a : a;
+}
+function strToCents(t) {
+  var parts = t.split(".");
+  var i = parts[0] || "0", f = parts[1] || "";
+  var c = Number(i) * 100;
+  if (f.length <= 2) c += Number((f + "00").slice(0, 2));
+  else c += Math.round(Number((Number("0." + f) * 100).toFixed(6)));
+  return c;
+}
+function parseAmount(v) {
+  if (v === null || v === undefined) return { k: "none" };
+  if (typeof v === "number") return isFinite(v) ? { k: "amt", c: roundCents(v) + 0 } : { k: "bad" };
+  if (typeof v !== "string") return { k: "bad" };
+  var s = v.replace(/ /g, " ").trim();
+  if (s === "" || s === "-" || s === "–" || s === "—") return { k: "none" };
+  var t = s.replace(/[\s$,]/g, "").replace(/−/g, "-");
+  var neg = false, m;
+  if ((m = t.match(/^(.*?)(cr|dr)\.?$/i))) { if (m[2].toLowerCase() === "cr") neg = !neg; t = m[1]; }
+  if (/^\(.*\)$/.test(t)) { neg = !neg; t = t.slice(1, -1); }
+  if (/^-/.test(t)) { neg = !neg; t = t.slice(1); }
+  else if (/-$/.test(t)) { neg = !neg; t = t.slice(0, -1); }
+  if (/^\+/.test(t)) t = t.slice(1);
+  if (/^\(.*\)$/.test(t)) { neg = !neg; t = t.slice(1, -1); }
+  if (!/^(\d+(\.\d*)?|\.\d+)$/.test(t)) return { k: "bad" };
+  var c = strToCents(t);
+  return { k: "amt", c: neg ? -c : c + 0 };
+}
+function isNumericCell(v) {
+  if (typeof v === "number") return true;
+  if (typeof v === "string" && /\d/.test(v)) return parseAmount(v).k === "amt";
+  return false;
+}
+function cellText(v) {
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/ /g, " ").trim();
+}
+
+/* ---------------------------------------------------------------- headings */
+function classifyHeading(raw) {
+  if (typeof raw !== "string") return null;
+  var h = raw.replace(/ /g, " ").trim().toLowerCase().replace(/\s+/g, " ");
+  if (!h) return null;
+  if (/^ytd debits?$/.test(h) || /^debits? [-–] year to date$/.test(h)) return "ytdDr";
+  if (/^ytd credits?$/.test(h) || /^credits? [-–] year to date$/.test(h)) return "ytdCr";
+  if (/^(debit|debits|dr)$/.test(h)) return "dr";
+  if (/^(credit|credits|cr)$/.test(h)) return "cr";
+  var side = null;
+  if (/debits?$/.test(h) || /(^|[^a-z])dr\.?$/.test(h)) side = "Dr";
+  else if (/credits?$/.test(h) || /(^|[^a-z])cr\.?$/.test(h)) side = "Cr";
+  if (/unadjusted|per books|before adj/.test(h) || /^books/.test(h) || /^book balance/.test(h)) return side ? "unadj" + side : "unadj";
+  if (/^(net )?(ajes?|adj\.?|adjustments?|adjusting entries)(?=$|[^a-z])/.test(h)) return side ? "aje" + side : "aje";
+  if (/final/.test(h) || /^(adjusted|per return|balance|ending balance)/.test(h) || h === "amount") return side ? (side === "Dr" ? "dr" : "cr") : "final";
+  if (/^(acct\.?|#|no\.?|code)$/.test(h) || /^(account|acct\.?)\s*(#|no\.?|num\.?|number|code)$/.test(h)) return "num";
+  if (/^(account|account name|description|name|account description)$/.test(h)) return "name";
+  return null;
+}
+
+var REPORT_RE = /balance sheet|statement of financial position|profit (and|&) loss|income statement|statement of operations|general ledger|transaction (detail|list)|journal|aged (receivables|payables)|cash flows?/i;
+var IS_SECTIONS = ["revenue", "income", "trading income", "other income", "direct costs", "cost of sales", "cost of goods sold", "expenses", "expense", "operating expenses", "other expenses", "other expense"];
+var BS_SECTIONS = ["assets", "current assets", "fixed assets", "non current assets", "bank", "inventory", "liabilities", "current liabilities", "non current liabilities", "long term liabilities", "equity"];
+
+/* ---------------------------------------------------------------- dates */
+var MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+var MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var MON = "(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)";
+var DRE = [
+  { re: new RegExp("\\b" + MON + "\\.?\\s+(\\d{1,2}),?\\s+(\\d{4}|\\d{2})\\b", "i"), f: function (m) { return [m[3], monIdx(m[1]), m[2]]; } },
+  { re: new RegExp("\\b(\\d{1,2})\\s+" + MON + "\\.?,?\\s+(\\d{4}|\\d{2})\\b", "i"), f: function (m) { return [m[3], monIdx(m[2]), m[1]]; } },
+  { re: /\b(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})\b/, f: function (m) { return [m[3], Number(m[1]), m[2]]; } },
+  { re: /\b(\d{4})-(\d{1,2})-(\d{1,2})\b/, f: function (m) { return [m[1], Number(m[2]), m[3]]; } }
+];
+function monIdx(s) { return MONTHS.indexOf(s.slice(0, 3).toLowerCase()) + 1; }
+function mkISO(y, mo, d) {
+  y = String(y); if (y.length === 2) y = "20" + y;
+  var Y = Number(y), M = Number(mo), D = Number(d);
+  if (!(M >= 1 && M <= 12 && D >= 1 && D <= 31)) return null;
+  var dt = new Date(Date.UTC(Y, M - 1, D));
+  if (dt.getUTCMonth() !== M - 1) return null;
+  return Y + "-" + String(M).padStart(2, "0") + "-" + String(D).padStart(2, "0");
+}
+function findDate(s) {
+  if (typeof s !== "string" || !s) return null;
+  var best = null, bestIdx = Infinity;
+  DRE.forEach(function (d) {
+    var m = s.match(d.re);
+    if (m && m.index < bestIdx) {
+      var p = d.f(m), iso = mkISO(p[0], p[1], p[2]);
+      if (iso) { best = iso; bestIdx = m.index; }
+    }
+  });
+  return best;
+}
+function serialToISO(n) {
+  if (typeof n !== "number" || n < 36526 || n > 55153) return null;
+  var dt = new Date(Date.UTC(1899, 11, 30) + Math.floor(n) * 86400000);
+  return dt.toISOString().slice(0, 10);
+}
+function longDate(iso) {
+  if (!iso) return "date unknown";
+  var p = iso.split("-");
+  return MONTH_NAMES[Number(p[1]) - 1] + " " + Number(p[2]) + ", " + p[0];
+}
+function nextDay(iso) {
+  if (!iso) return null;
+  var p = iso.split("-");
+  var dt = new Date(Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]) + 1));
+  return dt.toISOString().slice(0, 10);
+}
+
+/* ---------------------------------------------------------------- labels */
+function normName(s) {
+  return String(s || "").toLowerCase().replace(/&/g, " and ").replace(/\(a\/r\)|\(a\/p\)/g, "")
+    .replace(/[^a-z0-9:]+/g, " ").replace(/ *: */g, ":").trim();
+}
+function parseLabel(label, numCol) {
+  var s = label, code = "";
+  var m = s.match(/^(.*?)\s*\(([A-Za-z0-9.\-]{1,10})\)\s*$/);
+  if (m && /\d/.test(m[2]) && m[1].trim()) { code = m[2]; s = m[1]; }
+  var parts = s.split(":").map(function (p) {
+    p = p.trim();
+    var mm = p.match(/^(\d[\d.]*)(?:\s*[·•\-–]\s*|\s+)(.+)$/);
+    if (mm) return { num: mm[1], name: mm[2].trim() };
+    return { num: "", name: p };
+  });
+  var number = numCol || code || parts[parts.length - 1].num || parts[0].num || "";
+  var name = parts.map(function (p) { return p.name; }).filter(function (x) { return x !== ""; }).join(":");
+  if (!name) name = label;
+  var norm = normName(name);
+  var leaf = norm.split(":").pop();
+  return { number: String(number).trim(), name: name, norm: norm, leaf: leaf };
+}
+
+/* ---------------------------------------------------------------- readTB */
+function readTB(rows) {
+  rows = rows || [];
+  var tb = { ok: false, accounts: [], unread: [], titleLines: [], footer: [], mode: null, cols: {} };
+  var head = -1, kinds = null;
+  for (var r = 0; r < Math.min(40, rows.length); r++) {
+    var row = rows[r] || [];
+    if (row.some(isNumericCell)) continue;
+    var ks = row.map(classifyHeading);
+    var cnt = ks.filter(Boolean).length;
+    if (cnt < 2) continue;
+    var has = function (k) { return ks.indexOf(k) >= 0; };
+    if ((has("dr") && has("cr")) || has("ytdDr") || has("final")) { head = r; kinds = ks; break; }
+  }
+  function rowText(row) { return (row || []).map(cellText).filter(Boolean).join(" "); }
+  if (head < 0) {
+    var txt = rows.slice(0, 12).map(rowText).join(" \n ");
+    var m = txt.match(REPORT_RE);
+    tb.notTB = true;
+    tb.notTBMessage = m ? "this is a " + m[0].toLowerCase() + " report, not a trial balance" : "I could not find Debit and Credit columns, or a column of final balances";
+    tb.reportKind = m ? m[0].toLowerCase() : null;
+    return tb;
+  }
+  tb.headRow = head + 1;
+  for (r = 0; r < head; r++) { var t = rowText(rows[r]); if (t) tb.titleLines.push(t); }
+  var titleText = tb.titleLines.join(" \n ");
+  var tm = titleText.match(REPORT_RE);
+  if (tm && !/trial balance/i.test(titleText)) {
+    tb.notTB = true; tb.reportKind = tm[0].toLowerCase();
+    tb.notTBMessage = "this is a " + tm[0].toLowerCase() + " report, not a trial balance";
+    return tb;
+  }
+  var cols = {};
+  kinds.forEach(function (k, i) { if (k && cols[k] === undefined) cols[k] = i; });
+  if (cols.ytdDr === undefined && cols.final === undefined) {
+    var lastDr = kinds.lastIndexOf("dr"), lastCr = kinds.lastIndexOf("cr");
+    if (lastDr >= 0) cols.dr = lastDr;
+    if (lastCr >= 0) cols.cr = lastCr;
+  }
+  tb.cols = cols;
+  tb.mode = cols.ytdDr !== undefined ? "ytd" : cols.final !== undefined ? "signed" : "drcr";
+  tb.hasAje = cols.aje !== undefined || cols.ajeDr !== undefined || cols.ajeCr !== undefined;
+  tb.hasUnadj = cols.unadj !== undefined || cols.unadjDr !== undefined || cols.unadjCr !== undefined;
+  var counting = tb.mode === "ytd" ? [cols.ytdDr, cols.ytdCr] : tb.mode === "signed" ? [cols.final] : [cols.dr, cols.cr];
+  var amtKinds = ["dr", "cr", "ytdDr", "ytdCr", "final", "unadj", "unadjDr", "unadjCr", "aje", "ajeDr", "ajeCr"];
+  var firstAmt = Infinity;
+  amtKinds.forEach(function (k) { if (cols[k] !== undefined) firstAmt = Math.min(firstAmt, cols[k]); });
+  var section = null, sectionName = null, stopped = false, sumDr = 0, sumCr = 0;
+  var others = [];
+  function amtOf(row, i) { if (i === undefined) return { k: "none" }; return parseAmount(row[i]); }
+  function cents(p) { return p.k === "amt" ? p.c : 0; }
+  for (r = head + 1; r < rows.length; r++) {
+    var row = rows[r] || [];
+    if (stopped) { var ft = rowText(row); if (ft) tb.footer.push(ft); continue; }
+    var label = "";
+    if (cols.name !== undefined) label = cellText(row[cols.name]);
+    else {
+      for (var c = 0; c < Math.min(firstAmt, row.length); c++) {
+        if (c === cols.num) continue;
+        var v = row[c];
+        if (cellText(v) && !isNumericCell(v)) { label = cellText(v); break; }
+      }
+    }
+    var number = cols.num !== undefined ? cellText(row[cols.num]) : "";
+    var parsed = counting.map(function (i) { return amtOf(row, i); });
+    var hasAmt = parsed.some(function (p) { return p.k === "amt"; });
+    var hasBad = parsed.some(function (p) { return p.k === "bad"; });
+    if (!label && !number && !hasAmt && !hasBad) continue;
+    var lab = label.toLowerCase().replace(/:$/, "").trim();
+    if (/^(grand total|totals?)$/.test(lab) || (hasAmt && !label && !number && tb.accounts.length > 0)) {
+      if (tb.mode === "signed") tb.total = parsed[0].k === "amt" ? { amount: parsed[0].c } : null;
+      else tb.total = hasAmt ? { debit: cents(parsed[0]), credit: cents(parsed[1]) } : null;
+      tb.totalRow = r + 1;
+      stopped = true;
+      continue;
+    }
+    if (/^total\s+\S/.test(lab)) continue;
+    if (!hasAmt && !hasBad) {
+      if (label) {
+        var key = lab.replace(/[-\s]+/g, " ");
+        if (IS_SECTIONS.indexOf(key) >= 0) { section = "PL"; sectionName = label; }
+        else if (BS_SECTIONS.indexOf(key) >= 0) { section = "BS"; sectionName = label; }
+        others.push(rowText(row));
+      }
+      continue;
+    }
+    if (hasBad || (!label && !number)) { tb.unread.push({ row: r + 1, label: label || number || "(no name)" }); continue; }
+    var a = parseLabel(label || number, number);
+    if (tb.mode === "signed") a.cents = cents(parsed[0]);
+    else { var d = cents(parsed[0]), k = cents(parsed[1]); a.cents = d - k; sumDr += d; sumCr += k; }
+    if (tb.hasUnadj) a.unadj = cols.unadj !== undefined ? cents(amtOf(row, cols.unadj)) : cents(amtOf(row, cols.unadjDr)) - cents(amtOf(row, cols.unadjCr));
+    if (tb.hasAje) a.aje = cols.aje !== undefined ? cents(amtOf(row, cols.aje)) : cents(amtOf(row, cols.ajeDr)) - cents(amtOf(row, cols.ajeCr));
+    else a.aje = 0;
+    a.row = r + 1; a.label = label; a.section = section; a.sectionName = sectionName;
+    tb.accounts.push(a);
+  }
+  tb.rowsRead = tb.accounts.length;
+  tb.sumDr = sumDr; tb.sumCr = sumCr;
+  tb.sum = tb.accounts.reduce(function (s, a) { return s + a.cents; }, 0);
+  var withCents = tb.accounts.filter(function (a) { return a.cents % 100 !== 0; }).length;
+  tb.whole = withCents <= 0.1 * tb.accounts.length;
+  if (!tb.total) tb.totalTies = null;
+  else if (tb.mode === "signed") tb.totalTies = tb.total.amount === tb.sum;
+  else tb.totalTies = tb.total.debit === sumDr && tb.total.credit === sumCr;
+  // date
+  tb.asOf = null; tb.asOfFrom = null;
+  for (var i = 0; i < tb.titleLines.length && !tb.asOf; i++) {
+    if (/\bas (of|at)\b/i.test(tb.titleLines[i])) { var dd = findDate(tb.titleLines[i]); if (dd) { tb.asOf = dd; tb.asOfFrom = "the title line \"" + tb.titleLines[i] + "\""; } }
+  }
+  for (r = 0; r < head && !tb.asOf; r++) {
+    (rows[r] || []).some(function (v) {
+      var dd = null;
+      if (typeof v === "number") dd = serialToISO(v);
+      else if (typeof v === "string" && !/\d{1,2}:\d{2}/.test(v)) dd = findDate(v);
+      if (dd) { tb.asOf = dd; tb.asOfFrom = "a cell above the column headings (" + (typeof v === "number" ? "a date cell" : "\"" + cellText(v) + "\"") + ")"; return true; }
+      return false;
+    });
+  }
+  if (!tb.asOf) {
+    (rows[head] || []).some(function (v) {
+      var dd = findDate(typeof v === "string" ? v : "");
+      if (dd) { tb.asOf = dd; tb.asOfFrom = "the column heading \"" + cellText(v) + "\""; return true; }
+      return false;
+    });
+  }
+  var basisText = tb.titleLines.concat(tb.footer, others).join(" \n ");
+  var bm = basisText.match(/(cash|accrual) basis/i);
+  tb.basis = bm ? bm[1].toLowerCase() : null;
+  tb.company = null;
+  for (i = 0; i < tb.titleLines.length; i++) {
+    var tl = tb.titleLines[i];
+    if (/trial balance|as of|as at|basis|workpaper/i.test(tl)) continue;
+    if (findDate(tl)) continue;
+    tb.company = tl; break;
+  }
+  if (tb.accounts.length === 0 && tb.unread.length === 0) {
+    tb.notTB = true;
+    tb.notTBMessage = "I found the column headings but no accounts below them";
+    return tb;
+  }
+  tb.ok = true;
+  return tb;
+}
+
+/* ---------------------------------------------------------------- classify */
+var RE_RE = /retained earnings|accumulated (deficit|earnings)|earnings retained/i;
+var ORDER_RE = /equity|capital|draw|drawings|distribution|dividend|investment|contribution|introduced|member|partner|owner|shareholder|stockholder|stock|shares|treasury|paid-in|paid in|surplus|aaa|accumulated adjustments/i;
+var ORDER_NOT = /income|revenue|sales|fees earned/i;
+var OWNER_RE = /\b(distributions?|draws?|drawings|dividends?|capital(?!\s+(lease|improvement|asset|expenditure))|contributions?|funds introduced|investments?(?!\s+income)|paid-in|paid in|stock|shares|shareholders?|stockholders?|partners?|members?|owners?|equity|aaa|accumulated adjustments)\b/i;
+var BS_GUESS = /accumulated (depreciation|amortization)|payable|prepaid|deposit|receivable|accrued|\bloans?\b|\bnotes?\b|due (to|from)|inventory|allowance|equipment|vehicles?|furniture|building|\bland\b|\bcash\b|checking|savings|\bbank\b|undeposited|credit card|liabilit|petty/i;
+var PL_GUESS = /income|revenue|sales|expense|cost of|fees|wages|salar|compensation|labor|guaranteed|\brent|utilities|insurance|depreciation|interest|taxes|licenses|advertising|supplies|repairs|meals|travel|\bcar\b|truck|fuel|dues|postage|telephone|charges|commission/i;
+function isOwnerName(n) { return OWNER_RE.test(n) && !/accumulated depreciation/i.test(n); }
+
+function classify(tb) {
+  var accs = tb.accounts;
+  function set(a, type, strength, how) { if (a.type) return; a.type = type; a.strength = strength; a.how = how; }
+  accs.forEach(function (a) { a.type = null; a.strength = -1; a.how = null; });
+  accs.forEach(function (a) { if (RE_RE.test(a.name)) set(a, "RE", 3, "re"); });
+  accs.forEach(function (a) { if (a.section) set(a, a.section, 3, "section"); });
+  var hasSections = accs.some(function (a) { return a.section; });
+  var withDigit = accs.filter(function (a) { return /^\d/.test(a.number); });
+  var reNums = accs.filter(function (a) { return a.type === "RE" && a.number; });
+  tb.usualPlan = accs.length > 0 && withDigit.length >= 0.8 * accs.length &&
+    reNums.every(function (a) { return /^3/.test(a.number); }) &&
+    withDigit.some(function (a) { return /^[123]/.test(a.number); }) && !hasSections;
+  if (tb.usualPlan) withDigit.forEach(function (a) { set(a, /^[123]/.test(a.number) ? "BS" : "PL", 2, "number"); });
+  var lastRE = -1;
+  accs.forEach(function (a, i) { if (RE_RE.test(a.name)) lastRE = i; });
+  if (lastRE >= 0) {
+    for (var i = 0; i < lastRE; i++) set(accs[i], "BS", 1, "order");
+    var pl = false;
+    for (i = lastRE + 1; i < accs.length; i++) {
+      if (!pl && !(ORDER_RE.test(accs[i].name) && !ORDER_NOT.test(accs[i].name))) pl = true;
+      set(accs[i], pl ? "PL" : "BS", 1, "order");
+    }
+  }
+  accs.forEach(function (a) {
+    if (BS_GUESS.test(a.name) || isOwnerName(a.name)) set(a, "BS", 0, "guess");
+    else if (PL_GUESS.test(a.name)) set(a, "PL", 0, "guess");
+    else set(a, "BS", 0, "guess");
+  });
+  accs.forEach(function (a) {
+    a.owner = a.type === "BS" && ((tb.usualPlan && /^3/.test(a.number)) ||
+      (a.sectionName && a.sectionName.trim().toLowerCase() === "equity") || isOwnerName(a.name));
+  });
+}
+var HOW_TEXT = { re: "retained earnings, by its name", section: "under the heading", number: "by its account number (1-3 balance sheet, 4-9 profit and loss)", order: "by its place in the file relative to retained earnings", guess: "guessed from its name", created: "created to close profit and loss" };
+function howText(a) {
+  if (!a) return "";
+  if (a.how === "section") return "under the \"" + a.sectionName + "\" heading";
+  return HOW_TEXT[a.how] || a.how;
+}
+
+/* ---------------------------------------------------------------- formatting */
+function grp(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+function fmtC(c) { var a = Math.abs(c); return grp(Math.floor(a / 100)) + "." + String(a % 100).padStart(2, "0"); }
+function money(c) { return "$" + fmtC(c); }
+function bal(c) { if (c === 0) return "0.00"; return fmtC(c) + (c > 0 ? " Dr" : " Cr"); }
+function dollars(c) { return c === null || c === undefined ? null : Math.round(c) / 100; }
+function esc(s) { return String(s === null || s === undefined ? "" : s).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[ch]; }); }
+function plural(n, one, many) { return n + " " + (n === 1 ? one : (many || one + "s")); }
+function listText(arr) { if (arr.length <= 1) return arr.join(""); return arr.slice(0, -1).join(", ") + " and " + arr[arr.length - 1]; }
+
+/* ---------------------------------------------------------------- compare */
+var BANNER_CODES = ["OUT_OF_BALANCE", "TOTAL_MISMATCH", "UNREAD_ROWS", "NOT_A_TB", "DATE_MISMATCH", "BASIS_MISMATCH", "BASIS_SUSPECTED", "SAME_FILE", "WRONG_CLIENT"];
+var REAL = ["changed", "new", "missing", "aje"];
+
+function fileInfo(F) {
+  var tb = F.tb || {};
+  var total = null;
+  if (tb.total) total = tb.total.amount !== undefined ? { debit: null, credit: null, net: dollars(tb.total.amount) } : { debit: dollars(tb.total.debit), credit: dollars(tb.total.credit), net: dollars(tb.total.debit - tb.total.credit) };
+  return {
+    name: F.name, rows: tb.rowsRead || 0, asOf: tb.asOf || null, basis: tb.basis || null, layout: tb.mode || null,
+    company: tb.company || null, balances: tb.ok ? tb.sum === 0 : null, outOfBalance: tb.ok ? dollars(tb.sum) : null,
+    total: total, totalTies: tb.totalTies === undefined ? null : tb.totalTies, wholeDollars: tb.ok ? tb.whole : null,
+    hasAdjustments: !!tb.hasAje
+  };
+}
+
+function normalSide(c) { if (c.type === "RE") return -1; var s = Math.sign(c.fc !== 0 ? c.fc : c.tc); return s === 0 ? 1 : s; }
+function dirWord(c) { return Math.sign(c.d) === normalSide(c) ? "higher" : "lower"; }
+
+function compare(F, T, sameBytes) {
+  var ex = [];
+  var rep = {
+    version: VERSION, status: null, asOf: null, files: {}, exceptions: ex, accounts: [],
+    netIncome: null, retainedEarnings: null, entry: null, entryWithheld: null, questions: [],
+    controls: { accountsCompared: 0, differences: 0, rounding: 0, roundingAccounts: 0, diffTotal: 0, diffsTie: true }
+  };
+  function setFiles() { rep.files = { final: fileInfo(F), today: fileInfo(T) }; rep.asOf = (F.tb && F.tb.asOf) || (T.tb && T.tb.asOf) || null; }
+  function stop() { rep.status = "NOT_COMPARABLE"; rep.accounts = []; rep.entry = null; setFiles(); rep._F = F; rep._T = T; return rep; }
+
+  // 1
+  if (sameBytes) {
+    ex.push({ code: "SAME_FILE", level: "stop", message: "You gave me the same file twice (\"" + F.name + "\"). Put last year's final trial balance in box 1 and the trial balance exported from the client's books today in box 2." });
+    return stop();
+  }
+  // 2
+  if (T.tb.hasAje && !F.tb.hasAje) {
+    var tmp = F; F = T; T = tmp;
+    ex.push({ code: "SWAPPED", level: "info", message: "\"" + F.name + "\" has adjusting-entry columns, so I took it as your final trial balance and \"" + T.name + "\" as the client's books today." });
+  }
+  setFiles();
+  // 3
+  var notTB = false;
+  [F, T].forEach(function (X) {
+    if (X.tb.notTB) {
+      notTB = true;
+      ex.push({ code: "NOT_A_TB", level: "stop", box: X.box, report: X.tb.reportKind || null, message: "Box " + X.box + " (\"" + X.name + "\") is not a trial balance I can read: " + X.tb.notTBMessage + ". Export the Trial Balance report as Excel or CSV and drop that in box " + X.box + "." });
+    }
+  });
+  if (notTB) return stop();
+  var Ftb = F.tb, Ttb = T.tb;
+  // 4
+  var stop4 = false;
+  if (Ftb.asOf && Ttb.asOf && Ftb.asOf !== Ttb.asOf) {
+    stop4 = true;
+    ex.push({ code: "DATE_MISMATCH", level: "stop", message: "Your final trial balance is as of " + longDate(Ftb.asOf) + " but the client's file is as of " + longDate(Ttb.asOf) + ". Export the client's trial balance as of " + longDate(Ftb.asOf) + "." });
+  }
+  if (Ftb.basis && Ttb.basis && Ftb.basis !== Ttb.basis) {
+    stop4 = true;
+    ex.push({ code: "BASIS_MISMATCH", level: "stop", message: "Your final trial balance is on the " + Ftb.basis + " basis but the client's file is on the " + Ttb.basis + " basis. Export the client's trial balance on the " + Ftb.basis + " basis." });
+  }
+  if (!stop4 && (!Ftb.basis || !Ttb.basis)) {
+    var arap = function (a) { return a.cents !== 0 && /receivable|payable/i.test(a.name) && !/payroll|tax|wage|accrued|loan|note|shareholder|officer|interest/i.test(a.name); };
+    var fA = Ftb.accounts.filter(arap);
+    if (fA.length && !Ttb.accounts.some(arap)) {
+      stop4 = true;
+      ex.push({ code: "BASIS_SUSPECTED", level: "stop", message: "Your final trial balance has " + listText(fA.map(function (a) { return a.name; })) + ", but the client's file has no receivables or payables at all: that is what a cash-basis report looks like. Export the client's trial balance again on the accrual basis." });
+    }
+  }
+  if (stop4) return stop();
+  // 5
+  if (Ftb.company && Ttb.company) {
+    var words = function (s) { return s.toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length >= 4 && ["company", "corporation", "incorporated", "limited"].indexOf(w) < 0; }); };
+    var fw = words(Ftb.company), tw = words(Ttb.company);
+    if (!fw.some(function (w) { return tw.indexOf(w) >= 0; })) {
+      ex.push({ code: "COMPANY_DIFFERS", level: "care", message: "The company names differ: \"" + Ftb.company + "\" in your final trial balance and \"" + Ttb.company + "\" in the client's file. Check that both files are for the same client." });
+    }
+  }
+  // 6
+  rep.asOf = Ftb.asOf || Ttb.asOf || null;
+  [[F, "your final trial balance"], [T, "the client's trial balance"]].forEach(function (p) {
+    var X = p[0], who = p[1], tb = X.tb, cap = who.charAt(0).toUpperCase() + who.slice(1);
+    if (!tb.asOf) ex.push({ code: "DATE_UNKNOWN", level: "care", file: X === F ? "final" : "today", message: "I could not find the date of " + who + " (\"" + X.name + "\"). Check that it is as of the same date as the other file." });
+    if (tb.sum !== 0) {
+      if (Math.abs(tb.sum) <= 500 && tb.whole) ex.push({ code: "ROUNDING_IMBALANCE", level: "info", file: X === F ? "final" : "today", message: cap + " is out of balance by " + money(Math.abs(tb.sum)) + ", which is rounding in a whole-dollar trial balance." });
+      else ex.push({ code: "OUT_OF_BALANCE", level: "stop", file: X === F ? "final" : "today", message: cap + " (\"" + X.name + "\") does not balance: debits " + (tb.sum > 0 ? "exceed" : "are less than") + " credits by " + money(Math.abs(tb.sum)) + ". Check that every account was read, then compare again." });
+    }
+    if (tb.totalTies === false) {
+      var tt = tb.total.amount !== undefined ? "the total line shows " + bal(tb.total.amount) + " but the accounts add to " + bal(tb.sum) :
+        "the total line shows " + fmtC(tb.total.debit) + " Dr and " + fmtC(tb.total.credit) + " Cr but the accounts add to " + fmtC(tb.sumDr) + " Dr and " + fmtC(tb.sumCr) + " Cr";
+      ex.push({ code: "TOTAL_MISMATCH", level: "stop", file: X === F ? "final" : "today", message: "In " + who + " (\"" + X.name + "\"), " + tt + ". Some rows may not have been read as accounts." });
+    }
+    if (tb.unread.length) ex.push({ code: "UNREAD_ROWS", level: "stop", file: X === F ? "final" : "today", rows: tb.unread.map(function (u) { return u.row; }), message: "In " + who + " (\"" + X.name + "\"), I could not read the amounts on " + plural(tb.unread.length, "row") + ": " + tb.unread.map(function (u) { return "row " + u.row + " (" + u.label + ")"; }).join(", ") + ". They are left out." });
+  });
+  // 7
+  classify(Ftb); classify(Ttb);
+  function dedupe(X, who) {
+    var map = new Map(), out = [];
+    X.tb.accounts.forEach(function (a) {
+      var key = a.number + "|" + a.norm;
+      if (map.has(key)) {
+        var b = map.get(key);
+        b.cents += a.cents; b.aje = (b.aje || 0) + (a.aje || 0);
+        if (a.unadj !== undefined) b.unadj = (b.unadj || 0) + a.unadj;
+        b.dupRows.push(a.row);
+      } else { a.dupRows = [a.row]; map.set(key, a); out.push(a); }
+    });
+    out.forEach(function (a) {
+      if (a.dupRows.length > 1) ex.push({ code: "DUPLICATE_ACCOUNT", level: "care", message: "\"" + a.name + "\" appears " + a.dupRows.length + " times in " + who + " (rows " + a.dupRows.join(", ") + "). I added them together." });
+    });
+    return out;
+  }
+  var fa = dedupe(F, "your final trial balance"), ta = dedupe(T, "the client's trial balance");
+  // 8
+  var postClosing = false;
+  var plNZ = function (list) { return list.some(function (a) { return a.type === "PL" && a.cents !== 0; }); };
+  var fHas = plNZ(fa), tHas = plNZ(ta);
+  if (fHas !== tHas) {
+    postClosing = true;
+    var closeList = fHas ? fa : ta, pcList = fHas ? ta : fa, who2 = fHas ? "your final trial balance" : "the client's trial balance", pcWho = fHas ? "The client's trial balance" : "Your final trial balance";
+    var re = closeList.find(function (a) { return a.type === "RE"; });
+    if (!re) {
+      re = { name: "Retained Earnings", norm: "retained earnings", leaf: "retained earnings", number: "", cents: 0, aje: 0, row: null, type: "RE", strength: 3, how: "created", owner: false, created: true, dupRows: [] };
+      closeList.push(re);
+    }
+    var distRe = /distribution|\bdraws?\b|drawings|dividend/i;
+    var closeDist = !pcList.some(function (a) { return a.cents !== 0 && distRe.test(a.name); }) && closeList.some(function (a) { return a.cents !== 0 && distRe.test(a.name); });
+    var plSum = 0, distSum = 0;
+    for (var i = closeList.length - 1; i >= 0; i--) {
+      var a = closeList[i];
+      if (a === re) continue;
+      var isPL = a.type === "PL", isDist = closeDist && a.type !== "RE" && distRe.test(a.name);
+      if (isPL || isDist) {
+        re.cents += a.cents; re.aje = (re.aje || 0) + (a.aje || 0);
+        if (isPL) plSum += a.cents; else distSum += a.cents;
+        closeList.splice(i, 1);
+      }
+    }
+    ex.push({ code: "POST_CLOSING", level: "info", message: pcWho + " is after closing: it has no profit and loss balances. I closed last year's profit (" + money(Math.abs(plSum)) + (plSum <= 0 ? " profit" : " loss") + ")" + (closeDist ? " and the distributions (" + money(Math.abs(distSum)) + ")" : "") + " in " + who2 + " into " + re.name + " so the two can be compared." });
+  }
+  // 9
+  var pairs = [];
+  fa.forEach(function (a) { a.m = null; }); ta.forEach(function (a) { a.m = null; });
+  function pass(keyFn, how) {
+    var fm = new Map(), tm = new Map();
+    fa.forEach(function (a) { if (a.m) return; var k = keyFn(a); if (!k) return; if (!fm.has(k)) fm.set(k, []); fm.get(k).push(a); });
+    ta.forEach(function (a) { if (a.m) return; var k = keyFn(a); if (!k) return; if (!tm.has(k)) tm.set(k, []); tm.get(k).push(a); });
+    fm.forEach(function (fl, k) {
+      var tl = tm.get(k);
+      if (fl.length === 1 && tl && tl.length === 1) {
+        var p = { f: fl[0], t: tl[0], how: how };
+        fl[0].m = p; tl[0].m = p; pairs.push(p);
+      }
+    });
+  }
+  pass(function (a) { return a.number; }, "number");
+  pass(function (a) { return a.norm; }, "name");
+  pass(function (a) { return a.leaf; }, "leaf");
+  var strictPairs = pairs.length;
+  pairs.forEach(function (p) {
+    if (p.how === "number" && p.f.norm !== p.t.norm) {
+      p.renamed = true;
+      ex.push({ code: "RENAMED", level: "info", message: "Account " + p.f.number + " is \"" + p.f.name + "\" in your final trial balance and \"" + p.t.name + "\" in the client's books. I took it as the same account, renamed." });
+    }
+  });
+  // 10
+  var larger = Math.max(fa.length, ta.length);
+  if (strictPairs < larger / 2) {
+    ex.push({ code: "WRONG_CLIENT", level: "stop", message: "Only " + strictPairs + " of " + larger + " accounts match between the two files by number or name. These look like the books of different clients, or different charts of accounts. Check that both files are for the same client." });
+    return stop();
+  }
+  (function () {
+    var fu = fa.filter(function (a) { return !a.m && a.cents !== 0; }), tu = ta.filter(function (a) { return !a.m && a.cents !== 0; });
+    var cnt = function (list, c) { return list.filter(function (a) { return a.cents === c; }).length; };
+    fu.forEach(function (f) {
+      if (cnt(fu, f.cents) !== 1 || cnt(tu, f.cents) !== 1) return;
+      var t = tu.find(function (a) { return a.cents === f.cents; });
+      var p = { f: f, t: t, how: "balance", renamedGuess: true };
+      f.m = p; t.m = p; pairs.push(p);
+      ex.push({ code: "RENAMED_GUESS", level: "care", message: "\"" + f.name + "\" in your final trial balance and \"" + t.name + "\" in the client's books have the same balance (" + bal(f.cents) + ") and no other match. I took them as the same account, renamed. Check that this is right." });
+    });
+  })();
+  // 11
+  var comps = [];
+  fa.forEach(function (f) { comps.push(f.m ? f.m : { f: f, t: null, how: null }); });
+  ta.forEach(function (t) { if (!t.m) comps.push({ f: null, t: t, how: null }); });
+  var fWhole = Ftb.whole, tWhole = Ttb.whole;
+  comps.forEach(function (c) {
+    var f = c.f, t = c.t;
+    c.fc = f ? f.cents : 0; c.tc = t ? t.cents : 0; c.d = c.tc - c.fc;
+    var src = f && t ? (t.strength > f.strength ? t : f) : (f || t);
+    c.type = src.type; c.how2 = src.how; c.src = src;
+    c.owner = !!((f && f.owner) || (t && t.owner));
+    c.a = f ? (f.aje || 0) : 0;
+    c.name = t ? t.name : f.name;
+    c.number = (f && f.number) || (t && t.number) || "";
+    var tol = fWhole ? 50 : 0;
+    if (c.d === 0) c.status = c.renamedGuess ? "renamed?" : c.renamed ? "renamed" : "same";
+    else if (c.a !== 0 && Math.abs(c.d + c.a) <= tol) c.status = "aje";
+    else if (fWhole && ((!tWhole && Math.abs(c.d) <= 50) || (c.type === "RE" && Math.abs(c.d) <= 500))) c.status = "rounding";
+    else c.status = !f ? "new" : !t ? "missing" : "changed";
+  });
+  // 12
+  var STOPW = ["expense", "expenses", "account", "accounts", "other", "general", "misc", "miscellaneous", "cost", "costs", "income"];
+  function wordsOf(c) {
+    var s = ((c.f ? c.f.name : "") + " " + (c.t ? c.t.name : "")).toLowerCase();
+    return s.split(/[^a-z0-9]+/).filter(function (w) { return w.length >= 4 && STOPW.indexOf(w) < 0; });
+  }
+  var merges = [];
+  comps.filter(function (g) { return g.status === "missing" && g.fc !== 0; }).forEach(function (g) {
+    var gw = wordsOf(g);
+    var cands = comps.filter(function (m) {
+      return m.status === "changed" && m.d === g.fc && m.type === g.type && !m.owner && !g.owner &&
+        (m.fc === 0 || Math.sign(m.fc) === Math.sign(g.fc)) && wordsOf(m).some(function (w) { return gw.indexOf(w) >= 0; });
+    });
+    if (cands.length === 1) {
+      var m = cands[0];
+      g.status = "merged?"; m.status = "merged?"; g.mergedWith = m; m.mergedWith = g;
+      merges.push([g, m]);
+      ex.push({ code: "MERGED_GUESS", level: "care", message: "\"" + g.name + "\" (" + bal(g.fc) + " in your final) is gone from the client's books and \"" + m.name + "\" is higher by the same amount. The accounts look merged. Profit is unchanged, but last year's books no longer show the two amounts separately, and the return's lines may no longer tie to the books." });
+    }
+  });
+  // 13
+  var real = comps.filter(function (c) { return REAL.indexOf(c.status) >= 0; });
+  var sumBy = function (list, fn) { return list.reduce(function (s, c) { return s + fn(c); }, 0); };
+  var plc = comps.filter(function (c) { return c.type === "PL"; });
+  var reC = comps.filter(function (c) { return c.type === "RE"; });
+  if (!postClosing) {
+    var niF = -sumBy(plc, function (c) { return c.fc; }), niT = -sumBy(plc, function (c) { return c.tc; });
+    var niApart = -sumBy(plc.filter(function (c) { return c.status !== "rounding"; }), function (c) { return c.d; });
+    rep.netIncome = { final: dollars(niF), today: dollars(niT), change: dollars(niT - niF), changeApartFromRounding: dollars(niApart) };
+  }
+  if (reC.length) {
+    var reF = -sumBy(reC, function (c) { return c.fc; }), reT = -sumBy(reC, function (c) { return c.tc; });
+    rep.retainedEarnings = { final: dollars(reF), today: dollars(reT), change: postClosing ? null : dollars(reT - reF) };
+  }
+  // 14
+  var nonAje = real.filter(function (c) { return c.status !== "aje"; });
+  var plCh = nonAje.filter(function (c) { return c.type === "PL"; });
+  var bsCh = nonAje.filter(function (c) { return c.type === "BS" && !c.owner; });
+  var ownCh = nonAje.filter(function (c) { return c.type === "BS" && c.owner; });
+  var reCh = nonAje.filter(function (c) { return c.type === "RE"; });
+  var ajeC = real.filter(function (c) { return c.status === "aje"; });
+  function line(c) { return c.name + " is " + money(Math.abs(c.d)) + " " + dirWord(c) + " (final " + bal(c.fc) + ", today " + bal(c.tc) + ")"; }
+  var payrollRe = /wage|salar|payroll|sales tax|contract labor|subcontract|officer/i;
+  var payrollNote = " Because " + "wages, payroll, sales-tax or contractor accounts changed, check whether last year's payroll returns and W-2s, sales-tax returns or 1099s also need correcting.";
+  var payrollPL = plCh.some(function (c) { return payrollRe.test(c.name); }), payrollBS = bsCh.some(function (c) { return payrollRe.test(c.name); });
+  if (plCh.length) {
+    var eff = -sumBy(plCh, function (c) { return c.d; });
+    var msg = "Last year's profit and loss accounts changed in the client's books: " + plCh.map(line).join("; ") + ". ";
+    if (eff !== 0) msg += "Last year's profit is " + money(Math.abs(eff)) + " " + (eff > 0 ? "higher" : "lower") + " in the client's books than on the return. If the change is right, last year's return may need amending.";
+    else msg += "Profit is the same in total, but amounts moved between lines of the return.";
+    var causes = [];
+    plCh.forEach(function (p) {
+      var cands = real.filter(function (b) { return b.type === "BS" && !b.owner && b.d === -p.d; });
+      if (cands.length !== 1) return;
+      var b = cands[0];
+      var income = normalSide(p) < 0, asset = normalSide(b) > 0, ph = dirWord(p), bh = dirWord(b), cause = null;
+      if (income && ph === "lower" && asset) cause = "a deposit or sale in last year was deleted or voided";
+      else if (income && ph === "higher" && asset) cause = "a deposit or sale was added and dated last year";
+      else if (income && ph === "lower" && !asset) cause = "income was moved to a liability, such as a customer deposit or deferred revenue";
+      else if (income && ph === "higher" && !asset) cause = "a customer deposit or other liability was moved into last year's income";
+      else if (!income && ph === "higher" && !asset) cause = "a bill was added and dated last year";
+      else if (!income && ph === "lower" && !asset) cause = "a bill in last year was deleted or voided";
+      else if (!income && ph === "lower" && asset) cause = "a payment or check in last year was voided or deleted";
+      else if (!income && ph === "higher" && asset) cause = "a payment or check was added and dated last year";
+      if (cause) causes.push("Likely cause for " + p.name + ": " + cause + " (" + b.name + " is " + bh + " by the same " + money(Math.abs(b.d)) + ").");
+    });
+    if (causes.length) msg += " " + causes.join(" ");
+    if (payrollPL) msg += payrollNote;
+    ex.push({ code: "CHANGED_PL", level: "stop", accounts: plCh.map(function (c) { return c.name; }), profitEffect: dollars(eff), message: msg });
+  }
+  if (bsCh.length) {
+    var m2 = "Last year's balance sheet accounts changed in the client's books: " + bsCh.map(line).join("; ") + ". This year's opening balances no longer agree with last year's return (Schedule L).";
+    if (payrollBS && !payrollPL) m2 += payrollNote;
+    ex.push({ code: "CHANGED_BS", level: "stop", accounts: bsCh.map(function (c) { return c.name; }), message: m2 });
+  }
+  if (ownCh.length) {
+    ex.push({ code: "OWNER_CHANGED", level: "stop", accounts: ownCh.map(function (c) { return c.name; }), message: "Owner accounts changed: " + ownCh.map(line).join("; ") + ". The K-1s, Schedule M-2 and the owners' basis change even though profit does not. Correct them in last year's books." });
+  }
+  if (reCh.length) {
+    var reD = -sumBy(reCh, function (c) { return c.d; });
+    ex.push({ code: postClosing ? "RETAINED_EARNINGS_CHANGED" : "PRIOR_YEARS_CHANGED", level: "stop", accounts: reCh.map(function (c) { return c.name; }),
+      message: (postClosing ? "Retained earnings changed: " : "Retained earnings at the start of last year changed, so something in an earlier year was changed: ") + reCh.map(line).join("; ") + ". Retained earnings are " + money(Math.abs(reD)) + " " + (reD > 0 ? "higher" : "lower") + " in the client's books." });
+  }
+  if (ajeC.length) {
+    ex.push({ code: "AJE_NOT_POSTED", level: "care", accounts: ajeC.map(function (c) { return c.name; }),
+      message: "Your adjusting entries are not in the client's books: " + ajeC.map(function (c) { return c.name + " " + bal(c.a); }).join("; ") + ". Either the client posts them dated " + longDate(rep.asOf) + ", or you use the correcting entry below: one or the other, never both. Tax-only adjustments are not in a trial balance and are left out." });
+  }
+  var rnd = comps.filter(function (c) { return c.status === "rounding"; });
+  if (rnd.length) {
+    ex.push({ code: "ROUNDING", level: "info", accounts: rnd.map(function (c) { return c.name; }), message: plural(rnd.length, "account differs", "accounts differ") + " only by rounding, because your trial balance is in whole dollars: " + rnd.map(function (c) { return c.name + " " + money(Math.abs(c.d)); }).join(", ") + ". I treated these as agreeing." });
+  }
+  comps.forEach(function (c) {
+    if ((REAL.indexOf(c.status) >= 0 || c.status === "merged?" || c.status === "renamed?" || c.status === "renamed" || c.renamed || c.renamedGuess) && c.how2 === "guess") {
+      ex.push({ code: "TYPE_GUESS", level: "care", account: c.name, message: "I could not tell from the files whether \"" + c.name + "\" is a balance sheet or a profit and loss account, so I guessed " + (c.type === "PL" ? "profit and loss" : "balance sheet") + " from its name. Check it." });
+    }
+  });
+  // 15
+  var entryDate = nextDay(rep.asOf);
+  var bsReal = real.filter(function (c) { return c.type === "BS"; });
+  var withheld = null;
+  if (ex.some(function (e) { return e.code === "OUT_OF_BALANCE"; })) withheld = "a file does not balance";
+  else if (ownCh.length) withheld = "owner accounts changed; correct those in last year's books instead";
+  else if (!reC.length) withheld = "there is no retained earnings account";
+  else if (real.some(function (c) { return c.how2 === "guess"; })) withheld = "I guessed the type of an account that changed; check it first";
+  if (withheld) { rep.entry = null; if (bsReal.length) rep.entryWithheld = withheld; else if (real.length) rep.entryWithheld = withheld; }
+  else if (bsReal.length) {
+    var lines = [], tot = 0;
+    bsReal.forEach(function (c) {
+      var amt = c.status === "aje" ? c.a : -c.d;
+      if (amt === 0) return;
+      tot += amt; lines.push({ account: c.name, cents: amt });
+    });
+    var reAcc = reC.find(function (c) { return c.f; }) || reC[0];
+    if (tot !== 0) lines.push({ account: reAcc.name, cents: -tot });
+    if (lines.length) {
+      var td = 0, tc = 0;
+      var outLines = lines.map(function (l) { if (l.cents > 0) td += l.cents; else tc -= l.cents; return { account: l.account, debit: l.cents > 0 ? dollars(l.cents) : 0, credit: l.cents < 0 ? dollars(-l.cents) : 0 }; });
+      rep.entry = { date: entryDate, lines: outLines, totalDebit: dollars(td), totalCredit: dollars(tc) };
+    }
+  }
+  // 16
+  nonAje.forEach(function (c) {
+    var phr = c.status === "new" ? "is new in your books: " + c.name + " shows " + bal(c.tc) + " at " + longDate(rep.asOf) + ", and it was not in my final figures." :
+      c.status === "missing" ? "is gone from your books: my final figures show " + c.name + " at " + bal(c.fc) + "." :
+      "is " + money(Math.abs(c.d)) + " " + dirWord(c) + " in your books than in my final figures (" + bal(c.fc) + " then, " + bal(c.tc) + " now).";
+    rep.questions.push(c.name + " " + phr + " What was added, deleted or changed, and why?");
+  });
+  if (ajeC.length) rep.questions.push("Please post my adjusting entries dated " + longDate(rep.asOf) + ": " + ajeC.map(function (c) { return c.name + " " + bal(c.a); }).join("; ") + ".");
+  merges.forEach(function (gm) { rep.questions.push("Did you merge \"" + gm[0].name + "\" into \"" + gm[1].name + "\"? Why?"); });
+  // 17
+  rep.status = real.length || merges.length ? "CHANGED" : "AGREES";
+  rep.postClosing = postClosing;
+  rep.accounts = comps.map(function (c) {
+    return { name: c.name, finalName: c.f ? c.f.name : null, todayName: c.t ? c.t.name : null, number: c.number || null,
+      type: c.type, typeHow: c.how2, final: dollars(c.fc), today: dollars(c.tc), diff: dollars(c.d), status: c.status,
+      finalRow: c.f ? c.f.row : null, todayRow: c.t ? c.t.row : null, aje: c.f && c.f.aje ? dollars(c.f.aje) : 0,
+      owner: c.owner, matchedBy: c.how, mergedWith: c.mergedWith ? c.mergedWith.name : null };
+  });
+  var dt = sumBy(comps, function (c) { return c.d; });
+  rep.controls = { accountsCompared: comps.length, differences: real.length, rounding: dollars(sumBy(rnd, function (c) { return c.d; })), roundingAccounts: rnd.length, diffTotal: dollars(dt), diffsTie: dt === 0 };
+  rep._comps = comps; rep._F = F; rep._T = T;
+  return rep;
+}
+
+/* ---------------------------------------------------------------- render */
+var STATUS_TEXT = { same: "Agrees", renamed: "Agrees (renamed)", "renamed?": "Agrees (renamed?)", rounding: "Rounding", aje: "Your adjustment not posted", changed: "Changed", "new": "New account", missing: "Missing", "merged?": "Merged?" };
+function meaning(c) {
+  switch (c.status) {
+    case "changed": return money(Math.abs(c.d)) + " " + dirWord(c) + " in the client's books. Something dated last year was added, deleted or changed after you finished.";
+    case "new": return "Not in your final trial balance. A new account with entries dated last year.";
+    case "missing": return "In your final trial balance but not in the client's books today: deleted, or its balance moved elsewhere.";
+    case "aje": return "Your adjusting entry of " + bal(c.a) + " was never posted in the client's books.";
+    case "merged?": return "Looks merged with \"" + c.mergedWith.name + "\". Profit is unchanged, but the return's lines may no longer tie to the books.";
+    case "renamed?": return "Same balance as \"" + (c.f ? c.f.name : "") + "\" in your final, under a different name. Probably renamed.";
+    default: return "";
+  }
+}
+function exList(list) {
+  return "<ul class=\"ex\">" + list.map(function (e) { return "<li class=\"" + e.level + "\"><span class=\"lvl\">" + (e.level === "stop" ? "Stop" : e.level === "care" ? "Take care" : "For information") + "</span>" + esc(e.message) + "</li>"; }).join("") + "</ul>";
+}
+function layoutText(tb) {
+  if (!tb || !tb.mode) return "not recognised";
+  var s = tb.mode === "ytd" ? "YTD Debit and YTD Credit columns (Xero); the month's Debit and Credit columns ignored" :
+    tb.mode === "signed" ? "one column of final balances, debit positive and credit negative" : "Debit and Credit columns";
+  if (tb.hasUnadj) s += "; unadjusted balances read";
+  if (tb.hasAje) s += "; adjusting entries read";
+  return s + "; headings on row " + tb.headRow;
+}
+function render(rep) {
+  var F = rep._F, T = rep._T, comps = rep._comps || [];
+  var nc = rep.status === "NOT_COMPARABLE";
+  var h = [];
+  var company = (F && F.tb && F.tb.company) || (T && T.tb && T.tb.company) || "";
+  h.push("<h1>Did last year change?</h1>");
+  h.push("<dl class=\"meta\">" + (company ? "<dt>Company</dt><dd>" + esc(company) + "</dd>" : "") +
+    "<dt>Balance date</dt><dd>" + esc(longDate(rep.asOf)) + "</dd>" +
+    "<dt>Your final trial balance</dt><dd>" + esc(F ? F.name : "") + "</dd>" +
+    "<dt>The client's books today</dt><dd>" + esc(T ? T.name : "") + "</dd></dl>");
+  if (!nc) h.push("<div class=\"signoff\"><div>Prepared by</div><div>Date</div><div>Reviewed by</div><div>Date</div></div>");
+  // verdict
+  var real = comps.filter(function (c) { return REAL.indexOf(c.status) >= 0; });
+  var merged = comps.filter(function (c) { return c.status === "merged?"; });
+  var v = "", cls = "";
+  if (nc) { v = "<div class=\"big\">I cannot compare these two files.</div><p>See below for why and what to do.</p>"; cls = "nc"; }
+  else if (rep.status === "AGREES") {
+    cls = "agrees";
+    var allowed = [];
+    if (rep.controls.roundingAccounts) allowed.push("rounding on " + plural(rep.controls.roundingAccounts, "account") + " (" + money(Math.round(Math.abs(rep.controls.rounding) * 100)) + " in total)");
+    var ren = comps.filter(function (c) { return c.status === "renamed" || c.status === "renamed?"; }).length;
+    if (ren) allowed.push(plural(ren, "renamed account"));
+    if (rep.postClosing) allowed.push("one file being after closing");
+    v = "<div class=\"big\">Last year's books still agree with your final trial balance.</div><p>All " + rep.controls.accountsCompared + " accounts agree" + (allowed.length ? ", allowing for " + esc(listText(allowed)) : "") + ".</p>";
+  } else {
+    cls = "changed";
+    var big = !real.length ? "Last year's books have changed: accounts were merged." :
+      real.every(function (c) { return c.status === "aje"; }) ? "Last year's books do not have your adjusting entries." :
+      "Last year's books have changed since your final trial balance.";
+    var p = plural(real.length + merged.length, "account differs", "accounts differ") + " from your final figures.";
+    if (rep.netIncome) {
+      var ch = Math.round(rep.netIncome.changeApartFromRounding * 100);
+      p += ch === 0 ? " Last year's profit is unchanged" + (rep.controls.roundingAccounts ? " apart from rounding." : ".") :
+        " Last year's profit is " + money(Math.abs(ch)) + " " + (ch > 0 ? "higher" : "lower") + " in the client's books" + (rep.controls.roundingAccounts ? ", apart from rounding." : ".");
+    }
+    v = "<div class=\"big\">" + esc(big) + "</div><p>" + esc(p) + "</p>";
+  }
+  h.push("<div id=\"verdict\" class=\"" + cls + "\">" + v + "</div>");
+  var banner = rep.exceptions.filter(function (e) { return BANNER_CODES.indexOf(e.code) >= 0; });
+  h.push("<div id=\"stop-banner\"" + (banner.length ? "" : " hidden") + "><h2>Stop: check this before you rely on anything here</h2><ul>" + banner.map(function (e) { return "<li>" + esc(e.message) + "</li>"; }).join("") + "</ul></div>");
+  if (nc) return h.join("");
+  // check first
+  var order = { stop: 0, care: 1, info: 2 };
+  var rest = rep.exceptions.filter(function (e) { return BANNER_CODES.indexOf(e.code) < 0; }).slice().sort(function (a, b) { return order[a.level] - order[b.level]; });
+  if (rest.length) { h.push("<h2>Check these first</h2>"); h.push(exList(rest)); }
+  // what changed
+  var shown = comps.filter(function (c) { return ["changed", "new", "missing", "aje", "merged?", "renamed?"].indexOf(c.status) >= 0; });
+  h.push("<h2>What changed</h2>");
+  if (!shown.length) h.push("<p>No account differs from your final figures" + (rep.controls.roundingAccounts ? " apart from rounding" : "") + ".</p>");
+  else {
+    h.push("<div class=\"scroll\"><table><thead><tr><th>Account</th><th class=\"num\">Your final</th><th class=\"num\">Client's books today</th><th class=\"num\">Difference</th><th>What it means</th></tr></thead><tbody>" +
+      shown.map(function (c) { return "<tr><td>" + esc((c.number ? c.number + " " : "") + c.name) + "</td><td class=\"num\">" + bal(c.fc) + "</td><td class=\"num\">" + bal(c.tc) + "</td><td class=\"num\">" + fmtC(c.d) + "</td><td>" + esc(meaning(c)) + "</td></tr>"; }).join("") +
+      "</tbody></table></div>");
+  }
+  // profit and RE
+  h.push("<h2>Last year's profit and retained earnings</h2>");
+  var rows = [];
+  if (rep.netIncome) {
+    var n = rep.netIncome;
+    rows.push(["Profit (loss) for last year", n.final, n.today, n.change]);
+  }
+  if (rep.retainedEarnings) {
+    var r = rep.retainedEarnings;
+    rows.push(["Retained earnings (credit balance)", r.final, r.today, r.change]);
+  }
+  var sg = function (d) { if (d === null || d === undefined) return "n/a"; var c = Math.round(d * 100); return (c < 0 ? "-" : "") + fmtC(c); };
+  if (rows.length) h.push("<div class=\"scroll\"><table><thead><tr><th></th><th class=\"num\">Your final</th><th class=\"num\">Client's books today</th><th class=\"num\">Change</th></tr></thead><tbody>" +
+    rows.map(function (x) { return "<tr><td>" + esc(x[0]) + "</td><td class=\"num\">" + sg(x[1]) + "</td><td class=\"num\">" + sg(x[2]) + "</td><td class=\"num\">" + sg(x[3]) + "</td></tr>"; }).join("") + "</tbody></table></div>");
+  if (rep.postClosing) h.push("<p>One file is after closing, so last year's profit cannot be compared on its own.</p>");
+  if (rep.netIncome && rep.controls.roundingAccounts) h.push("<p>Change in profit apart from rounding: " + sg(rep.netIncome.changeApartFromRounding) + ".</p>");
+  h.push("<p>Check: the differences on all " + rep.controls.accountsCompared + " accounts add up to " + sg(rep.controls.diffTotal) + ". " +
+    (rep.controls.diffsTie ? "<span class=\"good\">They add to zero, as they should.</span>" : "<span class=\"bad\">They should add to zero: one of the files does not balance.</span>") + "</p>");
+  // entry
+  var ajeC = comps.filter(function (c) { return c.status === "aje"; });
+  var cliC = comps.filter(function (c) { return ["changed", "new", "missing"].indexOf(c.status) >= 0; });
+  h.push("<h2>Correcting entry, " + esc(rep.entry && rep.entry.date ? longDate(rep.entry.date) : rep.asOf ? longDate(nextDay(rep.asOf)) : "date unknown") + "</h2>");
+  if (rep.entry || rep.entryWithheld) {
+    var conds = [];
+    if (ajeC.length) conds.push("For your adjustments: the client posts them dated " + longDate(rep.asOf) + ", or you post this entry. One or the other, never both. Reverse accruals as usual.");
+    if (cliC.length) {
+      conds.push("For the client's changes: first ask the client to undo the change in last year, or re-date it into this year. Post this entry only if the changes were mistakes, the client will not undo them, and the transaction was not entered again this year.");
+      conds.push("If a change was right, consider amending last year's return, or keep this year's beginning balance sheet as filed and show a prior-period adjustment on Schedule M-2.");
+    }
+    if (conds.length) h.push("<ul class=\"cond\">" + conds.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul>");
+  }
+  if (rep.entry) {
+    h.push("<p>Dated the day after the balance date, so last year's books stay as they are and this year opens on your final figures.</p>");
+    h.push("<div class=\"scroll\"><table><thead><tr><th>Account</th><th class=\"num\">Debit</th><th class=\"num\">Credit</th></tr></thead><tbody>" +
+      rep.entry.lines.map(function (l) { return "<tr><td>" + esc(l.account) + "</td><td class=\"num\">" + (l.debit ? fmtC(Math.round(l.debit * 100)) : "") + "</td><td class=\"num\">" + (l.credit ? fmtC(Math.round(l.credit * 100)) : "") + "</td></tr>"; }).join("") +
+      "<tr class=\"tot\"><td>Total</td><td class=\"num\">" + fmtC(Math.round(rep.entry.totalDebit * 100)) + "</td><td class=\"num\">" + fmtC(Math.round(rep.entry.totalCredit * 100)) + "</td></tr></tbody></table></div>");
+    h.push("<p class=\"small\">Memo: Restore balances to the final trial balance used for last year's return, as of " + esc(longDate(rep.asOf)) + ".</p>");
+  } else if (rep.entryWithheld) {
+    h.push("<p><b>No entry drafted:</b> " + esc(rep.entryWithheld) + ".</p>");
+  } else if (real.length) {
+    h.push("<p>No balance sheet account differs, so no entry is needed to bring this year's opening balances back to your figures.</p>");
+  } else h.push("<p>None needed.</p>");
+  // questions
+  h.push("<h2>To ask the client</h2>");
+  if (rep.questions.length) h.push("<ol>" + rep.questions.map(function (q) { return "<li>" + esc(q) + "</li>"; }).join("") + "</ol>");
+  else h.push("<p>Nothing to ask about last year's balances.</p>");
+  h.push("<p>To stop this happening again, set a closing date with a password in QuickBooks (Settings, Account and settings, Advanced, Close the books) or a lock date in Xero (Accounting, Advanced, Financial settings) at " + esc(longDate(rep.asOf)) + ".</p>");
+  // every account
+  h.push("<details><summary>Every account compared (" + comps.length + ")</summary><div class=\"scroll\"><table><thead><tr><th>No.</th><th>Account</th><th>Type, and how I decided</th><th class=\"num\">Your final (row)</th><th class=\"num\">Today (row)</th><th class=\"num\">Difference</th><th>Result</th></tr></thead><tbody>" +
+    comps.map(function (c) {
+      var nm = c.f && c.t && c.f.name !== c.t.name ? c.f.name + " / " + c.t.name : c.name;
+      var ty = (c.type === "PL" ? "Profit and loss" : c.type === "RE" ? "Retained earnings" : "Balance sheet") + (c.owner ? ", owner" : "") + ": " + howText(c.src);
+      return "<tr><td>" + esc(c.number) + "</td><td>" + esc(nm) + "</td><td>" + esc(ty) + "</td><td class=\"num\">" + (c.f ? bal(c.fc) + (c.f.row ? " (" + c.f.row + ")" : " (closed)") : "not there") + "</td><td class=\"num\">" + (c.t ? bal(c.tc) + (c.t.row ? " (" + c.t.row + ")" : " (closed)") : "not there") + "</td><td class=\"num\">" + fmtC(c.d) + "</td><td><span class=\"pill " + esc(c.status) + "\">" + esc(STATUS_TEXT[c.status] || c.status) + "</span></td></tr>";
+    }).join("") + "</tbody></table></div></details>");
+  // what I read
+  h.push("<h2>What I read from each file</h2><div class=\"scroll\"><table><thead><tr><th></th><th>Your final trial balance</th><th>The client's books today</th></tr></thead><tbody>");
+  var fr = function (lab, fn) { h.push("<tr><td>" + esc(lab) + "</td><td>" + esc(fn(F.tb, F)) + "</td><td>" + esc(fn(T.tb, T)) + "</td></tr>"); };
+  fr("File", function (tb, X) { return X.name; });
+  fr("Layout", function (tb) { return layoutText(tb); });
+  fr("Date", function (tb) { return tb.asOf ? longDate(tb.asOf) + ", from " + tb.asOfFrom : "not found"; });
+  fr("Basis", function (tb) { return tb.basis ? tb.basis + " basis" : "not stated"; });
+  fr("Company", function (tb) { return tb.company || "not stated"; });
+  fr("Accounts read", function (tb) { return tb.rowsRead + (tb.unread.length ? ", plus " + plural(tb.unread.length, "row") + " I could not read" : "") + (tb.whole ? " (whole dollars)" : ""); });
+  fr("Debits equal credits", function (tb) { return tb.sum === 0 ? "Yes" : "No, off by " + money(Math.abs(tb.sum)); });
+  fr("Total line agrees", function (tb) { return tb.totalTies === null ? "No total line found" : tb.totalTies ? "Yes (row " + tb.totalRow + ")" : "No (row " + tb.totalRow + ")"; });
+  h.push("</tbody></table></div>");
+  h.push("<footer>Where your data went: nowhere. Both files were read in this browser window and nothing was uploaded. All arithmetic is in whole cents. This is a working paper to support your judgment; you remain responsible for the return and for any entry posted. Version " + VERSION + ".</footer>");
+  return h.join("");
+}
+
+/* ---------------------------------------------------------------- page */
+var state = { final: null, today: null, token: 0 };
+var $ = function (id) { return document.getElementById(id); };
+function showError(msg) { var e = $("error"); e.textContent = msg; e.hidden = !msg; }
+function setReport(r) {
+  var clean = {};
+  Object.keys(r).forEach(function (k) { if (k.charAt(0) !== "_") clean[k] = r[k]; });
+  window.__report = clean;
+}
+function extOf(name) { var m = /\.([^.]+)$/.exec(name || ""); return m ? m[1].toLowerCase() : ""; }
+function acceptFile(box, file) {
+  if (!file) return;
+  var ext = extOf(file.name);
+  if (["xlsx", "xlsm", "xls", "csv", "txt"].indexOf(ext) < 0) {
+    var what = ext === "pdf" ? "is a PDF" : ext ? "is a ." + ext + " file" : "has no file type";
+    var msg = "\"" + file.name + "\" " + what + ". I can only read Excel or CSV files (.xlsx, .xls, .xlsm, .csv, .txt). Export the trial balance from the accounting software or your workpapers as Excel or CSV and drop that here.";
+    state[box] = null; $("name-" + box).textContent = ""; $("drop-" + box).classList.remove("has");
+    try { $(box).value = ""; } catch (e) {}
+    showError(msg);
+    window.__report = { status: "ERROR", message: msg, refused: true };
+    return;
+  }
+  showError("");
+  var tok = ++state.token;
+  file.arrayBuffer().then(function (buf) {
+    state[box] = { name: file.name, buf: buf, ext: ext };
+    $("name-" + box).textContent = "✓ " + file.name;
+    $("drop-" + box).classList.add("has");
+    if (state.final && state.today) runFiles();
+  }).catch(function (e) { fail(e); });
+}
+function fail(e) {
+  var msg = "Something went wrong reading the files: " + (e && e.message ? e.message : String(e)) + ". Check that both are trial balances saved as Excel or CSV, then try again.";
+  $("result").hidden = true; $("start").hidden = false;
+  showError(msg);
+  window.__report = { status: "ERROR", message: msg };
+}
+function sheetRows(f) {
+  var wb;
+  if (f.ext === "csv" || f.ext === "txt") {
+    var text = new TextDecoder("utf-8").decode(new Uint8Array(f.buf)).replace(/^﻿/, "");
+    wb = XLSX.read(text, { type: "string", raw: true });
+  } else wb = XLSX.read(new Uint8Array(f.buf), { type: "array" });
+  var best = [];
+  wb.SheetNames.forEach(function (n) {
+    var rows = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: null, blankrows: true });
+    if (rows.length > best.length) best = rows;
+  });
+  return best;
+}
+function sameBytes(a, b) {
+  if (a.byteLength !== b.byteLength) return false;
+  var x = new Uint8Array(a), y = new Uint8Array(b);
+  for (var i = 0; i < x.length; i++) if (x[i] !== y[i]) return false;
+  return true;
+}
+function runFiles() {
+  try {
+    if (typeof XLSX === "undefined") throw new Error("the spreadsheet reader (SheetJS) did not load; check the internet connection and reload the page");
+    var same = sameBytes(state.final.buf, state.today.buf);
+    var F = { name: state.final.name, box: 1, tb: null }, T = { name: state.today.name, box: 2, tb: null };
+    try { F.tb = readTB(sheetRows(state.final)); T.tb = readTB(sheetRows(state.today)); }
+    catch (e) { if (!same) throw e; F.tb = F.tb || { accounts: [], unread: [] }; T.tb = T.tb || { accounts: [], unread: [] }; }
+    show(compare(F, T, same));
+  } catch (e) { fail(e); }
+}
+function runRows(fName, fRows, tName, tRows) {
+  try {
+    show(compare({ name: fName, box: 1, tb: readTB(fRows) }, { name: tName, box: 2, tb: readTB(tRows) }, false));
+  } catch (e) { fail(e); }
+}
+function show(rep) {
+  setReport(rep);
+  $("workpaper").innerHTML = render(rep);
+  $("start").hidden = true; $("result").hidden = false;
+  showError("");
+  window.scrollTo(0, 0);
+}
+function reset() {
+  state.final = null; state.today = null;
+  ["final", "today"].forEach(function (b) { try { $(b).value = ""; } catch (e) {} $("name-" + b).textContent = ""; $("drop-" + b).classList.remove("has"); });
+  $("workpaper").innerHTML = ""; $("result").hidden = true; $("start").hidden = false; showError("");
+}
+["final", "today"].forEach(function (box) {
+  var input = $(box), drop = $("drop-" + box);
+  input.addEventListener("change", function () { acceptFile(box, input.files && input.files[0]); });
+  ["dragenter", "dragover"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; acceptFile(box, f); });
+});
+window.addEventListener("dragover", function (e) { e.preventDefault(); });
+window.addEventListener("drop", function (e) { e.preventDefault(); });
+$("print").addEventListener("click", function () { window.print(); });
+$("restart").addEventListener("click", function (e) { e.preventDefault(); reset(); });
+
+/* ---------------------------------------------------------------- sample */
+var SAMPLE_FINAL = [
+  ["Sunrise Bakery LLC"],
+  ["Adjusted trial balance workpaper"],
+  ["As of December 31, 2025"],
+  [],
+  ["Acct", "Account", "Per books", "Adjustments", "Final"],
+  ["1000", "Checking", "18,420.00", "", "18,420.00"],
+  ["1200", "Accounts Receivable", "3,150.00", "", "3,150.00"],
+  ["1300", "Inventory", "4,800.00", "", "4,800.00"],
+  ["1500", "Equipment", "62,000.00", "", "62,000.00"],
+  ["1510", "Accumulated Depreciation", "(12,000.00)", "(6,000.00)", "(18,000.00)"],
+  ["2000", "Accounts Payable", "(5,260.00)", "", "(5,260.00)"],
+  ["2100", "Sales Tax Payable", "(1,140.00)", "", "(1,140.00)"],
+  ["2500", "Equipment Loan", "(28,500.00)", "", "(28,500.00)"],
+  ["3000", "Member Capital", "(10,000.00)", "", "(10,000.00)"],
+  ["3100", "Member Distributions", "24,000.00", "", "24,000.00"],
+  ["3900", "Retained Earnings", "(22,330.00)", "", "(22,330.00)"],
+  ["4000", "Sales", "(186,400.00)", "", "(186,400.00)"],
+  ["5000", "Cost of Goods Sold", "68,900.00", "", "68,900.00"],
+  ["6000", "Wages", "52,300.00", "", "52,300.00"],
+  ["6100", "Rent", "18,000.00", "", "18,000.00"],
+  ["6200", "Utilities", "6,240.00", "", "6,240.00"],
+  ["6300", "Insurance", "3,180.00", "", "3,180.00"],
+  ["6400", "Depreciation Expense", "-", "6,000.00", "6,000.00"],
+  ["6500", "Supplies", "2,760.00", "", "2,760.00"],
+  ["6600", "Interest Expense", "1,880.00", "", "1,880.00"],
+  ["", "Total", "0.00", "0.00", "0.00"]
+];
+var SAMPLE_TODAY = [
+  ["Sunrise Bakery LLC"],
+  ["Trial Balance"],
+  ["As of December 31, 2025"],
+  [],
+  [null, "Debit", "Credit"],
+  ["1000 Checking", "14,270.00", null],
+  ["1200 Accounts Receivable", "3,150.00", null],
+  ["1300 Inventory", "4,800.00", null],
+  ["1500 Equipment", "62,000.00", null],
+  ["1510 Accumulated Depreciation", null, "12,000.00"],
+  ["2000 Accounts Payable", null, "5,260.00"],
+  ["2100 Sales Tax Payable", null, "1,140.00"],
+  ["2500 Equipment Loan", null, "28,500.00"],
+  ["3000 Member Capital", null, "10,000.00"],
+  ["3100 Member Distributions", "24,000.00", null],
+  ["3900 Retained Earnings", null, "22,330.00"],
+  ["4000 Sales", null, "182,250.00"],
+  ["5000 Cost of Goods Sold", "68,900.00", null],
+  ["6000 Wages", "52,300.00", null],
+  ["6100 Rent", "18,000.00", null],
+  ["6200 Utilities", "6,240.00", null],
+  ["6300 Insurance", "3,180.00", null],
+  ["6500 Supplies", "2,760.00", null],
+  ["6600 Interest Expense", "1,880.00", null],
+  ["TOTAL", "$261,480.00", "$261,480.00"],
+  [],
+  ["Accrual Basis Thursday, November 12, 2026 09:41 AM GMT-05:00"]
+];
+$("sample").addEventListener("click", function (e) {
+  e.preventDefault();
+  runRows("Sunrise Bakery 2025 final TB (made-up sample).xlsx", SAMPLE_FINAL, "Sunrise Bakery Trial Balance from QuickBooks (made-up sample).xlsx", SAMPLE_TODAY);
+});
+</script>
+</body>
+</html>

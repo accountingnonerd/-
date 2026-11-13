@@ -125,4 +125,14 @@ and the Desktop and Xero layouts here have none. The rule is unproved until a la
 
 ## Rebuild from the prompt
 
-See the bottom of this file once the rebuild check has run.
+A fresh AI session was given only `REBUILD-PROMPT.md` (and the spreadsheet library) and told not to
+look at anything else. What it built was run through the same acceptance test.
+
+| Rebuild | Result | What went wrong | What changed in the prompt |
+|---|---|---|---|
+| 1 (`rebuild-check/rebuild-1.html`) | 18 of 22 cases, 325 of 334 checks | The correcting entry named accounts with their numbers ("1000 Checking"); the prompt never said otherwise. Every verdict, difference and amount was right. | Entry lines and accounts are named without their numbers. |
+| 2 (`rebuild-check/rebuild-2.html`) | **22 of 22 cases, 343 of 343 checks** | Nothing. | None. |
+
+"The same agent" means this: a build that passes these 22 cases. Rebuild 2 differs from the original
+in wording, layout and a few choices the prompt left open (for example, the codes it uses to say how it
+decided an account's type), and is the same agent by that test.
