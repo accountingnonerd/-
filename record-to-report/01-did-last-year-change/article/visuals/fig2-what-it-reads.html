@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:30px}
+.src{background:var(--ground);border-radius:10px;padding:18px 18px 16px}
+.src h2{font:700 19px/1.2 var(--display)}
+.src .k{font:400 15px/1.4 var(--text);color:var(--soft);margin-top:4px}
+.mini{margin-top:12px;background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:8px 10px;font:500 14px/1.6 var(--mono);color:var(--ink);white-space:pre}
+.mini i{font-style:normal;color:var(--faint)}
+.stops{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.stops .lab{font:600 13px/1 var(--text);letter-spacing:.1em;text-transform:uppercase;color:var(--alarm);margin-right:6px}
+.chip{font:500 15px/1 var(--text);padding:10px 12px;border-radius:6px;background:var(--alarm-tint);color:var(--alarm)}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">What it reads</div>
+  <h1>Two trial balances, one date, any of four layouts</h1>
+  <p class="sub">Box 1: your final, adjusted trial balance. Box 2: the client's trial balance for the same date, exported today.</p>
+  <div class="cols">
+    <div class="src"><h2>QuickBooks Online</h2><div class="k">Debit and Credit columns, basis in the footer</div><div class="mini">1000 Checking   48,215.37
+4000 Bakery Sales     <i>Cr</i> 512,640.25</div></div>
+    <div class="src"><h2>QuickBooks Desktop</h2><div class="k">"10100 · Checking", the date as "Dec 31, 25"</div><div class="mini">10100 · Checking  33,774.10
+40100 · Lab Fees:Crowns and Bridges</div></div>
+    <div class="src"><h2>Xero</h2><div class="k">Sections, and year-to-date columns beside the month's</div><div class="mini">Revenue
+Sales (200)  <i>YTD Cr</i> 384,116.50</div></div>
+    <div class="src"><h2>Your workpaper</h2><div class="k">Books, adjustments, final; whole dollars; signed or Dr/Cr pairs</div><div class="mini">Acct  Per books  Adjustments    Final
+1590   (31,560)      (8,000)  (39,560)</div></div>
+  </div>
+  <div class="stops"><span class="lab">It stops, and says why</span><span class="chip">different dates</span><span class="chip">cash against accrual</span><span class="chip">a cash-basis export that does not say so</span><span class="chip">a file that does not balance</span><span class="chip">the wrong client</span><span class="chip">a balance sheet, not a trial balance</span><span class="chip">a PDF</span></div>
+  <p class="source">Desktop and Xero layouts were built from the products' report layouts, not from real client exports. All figures are from invented test companies.</p>
+</div>
+</body></html>

@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="style.css">
+<style>
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:30px}
+.card{background:var(--ground);border-radius:10px;padding:22px 24px;border-left:8px solid var(--accent)}
+.card.bad{border-left-color:var(--alarm)}
+.what{font:600 13px/1 var(--text);letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.card h2{font:700 24px/1.2 var(--display);margin-top:10px}
+.card p{font:400 17px/1.45 var(--text);color:var(--soft);margin-top:8px}
+.card .ex{font:500 15px/1.4 var(--mono);color:var(--ink);margin-top:12px;background:var(--paper);padding:8px 10px;border-radius:6px}
+</style></head><body>
+<div class="frame">
+  <div class="kicker">One difference, five meanings</div>
+  <h1>Where an account moved tells you what to do</h1>
+  <p class="sub">The tool sorts every difference by the kind of account it is in, because each kind leads to a different decision.</p>
+  <div class="grid">
+    <div class="card bad"><div class="what">Income or expense account</div><h2>Last year's profit changed</h2><p>The return may be wrong. Was the change a mistake, or does last year need amending?</p><div class="ex">Bakery Sales  $4,250.00 lower</div></div>
+    <div class="card bad"><div class="what">Balance sheet account</div><h2>This year opens on the wrong number</h2><p>Opening cash, payables or fixed assets no longer agree with your final figures.</p><div class="ex">Checking  $4,250.00 lower</div></div>
+    <div class="card bad"><div class="what">Retained earnings</div><h2>An earlier year changed</h2><p>Something dated before last year was added, deleted or changed.</p><div class="ex">Retained Earnings  $2,400.00 lower</div></div>
+    <div class="card bad"><div class="what">Owners' accounts</div><h2>The K-1s may be wrong</h2><p>Profit does not move, but distributions and draws change Schedule M-2 and basis.</p><div class="ex">Shareholder Distributions  $5,000.00 higher</div></div>
+    <div class="card" style="grid-column:1 / span 2"><div class="what">Exactly your adjustment</div><h2>Your adjusting entry was never posted</h2><p>Not a mystery: a request to the client, or a correcting entry from you. One or the other, never both.</p><div class="ex">Accumulated Depreciation  $8,000.00: your credit, not in the books</div></div>
+  </div>
+  <p class="source">Examples from the test files. All companies are invented.</p>
+</div>
+</body></html>

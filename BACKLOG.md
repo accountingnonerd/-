@@ -22,11 +22,16 @@ killed ideas. A candidate is chosen only after it passes Stage 1 and the value t
   QuickBooks Payroll (with client data removed) and add them to the tests.
 
 ## 3. Record-to-Report (close)
+- **Built:** 01 Did last year change? (version 1.0.0).
 - **Month-over-month changes with client questions.** Flux software exists (FloQast,
-  Numeric and others) but is sold to larger finance teams.
-- **"Did last year change?"** Last year's final trial balance against this year's opening
-  balances, to catch books edited after the return was filed.
-- **Stale reconciling items.**
+  Numeric and others) for larger finance teams, and small-firm review tools (Xenett, listed at
+  $7.50 per client per month, Keeper) already do it inside QuickBooks Online and Xero. Needs a
+  gap those tools leave before it is built.
+- **Stale reconciling items.** The ledger's reconciliation report already lists uncleared
+  items with their dates.
+- **Did last year change? follow-ups** from its review: a test layout with an export date
+  and time above the column headings; real QuickBooks Desktop and Xero exports (client data
+  removed); tax-only adjustments marked as such in the workpaper.
 - **Financial statement footing and cross-tie.** Forums where this is discussed (Fishbowl,
   Going Concern) blocked automated reading. SEC EDGAR filings would be the test inputs.
 

@@ -581,11 +581,12 @@ function compare(F, T, info){
     var amt = money(Math.abs(b.diff)), hl = function(up){ return up ? "higher" : "lower"; };
     causes.push((bUp === pUp ? b.name + " and " + pl.name + " are both " + amt + " " + hl(bUp) : b.name + " is " + amt + " " + hl(bUp) + " and " + pl.name + " is " + amt + " " + hl(pUp)) + ": it looks like " + guess + ".");
   });
+  rep.plOnlyMoves = plCh.length > causes.length;
   if (plCh.length) {
     var niMove = -plCh.reduce(function(s, x){ return s + x.diff; }, 0);
     ex("CHANGED_PL", "stop", "Last year's income or expenses have changed in " + plCh.length + " account" + (plCh.length > 1 ? "s" : "") + " (" + list(plCh) + "). " +
       (niMove === 0 ? "Last year's profit is the same in total, but amounts moved between lines of the return." :
-       "Because of these changes, last year's profit in the books is " + money(Math.abs(niMove)) + (niMove > 0 ? " higher" : " lower") + " than on your final trial balance. If the change is right, last year's return may need amending (for a partnership under the centralized audit regime, an administrative adjustment request).") + (causes.length ? " " + causes.join(" ") : ""), { accounts: plCh.map(function(x){ return x.name; }) });
+       "Because of these changes, last year's profit in the books is " + money(Math.abs(niMove)) + (niMove > 0 ? " higher" : " lower") + " than on your final trial balance. If the change is right, last year's return may need amending (for a partnership, an administrative adjustment request).") + (causes.length ? " " + causes.join(" ") : ""), { accounts: plCh.map(function(x){ return x.name; }) });
   }
   if (bsCh.length) ex("CHANGED_BS", "stop", "The balance at the end of last year has changed in " + bsCh.length + " balance sheet account" + (bsCh.length > 1 ? "s" : "") + " (" + list(bsCh) +
     "). This year's opening balances no longer agree with your final trial balance, or with last year's Schedule L where one was filed.", { accounts: bsCh.map(function(x){ return x.name; }) });
@@ -755,7 +756,7 @@ function render(rep){
       o.push('<div class="scroll"><table class="v" id="entry"><thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th><th>Why</th></tr></thead><tbody>');
       rep.entry.lines.forEach(function(l){ o.push('<tr><td class="acct" data-l="Account">' + esc(l.account) + '</td><td class="num" data-l="Debit">' + (l.debit ? money(Math.round(l.debit * 100)) : "") + '</td><td class="num" data-l="Credit">' + (l.credit ? money(Math.round(l.credit * 100)) : "") + '</td><td data-l="Why">' + esc(l.why) + '</td></tr>'); });
       o.push('<tr class="sum"><td>Total</td><td class="num" data-l="Debit">' + money(Math.round(rep.entry.totalDebit * 100)) + '</td><td class="num" data-l="Credit">' + money(Math.round(rep.entry.totalCredit * 100)) + '</td><td>' + (rep.entry.totalDebit === rep.entry.totalCredit ? '<span class="tie-ok">balances</span>' : '<span class="tie-bad">does not balance</span>') + '</td></tr></tbody></table></div>');
-      if (rep.exceptions.some(function(e){ return e.code === "CHANGED_PL"; })) o.push('<p class="note">Amounts that only moved between income statement accounts need no entry, but they may change lines on last year’s return.</p>');
+      if (rep.plOnlyMoves) o.push('<p class="note">Amounts that only moved between income statement accounts need no entry, but they may change lines on last year’s return.</p>');
     }
   }
 

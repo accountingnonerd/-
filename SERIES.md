@@ -9,7 +9,7 @@ Series 1 takes the most painful step of each process; later series take the next
 |---|---|---|---|
 | Agent 1 | Procure-to-Pay | Who gets a 1099? | published 2026-11-11 |
 | Agent 2 | Hire-to-Retire | Do the 941s match the W-3? | published 2026-11-12 |
-| Agent 3 | Record-to-Report | to be chosen in Stage 1 | next |
+| Agent 3 | Record-to-Report | Did last year change? | built 2026-11-13, awaiting approval to publish |
 | Agent 4 | Order-to-Cash | to be chosen in Stage 1 | |
 | Agent 5 | Acquire-to-Retire | to be chosen in Stage 1 | |
 
@@ -87,11 +87,11 @@ The order is the release order. Each series starts in the season when its work p
 - **Left by hand:** explaining month-over-month swings and turning them into questions
   for the client; noticing that last year's closed books were changed after the return
   was filed; chasing reconciling items that have sat for months.
-- **Candidates:**
-  - month-over-month changes with client questions;
-  - "did last year change?": last year's final trial balance against this year's
-    opening balances;
-  - stale reconciling items.
+- **Episodes:**
+  - 01 [Did last year change?](record-to-report/01-did-last-year-change/), built, version 1.0.0;
+  - candidate: month-over-month changes with client questions (small-firm review tools
+    such as Xenett and Keeper already do this inside QuickBooks Online and Xero);
+  - candidate: stale reconciling items.
 
 ### 4. Order-to-Cash
 - **She already has:** invoicing in the ledger, Stripe, Square or Shopify dashboards, and
