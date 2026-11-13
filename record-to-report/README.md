@@ -11,7 +11,7 @@ Transactions  ->  Bank reconciliations  ->  Adjusting entries  ->  Review  ->  S
 
 | No. | Tool | Step | What it adds to what she already has | Version | Date |
 |---|---|---|---|---|---|
-| 01 | [Did last year change?](01-did-last-year-change/) | Opening a new year | Compares last year's final trial balance from her file with the client's books as they stand today, for the same date. Lists every account that moved, says whether last year's profit changed, finds the adjusting entries the client never posted, and drafts the entry that puts the opening balances back. | 1.0.0 | 2026-11-13 |
+| 01 | [Did last year change?](01-did-last-year-change/) | Opening a new year | Compares last year's final trial balance from her file with the client's books as they stand today, for the same date. Lists every account that moved, says whether last year's profit changed, finds the adjusting entries the client never posted, and drafts the entry that puts the opening balances back. | 1.0.0 | 2026-11-13, [published](https://www.linkedin.com/feed/update/urn:li:ugcPost:7527075530622431233) |
 
 ## Stage 1: how episode 01 was chosen
 

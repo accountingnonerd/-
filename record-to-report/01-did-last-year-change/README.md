@@ -1,6 +1,6 @@
 # Record-to-Report, episode 01: Did last year change?
 
-Version 1.0.0, 2026-11-13. Series 1, Agent 3. Part of [Record-to-Report](../README.md), which
+Version 1.0.0, 2026-11-13. Published on LinkedIn on 2026-11-13 as Series 1, Agent 3: [the post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7527075530622431233), with the full article attached as a PDF. Part of [Record-to-Report](../README.md), which
 holds the Stage 1 evidence and the value test this tool had to pass.
 
 ## The problem

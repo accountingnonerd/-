@@ -1,5 +1,5 @@
 <!--
-DRAFT FOR APPROVAL. Not published.
+Published on LinkedIn 2026-11-13: https://www.linkedin.com/feed/update/urn:li:ugcPost:7527075530622431233 (post text in LINKEDIN-POST.txt, this article attached as year-that-wont-stay-closed-article.pdf).
 Series: One Painful Problem, Series 1, Agent 3 (Record-to-Report: the close).
 Cover image: images/cover.png (1920 x 1080). Inline images: images/fig1 to fig5, each placed where it appears below.
 -->

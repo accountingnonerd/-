@@ -9,7 +9,7 @@ In our test file, opening cash was $4,250 short of the Schedule L that was filed
 What this free agent gives you:
 → Drop in last year's final trial balance and the client's trial balance for the same date, exported today (QuickBooks Online, Desktop, Xero, or your own workpaper)
 → Every account that moved, and what it means: last year's profit changed, an earlier year changed, a distribution changed the K-1s, or your adjusting entry was simply never posted
-→ The likely cause in plain words: "Checking and Bakery Sales are both $4,250.00 lower: it looks like a deposit in last year was deleted"
+→ The likely cause in plain words: "Checking and Bakery Sales are both $4,250.00 lower: it looks like a deposit or sale in last year was deleted or voided"
 → A correcting entry for the new year, with the conditions for posting it, and the question to send the client
 → Stops when the two files can't be compared: different dates, cash against accrual, the wrong client
 → Runs on your own computer. Nothing is uploaded.
