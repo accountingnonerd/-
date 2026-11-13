@@ -276,16 +276,17 @@ def write_workpaper(path, company, accts, unadj, aje, title="Trial balance, fina
             cell.number_format = fmt
     wb.save(path)
 
-def write_postclosing(path, company, accts):
+def write_postclosing(path, company, accts, close_dist=False):
     """A post-closing trial balance from the accountant's file: income and expenses already closed
     into retained earnings, so only balance sheet accounts remain."""
     wb = Workbook(); ws = wb.active; ws.title = "Post-closing"
     for r in [[company], ["Post-closing trial balance"], ["December 31, 2025"], [], ["Account", "Debit", "Credit"]]:
         ws.append(r)
-    ni = sum(a["cents"] for a in accts if a["kind"] == "PL")
+    closes = lambda a: a["kind"] == "PL" or (close_dist and "Distribution" in a["name"])
+    ni = sum(a["cents"] for a in accts if closes(a))
     td = tc = 0
     for a in accts:
-        if a["kind"] == "PL": continue
+        if closes(a): continue
         c = a["cents"] + (ni if a["kind"] == "RE" else 0)
         if c > 0: ws.append([a["name"], c / 100, None]); td += c
         else: ws.append([a["name"], None, -c / 100]); tc += -c
@@ -335,7 +336,7 @@ def write_balance_sheet(path, company, accts):
 
 # ---------------------------------------------------------------- the answer key, from the model
 
-def key_for(final, today, *, rounding_ok=False, aje=None, post_closing=False, renames=None, merges=None, out_of_balance=False):
+def key_for(final, today, *, rounding_ok=False, aje=None, post_closing=False, renames=None, merges=None, out_of_balance=False, withhold=False):
     """Works out what the tool should report, from the model.
     final, today: lists of accounts (the same accounts; renames/merges given separately).
     Returns differences, net income change, retained earnings change and the entry."""
@@ -358,10 +359,11 @@ def key_for(final, today, *, rounding_ok=False, aje=None, post_closing=False, re
         if n in aje: fc = whole(by_f[n]["cents"]) + aje[n] if rounding_ok else fc
         d = tc - fc
         if d == 0: continue
-        if n in aje and abs(d + aje[n]) < 100:
+        if n in aje and abs(d + aje[n]) <= (50 if rounding_ok else 0):
             diffs.append({"account": n, "kind": kind, "final": fc / 100, "today": tc / 100, "diff": d / 100, "aje": True, "ajeAmount": aje[n] / 100})
             continue
-        if rounding_ok and abs(d) < 100:
+        # rounding: 50 cents per account at most; up to $5 where the workpaper put its rounding (retained earnings)
+        if rounding_ok and (abs(d) <= 50 or (kind == "RE" and abs(d) <= 500)):
             rounding += d; continue
         diffs.append({"account": n, "kind": kind, "final": fc / 100, "today": tc / 100, "diff": d / 100})
     # merges and guessed renames: the pair is explained, not a change
@@ -379,7 +381,7 @@ def key_for(final, today, *, rounding_ok=False, aje=None, post_closing=False, re
     re_change = None if post_closing else (-(re_t) - -(re_f)) / 100   # positive: retained earnings higher today
     # the entry, dated the first day of the new year: put every balance sheet account back to final
     lines = []
-    if not out_of_balance:
+    if not out_of_balance and not withhold:
         for d in real:
             if d["kind"] != "BS": continue
             # final minus today; for an adjustment never posted, the adjustment itself (no rounding cents)
@@ -477,7 +479,7 @@ supplies = find(T, "Office Supplies")["cents"]; change(T, "Office Expenses", sup
 write_qbo(P("07-final.xlsx"), "Copper Kettle Catering", AS_OF, C7, numbered=False, stamp=STAMP_LAST)
 write_qbo(P("07-today.xlsx"), "Copper Kettle Catering", AS_OF, T, numbered=False, stamp=STAMP_NOW)
 k = key_for(C7, T, merges=[("Office Supplies", "Office Expenses")])
-case("07", "Office Supplies merged into Office Expenses", "ugly", "07-final.xlsx", "07-today.xlsx", "AGREES",
+case("07", "Office Supplies merged into Office Expenses", "ugly", "07-final.xlsx", "07-today.xlsx", "CHANGED",
      ["MERGED_GUESS"], {**k, "asOf": "2025-12-31", "rows": {"final": n(C7), "today": n(T)}})
 
 # ---- 08 the wrong date: today's report run for December 31, 2026
@@ -547,6 +549,77 @@ write_qbo(P("16-books.xlsx"), "Harbor Light Bakery LLC", AS_OF, T, stamp=STAMP_N
 k = key_for(H16, T, rounding_ok=True, aje=aje16)
 case("16", "Files put in the wrong boxes (workpaper given as today's)", "ugly", "16-books.xlsx", "16-workpaper.xlsx", "AGREES",
      ["SWAPPED", "ROUNDING"], {**k, "asOf": "2025-12-31", "rows": {"final": n(H16), "today": n(T)}})
+
+# ---- 17 planted: a distribution added to last year after filing (an owner's account)
+H17 = harbor(); T = clone(H17); change(T, "Shareholder Distributions", 500000); change(T, "Checking", -500000)
+write_qbo(P("17-final.xlsx"), "Harbor Light Bakery LLC", AS_OF, H17, stamp=STAMP_LAST)
+write_qbo(P("17-today.xlsx"), "Harbor Light Bakery LLC", AS_OF, T, stamp=STAMP_NOW)
+k = key_for(H17, T, withhold=True)
+case("17", "Planted: a $5,000 distribution added to last year after filing", "planted", "17-final.xlsx", "17-today.xlsx", "CHANGED",
+     ["OWNER_CHANGED", "CHANGED_BS"], {**k, "asOf": "2025-12-31", "rows": {"final": n(H17), "today": n(T)}})
+
+# ---- 18 a post-closing final with distributions closed too (textbook practice)
+H18 = harbor()
+write_postclosing(P("18-final-postclosing.xlsx"), "Harbor Light Bakery LLC", H18, close_dist=True)
+write_qbo(P("18-today.xlsx"), "Harbor Light Bakery LLC", AS_OF, H18, stamp=STAMP_NOW)
+k = key_for(H18, H18, post_closing=True)
+case("18", "Post-closing final with distributions closed into retained earnings", "ugly", "18-final-postclosing.xlsx", "18-today.xlsx", "AGREES",
+     ["POST_CLOSING"], {**k, "asOf": "2025-12-31", "rows": {"final": n(H18, closed=True) - 1, "today": n(H18)}})
+
+# ---- 19 her workpaper with Debit and Credit pairs, whole dollars, rounding put in retained earnings; one entry not posted
+R19 = ridgeview()
+aje19 = {"Depreciation Expense": 900000, "Accumulated Depreciation": -900000}
+def write_workpaper_pairs(path, company, accts, aje):
+    """Unadjusted, Adjustments and Adjusted, each as a Debit and Credit pair; whole dollars; the
+    rounding that keeps the whole-dollar figures in balance is put in retained earnings."""
+    fin = {a["name"]: whole(a["cents"]) + aje.get(a["name"], 0) for a in accts}
+    una = {a["name"]: whole(a["cents"]) for a in accts}
+    plug = -sum(fin.values())
+    re = [a["name"] for a in accts if a["kind"] == "RE"][0]
+    fin[re] += plug; una[re] += plug
+    wb = Workbook(); ws = wb.active; ws.title = "ATB"
+    for r in [[company], ["Adjusted trial balance"], ["December 31, 2025"], [],
+              ["Acct", "Account", "Unadjusted Dr", "Unadjusted Cr", "Adjustments Dr", "Adjustments Cr", "Adjusted Dr", "Adjusted Cr"]]:
+        ws.append(r)
+    tot = [0] * 6
+    for a in accts:
+        u, j, f = una[a["name"]], aje.get(a["name"], 0), fin[a["name"]]
+        cells = [u if u > 0 else 0, -u if u < 0 else 0, j if j > 0 else 0, -j if j < 0 else 0, f if f > 0 else 0, -f if f < 0 else 0]
+        tot = [t + c for t, c in zip(tot, cells)]
+        ws.append([int(a["num"]), a["name"]] + [c // 100 if c else None for c in cells])
+    ws.append([None, "Totals"] + [t // 100 for t in tot])
+    for row in ws.iter_rows(min_row=6):
+        for cell in row[2:]: cell.number_format = '#,##0'
+    wb.save(path)
+    return plug
+plug = write_workpaper_pairs(P("19-final-workpaper.xlsx"), "Ridgeview Dental Lab, Inc.", R19, aje19)
+assert abs(plug) <= 300, plug
+F19 = clone(R19); find(F19, "Retained Earnings")["cents"] = whole(find(F19, "Retained Earnings")["cents"]) + plug
+write_qbd(P("19-today.xlsx"), R19)
+k = key_for(F19, R19, rounding_ok=True, aje=aje19)
+case("19", "Her workpaper in Debit/Credit pairs, rounding put in retained earnings; depreciation not posted", "ugly", "19-final-workpaper.xlsx", "19-today.xlsx", "CHANGED",
+     ["AJE_NOT_POSTED", "ROUNDING"], {**k, "asOf": "2025-12-31", "rows": {"final": n(R19), "today": n(R19)}})
+
+# ---- 20 a cash-basis export that does not say so (QuickBooks Desktop prints the basis outside the cells)
+R20 = ridgeview(); T = clone(R20)
+change(T, "Accounts Receivable", -4128855); change(T, "Lab Fees:Crowns and Bridges", 4128855)
+change(T, "Accounts Payable", 1196577); change(T, "Cost of Goods Sold:Materials", -1196577)
+write_qbd(P("20-final.xlsx"), R20); write_qbd(P("20-today-cash.xlsx"), T)
+case("20", "A cash-basis export that does not say it is cash basis", "ugly", "20-final.xlsx", "20-today-cash.xlsx", "NOT_COMPARABLE", ["BASIS_SUSPECTED"])
+
+# ---- 21 the wrong client's file
+write_qbo(P("21-final.xlsx"), "Harbor Light Bakery LLC", AS_OF, harbor(), stamp=STAMP_LAST)
+write_qbo(P("21-today-other-client.xlsx"), "Copper Kettle Catering", AS_OF, copper(), numbered=False, stamp=STAMP_NOW)
+case("21", "The wrong client's file in box 2", "ugly", "21-final.xlsx", "21-today-other-client.xlsx", "NOT_COMPARABLE", ["WRONG_CLIENT", "COMPANY_DIFFERS"])
+
+# ---- 22 planted: all of last year's meals moved into office expenses (not a merge: the meals limit is lost)
+C22 = copper(); T = clone(C22)
+meals = find(T, "Meals")["cents"]; change(T, "Office Expenses", meals); T = [a for a in T if a["name"] != "Meals"]
+write_qbo(P("22-final.xlsx"), "Copper Kettle Catering", AS_OF, C22, numbered=False, stamp=STAMP_LAST)
+write_qbo(P("22-today.xlsx"), "Copper Kettle Catering", AS_OF, T, numbered=False, stamp=STAMP_NOW)
+k = key_for(C22, T)
+case("22", "Planted: all of last year's meals moved into office expenses", "planted", "22-final.xlsx", "22-today.xlsx", "CHANGED",
+     ["CHANGED_PL"], {**k, "asOf": "2025-12-31", "rows": {"final": n(C22), "today": n(T)}})
 
 with open(os.path.join(HERE, "answer-key.json"), "w") as f:
     json.dump(KEY, f, indent=1)

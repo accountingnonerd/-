@@ -291,7 +291,7 @@
    "final": "07-final.xlsx",
    "today": "07-today.xlsx"
   },
-  "status": "AGREES",
+  "status": "CHANGED",
   "exceptions": [
    "MERGED_GUESS"
   ],
@@ -509,6 +509,187 @@
   "asOf": "2025-12-31",
   "rows": {
    "final": 33,
+   "today": 33
+  }
+ },
+ "17": {
+  "title": "Planted: a $5,000 distribution added to last year after filing",
+  "kind": "planted",
+  "files": {
+   "final": "17-final.xlsx",
+   "today": "17-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_BS",
+   "OWNER_CHANGED"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Checking",
+    "kind": "BS",
+    "final": 48215.37,
+    "today": 43215.37,
+    "diff": -5000.0
+   },
+   {
+    "account": "Shareholder Distributions",
+    "kind": "BS",
+    "final": 60000.0,
+    "today": 65000.0,
+    "diff": 5000.0
+   }
+  ],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 33,
+   "today": 33
+  }
+ },
+ "18": {
+  "title": "Post-closing final with distributions closed into retained earnings",
+  "kind": "ugly",
+  "files": {
+   "final": "18-final-postclosing.xlsx",
+   "today": "18-today.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [
+   "POST_CLOSING"
+  ],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": null,
+  "retainedEarningsChange": null,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 14,
+   "today": 33
+  }
+ },
+ "19": {
+  "title": "Her workpaper in Debit/Credit pairs, rounding put in retained earnings; depreciation not posted",
+  "kind": "ugly",
+  "files": {
+   "final": "19-final-workpaper.xlsx",
+   "today": "19-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "AJE_NOT_POSTED",
+   "ROUNDING"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Accumulated Depreciation",
+    "kind": "BS",
+    "final": -77712.0,
+    "today": -68712.0,
+    "diff": 9000.0,
+    "aje": true,
+    "ajeAmount": -9000.0
+   },
+   {
+    "account": "Depreciation Expense",
+    "kind": "PL",
+    "final": 30400.0,
+    "today": 21400.0,
+    "diff": -9000.0,
+    "aje": true,
+    "ajeAmount": 9000.0
+   }
+  ],
+  "netIncomeChange": 8999.91,
+  "retainedEarningsChange": 0.03,
+  "rounding": 0.0,
+  "entry": [
+   {
+    "account": "Accumulated Depreciation",
+    "debit": 0,
+    "credit": 9000.0
+   },
+   {
+    "account": "Retained Earnings",
+    "debit": 9000.0,
+    "credit": 0
+   }
+  ],
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 28,
+   "today": 28
+  }
+ },
+ "20": {
+  "title": "A cash-basis export that does not say it is cash basis",
+  "kind": "ugly",
+  "files": {
+   "final": "20-final.xlsx",
+   "today": "20-today-cash.xlsx"
+  },
+  "status": "NOT_COMPARABLE",
+  "exceptions": [
+   "BASIS_SUSPECTED"
+  ],
+  "noOtherExceptions": true
+ },
+ "21": {
+  "title": "The wrong client's file in box 2",
+  "kind": "ugly",
+  "files": {
+   "final": "21-final.xlsx",
+   "today": "21-today-other-client.xlsx"
+  },
+  "status": "NOT_COMPARABLE",
+  "exceptions": [
+   "COMPANY_DIFFERS",
+   "WRONG_CLIENT"
+  ],
+  "noOtherExceptions": true
+ },
+ "22": {
+  "title": "Planted: all of last year's meals moved into office expenses",
+  "kind": "planted",
+  "files": {
+   "final": "22-final.xlsx",
+   "today": "22-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_PL"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Meals",
+    "kind": "PL",
+    "final": 935.2,
+    "today": 0.0,
+    "diff": -935.2
+   },
+   {
+    "account": "Office Expenses",
+    "kind": "PL",
+    "final": 1677.44,
+    "today": 2612.64,
+    "diff": 935.2
+   }
+  ],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 34,
    "today": 33
   }
  }
