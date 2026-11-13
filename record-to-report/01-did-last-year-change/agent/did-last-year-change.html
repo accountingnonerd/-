@@ -311,7 +311,7 @@ function readTB(rows, fileName){
     if (cols.ajeDr !== undefined || cols.ajeCr !== undefined) a.aje = (amt.ajeDr || 0) - (amt.ajeCr || 0);
     accounts.push(a);
   }
-  // as-of date: a line that says "as of"/"as at", then the column headings, then any other title line
+  // as-of date: a line that says "as of"/"as at", then any other cell above the headings, then the headings
   // (never a footer: QuickBooks footers carry the export date and time)
   var asOf = null, dateFrom = "";
   titleLines.forEach(function(l){ if (!asOf && /\bas (of|at)\b/i.test(l)) { asOf = findDate(l); dateFrom = l; } });
@@ -730,7 +730,7 @@ function render(rep){
   if (rep.status !== "NOT_COMPARABLE") o.push('<div class="sign"><label>Prepared by<input id="preparedBy" autocomplete="off"></label><label>Date<input id="preparedOn" autocomplete="off"></label>' +
          '<label>Reviewed by<input id="reviewedBy" autocomplete="off"></label><label>Date<input id="reviewedOn" autocomplete="off"></label></div></div>');
   o.push('<div class="verdict ' + v.cls + '" id="verdict">' + esc(v.head) + '<span class="sub">' + esc(v.sub) + '</span></div>');
-  var stops = rep.exceptions.filter(function(e){ return ["OUT_OF_BALANCE", "TOTAL_MISMATCH", "UNREAD_ROWS", "NOT_A_TB", "DATE_MISMATCH", "BASIS_MISMATCH", "SAME_FILE"].indexOf(e.code) >= 0; });
+  var stops = rep.exceptions.filter(function(e){ return ["OUT_OF_BALANCE", "TOTAL_MISMATCH", "UNREAD_ROWS", "NOT_A_TB", "DATE_MISMATCH", "BASIS_MISMATCH", "BASIS_SUSPECTED", "SAME_FILE", "WRONG_CLIENT"].indexOf(e.code) >= 0; });
   o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
 
   // check these first

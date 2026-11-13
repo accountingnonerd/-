@@ -105,7 +105,7 @@ function compare(key, rep) {
     } catch (e) { errors.push(String(e).split("\n")[0]); }
     const ms = Date.now() - t0;
     const checks = compare(key, rep);
-    const wantStop = key.exceptions.some((c) => ["OUT_OF_BALANCE", "TOTAL_MISMATCH", "NOT_A_TB", "DATE_MISMATCH", "BASIS_MISMATCH", "SAME_FILE"].includes(c));
+    const wantStop = key.exceptions.some((c) => ["OUT_OF_BALANCE", "TOTAL_MISMATCH", "UNREAD_ROWS", "NOT_A_TB", "DATE_MISMATCH", "BASIS_MISMATCH", "BASIS_SUSPECTED", "SAME_FILE", "WRONG_CLIENT"].includes(c));
     checks.push({ what: wantStop ? "shows the stop banner" : "shows no stop banner", expected: wantStop, got: !!shown.stop, ok: wantStop === !!shown.stop });
     const vOk = { AGREES: /still agree/i, CHANGED: /changed|do not have/i, NOT_COMPARABLE: /cannot compare/i }[key.status].test(shown.verdict || "");
     checks.push({ what: "verdict on screen matches the status", expected: key.status, got: (shown.verdict || "").split("\n")[0], ok: vOk });
