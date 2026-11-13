@@ -1,0 +1,515 @@
+{
+ "01": {
+  "title": "Nothing changed (QuickBooks Online)",
+  "kind": "clean",
+  "files": {
+   "final": "01-final.xlsx",
+   "today": "01-today.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 33,
+   "today": 33
+  }
+ },
+ "02": {
+  "title": "Planted: a December deposit deleted after filing",
+  "kind": "planted",
+  "files": {
+   "final": "02-final.xlsx",
+   "today": "02-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_BS",
+   "CHANGED_PL"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Checking",
+    "kind": "BS",
+    "final": 48215.37,
+    "today": 43965.37,
+    "diff": -4250.0
+   },
+   {
+    "account": "Bakery Sales",
+    "kind": "PL",
+    "final": -512640.25,
+    "today": -508390.25,
+    "diff": 4250.0
+   }
+  ],
+  "netIncomeChange": -4250.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": [
+   {
+    "account": "Checking",
+    "debit": 4250.0,
+    "credit": 0
+   },
+   {
+    "account": "Retained Earnings",
+    "debit": 0,
+    "credit": 4250.0
+   }
+  ],
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 33,
+   "today": 33
+  }
+ },
+ "03": {
+  "title": "Planted: a backdated bill, and office supplies moved to meals",
+  "kind": "planted",
+  "files": {
+   "final": "03-final.xlsx",
+   "today": "03-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_BS",
+   "CHANGED_PL"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Accounts Payable (A/P)",
+    "kind": "BS",
+    "final": -5088.33,
+    "today": -6948.33,
+    "diff": -1860.0
+   },
+   {
+    "account": "Meals",
+    "kind": "PL",
+    "final": 935.2,
+    "today": 1575.2,
+    "diff": 640.0
+   },
+   {
+    "account": "Office Supplies",
+    "kind": "PL",
+    "final": 1163.05,
+    "today": 523.05,
+    "diff": -640.0
+   },
+   {
+    "account": "Repairs & Maintenance",
+    "kind": "PL",
+    "final": 4126.5,
+    "today": 5986.5,
+    "diff": 1860.0
+   }
+  ],
+  "netIncomeChange": -1860.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": [
+   {
+    "account": "Accounts Payable (A/P)",
+    "debit": 1860.0,
+    "credit": 0
+   },
+   {
+    "account": "Retained Earnings",
+    "debit": 0,
+    "credit": 1860.0
+   }
+  ],
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 34,
+   "today": 34
+  }
+ },
+ "04": {
+  "title": "Planted: a 2024 equipment purchase re-entered as an expense (Desktop)",
+  "kind": "planted",
+  "files": {
+   "final": "04-final.xlsx",
+   "today": "04-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_BS",
+   "PRIOR_YEARS_CHANGED"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Furniture and Equipment",
+    "kind": "BS",
+    "final": 122780.0,
+    "today": 120380.0,
+    "diff": -2400.0
+   },
+   {
+    "account": "Retained Earnings",
+    "kind": "RE",
+    "final": -7079.03,
+    "today": -4679.03,
+    "diff": 2400.0
+   }
+  ],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": -2400.0,
+  "rounding": 0.0,
+  "entry": [
+   {
+    "account": "Furniture and Equipment",
+    "debit": 2400.0,
+    "credit": 0
+   },
+   {
+    "account": "Retained Earnings",
+    "debit": 0,
+    "credit": 2400.0
+   }
+  ],
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 28,
+   "today": 28
+  }
+ },
+ "05": {
+  "title": "Her adjusting entries never posted; workpaper in whole dollars",
+  "kind": "ugly",
+  "files": {
+   "final": "05-final-workpaper.xlsx",
+   "today": "05-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "AJE_NOT_POSTED",
+   "ROUNDING"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Accumulated Depreciation",
+    "kind": "BS",
+    "final": -39560.0,
+    "today": -31560.0,
+    "diff": 8000.0,
+    "aje": true,
+    "ajeAmount": -8000.0
+   },
+   {
+    "account": "Accrued Wages",
+    "kind": "BS",
+    "final": -3150.0,
+    "today": 0.0,
+    "diff": 3150.0,
+    "aje": true,
+    "ajeAmount": -3150.0
+   },
+   {
+    "account": "Depreciation Expense",
+    "kind": "PL",
+    "final": 23780.0,
+    "today": 15780.0,
+    "diff": -8000.0,
+    "aje": true,
+    "ajeAmount": 8000.0
+   },
+   {
+    "account": "Wages",
+    "kind": "PL",
+    "final": 185550.0,
+    "today": 182400.0,
+    "diff": -3150.0,
+    "aje": true,
+    "ajeAmount": 3150.0
+   }
+  ],
+  "netIncomeChange": 11150.56,
+  "retainedEarningsChange": -0.5,
+  "rounding": 0.0,
+  "entry": [
+   {
+    "account": "Accumulated Depreciation",
+    "debit": 0,
+    "credit": 8000.0
+   },
+   {
+    "account": "Accrued Wages",
+    "debit": 0,
+    "credit": 3150.0
+   },
+   {
+    "account": "Retained Earnings",
+    "debit": 11150.0,
+    "credit": 0
+   }
+  ],
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 34,
+   "today": 33
+  }
+ },
+ "06": {
+  "title": "Xero: one account renamed, nothing else changed",
+  "kind": "ugly",
+  "files": {
+   "final": "06-final.xlsx",
+   "today": "06-today.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [
+   "RENAMED"
+  ],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 28,
+   "today": 28
+  }
+ },
+ "07": {
+  "title": "Office Supplies merged into Office Expenses",
+  "kind": "ugly",
+  "files": {
+   "final": "07-final.xlsx",
+   "today": "07-today.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [
+   "MERGED_GUESS"
+  ],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 34,
+   "today": 33
+  }
+ },
+ "08": {
+  "title": "Today's report run for the wrong year",
+  "kind": "ugly",
+  "files": {
+   "final": "08-final.xlsx",
+   "today": "08-today.xlsx"
+  },
+  "status": "NOT_COMPARABLE",
+  "exceptions": [
+   "DATE_MISMATCH"
+  ],
+  "noOtherExceptions": true
+ },
+ "09": {
+  "title": "Today's report on cash basis, last year's on accrual",
+  "kind": "ugly",
+  "files": {
+   "final": "09-final.xlsx",
+   "today": "09-today.xlsx"
+  },
+  "status": "NOT_COMPARABLE",
+  "exceptions": [
+   "BASIS_MISMATCH"
+  ],
+  "noOtherExceptions": true
+ },
+ "10": {
+  "title": "Planted: a 2025 check voided; last year's CSV has a mistyped total and no date",
+  "kind": "planted",
+  "files": {
+   "final": "10-final.csv",
+   "today": "10-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_BS",
+   "CHANGED_PL",
+   "DATE_UNKNOWN",
+   "TOTAL_MISMATCH"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Checking",
+    "kind": "BS",
+    "final": 18772.4,
+    "today": 19747.4,
+    "diff": 975.0
+   },
+   {
+    "account": "Advertising & Marketing",
+    "kind": "PL",
+    "final": 2880.0,
+    "today": 1905.0,
+    "diff": -975.0
+   }
+  ],
+  "netIncomeChange": 975.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": [
+   {
+    "account": "Checking",
+    "debit": 0,
+    "credit": 975.0
+   },
+   {
+    "account": "Retained Earnings",
+    "debit": 975.0,
+    "credit": 0
+   }
+  ],
+  "rows": {
+   "final": 34,
+   "today": 34
+  }
+ },
+ "11": {
+  "title": "Last year's file is a post-closing trial balance",
+  "kind": "ugly",
+  "files": {
+   "final": "11-final-postclosing.xlsx",
+   "today": "11-today.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [
+   "POST_CLOSING"
+  ],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": null,
+  "retainedEarningsChange": null,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 13,
+   "today": 28
+  }
+ },
+ "12": {
+  "title": "Account numbers turned off since last year; one account renamed",
+  "kind": "ugly",
+  "files": {
+   "final": "12-final.xlsx",
+   "today": "12-today.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [
+   "RENAMED_GUESS"
+  ],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 33,
+   "today": 33
+  }
+ },
+ "13": {
+  "title": "Planted: the client's books do not balance (Desktop)",
+  "kind": "planted",
+  "files": {
+   "final": "13-final.xlsx",
+   "today": "13-today.xlsx"
+  },
+  "status": "CHANGED",
+  "exceptions": [
+   "CHANGED_BS",
+   "OUT_OF_BALANCE"
+  ],
+  "noOtherExceptions": true,
+  "differences": [
+   {
+    "account": "Undeposited Funds",
+    "kind": "BS",
+    "final": 1860.0,
+    "today": 1985.0,
+    "diff": 125.0
+   }
+  ],
+  "netIncomeChange": 0.0,
+  "retainedEarningsChange": 0.0,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 28,
+   "today": 28
+  }
+ },
+ "14": {
+  "title": "The wrong report: a balance sheet in place of a trial balance",
+  "kind": "ugly",
+  "files": {
+   "final": "14-final.xlsx",
+   "today": "14-today-balance-sheet.xlsx"
+  },
+  "status": "NOT_COMPARABLE",
+  "exceptions": [
+   "NOT_A_TB"
+  ],
+  "noOtherExceptions": true
+ },
+ "15": {
+  "title": "The same file given twice",
+  "kind": "ugly",
+  "files": {
+   "final": "15-same.xlsx",
+   "today": "15-same.xlsx"
+  },
+  "status": "NOT_COMPARABLE",
+  "exceptions": [
+   "SAME_FILE"
+  ],
+  "noOtherExceptions": true
+ },
+ "16": {
+  "title": "Files put in the wrong boxes (workpaper given as today's)",
+  "kind": "ugly",
+  "files": {
+   "final": "16-books.xlsx",
+   "today": "16-workpaper.xlsx"
+  },
+  "status": "AGREES",
+  "exceptions": [
+   "ROUNDING",
+   "SWAPPED"
+  ],
+  "noOtherExceptions": true,
+  "differences": [],
+  "netIncomeChange": 0.56,
+  "retainedEarningsChange": -0.5,
+  "rounding": 0.0,
+  "entry": null,
+  "asOf": "2025-12-31",
+  "rows": {
+   "final": 33,
+   "today": 33
+  }
+ }
+}
