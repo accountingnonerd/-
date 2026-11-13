@@ -140,14 +140,14 @@ table.src td,table.src th{padding:4px 8px}
     <label class="drop" id="drop-final" for="final">
       <span class="n">1</span>
       <strong>Last year's final trial balance</strong>
-      <span>The one the return was prepared from. Drop it here, or click to choose it.</span>
+      <span>Your adjusted trial balance, after your adjusting entries: the one the return was prepared from. Excel or CSV. Drop it here, or click to choose it.</span>
       <span class="got-name" id="name-final"></span>
       <input type="file" id="final" accept=".csv,.txt,.xlsx,.xls,.xlsm">
     </label>
     <label class="drop" id="drop-today" for="today">
       <span class="n">2</span>
       <strong>The same date, from the client's books today</strong>
-      <span>A trial balance for the last day of last year, exported today. Drop it here, or click.</span>
+      <span>A trial balance for the last day of last year, exported today. Excel or CSV. Drop it here, or click.</span>
       <span class="got-name" id="name-today"></span>
       <input type="file" id="today" accept=".csv,.txt,.xlsx,.xls,.xlsm">
     </label>
@@ -162,7 +162,7 @@ table.src td,table.src th{padding:4px 8px}
     <p><b>Where your data goes: nowhere.</b> This page reads the files on this computer. Nothing is uploaded, stored or sent.</p>
     <p><b>You stay in charge.</b> The result is a workpaper to review. Whether to post the entry, reverse the client's change, or amend last year's return is your decision.</p>
   </div>
-  <p class="made">Did Last Year Change?, version 1.0.0. One Painful Problem series, Record-to-Report, episode 1. The tests it passed and the prompt that rebuilds it are published with it.</p>
+  <p class="made">Version 1.0.0.</p>
 </section>
 
 <!-- ============ REPORT ============ -->
@@ -312,8 +312,8 @@ function readTB(rows, fileName){
   // (never a footer: QuickBooks footers carry the export date and time)
   var asOf = null, dateFrom = "";
   titleLines.forEach(function(l){ if (!asOf && /\bas (of|at)\b/i.test(l)) { asOf = findDate(l); dateFrom = l; } });
-  if (!asOf) for (c = 0; c < head.length && !asOf; c++) { asOf = findDate(head[c]); if (asOf) dateFrom = head[c]; }
   if (!asOf) for (r = 0; r < hr && !asOf; r++) (rows[r] || []).forEach(function(v){ if (!asOf && txt(v) && !/\d{1,2}:\d{2}/.test(txt(v))) { asOf = findDate(txt(v)); if (asOf) dateFrom = txt(v); } });
+  if (!asOf) for (c = 0; c < head.length && !asOf; c++) { asOf = findDate(head[c]); if (asOf) dateFrom = head[c]; }
   var allText = titleText + " | " + footer.join(" | ");
   var basis = (allText.match(/\b(cash|accrual)\s+basis\b/i) || [])[1];
   var company = "";
@@ -505,7 +505,7 @@ function compare(F, T, info){
   ut.forEach(function(t){ pairs.push({ f: null, t: t }); });
 
   // ---- each account's difference, and what it is
-  var rounding = 0, roundingN = 0;
+  var rounding = 0, roundingN = 0, roundingMax = 0, roundingPL = 0;
   var rows = pairs.map(function(p){
     var a = p.f || p.t;
     var typ = (p.f && p.t) ? (p.f.strength >= p.t.strength ? p.f : p.t) : a;
@@ -516,7 +516,7 @@ function compare(F, T, info){
     if (p.f && p.f.aje !== undefined) { x.ajeCents = p.f.aje; x.unadj = p.f.unadj; }
     if (d === 0) x.status = p.guess ? "renamed?" : (p.renamed ? "renamed" : "same");
     else if (x.ajeCents && Math.abs(d + x.ajeCents) < 100) x.status = "aje";
-    else if (F.whole && !T.whole && Math.abs(d) < 100) { x.status = "rounding"; rounding += d; roundingN++; }
+    else if (F.whole && !T.whole && Math.abs(d) < 100) { x.status = "rounding"; rounding += d; roundingN++; roundingMax = Math.max(roundingMax, Math.abs(d)); if (x.type === "PL") roundingPL += d; }
     else x.status = !p.f ? "new" : !p.t ? "missing" : "changed";
     return x;
   });
@@ -543,7 +543,7 @@ function compare(F, T, info){
   if (!closed) {
     var niF = -rows.filter(function(x){ return x.type === "PL"; }).reduce(function(s, x){ return s + x.final; }, 0);
     var niT = -rows.filter(function(x){ return x.type === "PL"; }).reduce(function(s, x){ return s + x.today; }, 0);
-    rep.netIncome = { final: dollars(niF), today: dollars(niT), change: dollars(niT - niF) };
+    rep.netIncome = { final: dollars(niF), today: dollars(niT), change: dollars(niT - niF), changeApartFromRounding: dollars(niT - niF + roundingPL) };
     rep._ni = { f: niF, t: niT };
   }
   var reRows = rows.filter(function(x){ return x.type === "RE"; });
@@ -559,11 +559,23 @@ function compare(F, T, info){
   var bsCh = real.filter(function(x){ return x.type === "BS" && x.status !== "aje"; });
   var reCh = real.filter(function(x){ return x.type === "RE" && x.status !== "aje"; });
   var ajeCh = real.filter(function(x){ return x.status === "aje"; });
+  var causes = [];
+  plCh.forEach(function(pl){
+    var hits = bsCh.filter(function(b){ return b.diff === -pl.diff; });
+    if (hits.length !== 1 || plCh.filter(function(p2){ return p2.diff === pl.diff; }).length !== 1) return;
+    var b = hits[0], bUp = natural(b) * b.diff > 0, pUp = natural(pl) * pl.diff > 0, income = natural(pl) < 0, asset = natural(b) > 0, guess;
+    if (income && asset) guess = bUp ? "a deposit or sale was added to last year" : "a deposit or sale in last year was deleted or voided";
+    else if (!income && !asset) guess = bUp ? "a bill was added and dated last year" : "a bill in last year was deleted";
+    else if (!income && asset) guess = bUp ? "a payment or check in last year was voided or deleted" : "a payment was added to last year";
+    else guess = "one transaction in last year was added, deleted or changed";
+    var amt = money(Math.abs(b.diff)), hl = function(up){ return up ? "higher" : "lower"; };
+    causes.push((bUp === pUp ? b.name + " and " + pl.name + " are both " + amt + " " + hl(bUp) : b.name + " is " + amt + " " + hl(bUp) + " and " + pl.name + " is " + amt + " " + hl(pUp)) + ": it looks like " + guess + ".");
+  });
   if (plCh.length) {
     var niMove = rep.netIncome ? rep._ni.t - rep._ni.f : 0;
     ex("CHANGED_PL", "stop", "Last year's income or expenses have changed in " + plCh.length + " account" + (plCh.length > 1 ? "s" : "") + " (" + list(plCh) + "). " +
       (niMove === 0 ? "Last year's profit is the same in total, but amounts moved between lines of the return." :
-       "Last year's profit in the books is now " + money(Math.abs(niMove)) + (niMove > 0 ? " higher" : " lower") + " than on your final trial balance. If the change is right, last year's return may need amending."), { accounts: plCh.map(function(x){ return x.name; }) });
+       "Last year's profit in the books is now " + money(Math.abs(niMove)) + (niMove > 0 ? " higher" : " lower") + " than on your final trial balance. If the change is right, last year's return may need amending.") + (causes.length ? " " + causes.join(" ") : ""), { accounts: plCh.map(function(x){ return x.name; }) });
   }
   if (bsCh.length) ex("CHANGED_BS", "stop", "The balance at the end of last year has changed in " + bsCh.length + " balance sheet account" + (bsCh.length > 1 ? "s" : "") + " (" + list(bsCh) +
     "). This year's return starts from last year's ending balance sheet, so these no longer agree with the books.", { accounts: bsCh.map(function(x){ return x.name; }) });
@@ -575,12 +587,12 @@ function compare(F, T, info){
     ajeCh.map(function(x){ return x.name + " " + (x.ajeCents > 0 ? "debit " : "credit ") + money(Math.abs(x.ajeCents)); }).join("; ") +
     "). The books still show the figures before your adjustments. Ask the client to post them, or post them yourself.", { accounts: ajeCh.map(function(x){ return x.name; }) });
   merges.forEach(function(m){ ex("MERGED_GUESS", "care", "“" + m.gone.name + "” is gone from the client's books, and “" + m.into.name + "” went up by exactly its balance, " +
-    money(Math.abs(m.gone.final)) + ". The two accounts were probably merged. I counted them together. Confirm with the client.", { accounts: [m.gone.name, m.into.name] }); });
+    money(Math.abs(m.gone.final)) + ". The two accounts were probably merged; I counted them together. Profit is unchanged, but if last year's return shows these two on separate lines, those lines no longer tie to the books. Confirm with the client.", { accounts: [m.gone.name, m.into.name] }); });
   guessed.forEach(function(g){ ex("RENAMED_GUESS", "care", "“" + g.f.name + "” (last year) and “" + g.t.name + "” (today) have exactly the same balance, " + money(Math.abs(g.f.cents)) +
     ", and neither has a partner. I treated them as one account that was renamed. Confirm it.", { accounts: [g.f.name, g.t.name] }); });
   renamed.forEach(function(p){ ex("RENAMED", "info", "Account " + p.f.num + " was “" + p.f.name + "” and is now “" + p.t.name + "”. Same account number, so I matched them.", { accounts: [p.t.name] }); });
   if (roundingN) ex("ROUNDING", "info", "Last year's final is in whole dollars. " + roundingN + " account" + (roundingN > 1 ? "s differ" : " differs") +
-    " by less than a dollar, " + money(Math.abs(rounding)) + " in all. That is rounding, not a change, and is left out below.");
+    " by less than a dollar (the largest by " + money(roundingMax) + "). That is rounding, not a change, and is left out of the list of changes.");
   real.concat(rows.filter(function(x){ return x.status === "merged?" || x.status === "renamed?"; })).forEach(function(x){
     if (x.typeStrength === 0) ex("TYPE_GUESS", "care", "I could not tell from the file whether “" + x.name + "” is a balance sheet or an income statement account. I guessed " +
       (x.type === "PL" ? "income statement" : "balance sheet") + " from its name. Check it.", { accounts: [x.name] });
@@ -606,7 +618,7 @@ function compare(F, T, info){
   if (plCh.length || bsCh.length || reCh.length) {
     var ch = plCh.concat(bsCh).concat(reCh);
     rep.questions.push("Since we finished last year's return, these balances for " + (rep.asOf ? longDate(parseISO(rep.asOf)) : "the end of last year") + " have changed in your books: " +
-      ch.map(function(x){ return x.name + " (" + money(Math.abs(x.diff)) + " " + (natural(x) * x.diff > 0 ? "higher" : "lower") + ")"; }).join(", ") +
+      ch.map(function(x){ return x.name + ", " + money(Math.abs(x.diff)) + " " + (natural(x) * x.diff > 0 ? "higher" : "lower"); }).join("; ") +
       ". What was added, deleted or changed, and why? Please send the transactions.");
   }
   if (ajeCh.length) rep.questions.push("Please post the adjusting entries we gave you for last year. Your books do not have them yet for: " + list(ajeCh) + ".");
@@ -637,7 +649,8 @@ function verdict(rep){
     return { cls: rep.shaky ? "care" : "", head: "Last year's books still agree with your final trial balance.", sub: sub + (notes.length ? ", " + notes.filter(function(v, i, a){ return a.indexOf(v) === i; }).join(", ") : "") + "." };
   }
   var r = rep._rows, n = rep.controls.differences, parts = [];
-  if (rep.netIncome && rep.netIncome.change !== 0 && Math.abs(rep.netIncome.change) >= 1) parts.push("last year's profit is " + money(Math.abs(Math.round(rep.netIncome.change * 100))) + (rep.netIncome.change > 0 ? " higher" : " lower"));
+  var niC = rep.netIncome ? Math.round(rep.netIncome.changeApartFromRounding * 100) : 0;
+  if (rep.netIncome && niC !== 0) parts.push("last year's profit is " + money(Math.abs(niC)) + (niC > 0 ? " higher" : " lower") + (rep.controls.roundingAccounts ? ", apart from rounding" : ""));
   else if (rep.netIncome) parts.push("last year's profit is unchanged");
   if (rep.retainedEarnings && rep.retainedEarnings.change && Math.abs(rep.retainedEarnings.change) >= 1) parts.push("an earlier year changed");
   var aje = rep.exceptions.some(function(e){ return e.code === "AJE_NOT_POSTED"; });
@@ -662,19 +675,19 @@ function render(rep){
   var d = rep.asOf ? longDate(parseISO(rep.asOf)) : "";
   o.push('<div class="wp-head"><div><h1>Did last year change?</h1>');
   o.push('<p class="meta">' + esc((F.company || T.company || "Client") + (d ? " · balances at " + d : "")) + '<br>Last year’s final: ' + esc(F.name || "") + '<br>Client’s books today: ' + esc(T.name || "") + '</p></div>');
-  o.push('<div class="sign"><label>Prepared by<input id="preparedBy" autocomplete="off"></label><label>Date<input id="preparedOn" autocomplete="off"></label>' +
+  if (rep.status !== "NOT_COMPARABLE") o.push('<div class="sign"><label>Prepared by<input id="preparedBy" autocomplete="off"></label><label>Date<input id="preparedOn" autocomplete="off"></label>' +
          '<label>Reviewed by<input id="reviewedBy" autocomplete="off"></label><label>Date<input id="reviewedOn" autocomplete="off"></label></div></div>');
   o.push('<div class="verdict ' + v.cls + '" id="verdict">' + esc(v.head) + '<span class="sub">' + esc(v.sub) + '</span></div>');
   var stops = rep.exceptions.filter(function(e){ return ["OUT_OF_BALANCE", "TOTAL_MISMATCH", "UNREAD_ROWS", "NOT_A_TB", "DATE_MISMATCH", "BASIS_MISMATCH", "SAME_FILE"].indexOf(e.code) >= 0; });
   o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
 
   // check these first
-  var order = { stop: 0, care: 1, info: 2 }, exs = rep.exceptions.slice().sort(function(a, b){ return order[a.level] - order[b.level]; });
-  o.push('<h2>Check these first</h2>');
-  if (!exs.length) o.push('<p class="ok">Nothing to check. Every account agrees, both files balance, and both are for the same date' + (rep.files.final.basis ? " and basis" : "") + '.</p>');
-  else o.push('<ul class="first">' + exs.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + esc({ stop: "Look at this. ", care: "Confirm this. ", info: "For your file. " }[e.level]) + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>');
+  var order = { stop: 0, care: 1, info: 2 }, exs = rep.exceptions.filter(function(e){ return stops.indexOf(e) < 0; }).sort(function(a, b){ return order[a.level] - order[b.level]; });
   if (rep.status === "NOT_COMPARABLE") { o.push(footer()); return o.join(""); }
-
+  o.push('<h2>Check these first</h2>');
+  if (!exs.length && stops.length) o.push('<p class="note">Only the item in the red box above.</p>');
+  else if (!exs.length) o.push('<p class="ok">Nothing to check. Every account agrees, both files balance, and both are for the same date' + (rep.files.final.basis ? " and basis" : "") + '.</p>');
+  else o.push('<ul class="first">' + exs.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + esc({ stop: "Look at this. ", care: "Confirm this. ", info: "For your file. " }[e.level]) + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>');
   // what changed
   var shown = rep.accounts.filter(function(x){ return ["changed", "new", "missing", "aje", "merged?", "renamed?"].indexOf(x.status) >= 0; });
   o.push('<h2>What changed <small>for ' + esc(d || "the same date") + '</small></h2>');
@@ -698,19 +711,23 @@ function render(rep){
   else o.push('<tr><td colspan="4">Last year’s profit cannot be compared account by account: one file is a post-closing trial balance.</td></tr>');
   if (rep.retainedEarnings) o.push(row3(rep.netIncome ? "Retained earnings at the start of last year" : "Retained earnings at the end of last year (profit closed in)", rep._re.f, rep._re.t, true));
   o.push('</tbody></table></div>');
-  if (rep.controls.roundingAccounts) o.push('<p class="note">Rounding: ' + rep.controls.roundingAccounts + ' accounts differ by less than $1 because your final is in whole dollars (' + money(Math.abs(Math.round(rep.controls.rounding * 100))) + ' in all). They are included in the profit figures above.</p>');
+  if (rep.controls.roundingAccounts) o.push('<p class="note">Rounding: ' + rep.controls.roundingAccounts + ' accounts differ by less than $1 because your final is in whole dollars. The figures above include those cents; apart from rounding, last year\u2019s profit ' + (rep.netIncome ? (Math.round(rep.netIncome.changeApartFromRounding * 100) === 0 ? "is unchanged" : "changed by " + money(Math.abs(Math.round(rep.netIncome.changeApartFromRounding * 100)))) : "cannot be compared") + '.</p>');
   o.push('<p class="note">Check: the differences on all ' + rep.controls.accountsCompared + ' accounts add up to ' + (rep.controls.diffsTie ? '<span class="tie-ok">zero, as they should</span>' : '<span class="tie-bad">' + money(Math.abs(Math.round(rep.controls.diffTotal * 100))) + ', not zero, because a file does not balance</span>') + '.</p>');
 
   // the entry
   if (rep.entry || rep.entryWithheld) {
-    o.push('<h2>The entry that puts the opening balances back</h2>');
+    o.push('<h2>Correcting entry' + (rep.entry ? ', ' + esc(longDate(parseISO(rep.entry.date))) : '') + ' <small>post only if the conditions below apply</small></h2>');
     if (rep.entryWithheld) o.push('<p class="stopbox">No entry is drafted, because a file does not balance. Fix that first.</p>');
     else {
-      o.push('<p class="next">Dated ' + esc(longDate(parseISO(rep.entry.date))) + ', the first day of this year. It makes this year’s opening balances agree with last year’s return.</p>');
+      var hasAje = rep.accounts.some(function(x){ return x.status === "aje"; }), hasClient = rep.accounts.some(function(x){ return ["changed", "new", "missing"].indexOf(x.status) >= 0; });
+      o.push('<p class="next">Dated the first day of this year. It makes this year’s opening balances agree with last year’s return.</p><ul class="first">');
+      if (hasAje) o.push('<li><span class="tag">Your adjustments. </span>Post this only if the client will not post your adjusting entries dated ' + esc(d) + '. One or the other, never both. If any of them is an accrual you normally reverse in the new year, reverse it as usual, or the expense is counted twice.</li>');
+      if (hasClient) o.push('<li><span class="tag">The client’s changes. </span>Post this only if they were mistakes and the client will not undo them in last year’s books. If a change was right (a real bill that was missed, a deposit that really bounced), last year’s return was wrong instead: consider amending it, and do not post this entry.</li>');
+      o.push('</ul>');
       o.push('<div class="scroll"><table class="v" id="entry"><thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th><th>Why</th></tr></thead><tbody>');
       rep.entry.lines.forEach(function(l){ o.push('<tr><td class="acct" data-l="Account">' + esc(l.account) + '</td><td class="num" data-l="Debit">' + (l.debit ? money(Math.round(l.debit * 100)) : "") + '</td><td class="num" data-l="Credit">' + (l.credit ? money(Math.round(l.credit * 100)) : "") + '</td><td data-l="Why">' + esc(l.why) + '</td></tr>'); });
-      o.push('<tr class="sum"><td>Total</td><td class="num">' + money(Math.round(rep.entry.totalDebit * 100)) + '</td><td class="num">' + money(Math.round(rep.entry.totalCredit * 100)) + '</td><td>' + (rep.entry.totalDebit === rep.entry.totalCredit ? '<span class="tie-ok">balances</span>' : '<span class="tie-bad">does not balance</span>') + '</td></tr></tbody></table></div>');
-      o.push('<p class="caution"><b>Post it only if the client’s changes were mistakes.</b> If a change was right (a real bill that was missed, a deposit that really bounced), last year’s return was wrong instead: consider amending it, and do not post this entry. Changes that only move amounts between income statement accounts need no entry, but may change lines on last year’s return.</p>');
+      o.push('<tr class="sum"><td>Total</td><td class="num" data-l="Debit">' + money(Math.round(rep.entry.totalDebit * 100)) + '</td><td class="num" data-l="Credit">' + money(Math.round(rep.entry.totalCredit * 100)) + '</td><td>' + (rep.entry.totalDebit === rep.entry.totalCredit ? '<span class="tie-ok">balances</span>' : '<span class="tie-bad">does not balance</span>') + '</td></tr></tbody></table></div>');
+      if (rep.exceptions.some(function(e){ return e.code === "CHANGED_PL"; })) o.push('<p class="note">Amounts that only moved between income statement accounts need no entry, but they may change lines on last year’s return.</p>');
     }
   }
 
@@ -741,7 +758,7 @@ function render(rep){
 }
 function row3(label, f, t, credit){
   var df = t - f;
-  return '<tr><td class="acct" data-l="">' + esc(label) + '</td><td class="num" data-l="Your final">' + (f < 0 ? "(" + money(-f) + ")" : money(f)) + '</td><td class="num" data-l="Books today">' + (t < 0 ? "(" + money(-t) + ")" : money(t)) +
+  return '<tr><td class="acct">' + esc(label) + '</td><td class="num" data-l="Your final">' + (f < 0 ? "(" + money(-f) + ")" : money(f)) + '</td><td class="num" data-l="Books today">' + (t < 0 ? "(" + money(-t) + ")" : money(t)) +
     '</td><td class="num" data-l="Difference">' + (df === 0 ? "none" : money(Math.abs(df)) + (df > 0 ? " higher" : " lower")) + '</td></tr>';
 }
 function fmtInfo(f, k){
@@ -796,6 +813,9 @@ function go(){
   window.__report = shown;
 }
 function take(which, f){
+  if (/\.pdf$/i.test(f.name)) { showProblem("\u201c" + f.name + "\u201d is a PDF. I can only read Excel or CSV files. Export the trial balance to Excel from your workpaper software or from the client's books, and drop that."); return; }
+  if (!/\.(xlsx|xlsm|xls|csv|txt)$/i.test(f.name)) { showProblem("\u201c" + f.name + "\u201d is not an Excel or CSV file. Export the trial balance to Excel and drop that."); return; }
+  $("problem").hidden = true;
   var reader = new FileReader();
   reader.onload = function(){
     files[which] = { name: f.name, buf: reader.result };
