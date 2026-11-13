@@ -99,7 +99,7 @@ Status is one of AGREES, CHANGED, NOT_COMPARABLE. Each exception has `code`, `le
     - ROUNDING (info) if any account's status is rounding.
     - TYPE_GUESS (care) for each real, merged or renamed account whose type was guessed from its name.
     Add a sentence about payroll, sales-tax and 1099 filings when a changed PL or BS account's name matches `wage|salar|payroll|sales tax|contract labor|subcontract|officer`.
-15. The correcting entry, dated the day after asOf (null date if asOf is unknown). Withhold it (entry null, with the reason shown) if any OUT_OF_BALANCE was raised, any owner account changed, there is no RE account, or a real difference's type was guessed from its name. Otherwise, for every real difference on a BS account: amount = the adjustment itself for "aje", else −d (back to the final). The other side, −(sum of those), goes to the RE account. No BS differences: no entry. Lines `{account, debit, credit}` in dollars (one of them 0), plus totalDebit and totalCredit.
+15. The correcting entry, dated the day after asOf (null date if asOf is unknown). Withhold it (entry null, with the reason shown) if any OUT_OF_BALANCE was raised, any owner account changed, there is no RE account, or a real difference's type was guessed from its name. Otherwise, for every real difference on a BS account: amount = the adjustment itself for "aje", else −d (back to the final). The other side, −(sum of those), goes to the RE account. No BS differences: no entry. Lines `{account, debit, credit}` in dollars (one of them 0), plus totalDebit and totalCredit. `account` is the account's name exactly as stored after label parsing, without its number (`Checking`, not `1000 Checking`); the other side uses the RE account's name.
 16. Questions for the client: the changed balances with "higher"/"lower" (no parentheses) and "What was added, deleted or changed, and why?"; a request to post her adjusting entries dated the balance date; "Did you merge ...?".
 17. Status: CHANGED if there is any real difference or any merge; otherwise AGREES.
 
@@ -123,7 +123,7 @@ Status is one of AGREES, CHANGED, NOT_COMPARABLE. Each exception has `code`, `le
 { version:"1.0.0", status, asOf:"YYYY-MM-DD"|null,
   files:{ final:{name, rows (accounts read), asOf, basis, layout, company, balances, total, totalTies, wholeDollars}, today:{...} },
   exceptions:[{code, level, message, ...}],
-  accounts:[{name, finalName, todayName, number, type:"BS"|"PL"|"RE", typeHow, final, today, diff, status, finalRow, todayRow, aje}],
+  accounts:[{name, finalName, todayName, number, type:"BS"|"PL"|"RE", typeHow, final, today, diff, status, finalRow, todayRow, aje}],   // names without numbers; name = today's name, else the final's
   netIncome:{final, today, change, changeApartFromRounding}|null,
   retainedEarnings:{final, today, change}|null,
   entry:{date, lines:[{account, debit, credit}], totalDebit, totalCredit}|null,

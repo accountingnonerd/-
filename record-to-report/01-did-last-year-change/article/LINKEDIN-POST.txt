@@ -1,0 +1,25 @@
+Series 1 · Agent 3 | The year that won't stay closed
+
+You filed last year's return from your final trial balance. Are the client's books for last year still the same?
+
+Often they aren't. A December deposit gets deleted in June. A bill gets backdated into the closed year. The adjusting entries you sent never get posted. Nothing announces it; the new year just starts from balances that no longer exist.
+
+In our test file, opening cash was $4,250 short of the Schedule L that was filed. The client is invented. The IRS rule is not: "The balance sheets should agree with the corporation's books and records."
+
+What this free agent gives you:
+→ Drop in last year's final trial balance and the client's trial balance for the same date, exported today (QuickBooks Online, Desktop, Xero, or your own workpaper)
+→ Every account that moved, and what it means: last year's profit changed, an earlier year changed, a distribution changed the K-1s, or your adjusting entry was simply never posted
+→ The likely cause in plain words: "Checking and Bakery Sales are both $4,250.00 lower: it looks like a deposit in last year was deleted"
+→ A correcting entry for the new year, with the conditions for posting it, and the question to send the client
+→ Stops when the two files can't be compared: different dates, cash against accrual, the wrong client
+→ Runs on your own computer. Nothing is uploaded.
+
+By hand: 10 to 15 minutes per client when nothing changed, 20 to 30 when something did (our estimate). Here: about a second, plus the time to read the answer.
+
+We tested it on 22 cases and 43 files, then broke it on purpose 18 ways. A reviewer playing a skeptical CPA found that our first correcting entry could count a re-entered deposit twice. The whole story, including what we got wrong, is in the document below.
+
+Series 1 is five agents, one for each process accountants run for clients. Agent 1 found the 1099 vendors your software misses. Agent 2 checked the 941s against the W-3. Agent 4 takes on receivables.
+
+What do you still check by hand before you trust a client's opening balances? Tell me below.
+
+#Accounting #CPA #TaxPrep #QuickBooks #SmallBusiness
