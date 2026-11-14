@@ -10,7 +10,7 @@ Series 1 takes the most painful step of each process; later series take the next
 | Agent 1 | Procure-to-Pay | Who gets a 1099? | published 2026-11-11 |
 | Agent 2 | Hire-to-Retire | Do the 941s match the W-3? | published 2026-11-12 |
 | Agent 3 | Record-to-Report | Did last year change? | published 2026-11-13 |
-| Agent 4 | Order-to-Cash | to be chosen in Stage 1 | |
+| Agent 4 | Order-to-Cash | Does the 1099-K tie? | built 2026-11-14, awaiting approval to publish |
 | Agent 5 | Acquire-to-Retire | to be chosen in Stage 1 | |
 
 The folders in this repository are organized by process, so later series' agents for the
@@ -99,9 +99,10 @@ The order is the release order. Each series starts in the season when its work p
 - **Left by hand:** turning a payout that is net of fees and refunds into gross sales,
   fees and refunds that tie to the bank deposit, for clients with no sync app;
   reviewing old receivables.
-- **Candidates:**
-  - a processor payout report turned into a journal entry that ties to the deposit;
-  - a receivables aging review with a memo for the file.
+- **Episodes:**
+  - 01 [Does the 1099-K tie?](order-to-cash/01-does-the-1099k-tie/), built, version 1.0.0 (its year-end entry also covers the payout gross-up);
+  - candidate: a receivables aging review with a memo for the file;
+  - candidate: Shopify, Venmo and marketplace exports for the 1099-K reconciliation.
 
 ### 5. Acquire-to-Retire (fixed assets)
 - **She already has:** the depreciation module in her tax software, or an Excel schedule.

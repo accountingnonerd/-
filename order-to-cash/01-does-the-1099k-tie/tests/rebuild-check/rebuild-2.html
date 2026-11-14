@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does the 1099-K tie?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#f7f6f2; --paper:#ffffff; --ink:#1d1f22; --muted:#5b6068; --line:#d9d6cc;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --stop:#a4231b; --stop-bg:#fbeceb;
+  --care:#8a5a00; --care-bg:#fdf4e0; --info:#2f5d7c; --info-bg:#eaf2f8; --ok:#1d6b3a; --ok-bg:#e8f5ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16181b; --paper:#1f2226; --ink:#eceae4; --muted:#a3a8b0; --line:#3a3e44;
+    --accent:#6fb0dd; --accent-ink:#0d1a24; --stop:#f08a82; --stop-bg:#3a1f1d;
+    --care:#e8b660; --care-bg:#33291a; --info:#8cc0e3; --info-bg:#1b2a36; --ok:#7fd29d; --ok-bg:#1a3123;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16181b; --paper:#1f2226; --ink:#eceae4; --muted:#a3a8b0; --line:#3a3e44;
+  --accent:#6fb0dd; --accent-ink:#0d1a24; --stop:#f08a82; --stop-bg:#3a1f1d;
+  --care:#e8b660; --care-bg:#33291a; --info:#8cc0e3; --info-bg:#1b2a36; --ok:#7fd29d; --ok-bg:#1a3123;
+}
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:2.2rem;line-height:1.15;margin:.2em 0 .3em}
+h2{font-size:1.35rem;margin:1.6em 0 .5em;border-bottom:2px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.1rem;margin:1.2em 0 .4em}
+p{margin:.5em 0}
+a{color:var(--accent)}
+.lead{font-size:1.2rem;color:var(--muted);max-width:44em}
+.sans,.btn,input,button,table,.drop,.grid,.label{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+label.field{display:block;margin:1.2em 0 .3em;font-weight:600}
+input[type=text]{font-size:1.1rem;padding:.5em .6em;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);width:16em;max-width:100%}
+.drop{display:block;margin:1em 0 0;border:3px dashed var(--line);border-radius:12px;background:var(--paper);padding:48px 20px;text-align:center;cursor:pointer;font-size:1.3rem;font-weight:600}
+.drop.over{border-color:var(--accent);background:var(--info-bg)}
+.drop small{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:.5em}
+.drop input[type=file]{display:block;margin:1em auto 0;font-size:.9rem}
+#problem{margin:.8em 0;padding:0}
+#problem:not(:empty){padding:.8em 1em;border-left:5px solid var(--stop);background:var(--stop-bg);color:var(--ink);border-radius:4px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px 28px;margin-top:1.5em}
+.cols section{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+.cols h2{margin-top:0;font-size:1.1rem}
+footer{margin-top:3em;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:1em}
+.btn{display:inline-block;font-size:1.05rem;font-weight:600;padding:.6em 1.1em;border-radius:8px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.btn.small{font-size:.95rem;padding:.45em .9em}
+.topbar{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:1em}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px 24px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px 24px;font-size:.95rem;margin:.8em 0}
+.meta div{border-bottom:1px solid var(--line);padding:.3em 0;color:var(--muted)}
+#verdict{font-size:1.45rem;font-weight:700;margin:1em 0;padding:.7em 1em;border-radius:8px;background:var(--info-bg)}
+#verdict.ties{background:var(--ok-bg);color:var(--ok)}
+#verdict.differs{background:var(--stop-bg);color:var(--stop)}
+#stop-banner{border:2px solid var(--stop);background:var(--stop-bg);border-radius:8px;padding:.6em 1em;margin:1em 0}
+#stop-banner[hidden]{display:none}
+#stop-banner h2{border:0;margin:.2em 0;color:var(--stop);font-size:1.15rem}
+.big{font-size:1.9rem;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.boxes{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-end}
+.boxes .label{font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:1em}
+@media (max-width:640px){.grid{grid-template-columns:repeat(3,1fr)} h1{font-size:1.7rem}}
+@media (max-width:380px){.grid{grid-template-columns:repeat(2,1fr)}}
+.grid div{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:.9rem}
+.grid div b{display:block;font-size:.75rem;color:var(--muted);font-weight:600}
+.grid div.zero{background:var(--care-bg)}
+table{border-collapse:collapse;width:100%;font-size:.95rem;margin:.5em 0}
+td,th{padding:.4em .5em;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--ink);border-bottom:3px double var(--ink)}
+.warn{border-left:5px solid var(--info);background:var(--info-bg);padding:.5em .9em;margin:.5em 0;border-radius:4px}
+.warn.care{border-color:var(--care);background:var(--care-bg)}
+.warn.stop{border-color:var(--stop);background:var(--stop-bg)}
+.warn .code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.75rem;color:var(--muted);display:block}
+.notyet{font-weight:700;color:var(--stop);border:2px solid var(--stop);padding:.4em .8em;border-radius:6px;display:inline-block}
+.muted{color:var(--muted)}
+.cmp{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:.8em}
+.checks label{display:block;margin:.3em 0}
+details summary{cursor:pointer;font-weight:600}
+.tablewrap{overflow-x:auto}
+@media print{
+  html{font-size:12px}
+  body{background:#fff;color:#000}
+  .noprint,.topbar,.cmp button,#start{display:none!important}
+  .paper{border:0;padding:0}
+  details{display:block} details>*{display:block}
+  #verdict,#stop-banner,.warn{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  h2{break-after:avoid}
+  table{break-inside:auto} tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="start">
+    <h1>Does the 1099-K tie?</h1>
+    <p class="lead">Drop in a client's year of Square, Stripe or PayPal transactions and get what the Form 1099-K should say, the figures for the return, the tie to the bank deposits, and a year-end entry.</p>
+
+    <label class="field sans" for="box1a-start">Have the client's 1099-K? Type box 1a first (optional)</label>
+    <input type="text" id="box1a-start" inputmode="decimal" placeholder="e.g. 84,210.55" autocomplete="off">
+
+    <label class="drop" id="drop">
+      Drop the processor's export for the year here
+      <small>CSV, TXT or Excel (xlsx, xls, xlsm). Or click to choose a file.</small>
+      <input type="file" id="file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+    </label>
+    <div id="problem" role="alert"></div>
+
+    <p class="sans"><a href="#" id="sample">See it work on a made-up sample</a></p>
+
+    <div class="cols">
+      <section>
+        <h2>Which export to get</h2>
+        <p><b>Square:</b> Transactions, Export, Transactions CSV.</p>
+        <p><b>Stripe:</b> Reports, Balance, itemized balance change from activity.</p>
+        <p><b>PayPal:</b> Activity, download, CSV.</p>
+        <p class="muted">Pick the whole calendar year.</p>
+      </section>
+      <section>
+        <h2>Why it matters</h2>
+        <p>The 1099-K reports gross: every payment before refunds and fees. The bank sees only the payouts.</p>
+        <p>If the return's gross receipts are below the 1099-K, the IRS may send a notice.</p>
+      </section>
+      <section>
+        <h2>Where your data goes: nowhere</h2>
+        <p>The file is read in this browser tab. Nothing is uploaded or stored.</p>
+        <h2 style="margin-top:1em">You stay in charge</h2>
+        <p>Every figure is shown with how it was built. Check it, then use your judgment.</p>
+      </section>
+    </div>
+    <footer>Version 1.0.0.</footer>
+  </div>
+
+  <div id="work" hidden>
+    <div class="topbar noprint">
+      <button class="btn" id="print" type="button">Print or save as PDF</button>
+      <a href="#" id="startover" class="sans">Start over</a>
+    </div>
+    <div id="workpaper" class="paper"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var VERSION = "1.0.0";
+var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+var BOXES = ["5a","5b","5c","5d","5e","5f","5g","5h","5i","5j","5k","5l"];
+var state = null;
+
+/* ---------- small helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function fmt(c){
+  c = Math.round(c || 0);
+  var neg = c < 0; c = Math.abs(c);
+  var d = Math.floor(c / 100), r = c % 100;
+  var s = String(d).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return (neg ? "-" : "") + "$" + s + "." + (r < 10 ? "0" : "") + r;
+}
+function dol(c){ return Math.round(c || 0) / 100; }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function monthList(ms){ return ms.map(function(m){ return MONTHS[m-1]; }).join(", "); }
+
+function cents(v){
+  if (v == null) return 0;
+  if (typeof v === "number") return isFinite(v) ? Math.round(v * 100) : 0;
+  if (typeof v === "boolean") return 0;
+  var s = String(v).trim();
+  if (!s) return 0;
+  var neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1).trim(); }
+  if (/-$/.test(s)) { neg = !neg; s = s.slice(0, -1).trim(); }
+  if (/^[-−]/.test(s)) { neg = !neg; s = s.slice(1).trim(); }
+  s = s.replace(/^[A-Za-z]{3}\s*/, "").replace(/\s*[A-Za-z]{3}$/, "");
+  s = s.replace(/[$\s,]/g, "");
+  if (/^[-−]/.test(s)) { neg = !neg; s = s.slice(1); }
+  if (/^\+/.test(s)) s = s.slice(1);
+  if (!/^\d*\.?\d*$/.test(s) || !/\d/.test(s)) return 0;
+  var parts = s.split(".");
+  var whole = parts[0] ? parseInt(parts[0], 10) : 0;
+  var frac = parts[1] || "";
+  var fc;
+  if (frac.length <= 2) fc = parseInt((frac + "00").slice(0, 2), 10);
+  else fc = Math.round(parseFloat("0." + frac) * 100);
+  var c = whole * 100 + fc;
+  return neg ? -c : c;
+}
+function parseTyped(v){
+  var s = String(v == null ? "" : v).trim();
+  if (!s) return null;
+  if (!/\d/.test(s)) return null;
+  if (!/^[\s$()\-−+,.\d]*$/.test(s.replace(/usd/i, ""))) return null;
+  return cents(s);
+}
+
+function daysIn(y, m){ return new Date(Date.UTC(y, m, 0)).getUTCDate(); }
+function parseDate(v){
+  if (v == null || v === "") return null;
+  if (v instanceof Date && !isNaN(v)) return {y:v.getFullYear(), m:v.getMonth()+1, d:v.getDate(), h:v.getHours(), t:true};
+  if (typeof v === "number") {
+    if (!(v >= 1 && v < 2958466)) return null;
+    var ms = Math.round((v - 25569) * 86400) * 1000;
+    var dt = new Date(ms);
+    return {y:dt.getUTCFullYear(), m:dt.getUTCMonth()+1, d:dt.getUTCDate(), h:dt.getUTCHours(), t:(v % 1) !== 0};
+  }
+  var s = String(v).trim(), y, mo, d, h = 0, t = false, mm;
+  mm = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ]+(\d{1,2}):(\d{2})(?::\d{2}(?:\.\d+)?)?\s*(am|pm)?)?/i);
+  if (mm) { y = +mm[1]; mo = +mm[2]; d = +mm[3]; if (mm[4] != null) { h = +mm[4]; t = true; if (mm[6]) h = ampm(h, mm[6]); } }
+  else {
+    mm = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})(?:[ T,]+(\d{1,2}):(\d{2})(?::\d{2})?\s*(am|pm)?)?/i);
+    if (!mm) return null;
+    mo = +mm[1]; d = +mm[2]; y = +mm[3]; if (y < 100) y += 2000;
+    if (mm[4] != null) { h = +mm[4]; t = true; if (mm[6]) h = ampm(h, mm[6]); }
+  }
+  if (!(mo >= 1 && mo <= 12) || !(d >= 1 && d <= daysIn(y, mo)) || h > 23) return null;
+  return {y:y, m:mo, d:d, h:h, t:t};
+}
+function ampm(h, s){ s = s.toLowerCase(); if (s === "pm" && h < 12) return h + 12; if (s === "am" && h === 12) return 0; return h; }
+function parseHour(v){
+  if (v == null || v === "") return null;
+  if (typeof v === "number") { var f = v % 1; return Math.floor(Math.round(f * 86400) / 3600) % 24; }
+  var m = String(v).trim().match(/^(\d{1,2}):(\d{2})(?::\d{2})?\s*(am|pm)?/i);
+  if (!m) return null;
+  var h = +m[1]; if (m[3]) h = ampm(h, m[3]);
+  return h <= 23 ? h : null;
+}
+function isBlank(row){
+  if (!row) return true;
+  for (var i = 0; i < row.length; i++) { var c = row[i]; if (c != null && String(c).trim() !== "") return false; }
+  return true;
+}
+
+/* ---------- recognizing ---------- */
+var SIGS = {
+  square: function(h){ return has(h, ["transaction id","event type","total collected","card","net total"]); },
+  stripe: function(h){ return has(h, ["reporting_category","gross","fee","net"]) && (h.indexOf("created_utc") >= 0 || h.indexOf("created") >= 0); },
+  paypal: function(h){ return has(h, ["type","status","currency","gross","fee","net","transaction id"]); }
+};
+var LAYOUTS = { square:"Square Transactions CSV", stripe:"Stripe itemized balance change from activity", paypal:"PayPal Activity download" };
+var NAMES = { square:"Square", stripe:"Stripe", paypal:"PayPal" };
+function has(h, list){ for (var i = 0; i < list.length; i++) if (h.indexOf(list[i]) < 0) return false; return true; }
+function headerCells(row){ return (row || []).map(function(c){ return c == null ? "" : String(c).replace(/^﻿/, "").replace(/^"|"$/g, "").trim().toLowerCase(); }); }
+function recognize(rows){
+  var n = Math.min(15, rows.length);
+  for (var i = 0; i < n; i++) {
+    var h = headerCells(rows[i]);
+    if (SIGS.square(h)) return {proc:"square", idx:i, h:h};
+    if (SIGS.stripe(h)) return {proc:"stripe", idx:i, h:h};
+    if (SIGS.paypal(h)) return {proc:"paypal", idx:i, h:h};
+  }
+  return null;
+}
+
+/* ---------- parsing rows into events ---------- */
+function parseRows(rec, rows){
+  var h = rec.h, proc = rec.proc;
+  function ci(name){ return h.indexOf(name); }
+  function getter(row){ return function(name){ var i = ci(name); return i < 0 ? null : (row[i] === undefined ? null : row[i]); }; }
+  var out = { proc:proc, layout:LAYOUTS[proc], headerRow:rec.idx + 1, columns:h.filter(Boolean),
+    events:[], unread:[], dups:[], rowsRead:0, blank:0, utcOnly:false, noDepositCol:false, hasCreated:ci("created") >= 0, totalsSkipped:0 };
+  if (proc === "square" && ci("deposit date") < 0) out.noDepositCol = true;
+  var seen = {};
+  for (var r = rec.idx + 1; r < rows.length; r++) {
+    var row = rows[r];
+    if (isBlank(row)) { out.blank++; continue; }
+    var g = getter(row);
+    var first = row[0] == null ? "" : String(row[0]).trim().toLowerCase();
+    if (proc === "square" && (first === "total" || first === "totals")) { out.totalsSkipped++; continue; }
+    out.rowsRead++;
+    var key = JSON.stringify(row.map(function(c){ return c == null ? "" : String(c); }));
+    var dt, usedUtc = false;
+    if (proc === "stripe") {
+      var cr = g("created");
+      if (cr != null && String(cr).trim() !== "") dt = parseDate(cr);
+      else { dt = parseDate(g("created_utc")); usedUtc = true; }
+    } else {
+      dt = parseDate(g("date"));
+      if (dt && !dt.t && ci("time") >= 0) { var hh = parseHour(g("time")); if (hh != null) { dt.h = hh; dt.t = true; } }
+    }
+    if (seen[key]) { out.dups.push({row:r + 1, m:dt ? dt.m : null, y:dt ? dt.y : null}); continue; }
+    seen[key] = true;
+    if (!dt) { out.unread.push(r + 1); continue; }
+    if (usedUtc) out.utcOnly = true;
+    var ev = { row:r + 1, y:dt.y, m:dt.m, d:dt.d, h:dt.h, kind:"other", card:0, tax:0, tip:0, cashOther:0, cashOtherTax:0, cashOtherTip:0,
+      gift:0, giftSold:0, fee:0, amount:0, cashRefund:0, refundTax:0, depositNet:0, depY:null, depM:null, label:"", txid:"", ref:"", name:"" };
+    if (proc === "square") squareEvent(ev, g);
+    else if (proc === "stripe") stripeEvent(ev, g);
+    else paypalEvent(ev, g);
+    out.events.push(ev);
+  }
+  if (proc === "paypal") convertForeign(out.events);
+  return out;
+}
+
+function squareEvent(ev, g){
+  var status = g("transaction status");
+  var card = cents(g("card")) + cents(g("cash app"));
+  var cashOther = cents(g("cash")) + cents(g("other tender"));
+  var gift = cents(g("square gift card"));
+  var total = cents(g("total collected"));
+  function share(x, t){ return total === 0 ? 0 : Math.round(x * t / total); }
+  var tax = cents(g("tax")), tip = cents(g("tip"));
+  ev.depositNet = cents(g("net total")) - cashOther - gift;
+  var dd = parseDate(g("deposit date"));
+  if (dd) { ev.depY = dd.y; ev.depM = dd.m; }
+  ev.fee = -cents(g("fees"));
+  ev.txid = String(g("transaction id") == null ? "" : g("transaction id")).trim();
+  var type = String(g("event type") == null ? "" : g("event type")).trim();
+  ev.label = type || "(no event type)";
+  ev.total = total;
+  if (status != null && String(status).trim() !== "" && !/^complete/i.test(String(status).trim())) {
+    ev.kind = "unsettled"; ev.amount = total; ev.status = String(status).trim(); ev.fee = 0; return;
+  }
+  var t = type.toLowerCase();
+  if (t === "payment") {
+    ev.kind = "sale"; ev.card = card; ev.tax = share(tax, card); ev.tip = share(tip, card);
+    ev.cashOther = cashOther; ev.cashOtherTax = share(tax, cashOther); ev.cashOtherTip = share(tip, cashOther);
+    ev.gift = gift; ev.giftSold = cents(g("gift card sales"));
+  } else if (t === "refund") {
+    ev.kind = "refund"; ev.amount = -card; ev.cashRefund = -cashOther; ev.refundTax = -tax;
+  } else {
+    ev.kind = "other"; ev.amount = ev.depositNet; ev.fee = 0;
+  }
+}
+
+function stripeEvent(ev, g){
+  var gross = cents(g("gross")), fee = cents(g("fee")), net = cents(g("net"));
+  var cat = String(g("reporting_category") == null ? "" : g("reporting_category")).trim().toLowerCase();
+  ev.label = cat || "(no category)";
+  ev.txid = String(g("source_id") || g("balance_transaction_id") || "");
+  if (cat === "charge") { ev.kind = "sale"; ev.card = gross; ev.fee = fee; }
+  else if (cat === "refund" || cat === "refund_failure" || cat === "partial_capture_reversal") { ev.kind = "refund"; ev.amount = -gross; ev.fee = fee; }
+  else if (cat === "dispute" || cat === "dispute_reversal") { ev.kind = "chargeback"; ev.amount = -gross; ev.fee = fee; }
+  else if (cat === "payout" || cat === "payout_reversal") { ev.kind = "payout"; ev.amount = -net; }
+  else if (cat === "fee" || cat === "network_cost" || cat === "tax") { ev.kind = "fee"; ev.fee = -net; }
+  else { ev.kind = "other"; ev.amount = net; }
+}
+
+var PAID = ["completed","refunded","partially refunded","reversed","cleared"];
+function paypalEvent(ev, g){
+  var type = String(g("type") == null ? "" : g("type")).trim(), t = type.toLowerCase();
+  var status = String(g("status") == null ? "" : g("status")).trim();
+  var cur = String(g("currency") == null ? "" : g("currency")).trim().toUpperCase() || "USD";
+  var gross = cents(g("gross")), fee = cents(g("fee"));
+  ev.txid = String(g("transaction id") == null ? "" : g("transaction id")).trim();
+  ev.ref = String(g("reference txn id") == null ? "" : g("reference txn id")).trim();
+  ev.name = String(g("name") == null ? "" : g("name")).trim();
+  ev.typeLabel = type; ev.currency = cur; ev.gross = gross; ev.rawFee = fee;
+  if (t.indexOf("hold") >= 0 || t.indexOf("authorization") >= 0) { ev.kind = "hold"; return; }
+  if (PAID.indexOf(status.toLowerCase()) < 0) { ev.kind = "unsettled"; ev.amount = gross; ev.status = status || "(blank)"; ev.label = type; return; }
+  if (cur !== "USD") {
+    if (t.indexOf("payment") >= 0 && t.indexOf("refund") < 0 && gross > 0) { ev.kind = "foreignSale"; ev.foreignGross = gross; ev.foreignFee = fee; ev.tax = cents(g("sales tax")); }
+    else if (t.indexOf("currency conversion") >= 0) ev.kind = "foreignConv";
+    else ev.kind = "foreignOther";
+    ev.label = type; return;
+  }
+  if (t.indexOf("currency conversion") >= 0) {
+    if (gross > 0) { ev.kind = "convIn"; ev.amount = gross + fee; ev.label = "Currency conversion (money in)"; }
+    else { ev.kind = "other"; ev.amount = gross + fee; ev.label = type + " (money out)"; }
+    return;
+  }
+  if (t.indexOf("refund") >= 0) {
+    if (gross < 0) { ev.kind = "refund"; ev.amount = -gross; ev.fee = -fee; }
+    else { ev.kind = "other"; ev.amount = gross + fee; ev.label = "Refunds received (money in)"; }
+    return;
+  }
+  if (t.indexOf("chargeback fee") >= 0 || t.indexOf("dispute fee") >= 0) { ev.kind = "fee"; ev.fee = -gross - fee; ev.label = type; return; }
+  if (t.indexOf("chargeback") >= 0 || t.indexOf("dispute") >= 0) { ev.kind = "chargeback"; ev.amount = -gross; ev.fee = -fee; ev.label = type; return; }
+  if (t.indexOf("withdraw") >= 0) { ev.kind = "payout"; ev.amount = -(gross + fee); ev.label = type; return; }
+  if (t.indexOf("bank deposit") >= 0 || t.indexOf("add funds") >= 0 || t.indexOf("credit card deposit") >= 0 || t.indexOf("transfer from") >= 0) {
+    ev.kind = "transferIn"; ev.amount = gross + fee; ev.label = type; return;
+  }
+  if (t.indexOf("general payment") >= 0 && gross > 0 && fee === 0) { ev.kind = "personal"; ev.amount = gross; ev.label = type; return; }
+  if (t.indexOf("payment") >= 0 && gross > 0) { ev.kind = "sale"; ev.card = gross; ev.fee = -fee; ev.tax = cents(g("sales tax")); ev.label = type; return; }
+  ev.kind = "other"; ev.amount = gross + fee;
+  ev.label = (type || "(no type)") + (gross + fee >= 0 ? " (money in)" : " (money out)");
+}
+
+function convertForeign(events){
+  var byRefF = {}, byRefU = {};
+  events.forEach(function(e){
+    if (!e.ref) return;
+    if (e.kind === "foreignConv") (byRefF[e.ref] = byRefF[e.ref] || []).push(e);
+    if (e.kind === "convIn") (byRefU[e.ref] = byRefU[e.ref] || []).push(e);
+  });
+  events.forEach(function(e){
+    if (e.kind !== "foreignSale") return;
+    var f = byRefF[e.txid] || [], u = byRefU[e.txid] || [];
+    var converted = 0, usd = 0;
+    f.forEach(function(x){ if (x.gross < 0) converted += -x.gross; });
+    u.forEach(function(x){ usd += x.gross; });
+    if (!f.length || !u.length || converted <= 0 || usd <= 0) { e.kind = "foreignUnconv"; return; }
+    var card = Math.round(e.foreignGross * usd / converted);
+    e.kind = "sale"; e.foreign = true; e.card = card; e.fee = card - usd; e.usdReceived = usd;
+    e.tax = e.tax ? Math.round(e.tax * usd / converted) : 0;
+    u.forEach(function(x){ x.absorbed = true; });
+    f.forEach(function(x){ x.absorbed = true; });
+  });
+}
+
+/* ---------- figures ---------- */
+function compute(p){
+  var ev = p.events;
+  var counts = {};
+  ev.forEach(function(e){ if (e.kind === "sale") counts[e.y] = (counts[e.y] || 0) + 1; });
+  var Y = null, best = -1;
+  Object.keys(counts).forEach(function(y){ y = +y; if (counts[y] > best || (counts[y] === best && y > Y)) { best = counts[y]; Y = y; } });
+  if (Y == null) {
+    var c2 = {};
+    ev.forEach(function(e){ if (e.kind !== "hold") c2[e.y] = (c2[e.y] || 0) + 1; });
+    Object.keys(c2).forEach(function(y){ y = +y; if (c2[y] > best || (c2[y] === best && y > Y)) { best = c2[y]; Y = y; } });
+  }
+  if (Y == null) Y = new Date().getFullYear() - 1;
+
+  var f = { year:Y, gross:0, box3:0, monthly:[0,0,0,0,0,0,0,0,0,0,0,0], monthCount:[0,0,0,0,0,0,0,0,0,0,0,0],
+    salesTax:0, tips:0, cashOther:0, giftRedeemed:0, giftSold:0, refunds:0, cashRefunds:0, refundTax:0, chargebacks:0, fees:0,
+    personal:0, transfersIn:0, other:0, payouts:0,
+    mRefunds:[0,0,0,0,0,0,0,0,0,0,0,0], mCharge:[0,0,0,0,0,0,0,0,0,0,0,0], mFees:[0,0,0,0,0,0,0,0,0,0,0,0], mPayouts:[0,0,0,0,0,0,0,0,0,0,0,0],
+    outside:{count:0, sales:0, amount:0}, otherByLabel:{}, personalList:[], foreign:{count:0, usd:0}, foreignList:[], unconv:[], foreignOther:0,
+    unsettled:[], refundsNoSale:[], boundary:null };
+  var saleIds = {};
+  ev.forEach(function(e){ if (e.kind === "sale" && e.txid) saleIds[e.txid] = true; });
+
+  ev.forEach(function(e){
+    if (e.kind === "hold" || e.absorbed) return;
+    var inY = e.y === Y, mi = e.m - 1;
+    if (!inY) {
+      if (e.kind === "unsettled") return;
+      f.outside.count++;
+      if (e.kind === "sale" && e.card > 0) { f.outside.sales++; f.outside.amount += e.card; }
+      return;
+    }
+    switch (e.kind) {
+      case "sale":
+        if (e.card > 0) { f.gross += e.card; f.box3++; f.monthly[mi] += e.card; f.monthCount[mi]++; }
+        f.salesTax += e.tax + e.cashOtherTax; f.tips += e.tip + e.cashOtherTip;
+        f.cashOther += e.cashOther; f.giftRedeemed += e.gift; f.giftSold += e.giftSold;
+        f.fees += e.fee; f.mFees[mi] += e.fee;
+        if (e.foreign) { f.foreign.count++; f.foreign.usd += e.card; f.foreignList.push(e); }
+        break;
+      case "refund":
+        f.refunds += e.amount; f.cashRefunds += e.cashRefund; f.refundTax += e.refundTax; f.fees += e.fee;
+        f.mRefunds[mi] += e.amount; f.mFees[mi] += e.fee;
+        if (p.proc === "square" && !(e.txid && saleIds[e.txid])) f.refundsNoSale.push(e);
+        break;
+      case "chargeback": f.chargebacks += e.amount; f.fees += e.fee; f.mCharge[mi] += e.amount; f.mFees[mi] += e.fee; break;
+      case "fee": f.fees += e.fee; f.mFees[mi] += e.fee; break;
+      case "payout": f.payouts += e.amount; f.mPayouts[mi] += e.amount; break;
+      case "transferIn": f.transfersIn += e.amount; break;
+      case "personal": f.personal += e.amount; f.personalList.push(e); break;
+      case "convIn": f.other += e.amount; addLabel(f, e.label, e.amount); break;
+      case "other": f.other += e.amount; addLabel(f, e.label, e.amount); break;
+      case "unsettled": f.unsettled.push(e); break;
+      case "foreignUnconv": f.unconv.push(e); break;
+      case "foreignConv": case "foreignOther": f.foreignOther++; break;
+    }
+  });
+  if (p.proc === "square") {
+    ev.forEach(function(e){
+      if (e.y !== Y || (e.kind !== "sale" && e.kind !== "refund")) return;
+      if (e.depY === Y) { f.payouts += e.depositNet; f.mPayouts[e.depM - 1] += e.depositNet; }
+    });
+  }
+  f.netActivity = f.gross - f.refunds - f.chargebacks - f.fees;
+  f.held = f.netActivity + f.transfersIn + f.personal + f.other - f.payouts;
+  f.grossReceipts = f.gross + f.cashOther;
+  f.grossReceiptsExcluding = f.grossReceipts - f.salesTax - f.tips;
+  f.returns = f.refunds + f.cashRefunds + f.chargebacks;
+
+  if (p.proc === "stripe" && p.utcOnly) {
+    var b = {intoNextYear:{count:0, amount:0}, fromPriorYear:{count:0, amount:0}};
+    ev.forEach(function(e){
+      if (e.kind !== "sale" || !(e.card > 0) || e.m !== 1 || e.d !== 1 || e.h >= 8) return;
+      if (e.y === Y + 1) { b.intoNextYear.count++; b.intoNextYear.amount += e.card; }
+      if (e.y === Y) { b.fromPriorYear.count++; b.fromPriorYear.amount += e.card; }
+    });
+    f.boundary = b;
+  }
+
+  var owner = f.transfersIn + f.personal;
+  var salesCredit = f.fees + f.refunds + f.chargebacks + f.held - owner - f.other;
+  var raw = [["Merchant fees", f.fees], ["Sales returns and allowances", f.refunds + f.chargebacks], ["Due from processor", f.held],
+             ["Owner contributions", -owner], ["Other activity to classify", -f.other], ["Sales", -salesCredit]];
+  var lines = [], td = 0, tc = 0;
+  raw.forEach(function(l){
+    if (!l[1]) return;
+    var dr = l[1] > 0 ? l[1] : 0, cr = l[1] < 0 ? -l[1] : 0;
+    td += dr; tc += cr; lines.push({account:l[0], debit:dr, credit:cr});
+  });
+  f.entry = { date:Y + "-12-31", lines:lines, salesBooked:f.payouts, salesAfter:f.payouts + salesCredit, totalDebit:td, totalCredit:tc, salesCredit:salesCredit, owner:owner };
+  f.missingMonths = [];
+  if (f.box3 > 0) for (var m = 0; m < 12; m++) if (f.monthCount[m] === 0) f.missingMonths.push(m + 1);
+  return f;
+}
+function addLabel(f, label, amt){ f.otherByLabel[label] = (f.otherByLabel[label] || 0) + amt; }
+
+/* ---------- warnings ---------- */
+function warnings(p, f, typed){
+  var W = [], Y = f.year;
+  function add(code, level, message){ W.push({code:code, level:level, message:message}); }
+  if (typed != null) {
+    var d = typed - f.gross;
+    if (d !== 0) {
+      var msg, ad = Math.abs(d);
+      if (d > 0) {
+        var causes = [];
+        causes.push("another location or another account on the same taxpayer ID that is not in this export");
+        if (f.boundary) {
+          var alt = f.boundary.intoNextYear.amount - f.boundary.fromPriorYear.amount;
+          causes.push("the UTC edge: Stripe dates in UTC, so sales late on December 31 fall into January (" + fmt(f.boundary.intoNextYear.amount) + " on January 1 of " + (Y+1) + " before 8:00)" + (alt === d ? ", which is exactly the difference" : ""));
+        }
+        if (f.missingMonths.length) causes.push("months with no sales in this export (" + monthList(f.missingMonths) + ")");
+        if (f.personal > 0) causes.push("personal transfers of " + fmt(f.personal) + " the processor may have counted as payments" + (f.personal === d ? ", which is exactly the difference" : ""));
+        if (f.outside.amount > 0 && f.outside.amount === d) causes.push("the " + fmt(f.outside.amount) + " of sales dated outside " + Y + ", which is exactly the difference");
+        msg = "Box 1a as typed (" + fmt(typed) + ") is " + fmt(ad) + " more than this export's card and app sales for " + Y + " (" + fmt(f.gross) + "). Likely causes: " + causes.join("; ") + ".";
+      } else {
+        var c2 = ["a different account or a different year", "a figure net of refunds (sales less refunds is " + fmt(f.gross - f.refunds) + ")" + (f.gross - f.refunds === typed ? ", which matches what you typed" : "")];
+        if (f.boundary && f.boundary.fromPriorYear.amount === ad) c2.push("the UTC edge: " + fmt(ad) + " of sales on January 1 before 8:00 UTC may be December 31 sales of " + (Y-1));
+        msg = "Box 1a as typed (" + fmt(typed) + ") is " + fmt(ad) + " less than this export's card and app sales for " + Y + " (" + fmt(f.gross) + "). Likely causes: " + c2.join("; ") + ".";
+      }
+      add("DIFFERS_FROM_1099K", "stop", msg);
+    }
+  }
+  if (p.unread.length) add("UNREAD_ROWS", "stop", plural(p.unread.length, "row has", "rows have") + " a date I cannot read (spreadsheet row" + (p.unread.length > 1 ? "s " : " ") + p.unread.slice(0, 12).join(", ") + (p.unread.length > 12 ? ", ..." : "") + "). They are left out of every figure. Check them in the export.");
+  if (p.dups.length) {
+    var dm = []; p.dups.forEach(function(x){ if (x.m && dm.indexOf(x.m) < 0) dm.push(x.m); }); dm.sort(function(a,b){return a-b;});
+    add("DUPLICATE_ROWS", "stop", plural(p.dups.length, "row is an exact copy", "rows are exact copies") + " of an earlier row" + (dm.length ? " (" + monthList(dm) + ")" : "") + ". I counted each only once. If the export was put together from overlapping downloads that is right; if the client really had identical transactions, add them back.");
+  }
+  if (p.noDepositCol) add("NO_DEPOSIT_DATES", "stop", "This Square export has no Deposit Date column, so I cannot tell which sales were paid out in " + Y + ". Payouts show as zero and everything shows as held. Export again with Deposit Date included.");
+  if (f.missingMonths.length) add("MISSING_MONTH", "care", "No card or app sales in " + monthList(f.missingMonths) + " " + Y + ". If the business was open then, this export may be incomplete, and the 1099-K will be higher.");
+  if (f.boundary) {
+    var b = f.boundary, alt2 = f.gross + b.intoNextYear.amount - b.fromPriorYear.amount;
+    add("UTC_DATES", "care", "This Stripe file has only UTC dates. " + plural(b.intoNextYear.count, "sale") + " of " + fmt(b.intoNextYear.amount) + " on January 1, " + (Y+1) + " before 8:00 UTC may be December 31 sales in the US; " + plural(b.fromPriorYear.count, "sale") + " of " + fmt(b.fromPriorYear.amount) + " on January 1, " + Y + " before 8:00 UTC may belong to " + (Y-1) + ". Box 1a by UTC date: " + fmt(f.gross) + "; by US date: " + fmt(alt2) + ". Stripe's 1099-K uses its own time zone; compare both.");
+  }
+  if (f.personalList.length) add("PERSONAL_TRANSFERS", "care", plural(f.personalList.length, "payment looks", "payments look") + " like personal transfers (friends and family), " + fmt(f.personal) + " in all: " + f.personalList.slice(0, 10).map(function(e){ return (e.name || "no name") + " " + fmt(e.amount) + " on " + e.m + "/" + e.d; }).join("; ") + (f.personalList.length > 10 ? "; ..." : "") + ". They are not in box 1a here. Ask the client; if any were business income, add them.");
+  if (f.foreign.count || f.foreignOther) add("FOREIGN_CURRENCY", "care", (f.foreign.count ? plural(f.foreign.count, "sale was", "sales were") + " in a foreign currency, converted at PayPal's own rate to " + fmt(f.foreign.usd) + " and included in box 1a." : "") + (f.foreignOther ? " " + plural(f.foreignOther, "other foreign-currency line is", "other foreign-currency lines are") + " left out; the USD balance is what ties to the bank." : "") + " Check the converted figures against the 1099-K.");
+  if (f.unconv.length) add("FOREIGN_NOT_CONVERTED", "care", plural(f.unconv.length, "foreign-currency sale has", "foreign-currency sales have") + " no conversion lines, so I cannot put a dollar figure on " + (f.unconv.length > 1 ? "them" : "it") + ": " + f.unconv.slice(0, 8).map(function(e){ return (cents2(e.foreignGross)) + " " + e.currency + " (" + e.txid + ")"; }).join("; ") + ". " + (f.unconv.length > 1 ? "They are" : "It is") + " not counted in box 1a; the 1099-K will include " + (f.unconv.length > 1 ? "them" : "it") + ".");
+  var oLabels = Object.keys(f.otherByLabel);
+  if (oLabels.length) add("OTHER_ACTIVITY", "care", "Activity that is not sales, refunds, fees or payouts, " + fmt(f.other) + " in all: " + oLabels.map(function(l){ return l + " " + fmt(f.otherByLabel[l]); }).join("; ") + ". It is in the bank tie and the entry as \"Other activity to classify\".");
+  if (f.salesTax > 0) add("SALES_TAX_IN_GROSS", "care", "Sales tax of " + fmt(f.salesTax) + " is included in the figures, as the 1099-K includes it. Where the client collects it as a trustee and the books record it as a liability, you may leave it out of gross receipts; line 1 is then below the 1099-K, so be ready to explain the difference.");
+  if (f.tips > 0) add("TIPS_IN_GROSS", "care", "Card tips of " + fmt(f.tips) + " are included, as the 1099-K includes them. Where tips are paid out to staff and handled through payroll, you may leave them out of gross receipts; line 1 is then below the 1099-K, so be ready to explain the difference.");
+  if (p.proc === "stripe") add("NO_TAX_DETAIL", "info", "Stripe's balance report does not split out sales tax or tips. Any sales tax collected is inside gross; take it from the client's sales tax returns if you need it.");
+  if (f.outside.count) add("OUTSIDE_YEAR", "info", plural(f.outside.count, "line is", "lines are") + " dated outside " + Y + " and left out" + (f.outside.sales ? ", including " + plural(f.outside.sales, "sale") + " of " + fmt(f.outside.amount) : "") + ".");
+  if (f.cashOther > 0 || f.giftRedeemed > 0) add("NOT_ON_1099K", "info", (f.cashOther > 0 ? "Cash and other-tender sales of " + fmt(f.cashOther) + " are not on the 1099-K; they are added to get gross receipts. " : "") + (f.giftRedeemed > 0 ? "Payments with the merchant's own gift cards, " + fmt(f.giftRedeemed) + ", are not on the 1099-K and not added again (the income was the gift card sale)." : ""));
+  if (f.giftSold > 0) add("GIFT_CARD_SALES", "info", "Gift cards sold for " + fmt(f.giftSold) + " are inside the sales. Depending on the client's method, unredeemed gift cards may be deferred.");
+  if (f.unsettled.length) { var ua = 0; f.unsettled.forEach(function(e){ ua += e.amount; }); add("NOT_SETTLED", "info", plural(f.unsettled.length, "line was", "lines were") + " not settled (" + uniq(f.unsettled.map(function(e){ return e.status; })).join(", ") + "), " + fmt(ua) + " in all. They are left out."); }
+  if (f.refundsNoSale.length) { var ra = 0; f.refundsNoSale.forEach(function(e){ ra += e.amount; }); add("REFUND_WITHOUT_SALE", "info", plural(f.refundsNoSale.length, "refund matches", "refunds match") + " no sale in this export (" + fmt(ra) + "). The sale was probably in an earlier year or another location. The refund still reduces the payouts."); }
+  if (p.proc === "paypal" && (f.gross <= 2000000 || f.box3 <= 200)) add("BELOW_THRESHOLD", "info", "Sales are " + fmt(f.gross) + " in " + plural(f.box3, "payment") + ". PayPal need not issue a federal 1099-K unless both are over $20,000 and 200; some states require one at a lower figure. The income is reportable either way.");
+  var order = {stop:0, care:1, info:2};
+  var first = W.filter(function(w){ return w.code === "DIFFERS_FROM_1099K"; });
+  var rest = W.filter(function(w){ return w.code !== "DIFFERS_FROM_1099K"; });
+  rest.sort(function(a, b){ return order[a.level] - order[b.level]; });
+  return first.concat(rest);
+}
+function uniq(a){ var o = []; a.forEach(function(x){ if (o.indexOf(x) < 0) o.push(x); }); return o; }
+function cents2(c){ return fmt(c).replace("$", ""); }
+
+/* ---------- report ---------- */
+function buildReport(p, f, typed, W){
+  var status = typed == null ? "COMPUTED" : (typed === f.gross ? "TIES" : "DIFFERS");
+  var b = f.boundary ? { intoNextYear:{count:f.boundary.intoNextYear.count, amount:dol(f.boundary.intoNextYear.amount)},
+                         fromPriorYear:{count:f.boundary.fromPriorYear.count, amount:dol(f.boundary.fromPriorYear.amount)} } : null;
+  var months = [];
+  for (var m = 0; m < 12; m++) months.push({ month:m+1, name:MONTHS[m], box:BOXES[m], sales:dol(f.monthly[m]), count:f.monthCount[m],
+    refunds:dol(f.mRefunds[m]), chargebacks:dol(f.mCharge[m]), fees:dol(f.mFees[m]), payouts:dol(f.mPayouts[m]) });
+  return {
+    version:VERSION, file:p.file, status:status, processor:p.proc, layout:p.layout, year:f.year, rowsRead:p.rowsRead,
+    box1a:dol(f.gross), box3:f.box3, monthly:f.monthly.map(dol),
+    bridge:{ gross:dol(f.gross), salesTax:dol(f.salesTax), tips:dol(f.tips), notOn1099K:dol(f.cashOther), giftRedeemed:dol(f.giftRedeemed),
+      grossReceipts:dol(f.grossReceipts), grossReceiptsExcluding:dol(f.grossReceiptsExcluding), refunds:dol(f.refunds), chargebacks:dol(f.chargebacks),
+      returns:dol(f.returns), refundTax:dol(f.refundTax), fees:dol(f.fees), personal:dol(f.personal), transfersIn:dol(f.transfersIn),
+      other:dol(f.other), netActivity:dol(f.netActivity), payouts:dol(f.payouts), held:dol(f.held) },
+    entry:{ date:f.entry.date, lines:f.entry.lines.map(function(l){ return {account:l.account, debit:dol(l.debit), credit:dol(l.credit)}; }),
+      salesBooked:dol(f.entry.salesBooked), salesAfter:dol(f.entry.salesAfter), totalDebit:dol(f.entry.totalDebit), totalCredit:dol(f.entry.totalCredit) },
+    exceptions:W.map(function(w){ return {code:w.code, level:w.level, message:w.message}; }),
+    typedBox1a:typed == null ? null : dol(typed), difference:typed == null ? null : dol(typed - f.gross),
+    boundary:b, duplicates:p.dups.length, missingMonths:f.missingMonths.slice(),
+    outside:{count:f.outside.count, sales:f.outside.sales, amount:dol(f.outside.amount)},
+    foreign:{count:f.foreign.count, usd:dol(f.foreign.usd)}, months:months
+  };
+}
+
+/* ---------- rendering ---------- */
+function row(label, amt, cls, note){ return '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + label + (note ? '<div class="muted" style="font-size:.85em">' + note + '</div>' : '') + '</td><td class="n">' + fmt(amt) + '</td></tr>'; }
+function warnHtml(w){ return '<div class="warn ' + w.level + '"><span class="code">' + esc(w.code) + ' &middot; ' + esc(w.level) + '</span>' + esc(w.message) + '</div>'; }
+
+function render(){
+  var p = state.p, f = state.f, typed = state.typed;
+  var W = warnings(p, f, typed);
+  var rep = buildReport(p, f, typed, W);
+  var Y = f.year, status = rep.status, differs = status === "DIFFERS";
+  var H = [];
+  H.push('<h1 style="font-size:1.8rem">Does the 1099-K tie? ' + esc(NAMES[p.proc]) + ' ' + Y + '</h1>');
+  H.push('<p class="muted sans">' + esc(p.layout) + ' &middot; tax year ' + Y + ' &middot; file: ' + esc(p.file) + '</p>');
+  H.push('<div class="meta sans"><div>Client:</div><div>EIN:</div><div>Prepared by:</div><div>Date:</div><div>Reviewed by:</div><div>Date:</div></div>');
+
+  var vt, vc = "";
+  if (status === "COMPUTED") vt = "If a 1099-K is issued for " + Y + ", box 1a should be " + fmt(f.gross) + ".";
+  else if (status === "TIES") { vt = "The 1099-K ties: box 1a is " + fmt(f.gross) + ", exactly the year's card and app sales."; vc = "ties"; }
+  else { var d = typed - f.gross; vt = "The 1099-K does not tie: box 1a is " + fmt(Math.abs(d)) + " " + (d > 0 ? "more" : "less") + " than this export's sales."; vc = "differs"; }
+  H.push('<div id="verdict" class="' + vc + '">' + esc(vt) + '</div>');
+
+  var stops = W.filter(function(w){ return w.level === "stop"; });
+  H.push('<div id="stop-banner" role="alert"' + (stops.length ? '' : ' hidden') + '>' + (stops.length ? '<h2>Stop: deal with ' + (stops.length > 1 ? 'these' : 'this') + ' before you rely on the figures</h2>' + stops.map(warnHtml).join("") : '') + '</div>');
+
+  // what the 1099-K should say
+  H.push('<h2>What the 1099-K should say</h2>');
+  H.push('<div class="boxes"><div><div class="label">Box 1a, gross amount</div><div class="big" id="out-box1a">' + fmt(f.gross) + '</div></div>' +
+         '<div><div class="label">Box 3, number of payment transactions</div><div class="big" id="out-box3">' + f.box3.toLocaleString("en-US") + '</div></div></div>');
+  H.push('<div class="cmp noprint"><label for="box1a" class="sans" style="font-weight:600">Box 1a on the client\'s 1099-K:</label>' +
+         '<input type="text" id="box1a" inputmode="decimal" autocomplete="off" value="' + esc(state.typedText || "") + '" placeholder="type it here">' +
+         '<button class="btn small" id="compare" type="button">Check it ties</button></div>');
+  if (typed != null) H.push('<p class="sans">Typed box 1a: <b>' + fmt(typed) + '</b>; difference from this export: <b>' + fmt(typed - f.gross) + '</b>.</p>');
+  H.push('<div class="grid">');
+  for (var m = 0; m < 12; m++) H.push('<div' + (f.monthCount[m] === 0 && f.box3 > 0 ? ' class="zero"' : '') + '><b>' + BOXES[m] + ' ' + MONTHS[m].slice(0, 3) + '</b>' + fmt(f.monthly[m]) + '</div>');
+  H.push('</div>');
+  H.push('<p class="muted" style="font-size:.85rem">Box 1a is every card and app payment, dated on the day of the sale, before refunds, fees and chargebacks, with sales tax and tips included. Payments with the merchant\'s own gift card are not counted.</p>');
+
+  var others = W.filter(function(w){ return w.level !== "stop"; });
+  if (others.length) { H.push('<h2>Check these first</h2>'); H.push(others.map(warnHtml).join("")); }
+
+  // to the return
+  H.push('<h2>From the 1099-K to the return</h2>');
+  if (differs) H.push('<p class="notyet">Not for the return yet: the 1099-K does not tie.</p>');
+  var gr = f.grossReceipts, exTax = state.exTax && f.salesTax > 0, exTips = state.exTips && f.tips > 0;
+  H.push('<div class="tablewrap"><table><tbody>');
+  H.push(row("Form 1099-K box 1a (card and app sales)", f.gross));
+  H.push(row("Add cash and other-tender sales (not on the 1099-K)", f.cashOther));
+  H.push(row("Gross receipts, sales tax and tips included", gr, "total", "Schedule C line 1; Form 1120-S line 1a; Form 1065 line 1a"));
+  if (exTax || exTips) {
+    if (exTax) H.push(row("Less sales tax left out of gross receipts", -f.salesTax));
+    if (exTips) H.push(row("Less tips left out of gross receipts", -f.tips));
+    var red = gr - (exTax ? f.salesTax : 0) - (exTips ? f.tips : 0);
+    H.push(row("Gross receipts for line 1", red, "total", red < f.gross ? "Line 1 is now below the 1099-K by " + fmt(f.gross - red) + "; attach an explanation or be ready for an IRS notice." : "Line 1 is still not below the 1099-K, because cash sales are added."));
+  }
+  H.push(row("Returns and allowances", f.returns, "", "Schedule C line 2; Forms 1120-S and 1065 line 1b. Card refunds " + fmt(f.refunds) + (f.cashRefunds ? ", cash refunds " + fmt(f.cashRefunds) : "") + (f.chargebacks ? ", chargebacks " + fmt(f.chargebacks) : "") + (f.refundTax ? "; includes sales tax refunded of " + fmt(f.refundTax) : "") + "."));
+  H.push(row("Merchant fees", f.fees, "", "Schedule C line 10; Form 1120-S line 19; Form 1065 line 21"));
+  H.push('</tbody></table></div>');
+  if (f.salesTax > 0 || f.tips > 0) {
+    H.push('<div class="checks sans noprint">');
+    if (f.salesTax > 0) H.push('<label><input type="checkbox" id="ex-tax"' + (state.exTax ? ' checked' : '') + '> Leave sales tax (' + fmt(f.salesTax) + ') out of gross receipts</label>');
+    if (f.tips > 0) H.push('<label><input type="checkbox" id="ex-tips"' + (state.exTips ? ' checked' : '') + '> Leave tips (' + fmt(f.tips) + ') out of gross receipts</label>');
+    H.push('</div>');
+  }
+  if (f.giftRedeemed > 0) H.push('<p class="muted">Gift card redemptions of ' + fmt(f.giftRedeemed) + ' are not added: the income was the gift card sale.</p>');
+
+  // to the bank
+  H.push('<h2>From the 1099-K to the bank</h2>');
+  H.push('<div class="tablewrap"><table id="bank"><tbody>');
+  H.push(row("Gross, box 1a", f.gross));
+  H.push(row("Less refunds", -f.refunds));
+  H.push(row("Less chargebacks", -f.chargebacks));
+  H.push(row("Less fees", -f.fees));
+  H.push(row("Net card and app activity", f.netActivity, "", ""));
+  H.push(row("Add money moved in from the owner or the bank", f.transfersIn));
+  H.push(row("Add personal transfers received", f.personal));
+  H.push(row("Add other activity", f.other));
+  H.push(row(p.proc === "square" ? "Less sales paid out after the year end" : "Less increase in the balance held at the processor", -f.held));
+  H.push(row("Equals payouts to the bank in " + Y, f.payouts, "total"));
+  H.push('</tbody></table></div>');
+  var foot = f.gross - f.refunds - f.chargebacks - f.fees + f.transfersIn + f.personal + f.other - f.held;
+  H.push('<p class="muted">It foots: ' + fmt(foot) + (foot === f.payouts ? ' equals the payouts.' : ' does NOT equal the payouts of ' + fmt(f.payouts) + '.') + ' Match the payouts to the deposits on the bank statements.</p>');
+
+  // entry
+  H.push('<h2>The year-end entry</h2>');
+  if (differs) H.push('<p class="notyet">Not for the return yet: the 1099-K does not tie.</p>');
+  H.push('<p>For books that recorded each payout as sales. Dated December 31, ' + Y + '.</p>');
+  H.push('<div class="tablewrap"><table id="entry"><thead><tr><th>Account</th><th class="n">Debit</th><th class="n">Credit</th></tr></thead><tbody>');
+  f.entry.lines.forEach(function(l){ H.push('<tr><td>' + esc(l.account) + '</td><td class="n">' + (l.debit ? fmt(l.debit) : "") + '</td><td class="n">' + (l.credit ? fmt(l.credit) : "") + '</td></tr>'); });
+  H.push('<tr class="total"><td>Total</td><td class="n">' + fmt(f.entry.totalDebit) + '</td><td class="n">' + fmt(f.entry.totalCredit) + '</td></tr>');
+  H.push('</tbody></table></div>');
+  H.push('<p>Starts from sales booked as payouts: <b>' + fmt(f.entry.salesBooked) + '</b>. Sales after the entry: <b>' + fmt(f.entry.salesAfter) + '</b>' + (f.entry.salesAfter === f.gross ? ', which equals box 1a.' : '.') + '</p>');
+  if (f.salesTax > 0) H.push('<p class="muted">Sales tax: the Sales line includes ' + fmt(f.salesTax) + ' of sales tax. If the books keep sales tax payable, move it there.</p>');
+  if (f.tips > 0) H.push('<p class="muted">Tips: the Sales line includes ' + fmt(f.tips) + ' of tips. If tips were paid to staff, move them to tips payable or wages.</p>');
+  if (f.cashOther > 0) H.push('<p class="muted">Cash and other-tender sales (' + fmt(f.cashOther) + ') are not in this entry; they should already be in the books from the cash deposits.</p>');
+
+  // ask the client
+  H.push('<h2>To ask the client</h2><ul>');
+  H.push('<li>Are there other locations, other processors, or other accounts on the same taxpayer ID?</li>');
+  if (f.missingMonths.length) H.push('<li>Was the business closed in ' + esc(monthList(f.missingMonths)) + '?</li>');
+  if (f.personalList.length) H.push('<li>Were the personal transfers (' + fmt(f.personal) + ') business income, gifts or reimbursements?</li>');
+  if (Object.keys(f.otherByLabel).length) H.push('<li>What was the other activity (' + fmt(f.other) + ')?</li>');
+  if (f.transfersIn) H.push('<li>Money moved in (' + fmt(f.transfersIn) + '): was it the owner\'s money?</li>');
+  if (f.salesTax > 0) H.push('<li>Does the client file sales tax returns, and do they agree with ' + fmt(f.salesTax) + '?</li>');
+  if (f.tips > 0) H.push('<li>Were card tips paid out to staff through payroll?</li>');
+  H.push('<li>Please send the 1099-K itself, and every one received for the year.</li></ul>');
+
+  H.push('<h2>Checks to make on the 1099-K itself</h2><ul>');
+  H.push('<li>The payee TIN and name match the return.</li><li>Box 4, federal income tax withheld (backup withholding): if any, claim it.</li><li>The state boxes, and any state filing.</li><li>One form per account: add up every 1099-K the client received.</li><li>The months, 5a to 5l, against the month-by-month table below.</li></ul>');
+
+  // month by month
+  H.push('<details id="months"' + (differs ? ' open' : '') + '><summary>Month by month</summary><div class="tablewrap"><table><thead><tr><th>Box</th><th>Month</th><th class="n">Sales</th><th class="n">Count</th><th class="n">Refunds</th><th class="n">Chargebacks</th><th class="n">Fees</th><th class="n">Payouts</th></tr></thead><tbody>');
+  for (m = 0; m < 12; m++) H.push('<tr><td>' + BOXES[m] + '</td><td>' + MONTHS[m] + '</td><td class="n">' + fmt(f.monthly[m]) + '</td><td class="n">' + f.monthCount[m] + '</td><td class="n">' + fmt(f.mRefunds[m]) + '</td><td class="n">' + fmt(f.mCharge[m]) + '</td><td class="n">' + fmt(f.mFees[m]) + '</td><td class="n">' + fmt(f.mPayouts[m]) + '</td></tr>');
+  H.push('<tr class="total"><td></td><td>Year</td><td class="n">' + fmt(f.gross) + '</td><td class="n">' + f.box3 + '</td><td class="n">' + fmt(f.refunds) + '</td><td class="n">' + fmt(f.chargebacks) + '</td><td class="n">' + fmt(f.fees) + '</td><td class="n">' + fmt(f.payouts) + '</td></tr>');
+  H.push('</tbody></table></div></details>');
+
+  // what was read
+  var kinds = {};
+  p.events.forEach(function(e){ kinds[e.kind] = (kinds[e.kind] || 0) + 1; });
+  var KN = {sale:"sales", refund:"refunds", chargeback:"chargebacks", payout:"payouts", fee:"fee lines", other:"other activity", transferIn:"money moved in", personal:"personal transfers", convIn:"currency conversions in", foreignConv:"foreign conversions", foreignOther:"other foreign lines", foreignUnconv:"unconverted foreign sales", hold:"holds (ignored)", unsettled:"not settled"};
+  H.push('<h2>What was read</h2><ul>');
+  H.push('<li>File: ' + esc(p.file) + ' (' + esc(p.layout) + '), sheet "' + esc(p.sheet) + '", heading row ' + p.headerRow + '.</li>');
+  H.push('<li>' + plural(p.rowsRead, "line") + ' read' + (p.blank ? ', ' + plural(p.blank, "blank row") + ' skipped' : '') + (p.totalsSkipped ? ', ' + plural(p.totalsSkipped, "totals row") + ' skipped' : '') + '.</li>');
+  H.push('<li>' + Object.keys(kinds).map(function(k){ return (KN[k] || k) + ": " + kinds[k]; }).join("; ") + '.</li>');
+  if (p.dups.length) H.push('<li>Duplicate rows skipped: ' + p.dups.length + ' (rows ' + p.dups.slice(0, 12).map(function(x){ return x.row; }).join(", ") + ').</li>');
+  if (p.unread.length) H.push('<li>Rows with unreadable dates: ' + p.unread.length + ' (rows ' + p.unread.slice(0, 12).join(", ") + ').</li>');
+  if (f.outside.count) H.push('<li>Lines outside ' + Y + ' left out: ' + f.outside.count + '.</li>');
+  if (p.proc === "stripe") H.push('<li>Dates from ' + (p.utcOnly ? 'created_utc (UTC)' : 'created (the account\'s time zone)') + '.</li>');
+  H.push('</ul>');
+  H.push('<footer>The data stayed in this browser; nothing was uploaded. All amounts are worked in whole cents. This is a workpaper to help you; the accountant is responsible for the return. Version ' + VERSION + '.</footer>');
+
+  $("workpaper").innerHTML = H.join("");
+  window.__report = rep;
+  bindWork();
+}
+
+function bindWork(){
+  $("compare").addEventListener("click", doCompare);
+  $("box1a").addEventListener("keydown", function(e){ if (e.key === "Enter") { e.preventDefault(); doCompare(); } });
+  var t = $("ex-tax"), tp = $("ex-tips");
+  if (t) t.addEventListener("change", function(){ state.exTax = t.checked; render(); });
+  if (tp) tp.addEventListener("change", function(){ state.exTips = tp.checked; render(); });
+}
+function doCompare(){
+  var v = $("box1a").value;
+  state.typedText = v;
+  state.typed = parseTyped(v);
+  render();
+  var b = $("box1a"); if (b) b.focus();
+}
+
+/* ---------- file handling ---------- */
+function problem(msg){ $("problem").textContent = msg; }
+function refuseNotRecognized(name, why){
+  var msg = "I cannot read this file. " + why;
+  problem(msg);
+  window.__report = { version:VERSION, file:name, status:"NOT_RECOGNIZED", processor:null, layout:null, year:null, rowsRead:0,
+    exceptions:[{code:"NOT_RECOGNIZED", level:"stop", message:msg}] };
+}
+function handleFile(file){
+  if (!file) return;
+  problem("");
+  var name = file.name || "file";
+  var ext = (name.match(/\.([^.]+)$/) || [, ""])[1].toLowerCase();
+  if (ext === "pdf" || file.type === "application/pdf") {
+    problem("This is a PDF. I need the processor's own export of the transactions, as CSV or Excel, not a PDF statement or a PDF of the 1099-K. See below for which export to get.");
+    return;
+  }
+  if (["csv","txt","xlsx","xls","xlsm"].indexOf(ext) < 0) {
+    problem("I can only read CSV, TXT or Excel files (xlsx, xls, xlsm)" + (ext ? "; this is a ." + ext + " file" : "") + ". Download the processor's transactions export as CSV and drop that here.");
+    return;
+  }
+  var text = ext === "csv" || ext === "txt";
+  var rd = text ? file.text() : file.arrayBuffer();
+  rd.then(function(data){
+    var wb;
+    try { wb = text ? XLSX.read(String(data).replace(/^﻿/, ""), {type:"string", raw:true}) : XLSX.read(new Uint8Array(data), {type:"array"}); }
+    catch (e) { refuseNotRecognized(name, "It does not open as a spreadsheet or CSV."); return; }
+    processWorkbook(wb, name);
+  }, function(){ refuseNotRecognized(name, "The browser could not open it."); });
+}
+function processWorkbook(wb, name){
+  if (typeof XLSX === "undefined") { problem("The spreadsheet reader did not load. Check the internet connection and reload the page."); return; }
+  var best = null, bestN = -1, bestName = "";
+  (wb.SheetNames || []).forEach(function(sn){
+    var rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header:1, raw:true, defval:null, blankrows:true});
+    if (rows.length > bestN) { bestN = rows.length; best = rows; bestName = sn; }
+  });
+  if (!best) { refuseNotRecognized(name, "It has no rows."); return; }
+  var rec = recognize(best);
+  if (!rec) { refuseNotRecognized(name, "It is not a Square Transactions CSV, a Stripe itemized balance change from activity report, or a PayPal Activity download: I could not find their column headings in the first 15 rows. Export one of those and drop it here."); return; }
+  var p = parseRows(rec, best);
+  p.file = name; p.sheet = bestName;
+  var f = compute(p);
+  var startTxt = $("box1a-start").value;
+  var typed = parseTyped(startTxt);
+  state = { p:p, f:f, typed:typed, typedText:typed != null ? startTxt.trim() : "", exTax:false, exTips:false };
+  $("start").hidden = true;
+  $("work").hidden = false;
+  render();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- the made-up sample ---------- */
+function sampleCsv(){
+  var Y = new Date().getFullYear() - 1;
+  var seed = 7;
+  function rnd(){ seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+  function money(c){ var neg = c < 0; c = Math.abs(c); return (neg ? "-" : "") + "$" + (Math.floor(c / 100)).toLocaleString("en-US") + "." + String(c % 100).padStart(2, "0"); }
+  function ds(y, m, d){ return y + "-" + String(m).padStart(2, "0") + "-" + String(d).padStart(2, "0"); }
+  function nextDay(y, m, d){ var t = new Date(Date.UTC(y, m - 1, d + 1)); if (t.getUTCDay() === 6) t = new Date(t.getTime() + 2 * 864e5); else if (t.getUTCDay() === 0) t = new Date(t.getTime() + 864e5); return ds(t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()); }
+  var head = ["Date","Time","Time Zone","Gross Sales","Discounts","Net Sales","Gift Card Sales","Tax","Tip","Partial Refunds","Total Collected","Source","Card","Card Entry Methods","Cash","Square Gift Card","Other Tender","Fees","Net Total","Transaction ID","Payment ID","Card Brand","Description","Event Type","Location","Deposit ID","Deposit Date","Transaction Status","Cash App"];
+  var lines = [head.join(",")], n = 0, refundDone = false, refundSrc = null;
+  for (var m = 1; m <= 12; m++) {
+    for (var d = 1; d <= daysIn(Y, m); d++) {
+      var dow = new Date(Date.UTC(Y, m - 1, d)).getUTCDay();
+      if (dow === 1) continue;
+      var k = 1 + Math.floor(rnd() * 2);
+      for (var j = 0; j < k; j++) {
+        n++;
+        var price = 450 + Math.floor(rnd() * 3300);
+        var tax = Math.round(price * 0.0825);
+        var isCard = rnd() < 0.72;
+        var tip = isCard && rnd() < 0.6 ? Math.round(price * (rnd() < 0.5 ? 0.15 : 0.2)) : 0;
+        var total = price + tax + tip;
+        var fee = isCard ? Math.round(total * 0.026) + 15 : 0;
+        var id = "CAFE" + String(n).padStart(5, "0");
+        var hr = 7 + Math.floor(rnd() * 9), mi = Math.floor(rnd() * 60);
+        var rowv = [ds(Y, m, d), String(hr).padStart(2, "0") + ":" + String(mi).padStart(2, "0") + ":00", "Central Time (US & Canada)", money(price), "$0.00", money(price), "$0.00",
+          money(tax), money(tip), "$0.00", money(total), "Point of Sale", isCard ? money(total) : "$0.00", isCard ? "Contactless" : "", isCard ? "$0.00" : money(total),
+          "$0.00", "$0.00", money(-fee), money(total - fee), id, "P" + id, isCard ? "Visa" : "", "Coffee and pastry", "Payment", "Corner Cafe",
+          isCard ? "D" + m + "-" + d : "", isCard ? nextDay(Y, m, d) : "", "Complete", "$0.00"];
+        lines.push(rowv.map(csvCell).join(","));
+        if (!refundSrc && m === 6 && isCard && price > 1500) refundSrc = {id:id, price:price, tax:tax, d:d};
+      }
+    }
+    if (m === 6 && refundSrc && !refundDone) {
+      refundDone = true;
+      var rd = Math.min(refundSrc.d + 1, 30), amt = refundSrc.price + refundSrc.tax;
+      lines.push([ds(Y, 6, rd), "10:05:00", "Central Time (US & Canada)", money(-refundSrc.price), "$0.00", money(-refundSrc.price), "$0.00", money(-refundSrc.tax), "$0.00", "$0.00",
+        money(-amt), "Point of Sale", money(-amt), "", "$0.00", "$0.00", "$0.00", "$0.00", money(-amt), refundSrc.id, "R" + refundSrc.id, "Visa", "Wrong order, refunded", "Refund",
+        "Corner Cafe", "D6-" + rd, nextDay(Y, 6, rd), "Complete", "$0.00"].map(csvCell).join(","));
+    }
+  }
+  return lines.join("\n");
+}
+function csvCell(v){ v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+
+/* ---------- wiring ---------- */
+var drop = $("drop"), input = $("file");
+input.addEventListener("change", function(){ if (input.files && input.files[0]) handleFile(input.files[0]); });
+["dragenter","dragover"].forEach(function(t){ drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+["dragleave","drop"].forEach(function(t){ drop.addEventListener(t, function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+drop.addEventListener("drop", function(e){ var fl = e.dataTransfer && e.dataTransfer.files; if (fl && fl[0]) handleFile(fl[0]); });
+document.addEventListener("dragover", function(e){ e.preventDefault(); });
+document.addEventListener("drop", function(e){ e.preventDefault(); });
+$("sample").addEventListener("click", function(e){
+  e.preventDefault(); problem("");
+  if (typeof XLSX === "undefined") { problem("The spreadsheet reader did not load. Check the internet connection and reload the page."); return; }
+  var wb = XLSX.read(sampleCsv(), {type:"string", raw:true});
+  processWorkbook(wb, "made-up-sample-corner-cafe-square.csv");
+});
+$("print").addEventListener("click", function(){ window.print(); });
+$("startover").addEventListener("click", function(e){
+  e.preventDefault(); state = null; input.value = ""; problem("");
+  $("workpaper").innerHTML = ""; $("work").hidden = true; $("start").hidden = false; window.scrollTo(0, 0);
+});
+})();
+</script>
+</body>
+</html>

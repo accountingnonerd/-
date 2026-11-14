@@ -36,10 +36,11 @@ killed ideas. A candidate is chosen only after it passes Stage 1 and the value t
   Going Concern) blocked automated reading. SEC EDGAR filings would be the test inputs.
 
 ## 4. Order-to-Cash
-- **Processor payouts to a journal entry.** A Stripe, Square or Shopify payout report,
-  turned into gross sales, fees and refunds that tie to the bank deposit, for clients
-  with no sync app. Sync apps exist (A2X, Synder, Webgility and others); the gap is the
-  client without one.
+- **Built:** 01 Does the 1099-K tie? (version 1.0.0), which also grosses up payouts.
+- **More processors for the 1099-K reconciliation:** Shopify Payments, Venmo and Cash App for
+  business, Etsy, Amazon and eBay; Square's Transfers report for the actual deposits.
+- **Real exports:** one Square, Stripe and PayPal export each, client data removed, to test the
+  layouts the tool was built from published column names.
 - **Receivables aging review** with a memo for the file.
 
 ## 5. Acquire-to-Retire (fixed assets)

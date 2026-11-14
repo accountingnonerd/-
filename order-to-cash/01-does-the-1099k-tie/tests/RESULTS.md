@@ -101,4 +101,13 @@ caught.**
 
 ## Rebuild from the prompt
 
-See the bottom of this file once the rebuild check has run.
+A fresh AI session was given only `REBUILD-PROMPT.md` (and the spreadsheet library) and told not to
+look at anything else. What it built was run through the same acceptance test.
+
+| Rebuild | Result | What went wrong | What changed in the prompt |
+|---|---|---|---|
+| 1 (`rebuild-check/rebuild-1.html`) | 12 of 14 cases, 658 of 660 checks | It reported duplicates as an object, not a number, and showed the "not an export I know" refusal outside the element the test reads. Every figure was right. | `duplicates` is a plain number; refusals go in `#problem`. |
+| 2 (`rebuild-check/rebuild-2.html`) | **14 of 14 cases, 660 of 660 checks** | Nothing. | None. |
+
+"The same agent" means a build that passes these 14 cases. Rebuild 2 differs from the original in
+wording, layout and choices the prompt left open, and is the same agent by that test.
