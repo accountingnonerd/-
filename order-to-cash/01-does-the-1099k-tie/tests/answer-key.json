@@ -1,0 +1,859 @@
+{
+ "01": {
+  "title": "Square caf\u00e9, full year: cash, gift cards, tips and sales tax",
+  "kind": "clean",
+  "file": "01-square-juniper-street-2025.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "NOT_ON_1099K",
+   "SALES_TAX_IN_GROSS",
+   "TIPS_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "square",
+  "year": 2025,
+  "box1a": 39907.56,
+  "box3": 1430,
+  "monthly": [
+   3424.06,
+   3381.16,
+   3011.08,
+   3396.92,
+   3101.74,
+   2920.62,
+   3701.68,
+   3392.38,
+   3298.11,
+   3354.84,
+   3463.56,
+   3461.41
+  ],
+  "bridge": {
+   "gross": 39907.56,
+   "salesTax": 2733.84,
+   "tips": 4034.52,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 1251.96,
+   "notOn1099K": 10527.0,
+   "personal": 0.0,
+   "grossReceipts": 43666.2,
+   "returns": 0.0,
+   "payouts": 38492.25,
+   "held": 163.35
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 1251.96,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 5516.4,
+    "credit": 0
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 2733.84
+   },
+   {
+    "account": "Tips payable",
+    "debit": 0,
+    "credit": 4034.52
+   }
+  ]
+ },
+ "02": {
+  "title": "Square caf\u00e9 with the 1099-K typed in: it ties",
+  "kind": "clean",
+  "file": "01-square-juniper-street-2025.csv",
+  "status": "TIES",
+  "exceptions": [
+   "NOT_ON_1099K",
+   "SALES_TAX_IN_GROSS",
+   "TIPS_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "square",
+  "year": 2025,
+  "box1a": 39907.56,
+  "box3": 1430,
+  "monthly": [
+   3424.06,
+   3381.16,
+   3011.08,
+   3396.92,
+   3101.74,
+   2920.62,
+   3701.68,
+   3392.38,
+   3298.11,
+   3354.84,
+   3463.56,
+   3461.41
+  ],
+  "bridge": {
+   "gross": 39907.56,
+   "salesTax": 2733.84,
+   "tips": 4034.52,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 1251.96,
+   "notOn1099K": 10527.0,
+   "personal": 0.0,
+   "grossReceipts": 43666.2,
+   "returns": 0.0,
+   "payouts": 38492.25,
+   "held": 163.35
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 1251.96,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 5516.4,
+    "credit": 0
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 2733.84
+   },
+   {
+    "account": "Tips payable",
+    "debit": 0,
+    "credit": 4034.52
+   }
+  ],
+  "typedBox1a": 39907.56,
+  "difference": 0.0
+ },
+ "03": {
+  "title": "Stripe shop: refunds, disputes, a euro charge, dates in UTC only",
+  "kind": "ugly",
+  "file": "03-stripe-fernhill-ceramics-2025.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "NO_TAX_DETAIL",
+   "OUTSIDE_YEAR",
+   "UTC_DATES"
+  ],
+  "noOtherExceptions": true,
+  "processor": "stripe",
+  "year": 2025,
+  "box1a": 69867.39,
+  "box3": 650,
+  "monthly": [
+   3865.41,
+   6011.07,
+   6849.19,
+   5544.55,
+   6138.63,
+   6214.81,
+   6182.66,
+   5461.9,
+   5892.19,
+   5763.19,
+   5866.84,
+   6076.95
+  ],
+  "bridge": {
+   "gross": 69867.39,
+   "salesTax": 0.0,
+   "tips": 0.0,
+   "refunds": 511.82,
+   "chargebacks": 178.75,
+   "fees": 2236.15,
+   "notOn1099K": 0.0,
+   "personal": 0.0,
+   "grossReceipts": 69867.39,
+   "returns": 690.57,
+   "payouts": 66444.24,
+   "held": 496.43
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 2236.15,
+    "credit": 0
+   },
+   {
+    "account": "Sales returns and allowances",
+    "debit": 690.57,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 2926.72
+   }
+  ],
+  "boundary": {
+   "count": 2,
+   "amount": 219.13
+  }
+ },
+ "04": {
+  "title": "PayPal seller: refunds, personal transfers, a bank top-up, a hold, a chargeback, a euro sale",
+  "kind": "ugly",
+  "file": "04-paypal-ridgeline-prints-2025.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "FOREIGN_CURRENCY",
+   "PERSONAL_TRANSFERS",
+   "SALES_TAX_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "paypal",
+  "year": 2025,
+  "box1a": 18136.24,
+  "box3": 216,
+  "monthly": [
+   1792.1,
+   1402.61,
+   1388.59,
+   1275.98,
+   1666.19,
+   1462.17,
+   1497.08,
+   1741.02,
+   1429.38,
+   1425.67,
+   1643.39,
+   1412.06
+  ],
+  "bridge": {
+   "gross": 18136.24,
+   "salesTax": 331.38,
+   "tips": 0.0,
+   "refunds": 610.33,
+   "chargebacks": 62.62,
+   "fees": 758.77,
+   "notOn1099K": 0.0,
+   "personal": 310.0,
+   "grossReceipts": 17804.86,
+   "returns": 672.95,
+   "payouts": 16273.67,
+   "held": 1317.97
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 758.77,
+    "credit": 0
+   },
+   {
+    "account": "Sales returns and allowances",
+    "debit": 672.95,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 1100.34
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 331.38
+   }
+  ],
+  "foreign": {
+   "count": 1,
+   "usd": 77.12
+  }
+ },
+ "05": {
+  "title": "Planted: two exports pasted together, June counted twice",
+  "kind": "planted",
+  "file": "05-square-two-exports-pasted.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "DUPLICATE_ROWS",
+   "NOT_ON_1099K",
+   "SALES_TAX_IN_GROSS",
+   "TIPS_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "square",
+  "year": 2025,
+  "box1a": 39554.97,
+  "box3": 1412,
+  "monthly": [
+   3344.11,
+   3141.29,
+   3390.8,
+   2642.28,
+   3330.28,
+   3607.54,
+   3473.71,
+   3210.86,
+   3191.64,
+   3492.96,
+   3265.75,
+   3463.75
+  ],
+  "bridge": {
+   "gross": 39554.97,
+   "salesTax": 2709.3,
+   "tips": 4006.49,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 1240.35,
+   "notOn1099K": 10262.02,
+   "personal": 0.0,
+   "grossReceipts": 43101.2,
+   "returns": 0.0,
+   "payouts": 38190.92,
+   "held": 123.7
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 1240.35,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 5475.44,
+    "credit": 0
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 2709.3
+   },
+   {
+    "account": "Tips payable",
+    "debit": 0,
+    "credit": 4006.49
+   }
+  ],
+  "duplicates": 158
+ },
+ "06": {
+  "title": "Planted: a Stripe export with no September",
+  "kind": "planted",
+  "file": "06-stripe-september-missing.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "MISSING_MONTH",
+   "NO_TAX_DETAIL"
+  ],
+  "noOtherExceptions": true,
+  "processor": "stripe",
+  "year": 2025,
+  "box1a": 61126.67,
+  "box3": 581,
+  "monthly": [
+   5852.03,
+   5633.58,
+   6590.33,
+   4884.7,
+   5882.82,
+   5864.43,
+   5769.59,
+   6231.91,
+   0.0,
+   4662.13,
+   4756.2,
+   4998.95
+  ],
+  "bridge": {
+   "gross": 61126.67,
+   "salesTax": 0.0,
+   "tips": 0.0,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 1946.88,
+   "notOn1099K": 0.0,
+   "personal": 0.0,
+   "grossReceipts": 61126.67,
+   "returns": 0.0,
+   "payouts": 58364.98,
+   "held": 814.81
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 1946.88,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 1946.88
+   }
+  ],
+  "missingMonths": [
+   9
+  ]
+ },
+ "07": {
+  "title": "A PayPal export from December 2024 to January 2026",
+  "kind": "ugly",
+  "file": "07-paypal-dec-to-jan.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "OUTSIDE_YEAR",
+   "SALES_TAX_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "paypal",
+  "year": 2025,
+  "box1a": 18733.07,
+  "box3": 211,
+  "monthly": [
+   1971.58,
+   1046.87,
+   2150.05,
+   1402.87,
+   1778.54,
+   1668.17,
+   2031.52,
+   1423.3,
+   1287.42,
+   1252.28,
+   1139.03,
+   1581.44
+  ],
+  "bridge": {
+   "gross": 18733.07,
+   "salesTax": 391.51,
+   "tips": 0.0,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 757.24,
+   "notOn1099K": 0.0,
+   "personal": 0.0,
+   "grossReceipts": 18341.56,
+   "returns": 0.0,
+   "payouts": 16504.35,
+   "held": 1471.48
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 757.24,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 365.73
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 391.51
+   }
+  ],
+  "outside": {
+   "count": 5
+  }
+ },
+ "08": {
+  "title": "Planted: the 1099-K includes a second location not in this export",
+  "kind": "planted",
+  "file": "08-square-one-location.csv",
+  "status": "DIFFERS",
+  "exceptions": [
+   "DIFFERS_FROM_1099K",
+   "NOT_ON_1099K",
+   "SALES_TAX_IN_GROSS",
+   "TIPS_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "square",
+  "year": 2025,
+  "box1a": 39158.05,
+  "box3": 1392,
+  "monthly": [
+   3539.82,
+   3278.03,
+   3369.67,
+   3335.98,
+   3133.65,
+   3257.86,
+   3386.6,
+   3038.28,
+   3541.42,
+   2920.71,
+   3009.92,
+   3346.11
+  ],
+  "bridge": {
+   "gross": 39158.05,
+   "salesTax": 2672.22,
+   "tips": 4095.65,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 1226.85,
+   "notOn1099K": 10537.9,
+   "personal": 0.0,
+   "grossReceipts": 42928.08,
+   "returns": 0.0,
+   "payouts": 37858.76,
+   "held": 72.44
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 1226.85,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 5541.02,
+    "credit": 0
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 2672.22
+   },
+   {
+    "account": "Tips payable",
+    "debit": 0,
+    "credit": 4095.65
+   }
+  ],
+  "typedBox1a": 41342.05,
+  "difference": 2184.0
+ },
+ "09": {
+  "title": "Square export in Excel with a totals row, blank lines, parentheses",
+  "kind": "ugly",
+  "file": "09-square-excel-with-totals.xlsx",
+  "status": "COMPUTED",
+  "exceptions": [
+   "NOT_ON_1099K",
+   "SALES_TAX_IN_GROSS",
+   "TIPS_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "square",
+  "year": 2025,
+  "box1a": 24453.88,
+  "box3": 867,
+  "monthly": [
+   2044.82,
+   1884.18,
+   2162.27,
+   1855.46,
+   2155.38,
+   1762.21,
+   2328.16,
+   2115.93,
+   1703.17,
+   2174.69,
+   2324.03,
+   1943.58
+  ],
+  "bridge": {
+   "gross": 24453.88,
+   "salesTax": 1667.84,
+   "tips": 2570.81,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 765.88,
+   "notOn1099K": 5336.86,
+   "personal": 0.0,
+   "grossReceipts": 25552.09,
+   "returns": 0.0,
+   "payouts": 23617.23,
+   "held": 70.77
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 765.88,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 3472.77,
+    "credit": 0
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 1667.84
+   },
+   {
+    "account": "Tips payable",
+    "debit": 0,
+    "credit": 2570.81
+   }
+  ]
+ },
+ "10": {
+  "title": "Not a processor export: a bank statement",
+  "kind": "ugly",
+  "file": "10-bank-statement.csv",
+  "status": "NOT_RECOGNIZED",
+  "exceptions": [
+   "NOT_RECOGNIZED"
+  ],
+  "noOtherExceptions": true
+ },
+ "11": {
+  "title": "Square: partial refunds, and a January refund of a December 2024 sale",
+  "kind": "ugly",
+  "file": "11-square-refund-of-last-years-sale.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "NOT_ON_1099K",
+   "REFUND_WITHOUT_SALE",
+   "SALES_TAX_IN_GROSS",
+   "TIPS_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "square",
+  "year": 2025,
+  "box1a": 28506.22,
+  "box3": 1006,
+  "monthly": [
+   2711.23,
+   2246.27,
+   2301.32,
+   2438.5,
+   2553.94,
+   2525.58,
+   2290.16,
+   2230.23,
+   1942.82,
+   2240.62,
+   2200.7,
+   2824.85
+  ],
+  "bridge": {
+   "gross": 28506.22,
+   "salesTax": 1949.43,
+   "tips": 2925.03,
+   "refunds": 128.1,
+   "chargebacks": 0.0,
+   "fees": 892.04,
+   "notOn1099K": 6925.34,
+   "personal": 0.0,
+   "grossReceipts": 30557.1,
+   "returns": 128.1,
+   "payouts": 27439.59,
+   "held": 46.49
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 892.04,
+    "credit": 0
+   },
+   {
+    "account": "Sales returns and allowances",
+    "debit": 128.1,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 3854.32,
+    "credit": 0
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 1949.43
+   },
+   {
+    "account": "Tips payable",
+    "debit": 0,
+    "credit": 2925.03
+   }
+  ]
+ },
+ "12": {
+  "title": "PayPal: a pending and a denied payment",
+  "kind": "ugly",
+  "file": "12-paypal-pending-and-denied.csv",
+  "status": "COMPUTED",
+  "exceptions": [
+   "NOT_SETTLED",
+   "SALES_TAX_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "paypal",
+  "year": 2025,
+  "box1a": 17791.7,
+  "box3": 204,
+  "monthly": [
+   1840.11,
+   991.2,
+   1397.34,
+   1892.59,
+   1057.99,
+   1877.32,
+   1747.23,
+   1561.24,
+   1170.29,
+   1326.58,
+   1445.26,
+   1484.55
+  ],
+  "bridge": {
+   "gross": 17791.7,
+   "salesTax": 393.69,
+   "tips": 0.0,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 720.84,
+   "notOn1099K": 0.0,
+   "personal": 0.0,
+   "grossReceipts": 17398.01,
+   "returns": 0.0,
+   "payouts": 15646.46,
+   "held": 1424.4
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 720.84,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 327.15
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 393.69
+   }
+  ]
+ },
+ "13": {
+  "title": "Stripe with local dates and the 1099-K typed in: it ties",
+  "kind": "clean",
+  "file": "13-stripe-local-dates.csv",
+  "status": "TIES",
+  "exceptions": [
+   "NO_TAX_DETAIL"
+  ],
+  "noOtherExceptions": true,
+  "processor": "stripe",
+  "year": 2025,
+  "box1a": 67351.02,
+  "box3": 630,
+  "monthly": [
+   4777.92,
+   4681.57,
+   6320.85,
+   5452.81,
+   5072.45,
+   5838.22,
+   6837.48,
+   5423.71,
+   5590.63,
+   5547.2,
+   6020.48,
+   5787.7
+  ],
+  "bridge": {
+   "gross": 67351.02,
+   "salesTax": 0.0,
+   "tips": 0.0,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 2142.22,
+   "notOn1099K": 0.0,
+   "personal": 0.0,
+   "grossReceipts": 67351.02,
+   "returns": 0.0,
+   "payouts": 64164.71,
+   "held": 1044.09
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 2142.22,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 2142.22
+   }
+  ],
+  "typedBox1a": 67351.02,
+  "difference": 0.0
+ },
+ "14": {
+  "title": "Planted: the 1099-K typed in is lower than the year's payments",
+  "kind": "planted",
+  "file": "07-paypal-dec-to-jan.csv",
+  "status": "DIFFERS",
+  "exceptions": [
+   "DIFFERS_FROM_1099K",
+   "OUTSIDE_YEAR",
+   "SALES_TAX_IN_GROSS"
+  ],
+  "noOtherExceptions": true,
+  "processor": "paypal",
+  "year": 2025,
+  "box1a": 18733.07,
+  "box3": 211,
+  "monthly": [
+   1971.58,
+   1046.87,
+   2150.05,
+   1402.87,
+   1778.54,
+   1668.17,
+   2031.52,
+   1423.3,
+   1287.42,
+   1252.28,
+   1139.03,
+   1581.44
+  ],
+  "bridge": {
+   "gross": 18733.07,
+   "salesTax": 391.51,
+   "tips": 0.0,
+   "refunds": 0.0,
+   "chargebacks": 0.0,
+   "fees": 757.24,
+   "notOn1099K": 0.0,
+   "personal": 0.0,
+   "grossReceipts": 18341.56,
+   "returns": 0.0,
+   "payouts": 16504.35,
+   "held": 1471.48
+  },
+  "entry": [
+   {
+    "account": "Merchant fees",
+    "debit": 757.24,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 365.73
+   },
+   {
+    "account": "Sales tax payable",
+    "debit": 0,
+    "credit": 391.51
+   }
+  ],
+  "typedBox1a": 18320.57,
+  "difference": -412.5,
+  "outside": {
+   "count": 5
+  }
+ }
+}

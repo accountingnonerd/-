@@ -1,0 +1,244 @@
+Date,Time,TimeZone,Name,Type,Status,Currency,Gross,Fee,Net,From Email Address,To Email Address,Transaction ID,Shipping Address,Address Status,Item Title,Item ID,Shipping and Handling Amount,Insurance Amount,Sales Tax,Option 1 Name,Option 1 Value,Option 2 Name,Option 2 Value,Reference Txn ID,Invoice Number,Custom Number,Quantity,Receipt ID,Balance,Subject,Note,Country Code,Balance Impact
+01/01/2025,18:36:57,PST,M. Silva,Mobile Payment,Completed,USD,55.80,-2.44,53.36,buyer@example.com,seller@example.com,41PP000001X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,53.36,,,US,Credit
+01/03/2025,06:28:09,PST,T. Haddad,Express Checkout Payment,Completed,USD,137.86,-5.30,132.56,buyer@example.com,seller@example.com,41PP000002X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,185.92,,,US,Credit
+01/04/2025,07:27:55,PST,T. Haddad,Website Payment,Completed,USD,64.40,-2.74,61.66,buyer@example.com,seller@example.com,41PP000003X,,,Print order,,0.00,0.00,4.21,,,,,,,,1,,247.58,,,US,Credit
+01/05/2025,10:35:42,PST,J. Okafor,Express Checkout Payment,Completed,USD,142.93,-5.48,137.45,buyer@example.com,seller@example.com,41PP000004X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,385.03,,,US,Credit
+01/06/2025,16:14:39,PST,R. Chen,Express Checkout Payment,Completed,USD,44.43,-2.04,42.39,buyer@example.com,seller@example.com,41PP000005X,,,Print order,,0.00,0.00,2.91,,,,,,,,1,,427.42,,,US,Credit
+01/08/2025,09:42:05,PST,J. Okafor,Website Payment,Completed,USD,33.35,-1.65,31.70,buyer@example.com,seller@example.com,41PP000006X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,459.12,,,US,Credit
+01/10/2025,10:04:29,PST,A. Novak,Mobile Payment,Completed,USD,88.47,-3.58,84.89,buyer@example.com,seller@example.com,41PP000007X,,,Print order,,0.00,0.00,5.79,,,,,,,,1,,544.01,,,US,Credit
+01/11/2025,06:41:29,PST,L. Brandt,Website Payment,Completed,USD,145.91,-5.58,140.33,buyer@example.com,seller@example.com,41PP000008X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,684.34,,,US,Credit
+01/12/2025,09:42:45,PST,A. Novak,Express Checkout Payment,Completed,USD,28.76,-1.49,27.27,buyer@example.com,seller@example.com,41PP000009X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,711.61,,,US,Credit
+01/16/2025,17:46:29,PST,T. Haddad,Mobile Payment,Completed,USD,36.69,-1.77,34.92,buyer@example.com,seller@example.com,41PP000010X,,,Print order,,0.00,0.00,2.40,,,,,,,,1,,746.53,,,US,Credit
+01/17/2025,14:34:13,PST,L. Brandt,Mobile Payment,Completed,USD,91.73,-3.69,88.04,buyer@example.com,seller@example.com,41PP000011X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,834.57,,,US,Credit
+01/18/2025,18:50:56,PST,A. Novak,Website Payment,Completed,USD,139.30,-5.35,133.95,buyer@example.com,seller@example.com,41PP000012X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,968.52,,,US,Credit
+01/20/2025,11:30:42,PST,J. Okafor,Express Checkout Payment,Completed,USD,48.05,-2.17,45.88,buyer@example.com,seller@example.com,41PP000013X,,,Print order,,0.00,0.00,3.14,,,,,,,,1,,"1,014.40",,,US,Credit
+01/22/2025,09:14:24,PST,T. Haddad,Mobile Payment,Completed,USD,120.02,-4.68,115.34,buyer@example.com,seller@example.com,41PP000014X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,129.74",,,US,Credit
+01/23/2025,21:25:22,PST,M. Silva,Website Payment,Completed,USD,91.27,-3.68,87.59,buyer@example.com,seller@example.com,41PP000015X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,217.33",,,US,Credit
+01/24/2025,22:33:41,PST,A. Novak,Express Checkout Payment,Completed,USD,114.58,-4.49,110.09,buyer@example.com,seller@example.com,41PP000016X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,327.42",,,US,Credit
+01/27/2025,18:59:59,PST,M. Silva,Website Payment,Completed,USD,114.58,-4.49,110.09,buyer@example.com,seller@example.com,41PP000017X,,,Print order,,5.95,0.00,7.11,,,,,,,,1,,"1,437.51",,,US,Credit
+01/28/2025,14:39:37,PST,M. Silva,Website Payment,Completed,USD,80.21,-3.29,76.92,buyer@example.com,seller@example.com,41PP000018X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,514.43",,,US,Credit
+01/29/2025,21:38:28,PST,A. Novak,Express Checkout Payment,Completed,USD,105.42,-4.17,101.25,buyer@example.com,seller@example.com,41PP000019X,,,Print order,,0.00,0.00,6.90,,,,,,,,1,,"1,615.68",,,US,Credit
+01/30/2025,21:30:36,PST,J. Okafor,Website Payment,Completed,USD,108.34,-4.27,104.07,buyer@example.com,seller@example.com,41PP000020X,,,Print order,,5.95,0.00,6.70,,,,,,,,1,,"1,719.75",,,US,Credit
+02/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,719.75",0.00,"-1,719.75",seller@example.com,,WD0001PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+02/03/2025,21:20:58,PST,R. Chen,Website Payment,Completed,USD,142.05,-5.45,136.60,buyer@example.com,seller@example.com,41PP000021X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,136.60,,,US,Credit
+02/04/2025,22:25:09,PST,T. Haddad,Express Checkout Payment,Completed,USD,22.12,-1.26,20.86,buyer@example.com,seller@example.com,41PP000022X,,,Print order,,0.00,0.00,1.45,,,,,,,,1,,157.46,,,US,Credit
+02/06/2025,22:46:15,PST,T. Haddad,Website Payment,Completed,USD,62.19,-2.66,59.53,buyer@example.com,seller@example.com,41PP000023X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,216.99,,,US,Credit
+02/07/2025,11:31:04,PST,R. Chen,Mobile Payment,Completed,USD,110.28,-4.34,105.94,buyer@example.com,seller@example.com,41PP000024X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,322.93,,,US,Credit
+02/09/2025,20:01:45,PST,J. Okafor,Website Payment,Completed,USD,53.53,-2.36,51.17,buyer@example.com,seller@example.com,41PP000025X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,374.10,,,US,Credit
+02/10/2025,17:32:50,PST,J. Okafor,Express Checkout Payment,Completed,USD,34.89,-1.71,33.18,buyer@example.com,seller@example.com,41PP000026X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,407.28,,,US,Credit
+02/11/2025,20:11:16,PST,J. Okafor,Express Checkout Payment,Completed,USD,93.42,-3.75,89.67,buyer@example.com,seller@example.com,41PP000027X,,,Print order,,5.95,0.00,5.72,,,,,,,,1,,496.95,,,US,Credit
+02/12/2025,16:20:53,PST,L. Brandt,Express Checkout Payment,Completed,USD,26.31,-1.41,24.90,buyer@example.com,seller@example.com,41PP000028X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,521.85,,,US,Credit
+02/13/2025,10:46:17,PST,M. Silva,Mobile Payment,Completed,USD,87.43,-3.54,83.89,buyer@example.com,seller@example.com,41PP000029X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,605.74,,,US,Credit
+02/14/2025,18:30:42,PST,T. Haddad,Website Payment,Completed,USD,54.50,-2.39,52.11,buyer@example.com,seller@example.com,41PP000030X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,657.85,,,US,Credit
+02/14/2025,20:11:16,PST,J. Okafor,Payment Refund,Completed,USD,-93.42,0.00,-93.42,seller@example.com,,4RF00002X,,,,,0.00,0.00,0.00,,,,,41PP000027X,,,,,564.43,,,US,Debit
+02/16/2025,13:51:52,PST,M. Silva,Express Checkout Payment,Completed,USD,62.62,-2.68,59.94,buyer@example.com,seller@example.com,41PP000031X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,624.37,,,US,Credit
+02/17/2025,14:59:54,PST,M. Silva,Website Payment,Completed,USD,59.09,-2.55,56.54,buyer@example.com,seller@example.com,41PP000032X,,,Print order,,5.95,0.00,3.48,,,,,,,,1,,680.91,,,US,Credit
+02/18/2025,15:09:25,PST,R. Chen,Mobile Payment,Completed,USD,34.98,-1.71,33.27,buyer@example.com,seller@example.com,41PP000033X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,714.18,,,US,Credit
+02/20/2025,19:38:42,PST,A. Novak,Website Payment,Completed,USD,124.16,-4.82,119.34,buyer@example.com,seller@example.com,41PP000034X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,833.52,,,US,Credit
+02/22/2025,17:01:11,PST,A. Novak,Website Payment,Completed,USD,54.78,-2.40,52.38,buyer@example.com,seller@example.com,41PP000035X,,,Print order,,0.00,0.00,3.58,,,,,,,,1,,885.90,,,US,Credit
+02/24/2025,07:54:46,PST,T. Haddad,Express Checkout Payment,Completed,USD,118.90,-4.64,114.26,buyer@example.com,seller@example.com,41PP000036X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,000.16",,,US,Credit
+02/25/2025,08:52:48,PST,J. Okafor,Mobile Payment,Completed,USD,125.65,-4.88,120.77,buyer@example.com,seller@example.com,41PP000037X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,120.93",,,US,Credit
+02/26/2025,13:51:52,PST,,Hold on Balance for Dispute Investigation,Completed,USD,-62.62,0.00,-62.62,seller@example.com,,4HD00001X,,,,,0.00,0.00,0.00,,,,,41PP000031X,,,,,"1,058.31",,,US,Debit
+02/26/2025,19:24:17,PST,L. Brandt,Express Checkout Payment,Completed,USD,135.71,-5.23,130.48,buyer@example.com,seller@example.com,41PP000038X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,188.79",,,US,Credit
+03/01/2025,21:12:23,PST,R. Chen,Mobile Payment,Completed,USD,114.99,-4.50,110.49,buyer@example.com,seller@example.com,41PP000039X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,299.28",,,US,Credit
+03/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,299.28",0.00,"-1,299.28",seller@example.com,,WD0002PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+03/04/2025,15:13:11,PST,M. Silva,Mobile Payment,Completed,USD,101.72,-4.04,97.68,buyer@example.com,seller@example.com,41PP000040X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,97.68,,,US,Credit
+03/06/2025,13:10:01,PST,J. Okafor,Mobile Payment,Completed,USD,148.24,-5.66,142.58,buyer@example.com,seller@example.com,41PP000041X,,,Print order,,0.00,0.00,9.70,,,,,,,,1,,240.26,,,US,Credit
+03/07/2025,11:08:16,PST,L. Brandt,Express Checkout Payment,Completed,USD,67.97,-2.86,65.11,buyer@example.com,seller@example.com,41PP000042X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,305.37,,,US,Credit
+03/08/2025,08:35:45,PST,M. Silva,Express Checkout Payment,Completed,USD,29.49,-1.52,27.97,buyer@example.com,seller@example.com,41PP000043X,,,Print order,,8.95,0.00,1.34,,,,,,,,1,,333.34,,,US,Credit
+03/10/2025,08:09:56,PST,J. Okafor,Website Payment,Completed,USD,74.30,-3.08,71.22,buyer@example.com,seller@example.com,41PP000044X,,,Print order,,5.95,0.00,4.47,,,,,,,,1,,404.56,,,US,Credit
+03/12/2025,13:51:52,PST,,Chargeback,Completed,USD,-62.62,0.00,-62.62,seller@example.com,,4CB00001X,,,,,0.00,0.00,0.00,,,,,41PP000031X,,,,,341.94,,,US,Debit
+03/12/2025,13:52:52,PST,,Reversal of General Account Hold,Completed,USD,62.62,0.00,62.62,buyer@example.com,seller@example.com,4HR00001X,,,,,0.00,0.00,0.00,,,,,41PP000031X,,,,,404.56,,,US,Credit
+03/12/2025,13:53:52,PST,,Chargeback Fee,Completed,USD,-20.00,0.00,-20.00,seller@example.com,,4CF00001X,,,,,0.00,0.00,0.00,,,,,41PP000031X,,,,,384.56,,,US,Debit
+03/13/2025,14:30:13,PST,J. Okafor,Website Payment,Completed,USD,92.97,-3.73,89.24,buyer@example.com,seller@example.com,41PP000045X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,473.80,,,US,Credit
+03/14/2025,12:00:00,PST,Dana Rivera,General Payment,Completed,USD,250.00,0.00,250.00,buyer@example.com,seller@example.com,4GP00001X,,,,,0.00,0.00,0.00,,,,,,,,,,723.80,,,US,Credit
+03/14/2025,21:58:22,PST,R. Chen,Website Payment,Completed,USD,95.08,-3.81,91.27,buyer@example.com,seller@example.com,41PP000046X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,815.07,,,US,Credit
+03/16/2025,15:27:30,PST,L. Brandt,Website Payment,Completed,USD,33.63,-1.66,31.97,buyer@example.com,seller@example.com,41PP000047X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,847.04,,,US,Credit
+03/20/2025,15:18:16,PST,M. Silva,Express Checkout Payment,Completed,USD,79.96,-3.28,76.68,buyer@example.com,seller@example.com,41PP000048X,,,Print order,,0.00,0.00,5.23,,,,,,,,1,,923.72,,,US,Credit
+03/21/2025,19:59:04,PST,T. Haddad,Mobile Payment,Completed,USD,27.91,-1.46,26.45,buyer@example.com,seller@example.com,41PP000049X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,950.17,,,US,Credit
+03/22/2025,10:25:40,PST,R. Chen,Express Checkout Payment,Completed,USD,55.58,-2.43,53.15,buyer@example.com,seller@example.com,41PP000050X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,003.32",,,US,Credit
+03/24/2025,16:52:25,PST,T. Haddad,Express Checkout Payment,Completed,USD,96.63,-3.86,92.77,buyer@example.com,seller@example.com,41PP000051X,,,Print order,,0.00,0.00,6.32,,,,,,,,1,,"1,096.09",,,US,Credit
+03/25/2025,07:27:48,PST,M. Silva,Mobile Payment,Completed,USD,106.02,-4.19,101.83,buyer@example.com,seller@example.com,41PP000052X,,,Print order,,5.95,0.00,6.55,,,,,,,,1,,"1,197.92",,,US,Credit
+03/26/2025,11:02:50,PST,R. Chen,Website Payment,Completed,USD,74.55,-3.09,71.46,buyer@example.com,seller@example.com,41PP000053X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,269.38",,,US,Credit
+03/28/2025,21:50:26,PST,L. Brandt,Website Payment,Completed,USD,38.24,-1.82,36.42,buyer@example.com,seller@example.com,41PP000054X,,,Print order,,8.95,0.00,1.92,,,,,,,,1,,"1,305.80",,,US,Credit
+03/30/2025,13:51:30,PST,J. Okafor,Mobile Payment,Completed,USD,100.16,-3.99,96.17,buyer@example.com,seller@example.com,41PP000055X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,401.97",,,US,Credit
+03/31/2025,17:51:53,PST,T. Haddad,Mobile Payment,Completed,USD,51.15,-2.28,48.87,buyer@example.com,seller@example.com,41PP000056X,,,Print order,,5.95,0.00,2.96,,,,,,,,1,,"1,450.84",,,US,Credit
+04/02/2025,14:20:23,PST,J. Okafor,Express Checkout Payment,Completed,USD,86.56,-3.51,83.05,buyer@example.com,seller@example.com,41PP000057X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,533.89",,,US,Credit
+04/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,533.89",0.00,"-1,533.89",seller@example.com,,WD0003PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+04/04/2025,06:51:05,PST,A. Novak,Mobile Payment,Completed,USD,28.57,-1.49,27.08,buyer@example.com,seller@example.com,41PP000058X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,27.08,,,US,Credit
+04/05/2025,18:03:34,PST,J. Okafor,Mobile Payment,Completed,USD,105.24,-4.16,101.08,buyer@example.com,seller@example.com,41PP000059X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,128.16,,,US,Credit
+04/06/2025,12:43:53,PST,J. Okafor,Express Checkout Payment,Completed,USD,48.57,-2.19,46.38,buyer@example.com,seller@example.com,41PP000060X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,174.54,,,US,Credit
+04/11/2025,07:34:01,PST,A. Novak,Express Checkout Payment,Completed,USD,154.99,-5.90,149.09,buyer@example.com,seller@example.com,41PP000061X,,,Print order,,0.00,0.00,10.14,,,,,,,,1,,323.63,,,US,Credit
+04/12/2025,14:03:55,PST,M. Silva,Express Checkout Payment,Completed,USD,114.42,-4.48,109.94,buyer@example.com,seller@example.com,41PP000062X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,433.57,,,US,Credit
+04/13/2025,20:22:15,PST,A. Novak,Website Payment,Completed,USD,91.74,-3.69,88.05,buyer@example.com,seller@example.com,41PP000063X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,521.62,,,US,Credit
+04/14/2025,07:34:01,PST,A. Novak,Payment Refund,Completed,USD,-154.99,0.00,-154.99,seller@example.com,,4RF00000X,,,,,0.00,0.00,0.00,,,,,41PP000061X,,,,,366.63,,,US,Debit
+04/15/2025,22:33:26,PST,L. Brandt,Website Payment,Completed,USD,98.55,-3.93,94.62,buyer@example.com,seller@example.com,41PP000064X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,461.25,,,US,Credit
+04/16/2025,20:39:55,PST,M. Silva,Express Checkout Payment,Completed,USD,28.91,-1.50,27.41,buyer@example.com,seller@example.com,41PP000065X,,,Print order,,5.95,0.00,1.50,,,,,,,,1,,488.66,,,US,Credit
+04/18/2025,21:12:04,PST,J. Okafor,Mobile Payment,Completed,USD,91.28,-3.68,87.60,buyer@example.com,seller@example.com,41PP000066X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,576.26,,,US,Credit
+04/19/2025,09:41:16,PST,T. Haddad,Website Payment,Completed,USD,43.08,-1.99,41.09,buyer@example.com,seller@example.com,41PP000067X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,617.35,,,US,Credit
+04/20/2025,16:38:40,PST,M. Silva,Website Payment,Completed,USD,32.07,-1.61,30.46,buyer@example.com,seller@example.com,41PP000068X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,647.81,,,US,Credit
+04/25/2025,14:49:00,PST,R. Chen,Mobile Payment,Completed,USD,87.72,-3.55,84.17,buyer@example.com,seller@example.com,41PP000069X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,731.98,,,US,Credit
+04/26/2025,14:29:44,PST,T. Haddad,Website Payment,Completed,USD,75.52,-3.13,72.39,buyer@example.com,seller@example.com,41PP000070X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,804.37,,,US,Credit
+04/27/2025,16:05:22,PST,L. Brandt,Mobile Payment,Completed,USD,49.16,-2.21,46.95,buyer@example.com,seller@example.com,41PP000071X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,851.32,,,US,Credit
+04/28/2025,12:25:52,PST,M. Silva,Mobile Payment,Completed,USD,27.30,-1.44,25.86,buyer@example.com,seller@example.com,41PP000072X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,877.18,,,US,Credit
+04/30/2025,22:54:49,PST,J. Okafor,Mobile Payment,Completed,USD,112.30,-4.41,107.89,buyer@example.com,seller@example.com,41PP000073X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,985.07,,,US,Credit
+05/01/2025,18:46:02,PST,R. Chen,Website Payment,Completed,USD,111.20,-4.37,106.83,buyer@example.com,seller@example.com,41PP000074X,,,Print order,,5.95,0.00,6.89,,,,,,,,1,,"1,091.90",,,US,Credit
+05/02/2025,08:35:58,PST,R. Chen,Website Payment,Completed,USD,99.16,-3.95,95.21,buyer@example.com,seller@example.com,41PP000075X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,187.11",,,US,Credit
+05/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,187.11",0.00,"-1,187.11",seller@example.com,,WD0004PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+05/03/2025,10:05:16,PST,T. Haddad,Express Checkout Payment,Completed,USD,139.46,-5.36,134.10,buyer@example.com,seller@example.com,41PP000076X,,,Print order,,5.95,0.00,8.73,,,,,,,,1,,134.10,,,US,Credit
+05/06/2025,14:36:57,PST,M. Silva,Express Checkout Payment,Completed,USD,135.42,-5.22,130.20,buyer@example.com,seller@example.com,41PP000077X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,264.30,,,US,Credit
+05/07/2025,21:12:35,PST,L. Brandt,Website Payment,Completed,USD,67.18,-2.83,64.35,buyer@example.com,seller@example.com,41PP000078X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,328.65,,,US,Credit
+05/08/2025,12:37:45,PST,J. Okafor,Website Payment,Completed,USD,133.25,-5.14,128.11,buyer@example.com,seller@example.com,41PP000079X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,456.76,,,US,Credit
+05/09/2025,12:42:53,PST,J. Okafor,Website Payment,Completed,USD,78.09,-3.22,74.87,buyer@example.com,seller@example.com,41PP000080X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,531.63,,,US,Credit
+05/10/2025,19:13:51,PST,M. Silva,Website Payment,Completed,USD,31.14,-1.58,29.56,buyer@example.com,seller@example.com,41PP000081X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,561.19,,,US,Credit
+05/10/2025,21:12:35,PST,L. Brandt,Payment Refund,Completed,USD,-67.18,0.00,-67.18,seller@example.com,,4RF00001X,,,,,0.00,0.00,0.00,,,,,41PP000078X,,,,,494.01,,,US,Debit
+05/12/2025,21:54:44,PST,A. Novak,Mobile Payment,Completed,USD,63.21,-2.70,60.51,buyer@example.com,seller@example.com,41PP000082X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,554.52,,,US,Credit
+05/14/2025,19:17:47,PST,L. Brandt,Express Checkout Payment,Completed,USD,62.18,-2.66,59.52,buyer@example.com,seller@example.com,41PP000083X,,,Print order,,8.95,0.00,3.48,,,,,,,,1,,614.04,,,US,Credit
+05/15/2025,22:24:14,PST,L. Brandt,Website Payment,Completed,USD,84.41,-3.44,80.97,buyer@example.com,seller@example.com,41PP000084X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,695.01,,,US,Credit
+05/18/2025,11:38:52,PST,L. Brandt,Mobile Payment,Completed,USD,115.43,-4.52,110.91,buyer@example.com,seller@example.com,41PP000085X,,,Print order,,5.95,0.00,7.16,,,,,,,,1,,805.92,,,US,Credit
+05/20/2025,08:00:00,PST,,Bank Deposit to PP Account,Completed,USD,500.00,0.00,500.00,buyer@example.com,seller@example.com,4BD00001X,,,,,0.00,0.00,0.00,,,,,,,,,,"1,305.92",,,US,Credit
+05/23/2025,19:15:22,PST,T. Haddad,Express Checkout Payment,Completed,USD,77.36,-3.19,74.17,buyer@example.com,seller@example.com,41PP000086X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,380.09",,,US,Credit
+05/26/2025,15:24:01,PST,M. Silva,Mobile Payment,Completed,USD,98.61,-3.93,94.68,buyer@example.com,seller@example.com,41PP000087X,,,Print order,,5.95,0.00,6.06,,,,,,,,1,,"1,474.77",,,US,Credit
+05/28/2025,06:46:14,PST,L. Brandt,Express Checkout Payment,Completed,USD,91.14,-3.67,87.47,buyer@example.com,seller@example.com,41PP000088X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,562.24",,,US,Credit
+05/29/2025,20:11:19,PST,J. Okafor,Express Checkout Payment,Completed,USD,96.71,-3.87,92.84,buyer@example.com,seller@example.com,41PP000089X,,,Print order,,8.95,0.00,5.74,,,,,,,,1,,"1,655.08",,,US,Credit
+05/30/2025,10:51:37,PST,J. Okafor,Express Checkout Payment,Completed,USD,103.96,-4.12,99.84,buyer@example.com,seller@example.com,41PP000090X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,754.92",,,US,Credit
+05/31/2025,11:58:09,PST,A. Novak,Mobile Payment,Completed,USD,78.28,-3.22,75.06,buyer@example.com,seller@example.com,41PP000091X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,829.98",,,US,Credit
+06/01/2025,20:36:24,PST,A. Novak,Website Payment,Completed,USD,141.10,-5.41,135.69,buyer@example.com,seller@example.com,41PP000092X,,,Print order,,0.00,0.00,9.23,,,,,,,,1,,"1,965.67",,,US,Credit
+06/02/2025,09:46:10,PST,R. Chen,Mobile Payment,Completed,USD,128.96,-4.99,123.97,buyer@example.com,seller@example.com,41PP000093X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"2,089.64",,,US,Credit
+06/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-2,089.64",0.00,"-2,089.64",seller@example.com,,WD0005PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+06/04/2025,20:14:13,PST,J. Okafor,Mobile Payment,Completed,USD,31.36,-1.58,29.78,buyer@example.com,seller@example.com,41PP000094X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,29.78,,,US,Credit
+06/06/2025,06:37:26,PST,M. Silva,Website Payment,Completed,USD,55.64,-2.43,53.21,buyer@example.com,seller@example.com,41PP000095X,,,Print order,,0.00,0.00,3.64,,,,,,,,1,,82.99,,,US,Credit
+06/07/2025,07:37:05,PST,T. Haddad,Website Payment,Completed,USD,39.55,-1.87,37.68,buyer@example.com,seller@example.com,41PP000096X,,,Print order,,0.00,0.00,2.59,,,,,,,,1,,120.67,,,US,Credit
+06/08/2025,22:11:24,PST,T. Haddad,Express Checkout Payment,Completed,USD,46.14,-2.10,44.04,buyer@example.com,seller@example.com,41PP000097X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,164.71,,,US,Credit
+06/09/2025,14:41:59,PST,L. Brandt,Website Payment,Completed,USD,103.03,-4.09,98.94,buyer@example.com,seller@example.com,41PP000098X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,263.65,,,US,Credit
+06/11/2025,15:00:00,PST,K. Weber,Express Checkout Payment,Completed,EUR,75.00,-3.01,71.99,buyer@example.com,seller@example.com,4EU00001X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,263.65,,,US,Credit
+06/11/2025,15:01:00,PST,,General Currency Conversion,Completed,EUR,-71.99,0.00,-71.99,seller@example.com,,4CV00001X,,,,,0.00,0.00,0.00,,,,,4EU00001X,,,,,263.65,,,US,Debit
+06/11/2025,15:01:00,PST,,General Currency Conversion,Completed,USD,77.12,0.00,77.12,buyer@example.com,seller@example.com,4CV00002X,,,,,0.00,0.00,0.00,,,,,4EU00001X,,,,,340.77,,,US,Credit
+06/14/2025,06:45:29,PST,J. Okafor,Mobile Payment,Completed,USD,152.25,-5.80,146.45,buyer@example.com,seller@example.com,41PP000099X,,,Print order,,5.95,0.00,9.57,,,,,,,,1,,487.22,,,US,Credit
+06/16/2025,07:14:08,PST,L. Brandt,Express Checkout Payment,Completed,USD,22.43,-1.27,21.16,buyer@example.com,seller@example.com,41PP000100X,,,Print order,,0.00,0.00,1.47,,,,,,,,1,,508.38,,,US,Credit
+06/17/2025,09:50:40,PST,A. Novak,Mobile Payment,Completed,USD,109.77,-4.32,105.45,buyer@example.com,seller@example.com,41PP000101X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,613.83,,,US,Credit
+06/18/2025,22:07:11,PST,R. Chen,Website Payment,Completed,USD,51.64,-2.29,49.35,buyer@example.com,seller@example.com,41PP000102X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,663.18,,,US,Credit
+06/19/2025,11:18:51,PST,A. Novak,Mobile Payment,Completed,USD,100.30,-3.99,96.31,buyer@example.com,seller@example.com,41PP000103X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,759.49,,,US,Credit
+06/21/2025,16:48:46,PST,R. Chen,Website Payment,Completed,USD,140.30,-5.39,134.91,buyer@example.com,seller@example.com,41PP000104X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,894.40,,,US,Credit
+06/21/2025,22:07:11,PST,R. Chen,Payment Refund,Completed,USD,-51.64,0.00,-51.64,seller@example.com,,4RF00004X,,,,,0.00,0.00,0.00,,,,,41PP000102X,,,,,842.76,,,US,Debit
+06/22/2025,12:02:44,PST,J. Okafor,Mobile Payment,Completed,USD,90.36,-3.64,86.72,buyer@example.com,seller@example.com,41PP000105X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,929.48,,,US,Credit
+06/23/2025,07:22:06,PST,A. Novak,Website Payment,Completed,USD,36.97,-1.78,35.19,buyer@example.com,seller@example.com,41PP000106X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,964.67,,,US,Credit
+06/26/2025,07:57:18,PST,R. Chen,Website Payment,Completed,USD,118.78,-4.64,114.14,buyer@example.com,seller@example.com,41PP000107X,,,Print order,,5.95,0.00,7.38,,,,,,,,1,,"1,078.81",,,US,Credit
+06/28/2025,08:50:43,PST,J. Okafor,Mobile Payment,Completed,USD,26.89,-1.43,25.46,buyer@example.com,seller@example.com,41PP000108X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,104.27",,,US,Credit
+06/29/2025,09:26:10,PST,R. Chen,Mobile Payment,Completed,USD,66.70,-2.82,63.88,buyer@example.com,seller@example.com,41PP000109X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,168.15",,,US,Credit
+07/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,168.15",0.00,"-1,168.15",seller@example.com,,WD0006PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+07/04/2025,10:44:41,PST,J. Okafor,Mobile Payment,Completed,USD,24.90,-1.36,23.54,buyer@example.com,seller@example.com,41PP000110X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,23.54,,,US,Credit
+07/05/2025,18:14:42,PST,R. Chen,Website Payment,Completed,USD,113.42,-4.45,108.97,buyer@example.com,seller@example.com,41PP000111X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,132.51,,,US,Credit
+07/06/2025,13:56:39,PST,J. Okafor,Mobile Payment,Completed,USD,87.11,-3.53,83.58,buyer@example.com,seller@example.com,41PP000112X,,,Print order,,0.00,0.00,5.70,,,,,,,,1,,216.09,,,US,Credit
+07/07/2025,17:44:48,PST,R. Chen,Website Payment,Completed,USD,56.66,-2.47,54.19,buyer@example.com,seller@example.com,41PP000113X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,270.28,,,US,Credit
+07/08/2025,20:17:31,PST,L. Brandt,Mobile Payment,Completed,USD,44.31,-2.04,42.27,buyer@example.com,seller@example.com,41PP000114X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,312.55,,,US,Credit
+07/10/2025,19:55:42,PST,M. Silva,Express Checkout Payment,Completed,USD,111.12,-4.37,106.75,buyer@example.com,seller@example.com,41PP000115X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,419.30,,,US,Credit
+07/12/2025,22:12:37,PST,A. Novak,Mobile Payment,Completed,USD,79.89,-3.28,76.61,buyer@example.com,seller@example.com,41PP000116X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,495.91,,,US,Credit
+07/13/2025,09:21:42,PST,L. Brandt,Website Payment,Completed,USD,138.71,-5.33,133.38,buyer@example.com,seller@example.com,41PP000117X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,629.29,,,US,Credit
+07/15/2025,13:46:17,PST,T. Haddad,Express Checkout Payment,Completed,USD,71.98,-3.00,68.98,buyer@example.com,seller@example.com,41PP000118X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,698.27,,,US,Credit
+07/17/2025,12:36:27,PST,R. Chen,Mobile Payment,Completed,USD,72.86,-3.03,69.83,buyer@example.com,seller@example.com,41PP000119X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,768.10,,,US,Credit
+07/21/2025,15:02:26,PST,J. Okafor,Express Checkout Payment,Completed,USD,103.00,-4.08,98.92,buyer@example.com,seller@example.com,41PP000120X,,,Print order,,0.00,0.00,6.74,,,,,,,,1,,867.02,,,US,Credit
+07/22/2025,08:52:48,PST,M. Silva,Express Checkout Payment,Completed,USD,87.84,-3.56,84.28,buyer@example.com,seller@example.com,41PP000121X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,951.30,,,US,Credit
+07/24/2025,14:11:38,PST,J. Okafor,Website Payment,Completed,USD,57.70,-2.50,55.20,buyer@example.com,seller@example.com,41PP000122X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,006.50",,,US,Credit
+07/25/2025,18:10:30,PST,M. Silva,Website Payment,Completed,USD,129.22,-5.00,124.22,buyer@example.com,seller@example.com,41PP000123X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,130.72",,,US,Credit
+07/28/2025,13:04:03,PST,A. Novak,Mobile Payment,Completed,USD,32.78,-1.63,31.15,buyer@example.com,seller@example.com,41PP000124X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,161.87",,,US,Credit
+07/28/2025,18:10:30,PST,M. Silva,Payment Refund,Completed,USD,-129.22,0.00,-129.22,seller@example.com,,4RF00005X,,,,,0.00,0.00,0.00,,,,,41PP000123X,,,,,"1,032.65",,,US,Debit
+07/29/2025,20:14:49,PST,R. Chen,Express Checkout Payment,Completed,USD,35.84,-1.74,34.10,buyer@example.com,seller@example.com,41PP000125X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,066.75",,,US,Credit
+07/30/2025,06:37:49,PST,L. Brandt,Express Checkout Payment,Completed,USD,127.83,-4.95,122.88,buyer@example.com,seller@example.com,41PP000126X,,,Print order,,0.00,0.00,8.36,,,,,,,,1,,"1,189.63",,,US,Credit
+07/31/2025,08:14:06,PST,J. Okafor,Express Checkout Payment,Completed,USD,121.91,-4.74,117.17,buyer@example.com,seller@example.com,41PP000127X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,306.80",,,US,Credit
+08/02/2025,09:30:00,PST,Dana Rivera,General Payment,Completed,USD,60.00,0.00,60.00,buyer@example.com,seller@example.com,4GP00002X,,,,,0.00,0.00,0.00,,,,,,,,,,"1,366.80",,,US,Credit
+08/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,366.80",0.00,"-1,366.80",seller@example.com,,WD0007PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+08/04/2025,15:13:16,PST,A. Novak,Website Payment,Completed,USD,138.26,-5.32,132.94,buyer@example.com,seller@example.com,41PP000128X,,,Print order,,8.95,0.00,8.46,,,,,,,,1,,132.94,,,US,Credit
+08/05/2025,08:26:49,PST,A. Novak,Website Payment,Completed,USD,64.88,-2.75,62.13,buyer@example.com,seller@example.com,41PP000129X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,195.07,,,US,Credit
+08/06/2025,14:25:40,PST,M. Silva,Website Payment,Completed,USD,143.99,-5.52,138.47,buyer@example.com,seller@example.com,41PP000130X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,333.54,,,US,Credit
+08/07/2025,14:31:54,PST,T. Haddad,Mobile Payment,Completed,USD,118.27,-4.62,113.65,buyer@example.com,seller@example.com,41PP000131X,,,Print order,,0.00,0.00,7.74,,,,,,,,1,,447.19,,,US,Credit
+08/09/2025,19:59:40,PST,L. Brandt,Website Payment,Completed,USD,24.72,-1.35,23.37,buyer@example.com,seller@example.com,41PP000132X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,470.56,,,US,Credit
+08/11/2025,15:57:04,PST,M. Silva,Website Payment,Completed,USD,108.64,-4.28,104.36,buyer@example.com,seller@example.com,41PP000133X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,574.92,,,US,Credit
+08/12/2025,15:02:32,PST,R. Chen,Mobile Payment,Completed,USD,152.39,-5.81,146.58,buyer@example.com,seller@example.com,41PP000134X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,721.50,,,US,Credit
+08/13/2025,20:07:07,PST,R. Chen,Mobile Payment,Completed,USD,98.45,-3.93,94.52,buyer@example.com,seller@example.com,41PP000135X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,816.02,,,US,Credit
+08/14/2025,18:28:14,PST,L. Brandt,Mobile Payment,Completed,USD,119.66,-4.67,114.99,buyer@example.com,seller@example.com,41PP000136X,,,Print order,,0.00,0.00,7.83,,,,,,,,1,,931.01,,,US,Credit
+08/15/2025,22:47:58,PST,J. Okafor,Express Checkout Payment,Completed,USD,146.74,-5.61,141.13,buyer@example.com,seller@example.com,41PP000137X,,,Print order,,8.95,0.00,9.01,,,,,,,,1,,"1,072.14",,,US,Credit
+08/24/2025,17:31:48,PST,J. Okafor,Mobile Payment,Completed,USD,150.54,-5.74,144.80,buyer@example.com,seller@example.com,41PP000138X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,216.94",,,US,Credit
+08/25/2025,20:32:19,PST,M. Silva,Express Checkout Payment,Completed,USD,55.24,-2.42,52.82,buyer@example.com,seller@example.com,41PP000139X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,269.76",,,US,Credit
+08/26/2025,16:49:02,PST,M. Silva,Website Payment,Completed,USD,124.74,-4.84,119.90,buyer@example.com,seller@example.com,41PP000140X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,389.66",,,US,Credit
+08/28/2025,17:23:38,PST,A. Novak,Website Payment,Completed,USD,44.28,-2.04,42.24,buyer@example.com,seller@example.com,41PP000141X,,,Print order,,0.00,0.00,2.90,,,,,,,,1,,"1,431.90",,,US,Credit
+08/29/2025,20:13:38,PST,J. Okafor,Mobile Payment,Completed,USD,115.30,-4.51,110.79,buyer@example.com,seller@example.com,41PP000142X,,,Print order,,8.95,0.00,6.96,,,,,,,,1,,"1,542.69",,,US,Credit
+08/30/2025,06:37:58,PST,A. Novak,Express Checkout Payment,Completed,USD,44.72,-2.05,42.67,buyer@example.com,seller@example.com,41PP000143X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,585.36",,,US,Credit
+08/31/2025,11:20:09,PST,T. Haddad,Website Payment,Completed,USD,90.20,-3.64,86.56,buyer@example.com,seller@example.com,41PP000144X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,671.92",,,US,Credit
+09/01/2025,17:18:47,PST,T. Haddad,Mobile Payment,Completed,USD,62.76,-2.68,60.08,buyer@example.com,seller@example.com,41PP000145X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,"1,732.00",,,US,Credit
+09/02/2025,22:43:41,PST,J. Okafor,Website Payment,Completed,USD,83.89,-3.42,80.47,buyer@example.com,seller@example.com,41PP000146X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,812.47",,,US,Credit
+09/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,812.47",0.00,"-1,812.47",seller@example.com,,WD0008PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+09/03/2025,16:46:35,PST,L. Brandt,Mobile Payment,Completed,USD,49.75,-2.23,47.52,buyer@example.com,seller@example.com,41PP000147X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,47.52,,,US,Credit
+09/04/2025,06:07:13,PST,R. Chen,Website Payment,Completed,USD,124.85,-4.85,120.00,buyer@example.com,seller@example.com,41PP000148X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,167.52,,,US,Credit
+09/07/2025,10:59:21,PST,M. Silva,Mobile Payment,Completed,USD,75.42,-3.12,72.30,buyer@example.com,seller@example.com,41PP000149X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,239.82,,,US,Credit
+09/09/2025,22:47:40,PST,T. Haddad,Website Payment,Completed,USD,57.51,-2.50,55.01,buyer@example.com,seller@example.com,41PP000150X,,,Print order,,0.00,0.00,3.76,,,,,,,,1,,294.83,,,US,Credit
+09/10/2025,08:37:27,PST,A. Novak,Express Checkout Payment,Completed,USD,93.85,-3.77,90.08,buyer@example.com,seller@example.com,41PP000151X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,384.91,,,US,Credit
+09/12/2025,19:12:14,PST,M. Silva,Website Payment,Completed,USD,33.85,-1.67,32.18,buyer@example.com,seller@example.com,41PP000152X,,,Print order,,8.95,0.00,1.63,,,,,,,,1,,417.09,,,US,Credit
+09/13/2025,14:21:45,PST,L. Brandt,Express Checkout Payment,Completed,USD,139.00,-5.34,133.66,buyer@example.com,seller@example.com,41PP000153X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,550.75,,,US,Credit
+09/15/2025,09:18:02,PST,R. Chen,Express Checkout Payment,Completed,USD,59.12,-2.55,56.57,buyer@example.com,seller@example.com,41PP000154X,,,Print order,,0.00,0.00,3.87,,,,,,,,1,,607.32,,,US,Credit
+09/17/2025,09:57:50,PST,L. Brandt,Website Payment,Completed,USD,152.67,-5.82,146.85,buyer@example.com,seller@example.com,41PP000155X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,754.17,,,US,Credit
+09/18/2025,21:19:14,PST,L. Brandt,Mobile Payment,Completed,USD,49.40,-2.21,47.19,buyer@example.com,seller@example.com,41PP000156X,,,Print order,,5.95,0.00,2.84,,,,,,,,1,,801.36,,,US,Credit
+09/19/2025,06:16:28,PST,L. Brandt,Website Payment,Completed,USD,135.75,-5.23,130.52,buyer@example.com,seller@example.com,41PP000157X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,931.88,,,US,Credit
+09/20/2025,18:45:26,PST,A. Novak,Mobile Payment,Completed,USD,108.46,-4.28,104.18,buyer@example.com,seller@example.com,41PP000158X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,036.06",,,US,Credit
+09/23/2025,18:58:46,PST,A. Novak,Website Payment,Completed,USD,27.56,-1.45,26.11,buyer@example.com,seller@example.com,41PP000159X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,062.17",,,US,Credit
+09/28/2025,09:16:36,PST,J. Okafor,Website Payment,Completed,USD,118.41,-4.62,113.79,buyer@example.com,seller@example.com,41PP000160X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,175.96",,,US,Credit
+09/29/2025,15:08:18,PST,J. Okafor,Mobile Payment,Completed,USD,57.13,-2.48,54.65,buyer@example.com,seller@example.com,41PP000161X,,,Print order,,5.95,0.00,3.35,,,,,,,,1,,"1,230.61",,,US,Credit
+10/02/2025,19:14:26,PST,J. Okafor,Website Payment,Completed,USD,131.04,-5.06,125.98,buyer@example.com,seller@example.com,41PP000162X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,356.59",,,US,Credit
+10/03/2025,06:26:34,PST,A. Novak,Express Checkout Payment,Completed,USD,76.77,-3.17,73.60,buyer@example.com,seller@example.com,41PP000163X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,430.19",,,US,Credit
+10/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,430.19",0.00,"-1,430.19",seller@example.com,,WD0009PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+10/05/2025,16:24:42,PST,M. Silva,Website Payment,Completed,USD,65.56,-2.78,62.78,buyer@example.com,seller@example.com,41PP000164X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,62.78,,,US,Credit
+10/10/2025,22:11:06,PST,T. Haddad,Website Payment,Completed,USD,31.58,-1.59,29.99,buyer@example.com,seller@example.com,41PP000165X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,92.77,,,US,Credit
+10/11/2025,06:02:09,PST,L. Brandt,Website Payment,Completed,USD,80.87,-3.31,77.56,buyer@example.com,seller@example.com,41PP000166X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,170.33,,,US,Credit
+10/13/2025,07:14:10,PST,M. Silva,Express Checkout Payment,Completed,USD,42.83,-1.98,40.85,buyer@example.com,seller@example.com,41PP000167X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,211.18,,,US,Credit
+10/14/2025,10:16:16,PST,L. Brandt,Express Checkout Payment,Completed,USD,137.21,-5.28,131.93,buyer@example.com,seller@example.com,41PP000168X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,343.11,,,US,Credit
+10/17/2025,08:21:34,PST,R. Chen,Express Checkout Payment,Completed,USD,88.48,-3.58,84.90,buyer@example.com,seller@example.com,41PP000169X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,428.01,,,US,Credit
+10/18/2025,19:52:21,PST,A. Novak,Express Checkout Payment,Completed,USD,88.57,-3.58,84.99,buyer@example.com,seller@example.com,41PP000170X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,513.00,,,US,Credit
+10/19/2025,06:47:44,PST,A. Novak,Website Payment,Completed,USD,110.46,-4.35,106.11,buyer@example.com,seller@example.com,41PP000171X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,619.11,,,US,Credit
+10/20/2025,16:38:56,PST,T. Haddad,Mobile Payment,Completed,USD,86.35,-3.50,82.85,buyer@example.com,seller@example.com,41PP000172X,,,Print order,,5.95,0.00,5.26,,,,,,,,1,,701.96,,,US,Credit
+10/21/2025,12:48:36,PST,R. Chen,Website Payment,Completed,USD,44.59,-2.05,42.54,buyer@example.com,seller@example.com,41PP000173X,,,Print order,,0.00,0.00,2.92,,,,,,,,1,,744.50,,,US,Credit
+10/22/2025,06:35:01,PST,L. Brandt,Express Checkout Payment,Completed,USD,90.71,-3.66,87.05,buyer@example.com,seller@example.com,41PP000174X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,831.55,,,US,Credit
+10/23/2025,16:50:34,PST,J. Okafor,Mobile Payment,Completed,USD,26.64,-1.42,25.22,buyer@example.com,seller@example.com,41PP000175X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,856.77,,,US,Credit
+10/24/2025,16:18:31,PST,M. Silva,Mobile Payment,Completed,USD,47.60,-2.15,45.45,buyer@example.com,seller@example.com,41PP000176X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,902.22,,,US,Credit
+10/25/2025,14:36:46,PST,L. Brandt,Mobile Payment,Completed,USD,66.94,-2.83,64.11,buyer@example.com,seller@example.com,41PP000177X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,966.33,,,US,Credit
+10/27/2025,20:33:09,PST,J. Okafor,Website Payment,Completed,USD,131.87,-5.09,126.78,buyer@example.com,seller@example.com,41PP000178X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,093.11",,,US,Credit
+10/28/2025,11:05:40,PST,T. Haddad,Mobile Payment,Completed,USD,77.60,-3.20,74.40,buyer@example.com,seller@example.com,41PP000179X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,167.51",,,US,Credit
+11/02/2025,11:29:01,PST,T. Haddad,Express Checkout Payment,Completed,USD,52.22,-2.31,49.91,buyer@example.com,seller@example.com,41PP000180X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,217.42",,,US,Credit
+11/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,217.42",0.00,"-1,217.42",seller@example.com,,WD0010PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+11/03/2025,13:43:39,PST,M. Silva,Website Payment,Completed,USD,95.47,-3.82,91.65,buyer@example.com,seller@example.com,41PP000181X,,,Print order,,5.95,0.00,5.86,,,,,,,,1,,91.65,,,US,Credit
+11/05/2025,17:18:06,PST,M. Silva,Mobile Payment,Completed,USD,112.18,-4.41,107.77,buyer@example.com,seller@example.com,41PP000182X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,199.42,,,US,Credit
+11/10/2025,18:33:19,PST,J. Okafor,Express Checkout Payment,Completed,USD,140.98,-5.41,135.57,buyer@example.com,seller@example.com,41PP000183X,,,Print order,,8.95,0.00,8.64,,,,,,,,1,,334.99,,,US,Credit
+11/11/2025,19:08:56,PST,R. Chen,Express Checkout Payment,Completed,USD,107.14,-4.23,102.91,buyer@example.com,seller@example.com,41PP000184X,,,Print order,,8.95,0.00,6.42,,,,,,,,1,,437.90,,,US,Credit
+11/12/2025,18:29:02,PST,R. Chen,Mobile Payment,Completed,USD,113.88,-4.46,109.42,buyer@example.com,seller@example.com,41PP000185X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,547.32,,,US,Credit
+11/13/2025,10:29:02,PST,M. Silva,Express Checkout Payment,Completed,USD,53.07,-2.34,50.73,buyer@example.com,seller@example.com,41PP000186X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,598.05,,,US,Credit
+11/14/2025,09:58:11,PST,R. Chen,Website Payment,Completed,USD,66.01,-2.79,63.22,buyer@example.com,seller@example.com,41PP000187X,,,Print order,,5.95,0.00,3.93,,,,,,,,1,,661.27,,,US,Credit
+11/15/2025,06:31:24,PST,L. Brandt,Website Payment,Completed,USD,30.42,-1.55,28.87,buyer@example.com,seller@example.com,41PP000188X,,,Print order,,0.00,0.00,1.99,,,,,,,,1,,690.14,,,US,Credit
+11/15/2025,18:29:02,PST,R. Chen,Payment Refund,Completed,USD,-113.88,0.00,-113.88,seller@example.com,,4RF00003X,,,,,0.00,0.00,0.00,,,,,41PP000185X,,,,,576.26,,,US,Debit
+11/18/2025,15:31:52,PST,R. Chen,Mobile Payment,Completed,USD,41.64,-1.94,39.70,buyer@example.com,seller@example.com,41PP000189X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,615.96,,,US,Credit
+11/21/2025,16:32:54,PST,R. Chen,Website Payment,Completed,USD,31.53,-1.59,29.94,buyer@example.com,seller@example.com,41PP000190X,,,Print order,,5.95,0.00,1.67,,,,,,,,1,,645.90,,,US,Credit
+11/22/2025,15:49:15,PST,M. Silva,Express Checkout Payment,Completed,USD,41.06,-1.92,39.14,buyer@example.com,seller@example.com,41PP000191X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,685.04,,,US,Credit
+11/23/2025,16:31:13,PST,M. Silva,Express Checkout Payment,Completed,USD,107.94,-4.26,103.68,buyer@example.com,seller@example.com,41PP000192X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,788.72,,,US,Credit
+11/24/2025,19:00:15,PST,R. Chen,Express Checkout Payment,Completed,USD,125.94,-4.89,121.05,buyer@example.com,seller@example.com,41PP000193X,,,Print order,,0.00,0.00,8.24,,,,,,,,1,,909.77,,,US,Credit
+11/25/2025,18:24:01,PST,L. Brandt,Website Payment,Completed,USD,72.38,-3.02,69.36,buyer@example.com,seller@example.com,41PP000194X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,979.13,,,US,Credit
+11/26/2025,06:06:26,PST,J. Okafor,Express Checkout Payment,Completed,USD,101.77,-4.04,97.73,buyer@example.com,seller@example.com,41PP000195X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,076.86",,,US,Credit
+11/27/2025,12:24:59,PST,J. Okafor,Mobile Payment,Completed,USD,153.34,-5.84,147.50,buyer@example.com,seller@example.com,41PP000196X,,,Print order,,5.95,0.00,9.64,,,,,,,,1,,"1,224.36",,,US,Credit
+11/29/2025,13:37:25,PST,M. Silva,Website Payment,Completed,USD,130.22,-5.03,125.19,buyer@example.com,seller@example.com,41PP000197X,,,Print order,,0.00,0.00,8.52,,,,,,,,1,,"1,349.55",,,US,Credit
+11/30/2025,19:14:54,PST,T. Haddad,Website Payment,Completed,USD,66.20,-2.80,63.40,buyer@example.com,seller@example.com,41PP000198X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,412.95",,,US,Credit
+12/02/2025,11:53:33,PST,L. Brandt,Express Checkout Payment,Completed,USD,37.83,-1.81,36.02,buyer@example.com,seller@example.com,41PP000199X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,448.97",,,US,Credit
+12/03/2025,09:00:00,PST,,General Withdrawal,Completed,USD,"-1,448.97",0.00,"-1,448.97",seller@example.com,,WD0011PAYPAL,,,,,0.00,0.00,0.00,,,,,,,,,,0.00,,,US,Debit
+12/03/2025,13:13:26,PST,R. Chen,Express Checkout Payment,Completed,USD,83.79,-3.41,80.38,buyer@example.com,seller@example.com,41PP000200X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,80.38,,,US,Credit
+12/05/2025,09:05:20,PST,R. Chen,Mobile Payment,Completed,USD,65.26,-2.77,62.49,buyer@example.com,seller@example.com,41PP000201X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,142.87,,,US,Credit
+12/06/2025,06:17:10,PST,T. Haddad,Website Payment,Completed,USD,33.33,-1.65,31.68,buyer@example.com,seller@example.com,41PP000202X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,174.55,,,US,Credit
+12/09/2025,10:53:35,PST,R. Chen,Express Checkout Payment,Completed,USD,80.06,-3.28,76.78,buyer@example.com,seller@example.com,41PP000203X,,,Print order,,8.95,0.00,0.00,,,,,,,,1,,251.33,,,US,Credit
+12/11/2025,18:53:54,PST,T. Haddad,Mobile Payment,Completed,USD,101.66,-4.04,97.62,buyer@example.com,seller@example.com,41PP000204X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,348.95,,,US,Credit
+12/12/2025,18:09:40,PST,M. Silva,Express Checkout Payment,Completed,USD,88.35,-3.57,84.78,buyer@example.com,seller@example.com,41PP000205X,,,Print order,,8.95,0.00,5.19,,,,,,,,1,,433.73,,,US,Credit
+12/13/2025,07:21:30,PST,M. Silva,Express Checkout Payment,Completed,USD,137.54,-5.29,132.25,buyer@example.com,seller@example.com,41PP000206X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,565.98,,,US,Credit
+12/14/2025,12:55:15,PST,J. Okafor,Express Checkout Payment,Completed,USD,102.43,-4.06,98.37,buyer@example.com,seller@example.com,41PP000207X,,,Print order,,8.95,0.00,6.12,,,,,,,,1,,664.35,,,US,Credit
+12/15/2025,17:35:13,PST,A. Novak,Website Payment,Completed,USD,49.50,-2.22,47.28,buyer@example.com,seller@example.com,41PP000208X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,711.63,,,US,Credit
+12/16/2025,12:41:46,PST,J. Okafor,Express Checkout Payment,Completed,USD,113.25,-4.44,108.81,buyer@example.com,seller@example.com,41PP000209X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,820.44,,,US,Credit
+12/18/2025,13:04:35,PST,T. Haddad,Mobile Payment,Completed,USD,38.91,-1.85,37.06,buyer@example.com,seller@example.com,41PP000210X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,857.50,,,US,Credit
+12/19/2025,22:25:42,PST,L. Brandt,Express Checkout Payment,Completed,USD,134.46,-5.18,129.28,buyer@example.com,seller@example.com,41PP000211X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,986.78,,,US,Credit
+12/21/2025,20:57:44,PST,M. Silva,Express Checkout Payment,Completed,USD,59.58,-2.57,57.01,buyer@example.com,seller@example.com,41PP000212X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,043.79",,,US,Credit
+12/22/2025,15:15:59,PST,L. Brandt,Website Payment,Completed,USD,128.69,-4.98,123.71,buyer@example.com,seller@example.com,41PP000213X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,167.50",,,US,Credit
+12/25/2025,06:19:51,PST,A. Novak,Mobile Payment,Completed,USD,45.12,-2.06,43.06,buyer@example.com,seller@example.com,41PP000214X,,,Print order,,8.95,0.00,2.37,,,,,,,,1,,"1,210.56",,,US,Credit
+12/30/2025,06:25:12,PST,R. Chen,Express Checkout Payment,Completed,USD,18.19,-1.12,17.07,buyer@example.com,seller@example.com,41PP000215X,,,Print order,,0.00,0.00,0.00,,,,,,,,1,,"1,227.63",,,US,Credit
+12/31/2025,22:28:52,PST,R. Chen,Mobile Payment,Completed,USD,94.11,-3.77,90.34,buyer@example.com,seller@example.com,41PP000216X,,,Print order,,5.95,0.00,0.00,,,,,,,,1,,"1,317.97",,,US,Credit
