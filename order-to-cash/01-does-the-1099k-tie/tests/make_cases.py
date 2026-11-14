@@ -219,6 +219,7 @@ PP_COLS = ["Date", "Time", "TimeZone", "Name", "Type", "Status", "Currency", "Gr
            "Sales Tax", "Option 1 Name", "Option 1 Value", "Option 2 Name", "Option 2 Value", "Reference Txn ID", "Invoice Number",
            "Custom Number", "Quantity", "Receipt ID", "Balance", "Subject", "Note", "Country Code", "Balance Impact"]
 
+SETTLED = ("Completed", "Complete", "Refunded", "Partially Refunded", "Reversed")
 def write_paypal(path, txs):
     """PayPal: Activity > Statements > Activity download, all transactions, CSV."""
     rows = [PP_COLS]
@@ -229,12 +230,13 @@ def write_paypal(path, txs):
         typ = {"sale": t.get("ptype", "Express Checkout Payment"), "refund": "Payment Refund", "chargeback": "Chargeback",
                "chargeback_reversal": "Chargeback Reversal", "payout": "General Withdrawal", "transfer_in": "Bank Deposit to PP Account",
                "personal": "General Payment", "hold": "Hold on Balance for Dispute Investigation", "hold_release": "Reversal of General Account Hold",
-               "fee_only": "Chargeback Fee", "conversion_out": "General Currency Conversion", "conversion_in": "General Currency Conversion"}[k]
+               "fee_only": "Chargeback Fee", "conversion_out": "General Currency Conversion", "conversion_in": "General Currency Conversion",
+               "vendor_refund": "Payment Refund", "purchase": "Express Checkout Payment"}[k]
         if k == "sale" and t.get("goods_general"): typ = "General Payment"
         cur = t.get("cur", "USD")
         g, fe = t["card"], t.get("fee", 0)
         ne = g + fe
-        if cur == "USD" and t.get("status", "Completed") == "Completed": bal += ne
+        if cur == "USD" and t.get("status", "Completed") in SETTLED: bal += ne
         rows.append([t["dt"].strftime("%m/%d/%Y"), t["dt"].strftime("%H:%M:%S"), "PST", t.get("name", ""), typ, t.get("status", "Completed"), cur,
                      p(g), p(fe), p(ne), "buyer@example.com" if g > 0 else "seller@example.com", "seller@example.com" if g > 0 else "",
                      t["id"], "", "", "Print order" if k == "sale" else "", "", p(t.get("ship", 0)), "0.00", p(t.get("tax", 0)), "", "", "", "",
@@ -248,39 +250,52 @@ def key_for(txs, *, processor, year=Y, box1a=None, utc=False):
     sales: card/app money for goods and services in the year (gross for 1099-K box 1a)."""
     when = (lambda t: t["dt"] + timedelta(hours=8)) if utc else (lambda t: t["dt"])   # a UTC-only file dates everything in UTC
     inyear = lambda t: when(t).year == year
-    sales = [t for t in txs if t["kind"] == "sale" and inyear(t) and t.get("cur", "USD") == "USD" and t.get("status", "Completed") in ("Completed", "Complete") and t["card"] > 0]
+    sales = [dict(t) for t in txs if t["kind"] == "sale" and inyear(t) and t.get("status", "Completed") in SETTLED and t["card"] > 0]
+    for t in sales:   # a sale in another currency counts in dollars at PayPal's own conversion rate (USD received / EUR converted)
+        if t.get("cur", "USD") != "USD":
+            eur_net = -sum(x["card"] for x in txs if x["kind"] == "conversion_out" and x.get("ref") == t["id"])
+            usd = sum(x["card"] for x in txs if x["kind"] == "conversion_in" and x.get("ref") == t["id"])
+            g = rnd(t["card"] * usd / eur_net)
+            t["card"], t["fee"], t["usd_net"] = g, -(g - usd), usd
     gross = sum(t["card"] for t in sales)
     monthly = [sum(t["card"] for t in sales if when(t).month == m) for m in range(1, 13)]
     count = len(sales)
-    salestax = sum(t.get("tax", 0) for t in sales if t["card"] > 0)
-    tips = sum(t.get("tip", 0) for t in sales)
-    ok = lambda t: inyear(t) and t.get("status", "Completed") in ("Completed", "Complete") and t.get("cur", "USD") == "USD"
+    ok = lambda t: inyear(t) and t.get("status", "Completed") in SETTLED and t.get("cur", "USD") == "USD"
+    allsales = [t for t in txs if t["kind"] == "sale" and ok(t)]
+    # sales tax and tips on every tender except the business's own gift cards (one tender per sale in this model)
+    salestax = sum(t.get("tax", 0) for t in allsales if not t.get("gift"))
+    tips = sum(t.get("tip", 0) for t in allsales if not t.get("gift"))
     refunds = -sum(t["card"] for t in txs if t["kind"] == "refund" and ok(t))
     cb = -sum(t["card"] for t in txs if t["kind"] == "chargeback" and ok(t)) - sum(t["card"] for t in txs if t["kind"] == "chargeback_reversal" and ok(t))
-    fees = -sum(t.get("fee", 0) for t in txs if ok(t) and t["kind"] in ("sale", "refund", "chargeback", "chargeback_reversal", "fee_only"))
+    fees = -sum(t.get("fee", 0) for t in txs if ok(t) and t["kind"] in ("refund", "chargeback", "chargeback_reversal", "fee_only")) - sum(t.get("fee", 0) for t in sales)
     fees += -sum(t["card"] for t in txs if ok(t) and t["kind"] == "fee_only")
-    notcard = sum(t.get("cash", 0) + t.get("gift", 0) + t.get("other", 0) for t in txs if t["kind"] == "sale" and ok(t))
+    notcard = sum(t.get("cash", 0) + t.get("other", 0) for t in allsales)
+    gift = sum(t.get("gift", 0) for t in allsales)
+    other = sum(t["card"] for t in txs if t["kind"] in ("vendor_refund", "purchase") and ok(t))
     personal = sum(t["card"] for t in txs if t["kind"] == "personal" and ok(t))
     transfers_in = sum(t["card"] for t in txs if t["kind"] == "transfer_in" and ok(t))
     if processor == "square":
         payouts = sum(t["card"] + t["fee"] for t in txs if ok(t) and t.get("payout_date") and t["payout_date"].year == year and t["kind"] in ("sale", "refund"))
     else:
         payouts = -sum(t.get("payout", t["card"]) for t in txs if t["kind"] == "payout" and ok(t))
-    gross_receipts = gross - salestax - tips + notcard
+    gross_receipts = gross + notcard              # with sales tax and tips, as the 1099-K counts them
     returns = refunds + cb
     net_activity = gross - refunds - cb - fees
-    held = net_activity + transfers_in + personal - payouts
-    # the entry for books that recorded each payout as sales
+    held = net_activity + transfers_in + personal + other - payouts
+    # the entry for books that recorded each payout as sales: after it, sales = the 1099-K gross
     lines = []
     def L(a, c):
         if c: lines.append({"account": a, "debit": c / 100 if c > 0 else 0, "credit": -c / 100 if c < 0 else 0})
-    L("Merchant fees", fees); L("Sales returns and allowances", returns)
-    sales_cr = fees + returns - salestax - tips
-    L("Sales", -sales_cr); L("Sales tax payable", -salestax); L("Tips payable", -tips)
+    owner = transfers_in + personal
+    sales_cr = fees + returns + held - owner - other
+    assert payouts + sales_cr == gross
+    L("Merchant fees", fees); L("Sales returns and allowances", returns); L("Due from processor", held)
+    L("Owner contributions", -owner); L("Other activity to classify", -other); L("Sales", -sales_cr)
     k = {"year": year, "box1a": gross / 100, "box3": count, "monthly": [m / 100 for m in monthly],
          "bridge": {"gross": gross / 100, "salesTax": salestax / 100, "tips": tips / 100, "refunds": refunds / 100, "chargebacks": cb / 100,
-                    "fees": fees / 100, "notOn1099K": notcard / 100, "personal": personal / 100, "grossReceipts": gross_receipts / 100,
-                    "returns": returns / 100, "payouts": payouts / 100, "held": held / 100},
+                    "fees": fees / 100, "notOn1099K": notcard / 100, "giftRedeemed": gift / 100, "personal": personal / 100, "transfersIn": transfers_in / 100,
+                    "other": other / 100, "grossReceipts": gross_receipts / 100, "grossReceiptsExcluding": (gross_receipts - salestax - tips) / 100,
+                    "returns": returns / 100, "netActivity": net_activity / 100, "payouts": payouts / 100, "held": held / 100},
          "entry": lines}
     if box1a is not None:
         k["typedBox1a"] = box1a / 100
@@ -325,8 +340,10 @@ S3 += stripe_payouts(S3)
 write_stripe(P("03-stripe-fernhill-ceramics-2025.csv"), S3, local=False)
 # with UTC dates only, the 6:40 pm December 31 sale reads as January 1, 2026: outside the year in the file
 k3x = key_for(S3, processor="stripe", utc=True)
-edge = [t for t in S3 if t["kind"] == "sale" and (t["dt"] + timedelta(hours=8)).month == 1 and (t["dt"] + timedelta(hours=8)).day == 1 and (t["dt"] + timedelta(hours=8)).hour < 8]
-k3x["boundary"] = {"count": len(edge), "amount": sum(t["card"] for t in edge) / 100}   # sales in the first 8 hours of January 1, UTC
+def edge(yy):   # sales in the first 8 hours of January 1 of year yy, UTC
+    e = [t for t in S3 if t["kind"] == "sale" and (t["dt"] + timedelta(hours=8)).date() == date(yy, 1, 1) and (t["dt"] + timedelta(hours=8)).hour < 8]
+    return {"count": len(e), "amount": sum(t["card"] for t in e) / 100}
+k3x["boundary"] = {"intoNextYear": edge(Y + 1), "fromPriorYear": edge(Y)}
 case("03", "Stripe shop: refunds, disputes, a euro charge, dates in UTC only", "ugly", "03-stripe-fernhill-ceramics-2025.csv", "COMPUTED",
      ["UTC_DATES", "OUTSIDE_YEAR", "NO_TAX_DETAIL"], k3x, "stripe")
 
@@ -336,6 +353,9 @@ r = random.Random(4)
 sales4 = [t for t in S4 if t["kind"] == "sale"]
 for i, s in enumerate(r.sample(sales4, 6)):
     S4.append(dict(kind="refund", id=f"4RF{i:05d}X", dt=s["dt"] + timedelta(days=3), card=-s["card"], fee=0, ref=s["id"], name=s["name"]))
+    s["status"] = "Refunded"          # PayPal re-labels the original payment once it is refunded
+S4.append(dict(kind="purchase", id="4PU00001X", dt=datetime(Y, 9, 9, 10, 0), card=-12000, fee=0, name="Inkwell Supply Co."))
+S4.append(dict(kind="vendor_refund", id="4VR00001X", dt=datetime(Y, 9, 20, 10, 0), card=4500, fee=0, name="Inkwell Supply Co."))
 S4.append(dict(kind="personal", id="4GP00001X", dt=datetime(Y, 3, 14, 12, 0), card=25000, fee=0, name="Dana Rivera"))
 S4.append(dict(kind="personal", id="4GP00002X", dt=datetime(Y, 8, 2, 9, 30), card=6000, fee=0, name="Dana Rivera"))
 S4.append(dict(kind="transfer_in", id="4BD00001X", dt=datetime(Y, 5, 20, 8, 0), card=50000, fee=0))
@@ -351,11 +371,9 @@ S4.append(dict(kind="conversion_in", id="4CV00002X", dt=eur["dt"] + timedelta(mi
 S4 += paypal_withdrawals([t for t in S4 if t.get("cur", "USD") == "USD"])
 write_paypal(P("04-paypal-ridgeline-prints-2025.csv"), S4)
 k4 = key_for(S4, processor="paypal")
-# the euro sale arrives as a USD conversion credit of $77.12; it is listed, not counted in gross
-k4["foreign"] = {"count": 1, "usd": 77.12}
-k4["bridge"]["held"] = round(k4["bridge"]["held"] + 77.12, 2)
-case("04", "PayPal seller: refunds, personal transfers, a bank top-up, a hold, a chargeback, a euro sale", "ugly", "04-paypal-ridgeline-prints-2025.csv", "COMPUTED",
-     ["PERSONAL_TRANSFERS", "FOREIGN_CURRENCY", "SALES_TAX_IN_GROSS"], k4, "paypal")
+k4["foreign"] = {"count": 1, "usd": rnd(7500 * 7712 / 7199) / 100}   # EUR 75.00 at PayPal's rate: USD 77.12 for EUR 71.99 net
+case("04", "PayPal seller: refunds, personal transfers, a bank top-up, a hold, a chargeback, a euro sale, a purchase from the balance", "ugly", "04-paypal-ridgeline-prints-2025.csv", "COMPUTED",
+     ["PERSONAL_TRANSFERS", "FOREIGN_CURRENCY", "SALES_TAX_IN_GROSS", "OTHER_ACTIVITY", "BELOW_THRESHOLD"], k4, "paypal")
 
 # ---- 05 planted: two Square exports pasted together, June in both
 S5 = square_year(52)
@@ -381,7 +399,7 @@ S7 += [dict(kind="sale", id=f"7NXT{i}X", dt=datetime(Y + 1, 1, 5 + i, 11, 0), ca
 S7 += paypal_withdrawals([t for t in S7 if t["dt"].year == Y])
 write_paypal(P("07-paypal-dec-to-jan.csv"), S7)
 case("07", "A PayPal export from December 2024 to January 2026", "ugly", "07-paypal-dec-to-jan.csv", "COMPUTED",
-     ["OUTSIDE_YEAR", "SALES_TAX_IN_GROSS"], {**key_for(S7, processor="paypal"), "outside": {"count": 5}}, "paypal")
+     ["OUTSIDE_YEAR", "SALES_TAX_IN_GROSS", "BELOW_THRESHOLD"], {**key_for(S7, processor="paypal"), "outside": {"count": 5}}, "paypal")
 
 # ---- 08 planted: the 1099-K's box 1a is higher by another location's sales
 S8 = square_year(81)
@@ -427,7 +445,7 @@ S12.append(dict(kind="sale", id="12DENY01X", dt=datetime(Y, 4, 2, 10, 0), card=1
 S12 += paypal_withdrawals([t for t in S12 if t.get("status", "Completed") == "Completed"])
 write_paypal(P("12-paypal-pending-and-denied.csv"), S12)
 case("12", "PayPal: a pending and a denied payment", "ugly", "12-paypal-pending-and-denied.csv", "COMPUTED",
-     ["NOT_SETTLED", "SALES_TAX_IN_GROSS"], key_for(S12, processor="paypal"), "paypal")
+     ["NOT_SETTLED", "SALES_TAX_IN_GROSS", "BELOW_THRESHOLD"], key_for(S12, processor="paypal"), "paypal")
 
 # ---- 13 Stripe with local dates and the 1099-K typed in: it ties
 S13 = stripe_year(131)
@@ -441,7 +459,7 @@ case("13", "Stripe with local dates and the 1099-K typed in: it ties", "clean", 
 k14 = key_for(S7, processor="paypal")
 refunds14 = 0
 case("14", "Planted: the 1099-K typed in is lower than the year's payments", "planted", "07-paypal-dec-to-jan.csv", "DIFFERS",
-     ["OUTSIDE_YEAR", "SALES_TAX_IN_GROSS", "DIFFERS_FROM_1099K"],
+     ["OUTSIDE_YEAR", "SALES_TAX_IN_GROSS", "DIFFERS_FROM_1099K", "BELOW_THRESHOLD"],
      {**key_for(S7, processor="paypal", box1a=sum(t["card"] for t in S7 if t["kind"] == "sale" and t["dt"].year == Y) - 41250), "outside": {"count": 5}}, "paypal")
 
 with open(os.path.join(HERE, "answer-key.json"), "w") as f:

@@ -30,15 +30,20 @@
   ],
   "bridge": {
    "gross": 39907.56,
-   "salesTax": 2733.84,
+   "salesTax": 3346.76,
    "tips": 4034.52,
    "refunds": 0.0,
    "chargebacks": 0.0,
    "fees": 1251.96,
-   "notOn1099K": 10527.0,
+   "notOn1099K": 8042.56,
+   "giftRedeemed": 2484.44,
    "personal": 0.0,
-   "grossReceipts": 43666.2,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 47950.12,
+   "grossReceiptsExcluding": 40568.84,
    "returns": 0.0,
+   "netActivity": 38655.6,
    "payouts": 38492.25,
    "held": 163.35
   },
@@ -49,19 +54,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 5516.4,
+    "account": "Due from processor",
+    "debit": 163.35,
     "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 2733.84
-   },
-   {
-    "account": "Tips payable",
-    "debit": 0,
-    "credit": 4034.52
+    "credit": 1415.31
    }
   ]
  },
@@ -96,15 +96,20 @@
   ],
   "bridge": {
    "gross": 39907.56,
-   "salesTax": 2733.84,
+   "salesTax": 3346.76,
    "tips": 4034.52,
    "refunds": 0.0,
    "chargebacks": 0.0,
    "fees": 1251.96,
-   "notOn1099K": 10527.0,
+   "notOn1099K": 8042.56,
+   "giftRedeemed": 2484.44,
    "personal": 0.0,
-   "grossReceipts": 43666.2,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 47950.12,
+   "grossReceiptsExcluding": 40568.84,
    "returns": 0.0,
+   "netActivity": 38655.6,
    "payouts": 38492.25,
    "held": 163.35
   },
@@ -115,19 +120,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 5516.4,
+    "account": "Due from processor",
+    "debit": 163.35,
     "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 2733.84
-   },
-   {
-    "account": "Tips payable",
-    "debit": 0,
-    "credit": 4034.52
+    "credit": 1415.31
    }
   ],
   "typedBox1a": 39907.56,
@@ -170,9 +170,14 @@
    "chargebacks": 178.75,
    "fees": 2236.15,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 0.0,
+   "transfersIn": 0.0,
+   "other": 0.0,
    "grossReceipts": 69867.39,
+   "grossReceiptsExcluding": 69867.39,
    "returns": 690.57,
+   "netActivity": 66940.67,
    "payouts": 66444.24,
    "held": 496.43
   },
@@ -188,38 +193,51 @@
     "credit": 0
    },
    {
+    "account": "Due from processor",
+    "debit": 496.43,
+    "credit": 0
+   },
+   {
     "account": "Sales",
     "debit": 0,
-    "credit": 2926.72
+    "credit": 3423.15
    }
   ],
   "boundary": {
-   "count": 2,
-   "amount": 219.13
+   "intoNextYear": {
+    "count": 2,
+    "amount": 219.13
+   },
+   "fromPriorYear": {
+    "count": 0,
+    "amount": 0.0
+   }
   }
  },
  "04": {
-  "title": "PayPal seller: refunds, personal transfers, a bank top-up, a hold, a chargeback, a euro sale",
+  "title": "PayPal seller: refunds, personal transfers, a bank top-up, a hold, a chargeback, a euro sale, a purchase from the balance",
   "kind": "ugly",
   "file": "04-paypal-ridgeline-prints-2025.csv",
   "status": "COMPUTED",
   "exceptions": [
+   "BELOW_THRESHOLD",
    "FOREIGN_CURRENCY",
+   "OTHER_ACTIVITY",
    "PERSONAL_TRANSFERS",
    "SALES_TAX_IN_GROSS"
   ],
   "noOtherExceptions": true,
   "processor": "paypal",
   "year": 2025,
-  "box1a": 18136.24,
-  "box3": 216,
+  "box1a": 18216.58,
+  "box3": 217,
   "monthly": [
    1792.1,
    1402.61,
    1388.59,
    1275.98,
    1666.19,
-   1462.17,
+   1542.51,
    1497.08,
    1741.02,
    1429.38,
@@ -228,23 +246,28 @@
    1412.06
   ],
   "bridge": {
-   "gross": 18136.24,
+   "gross": 18216.58,
    "salesTax": 331.38,
    "tips": 0.0,
    "refunds": 610.33,
    "chargebacks": 62.62,
-   "fees": 758.77,
+   "fees": 761.99,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 310.0,
-   "grossReceipts": 17804.86,
+   "transfersIn": 500.0,
+   "other": -75.0,
+   "grossReceipts": 18216.58,
+   "grossReceiptsExcluding": 17885.2,
    "returns": 672.95,
-   "payouts": 16273.67,
+   "netActivity": 16781.64,
+   "payouts": 16198.67,
    "held": 1317.97
   },
   "entry": [
    {
     "account": "Merchant fees",
-    "debit": 758.77,
+    "debit": 761.99,
     "credit": 0
    },
    {
@@ -253,19 +276,29 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 0,
-    "credit": 1100.34
+    "account": "Due from processor",
+    "debit": 1317.97,
+    "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Owner contributions",
     "debit": 0,
-    "credit": 331.38
+    "credit": 810.0
+   },
+   {
+    "account": "Other activity to classify",
+    "debit": 75.0,
+    "credit": 0
+   },
+   {
+    "account": "Sales",
+    "debit": 0,
+    "credit": 2017.91
    }
   ],
   "foreign": {
    "count": 1,
-   "usd": 77.12
+   "usd": 80.34
   }
  },
  "05": {
@@ -300,15 +333,20 @@
   ],
   "bridge": {
    "gross": 39554.97,
-   "salesTax": 2709.3,
+   "salesTax": 3323.4,
    "tips": 4006.49,
    "refunds": 0.0,
    "chargebacks": 0.0,
    "fees": 1240.35,
-   "notOn1099K": 10262.02,
+   "notOn1099K": 8057.1,
+   "giftRedeemed": 2204.92,
    "personal": 0.0,
-   "grossReceipts": 43101.2,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 47612.07,
+   "grossReceiptsExcluding": 40282.18,
    "returns": 0.0,
+   "netActivity": 38314.62,
    "payouts": 38190.92,
    "held": 123.7
   },
@@ -319,19 +357,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 5475.44,
+    "account": "Due from processor",
+    "debit": 123.7,
     "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 2709.3
-   },
-   {
-    "account": "Tips payable",
-    "debit": 0,
-    "credit": 4006.49
+    "credit": 1364.05
    }
   ],
   "duplicates": 158
@@ -372,9 +405,14 @@
    "chargebacks": 0.0,
    "fees": 1946.88,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 0.0,
+   "transfersIn": 0.0,
+   "other": 0.0,
    "grossReceipts": 61126.67,
+   "grossReceiptsExcluding": 61126.67,
    "returns": 0.0,
+   "netActivity": 59179.79,
    "payouts": 58364.98,
    "held": 814.81
   },
@@ -385,9 +423,14 @@
     "credit": 0
    },
    {
+    "account": "Due from processor",
+    "debit": 814.81,
+    "credit": 0
+   },
+   {
     "account": "Sales",
     "debit": 0,
-    "credit": 1946.88
+    "credit": 2761.69
    }
   ],
   "missingMonths": [
@@ -400,6 +443,7 @@
   "file": "07-paypal-dec-to-jan.csv",
   "status": "COMPUTED",
   "exceptions": [
+   "BELOW_THRESHOLD",
    "OUTSIDE_YEAR",
    "SALES_TAX_IN_GROSS"
   ],
@@ -430,9 +474,14 @@
    "chargebacks": 0.0,
    "fees": 757.24,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 0.0,
-   "grossReceipts": 18341.56,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 18733.07,
+   "grossReceiptsExcluding": 18341.56,
    "returns": 0.0,
+   "netActivity": 17975.83,
    "payouts": 16504.35,
    "held": 1471.48
   },
@@ -443,14 +492,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 0,
-    "credit": 365.73
+    "account": "Due from processor",
+    "debit": 1471.48,
+    "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 391.51
+    "credit": 2228.72
    }
   ],
   "outside": {
@@ -489,15 +538,20 @@
   ],
   "bridge": {
    "gross": 39158.05,
-   "salesTax": 2672.22,
+   "salesTax": 3297.22,
    "tips": 4095.65,
    "refunds": 0.0,
    "chargebacks": 0.0,
    "fees": 1226.85,
-   "notOn1099K": 10537.9,
+   "notOn1099K": 8200.96,
+   "giftRedeemed": 2336.94,
    "personal": 0.0,
-   "grossReceipts": 42928.08,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 47359.01,
+   "grossReceiptsExcluding": 39966.14,
    "returns": 0.0,
+   "netActivity": 37931.2,
    "payouts": 37858.76,
    "held": 72.44
   },
@@ -508,19 +562,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 5541.02,
+    "account": "Due from processor",
+    "debit": 72.44,
     "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 2672.22
-   },
-   {
-    "account": "Tips payable",
-    "debit": 0,
-    "credit": 4095.65
+    "credit": 1299.29
    }
   ],
   "typedBox1a": 41342.05,
@@ -557,15 +606,20 @@
   ],
   "bridge": {
    "gross": 24453.88,
-   "salesTax": 1667.84,
+   "salesTax": 1976.69,
    "tips": 2570.81,
    "refunds": 0.0,
    "chargebacks": 0.0,
    "fees": 765.88,
-   "notOn1099K": 5336.86,
+   "notOn1099K": 4053.27,
+   "giftRedeemed": 1283.59,
    "personal": 0.0,
-   "grossReceipts": 25552.09,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 28507.15,
+   "grossReceiptsExcluding": 23959.65,
    "returns": 0.0,
+   "netActivity": 23688.0,
    "payouts": 23617.23,
    "held": 70.77
   },
@@ -576,19 +630,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 3472.77,
+    "account": "Due from processor",
+    "debit": 70.77,
     "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 1667.84
-   },
-   {
-    "account": "Tips payable",
-    "debit": 0,
-    "credit": 2570.81
+    "credit": 836.65
    }
   ]
  },
@@ -634,15 +683,20 @@
   ],
   "bridge": {
    "gross": 28506.22,
-   "salesTax": 1949.43,
+   "salesTax": 2354.53,
    "tips": 2925.03,
    "refunds": 128.1,
    "chargebacks": 0.0,
    "fees": 892.04,
-   "notOn1099K": 6925.34,
+   "notOn1099K": 5315.26,
+   "giftRedeemed": 1610.08,
    "personal": 0.0,
-   "grossReceipts": 30557.1,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 33821.48,
+   "grossReceiptsExcluding": 28541.92,
    "returns": 128.1,
+   "netActivity": 27486.08,
    "payouts": 27439.59,
    "held": 46.49
   },
@@ -658,19 +712,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 3854.32,
+    "account": "Due from processor",
+    "debit": 46.49,
     "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 1949.43
-   },
-   {
-    "account": "Tips payable",
-    "debit": 0,
-    "credit": 2925.03
+    "credit": 1066.63
    }
   ]
  },
@@ -680,6 +729,7 @@
   "file": "12-paypal-pending-and-denied.csv",
   "status": "COMPUTED",
   "exceptions": [
+   "BELOW_THRESHOLD",
    "NOT_SETTLED",
    "SALES_TAX_IN_GROSS"
   ],
@@ -710,9 +760,14 @@
    "chargebacks": 0.0,
    "fees": 720.84,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 0.0,
-   "grossReceipts": 17398.01,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 17791.7,
+   "grossReceiptsExcluding": 17398.01,
    "returns": 0.0,
+   "netActivity": 17070.86,
    "payouts": 15646.46,
    "held": 1424.4
   },
@@ -723,14 +778,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 0,
-    "credit": 327.15
+    "account": "Due from processor",
+    "debit": 1424.4,
+    "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 393.69
+    "credit": 2145.24
    }
   ]
  },
@@ -769,9 +824,14 @@
    "chargebacks": 0.0,
    "fees": 2142.22,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 0.0,
+   "transfersIn": 0.0,
+   "other": 0.0,
    "grossReceipts": 67351.02,
+   "grossReceiptsExcluding": 67351.02,
    "returns": 0.0,
+   "netActivity": 65208.8,
    "payouts": 64164.71,
    "held": 1044.09
   },
@@ -782,9 +842,14 @@
     "credit": 0
    },
    {
+    "account": "Due from processor",
+    "debit": 1044.09,
+    "credit": 0
+   },
+   {
     "account": "Sales",
     "debit": 0,
-    "credit": 2142.22
+    "credit": 3186.31
    }
   ],
   "typedBox1a": 67351.02,
@@ -796,6 +861,7 @@
   "file": "07-paypal-dec-to-jan.csv",
   "status": "DIFFERS",
   "exceptions": [
+   "BELOW_THRESHOLD",
    "DIFFERS_FROM_1099K",
    "OUTSIDE_YEAR",
    "SALES_TAX_IN_GROSS"
@@ -827,9 +893,14 @@
    "chargebacks": 0.0,
    "fees": 757.24,
    "notOn1099K": 0.0,
+   "giftRedeemed": 0.0,
    "personal": 0.0,
-   "grossReceipts": 18341.56,
+   "transfersIn": 0.0,
+   "other": 0.0,
+   "grossReceipts": 18733.07,
+   "grossReceiptsExcluding": 18341.56,
    "returns": 0.0,
+   "netActivity": 17975.83,
    "payouts": 16504.35,
    "held": 1471.48
   },
@@ -840,14 +911,14 @@
     "credit": 0
    },
    {
-    "account": "Sales",
-    "debit": 0,
-    "credit": 365.73
+    "account": "Due from processor",
+    "debit": 1471.48,
+    "credit": 0
    },
    {
-    "account": "Sales tax payable",
+    "account": "Sales",
     "debit": 0,
-    "credit": 391.51
+    "credit": 2228.72
    }
   ],
   "typedBox1a": 18320.57,

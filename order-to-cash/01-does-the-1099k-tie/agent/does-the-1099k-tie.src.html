@@ -74,9 +74,20 @@ ol.ask{padding-left:1.4em}
 ol.ask li{margin:10px 0}
 details.big>summary{cursor:pointer;font-size:1.1rem;padding:10px 0;color:var(--ledger)}
 .foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--soft);font-size:.95rem}
+.mgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-top:12px;border-top:2px solid var(--ink)}
+.mgrid div{padding:8px 10px;border-bottom:1px solid var(--rule);text-align:right;font-variant-numeric:tabular-nums}
+.mgrid small{display:block;color:var(--soft);font-size:.8rem;letter-spacing:.04em;text-transform:uppercase}
+.choices{margin:10px 0;padding:12px 16px;background:#f6f8f7;border-radius:8px}
+.choices label{display:block;margin:6px 0}
+.choices input{width:1.2em;height:1.2em;accent-color:var(--ledger);vertical-align:-2px;margin-right:6px}
+ul.plain{padding-left:1.2em}
+ul.plain li{margin:6px 0}
+.pre{margin:0 0 16px;font-size:1.05rem}
+.pre input{font:inherit;width:10em;padding:6px 8px;border:2px solid var(--ink);border-radius:6px;margin-left:8px}
 [hidden]{display:none!important}
 @media (max-width:760px){
   body{font-size:17px}h1{font-size:1.9rem}.wp-head,.k1099{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:repeat(3,1fr)}
   #drop strong{font-size:1.4rem}
 }
 @media print{
@@ -104,6 +115,7 @@ details.big>summary{cursor:pointer;font-size:1.1rem;padding:10px 0;color:var(--l
   <h1>Does the 1099-K tie?</h1>
   <p class="lead">Give this page a client's year of card or app payments from Square, Stripe or PayPal. It gives back what the 1099-K should say, the figures for the return, how they tie to the bank deposits, and the entry for books that recorded deposits as sales.</p>
 
+  <p class="pre"><label>Have the client’s 1099-K? Type box 1a first (optional): <input id="box1a-start" inputmode="decimal" autocomplete="off" placeholder="0.00"></label></p>
   <label id="drop" for="file">
     <strong>Drop the processor's export for the year here</strong>
     <span>or click here to choose it. Excel or CSV, from Square, Stripe or PayPal.</span>
@@ -189,8 +201,9 @@ function findLayout(rows){
   return null;
 }
 
-/* Turn every row into an event: {row, when, kind, card, tax, tip, notCard, fee, depositNet, depositWhen, id, ...}
-   kind: sale, refund, chargeback, chargeback_reversal, fee, payout, transfer_in, personal, conversion_in, hold, other */
+/* Turn every row into an event: {row, when, kind, card, fee, ...}
+   kind: sale, refund, chargeback, fee, payout, transfer_in, personal, conversion_in, hold, unsettled, foreign_sale, other */
+var SETTLED = /^(completed?|refunded|partially refunded|reversed|cleared)$/i;   // PayPal re-labels a refunded payment, but it was paid
 function readEvents(rows, L){
   var c = L.col, ev = [], unread = [], skipped = [], dupes = 0, dupMonths = {}, seen = {};
   function g(row, name){ return c[name] === undefined ? null : row[c[name]]; }
@@ -206,16 +219,20 @@ function readEvents(rows, L){
       if (seen[sig]) { dupes++; dupMonths[e.when.m] = 1; continue; } seen[sig] = 1;
       var status = txt(g(row, "transaction status")) || "Complete";
       var card = amt(g(row, "card")) + amt(g(row, "cash app")), total = amt(g(row, "total collected"));
-      var notCard = amt(g(row, "cash")) + amt(g(row, "square gift card")) + amt(g(row, "other tender"));
-      var share = function(x){ return total ? Math.round(x * card / total) : 0; };
+      var cashOther = amt(g(row, "cash")) + amt(g(row, "other tender")), gift = amt(g(row, "square gift card"));
+      var tax = amt(g(row, "tax")), tip = amt(g(row, "tip"));
+      // tax and tips belong to each tender in proportion; the share paid with the business's own gift card is left out
+      var part = function(x, of){ return total ? Math.round(x * of / total) : 0; };
       e.id = txt(g(row, "transaction id"));
       e.fee = -amt(g(row, "fees"));
-      e.depositNet = amt(g(row, "net total")) - notCard;
+      e.depositNet = amt(g(row, "net total")) - cashOther - gift;
       e.depositWhen = parseWhen(g(row, "deposit date"));
+      e.giftSold = amt(g(row, "gift card sales"));
       var type = txt(g(row, "event type")).toLowerCase();
       if (!/^complete/i.test(status)) { e.kind = "unsettled"; e.amount = total; e.status = status; }
-      else if (type === "payment") { e.kind = "sale"; e.card = card; e.tax = share(amt(g(row, "tax"))); e.tip = share(amt(g(row, "tip"))); e.notCard = notCard; }
-      else if (type === "refund") { e.kind = "refund"; e.card = -card; }
+      else if (type === "payment") { e.kind = "sale"; e.card = card; e.tax = part(tax, card); e.tip = part(tip, card); e.cashOther = cashOther;
+        e.cashOtherTax = part(tax, cashOther); e.cashOtherTip = part(tip, cashOther); e.gift = gift; }
+      else if (type === "refund") { e.kind = "refund"; e.card = -card; e.cashRefund = -cashOther; e.refundTax = -(part(tax, card) + part(tax, cashOther)); }
       else { e.kind = "other"; e.amount = e.depositNet; e.label = type; }
     } else if (L.key === "stripe") {
       var local = c["created"] !== undefined && txt(g(row, "created"));
@@ -226,37 +243,45 @@ function readEvents(rows, L){
       var gross = amt(g(row, "gross")), fee = amt(g(row, "fee")), netv = amt(g(row, "net"));
       var cat = txt(g(row, "reporting_category")).toLowerCase();
       e.id = txt(g(row, "balance_transaction_id")); e.fee = 0;
-      if (cat === "charge") { e.kind = "sale"; e.card = gross; e.fee = fee; e.tax = 0; e.tip = 0; e.notCard = 0; }
+      if (cat === "charge") { e.kind = "sale"; e.card = gross; e.fee = fee; }
       else if (cat === "refund" || cat === "refund_failure" || cat === "partial_capture_reversal") { e.kind = "refund"; e.card = -gross; e.fee = fee; }
       else if (cat === "dispute" || cat === "dispute_reversal") { e.kind = "chargeback"; e.card = -gross; e.fee = fee; }
       else if (cat === "payout" || cat === "payout_reversal") { e.kind = "payout"; e.amount = -netv; }
       else if (cat === "fee" || cat === "network_cost" || cat === "tax") { e.kind = "fee"; e.fee = -netv; }
-      else { e.kind = "other"; e.amount = netv; e.label = cat; }
+      else { e.kind = "other"; e.amount = netv; e.label = cat || "other"; }
     } else {
       e.when = parseWhen(g(row, "date"), g(row, "time"));
       if (!e.when) { unread.push({ row: r + 1, label: cells[0] }); continue; }
       if (seen[sig]) { dupes++; dupMonths[e.when.m] = 1; continue; } seen[sig] = 1;
       var type2 = txt(g(row, "type")), st = txt(g(row, "status")), cur = txt(g(row, "currency")).toUpperCase() || "USD";
       var gr = amt(g(row, "gross")), fe = amt(g(row, "fee"));
-      e.id = txt(g(row, "transaction id")); e.fee = 0; e.name = txt(g(row, "name"));
+      e.id = txt(g(row, "transaction id")); e.ref = txt(g(row, "reference txn id")); e.fee = 0; e.name = txt(g(row, "name"));
       var T = type2.toLowerCase();
       var isHold = /hold|authorization/.test(T);
-      if (!/^completed$/i.test(st) && !isHold) { e.kind = "unsettled"; e.amount = gr; e.status = st; e.label = type2; }
-      else if (cur !== "USD") { e.kind = (/payment/.test(T) && gr > 0 && !/refund/.test(T)) ? "foreign_sale" : "foreign_other"; e.amount = gr; e.currency = cur; }
+      if (!SETTLED.test(st) && !isHold) { e.kind = "unsettled"; e.amount = gr; e.status = st; e.label = type2; }
+      else if (cur !== "USD") { e.kind = (/payment/.test(T) && gr > 0 && !/refund/.test(T)) ? "foreign_sale" : (/currency conversion/.test(T) ? "foreign_conversion" : "foreign_other"); e.amount = gr; e.feeFx = -fe; e.currency = cur; }
       else if (isHold) { e.kind = "hold"; }
       else if (/currency conversion/.test(T)) { e.kind = gr > 0 ? "conversion_in" : "other"; e.amount = gr; e.label = type2; }
-      else if (/refund/.test(T)) { e.kind = "refund"; e.card = -gr; e.fee = -fe; }
+      else if (/refund/.test(T)) { if (gr < 0) { e.kind = "refund"; e.card = -gr; e.fee = -fe; } else { e.kind = "other"; e.amount = gr + fe; e.label = "Refunds received (money in)"; } }
       else if (/chargeback fee|dispute fee/.test(T)) { e.kind = "fee"; e.fee = -gr - fe; }
-      else if (/chargeback reversal|dispute reversal/.test(T)) { e.kind = "chargeback"; e.card = -gr; e.fee = -fe; }
-      else if (/chargeback/.test(T)) { e.kind = "chargeback"; e.card = -gr; e.fee = -fe; }
+      else if (/chargeback|dispute/.test(T)) { e.kind = "chargeback"; e.card = -gr; e.fee = -fe; }
       else if (/withdraw/.test(T)) { e.kind = "payout"; e.amount = -(gr + fe); }
       else if (/bank deposit|add funds|credit card deposit|transfer from/.test(T)) { e.kind = "transfer_in"; e.amount = gr + fe; }
       else if (/general payment/.test(T) && gr > 0 && fe === 0) { e.kind = "personal"; e.amount = gr; }
-      else if (/payment/.test(T) && gr > 0) { e.kind = "sale"; e.card = gr; e.fee = -fe; e.tax = amt(g(row, "sales tax")); e.tip = 0; e.notCard = 0; }
-      else { e.kind = "other"; e.amount = gr + fe; e.label = type2; }
+      else if (/payment/.test(T) && gr > 0) { e.kind = "sale"; e.card = gr; e.fee = -fe; e.tax = amt(g(row, "sales tax")); }
+      else { e.kind = "other"; e.amount = gr + fe; e.label = type2 + (gr > 0 ? " (money in)" : " (money out)"); }
     }
     ev.push(e);
   }
+  // PayPal sales in another currency: convert at PayPal's own rate, from the conversion lines that refer to the sale
+  ev.filter(function(e){ return e.kind === "foreign_sale"; }).forEach(function(s){
+    var out = ev.filter(function(x){ return x.kind === "foreign_conversion" && x.ref === s.id; });
+    var inn = ev.filter(function(x){ return x.kind === "conversion_in" && x.ref === s.id; });
+    var fxNet = -out.reduce(function(a, x){ return a + x.amount; }, 0), usd = inn.reduce(function(a, x){ return a + x.amount; }, 0);
+    if (!fxNet || !usd) return;
+    s.fxGross = s.amount; s.kind = "sale"; s.card = Math.round(s.amount * usd / fxNet); s.fee = s.card - usd; s.tax = 0; s.foreign = true; s.usdNet = usd;
+    inn.forEach(function(x){ x.kind = "absorbed"; });
+  });
   return { events: ev, unread: unread, skipped: skipped, duplicates: dupes, duplicateMonths: Object.keys(dupMonths).map(Number).sort(function(a, b){ return a - b; }) };
 }
 
@@ -265,6 +290,8 @@ function readEvents(rows, L){
    ===================================================================================== */
 function money(c){ var s = Math.abs(c), d = Math.floor(s / 100), r = String(s % 100).padStart(2, "0"); return (c < 0 ? "-" : "") + "$" + d.toLocaleString("en-US") + "." + r; }
 function dollars(c){ return Math.round(c) / 100; }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function listDays(list){ return list.map(function(e){ return MONTHS[e.when.m - 1].slice(0, 3) + " " + e.when.d; }).join(", "); }
 
 function analyze(rows, fileName){
   var rep = { version: "1.0.0", file: fileName, status: null, exceptions: [] };
@@ -278,7 +305,6 @@ function analyze(rows, fileName){
   rep.processor = L.key; rep.layout = LAYOUTS[L.key].name;
   var R = readEvents(rows, L), E = R.events;
   rep.rowsRead = E.length + R.duplicates;
-  // the year: the one with the most sales
   var years = {};
   E.forEach(function(e){ if (e.kind === "sale") years[e.when.y] = (years[e.when.y] || 0) + 1; });
   var Y = +Object.keys(years).sort(function(a, b){ return years[b] - years[a] || b - a; })[0];
@@ -286,86 +312,105 @@ function analyze(rows, fileName){
   var out = E.filter(function(e){ return e.when.y !== Y; }), inY = E.filter(function(e){ return e.when.y === Y; });
   var sum = function(list, f){ return list.reduce(function(s, e){ return s + (f(e) || 0); }, 0); };
   var of = function(k){ return inY.filter(function(e){ return e.kind === k; }); };
-  var sales = of("sale").filter(function(e){ return e.card > 0; });   // a cash-only sale is a sale, but not a 1099-K payment
-  var allSales = of("sale");
+  var allSales = of("sale"), sales = allSales.filter(function(e){ return e.card > 0; });
   var monthly = []; for (var m = 1; m <= 12; m++) monthly.push(sum(sales.filter(function(e){ return e.when.m === m; }), function(e){ return e.card; }));
   var gross = sum(sales, function(e){ return e.card; });
-  var tax = sum(sales, function(e){ return e.tax; }), tip = sum(sales, function(e){ return e.tip; }), notCard = sum(allSales, function(e){ return e.notCard; });
-  var refunds = sum(of("refund"), function(e){ return e.card; }), chargebacks = sum(of("chargeback"), function(e){ return e.card; });
+  var tax = sum(allSales, function(e){ return (e.tax || 0) + (e.cashOtherTax || 0); }), tip = sum(allSales, function(e){ return (e.tip || 0) + (e.cashOtherTip || 0); });
+  var cashOther = sum(allSales, function(e){ return e.cashOther; }), giftRedeemed = sum(allSales, function(e){ return e.gift; }), giftSold = sum(allSales, function(e){ return e.giftSold; });
+  var refunds = sum(of("refund"), function(e){ return e.card; }), cashRefunds = sum(of("refund"), function(e){ return e.cashRefund; });
+  var refundTax = sum(of("refund"), function(e){ return e.refundTax; }), chargebacks = sum(of("chargeback"), function(e){ return e.card; });
   var fees = sum(inY, function(e){ return e.fee; });
   var personal = sum(of("personal"), function(e){ return e.amount; }), transfersIn = sum(of("transfer_in"), function(e){ return e.amount; });
-  var convIn = sum(of("conversion_in"), function(e){ return e.amount; }), other = sum(of("other"), function(e){ return e.amount; });
+  var other = sum(of("other").concat(of("conversion_in")), function(e){ return e.amount; });
   var payouts;
   if (L.key === "square") payouts = sum(inY.filter(function(e){ return (e.kind === "sale" || e.kind === "refund") && e.depositWhen && e.depositWhen.y === Y; }), function(e){ return e.depositNet; });
   else payouts = sum(of("payout"), function(e){ return e.amount; });
   var netActivity = gross - refunds - chargebacks - fees;
-  var held = netActivity + transfersIn + personal + convIn + other - payouts;
-  var grossReceipts = gross - tax - tip + notCard, returns = refunds + chargebacks;
+  var held = netActivity + transfersIn + personal + other - payouts;
+  var grossReceipts = gross + cashOther, returns = refunds + cashRefunds + chargebacks;
 
   rep.box1a = dollars(gross); rep.box3 = sales.length; rep.monthly = monthly.map(dollars);
-  rep.bridge = { gross: dollars(gross), salesTax: dollars(tax), tips: dollars(tip), refunds: dollars(refunds), chargebacks: dollars(chargebacks), fees: dollars(fees),
-    notOn1099K: dollars(notCard), personal: dollars(personal), transfersIn: dollars(transfersIn), conversionsIn: dollars(convIn), other: dollars(other),
-    grossReceipts: dollars(grossReceipts), returns: dollars(returns), netActivity: dollars(netActivity), payouts: dollars(payouts), held: dollars(held) };
-  rep._c = { gross: gross, tax: tax, tip: tip, notCard: notCard, refunds: refunds, chargebacks: chargebacks, fees: fees, personal: personal, transfersIn: transfersIn,
-    convIn: convIn, other: other, payouts: payouts, held: held, grossReceipts: grossReceipts, returns: returns, netActivity: netActivity, monthly: monthly };
-  // month by month
+  rep.bridge = { gross: dollars(gross), salesTax: dollars(tax), tips: dollars(tip), notOn1099K: dollars(cashOther), giftRedeemed: dollars(giftRedeemed),
+    grossReceipts: dollars(grossReceipts), grossReceiptsExcluding: dollars(grossReceipts - tax - tip), refunds: dollars(refunds), chargebacks: dollars(chargebacks),
+    returns: dollars(returns), refundTax: dollars(refundTax), fees: dollars(fees), personal: dollars(personal), transfersIn: dollars(transfersIn), other: dollars(other),
+    netActivity: dollars(netActivity), payouts: dollars(payouts), held: dollars(held) };
+  rep._c = { gross: gross, tax: tax, tip: tip, cashOther: cashOther, giftRedeemed: giftRedeemed, refunds: refunds, cashRefunds: cashRefunds, chargebacks: chargebacks, fees: fees,
+    personal: personal, transfersIn: transfersIn, other: other, payouts: payouts, held: held, grossReceipts: grossReceipts, returns: returns, netActivity: netActivity, monthly: monthly };
   rep.months = []; for (m = 1; m <= 12; m++) {
     var inM = inY.filter(function(e){ return e.when.m === m; });
     rep.months.push({ month: m, gross: dollars(monthly[m - 1]), refunds: dollars(sum(inM.filter(function(e){ return e.kind === "refund" || e.kind === "chargeback"; }), function(e){ return e.card; })),
-      fees: dollars(sum(inM, function(e){ return e.fee; })), sales: inM.filter(function(e){ return e.kind === "sale"; }).length });
+      fees: dollars(sum(inM, function(e){ return e.fee; })), sales: inM.filter(function(e){ return e.kind === "sale" && e.card > 0; }).length });
   }
 
   // ---- what to look at first
-  if (R.unread.length) ex("UNREAD_ROWS", "stop", "I could not read the date on " + R.unread.length + " line(s) (" + R.unread.slice(0, 5).map(function(u){ return "row " + u.row; }).join(", ") + "). They are left out.");
-  if (R.duplicates) { rep.duplicates = R.duplicates; ex("DUPLICATE_ROWS", "stop", R.duplicates + " lines appear twice, exactly the same, in " + R.duplicateMonths.map(function(x){ return MONTHS[x - 1]; }).join(", ") +
+  if (R.unread.length) ex("UNREAD_ROWS", "stop", "I could not read the date on " + plural(R.unread.length, "line") + " (" + R.unread.slice(0, 5).map(function(u){ return "row " + u.row; }).join(", ") + "). They are left out.");
+  if (R.duplicates) { rep.duplicates = R.duplicates; ex("DUPLICATE_ROWS", "stop", plural(R.duplicates, "line") + " appear twice, exactly the same, in " + R.duplicateMonths.map(function(x){ return MONTHS[x - 1]; }).join(", ") +
     ". It looks like two exports were pasted together with an overlap. I counted each line once. Check that nothing else overlaps or is missing."); }
-  var active = monthly.map(function(v, i){ return v > 0 ? i + 1 : 0; }).filter(Boolean);
-  if (active.length) {
-    var missing = []; for (m = 1; m <= 12; m++) if (!monthly[m - 1]) missing.push(m);
-    if (missing.length && missing.length < 12) { rep.missingMonths = missing; ex("MISSING_MONTH", "stop", "No sales in " + missing.map(function(x){ return MONTHS[x - 1]; }).join(", ") + " " + Y +
-      ". Either the business was closed, or the export is incomplete. The 1099-K will include every month the processor has; run the export again for the whole year if in doubt."); }
-  }
+  var missing = []; for (m = 1; m <= 12; m++) if (!monthly[m - 1]) missing.push(m);
+  if (missing.length && missing.length < 12) { rep.missingMonths = missing; ex("MISSING_MONTH", "care", "No card or app sales in " + missing.map(function(x){ return MONTHS[x - 1]; }).join(", ") + " " + Y +
+    ". Confirm the business was closed then, or ask for the export again for the whole year: the 1099-K will include every month the processor has."); }
   if (out.length) {
     var outSales = out.filter(function(e){ return e.kind === "sale"; });
     rep.outside = { count: out.length, sales: outSales.length, amount: dollars(sum(outSales, function(e){ return e.card; })) };
-    ex("OUTSIDE_YEAR", "info", out.length + " line(s) are dated outside " + Y + " (" + outSales.length + " of them sales, " + money(sum(outSales, function(e){ return e.card; })) + "). They belong to another year's 1099-K and are left out.");
+    ex("OUTSIDE_YEAR", "info", plural(out.length, "line") + " are dated outside " + Y + " (" + plural(outSales.length, "sale") + ", " + money(sum(outSales, function(e){ return e.card; })) + "). They belong to another year and are left out.");
   }
-  var utc = E.some(function(e){ return e.utc; });
-  if (utc) {
-    var edge = E.filter(function(e){ return e.kind === "sale" && e.when.m === 1 && e.when.d === 1 && e.when.h < 8; });
-    rep.boundary = { count: edge.length, amount: dollars(sum(edge, function(e){ return e.card; })) };
-    ex("UTC_DATES", "care", "This export gives times in UTC only. A sale late on December 31 in the United States is already January 1 in UTC, so it lands in the next year here; the processor's 1099-K may date it by your time zone. " +
-      edge.length + " sale(s), " + money(sum(edge, function(e){ return e.card; })) + ", fall in the first 8 hours of a January 1 (UTC). Download the report again with your time zone chosen to be sure.");
+  if (E.some(function(e){ return e.utc; })) {
+    var early = function(e, yy){ return e.kind === "sale" && e.when.y === yy && e.when.m === 1 && e.when.d === 1 && e.when.h < 8; };
+    var into = E.filter(function(e){ return early(e, Y + 1); }), from = E.filter(function(e){ return early(e, Y); });
+    var ia = sum(into, function(e){ return e.card; }), fa = sum(from, function(e){ return e.card; });
+    rep.boundary = { intoNextYear: { count: into.length, amount: dollars(ia) }, fromPriorYear: { count: from.length, amount: dollars(fa) } };
+    ex("UTC_DATES", "care", "This export dates everything in UTC. A sale on the evening of December 31 in the United States is already January 1 in UTC. " +
+      (into.length ? plural(into.length, "sale") + " (" + money(ia) + ") on January 1, " + (Y + 1) + " before 8 am UTC may be December 31, " + Y + " sales. " : "") +
+      (from.length ? plural(from.length, "sale") + " (" + money(fa) + ") on January 1, " + Y + " before 8 am UTC may be December 31, " + (Y - 1) + " sales. " : "") +
+      "Box 1a is " + money(gross) + " with UTC dates" + (into.length || from.length ? ", or " + money(gross + ia - fa) + " if those sales are dated by US time" : "") +
+      ". Download the report again with the client's time zone chosen to settle it.");
   }
-  if (L.key === "stripe") ex("NO_TAX_DETAIL", "info", "Stripe's balance export does not separate sales tax or tips from the charge. If your client collects sales tax online, take the amount from the sales tax returns and treat it as below.");
-  if (tax) ex("SALES_TAX_IN_GROSS", "care", "The 1099-K gross includes " + money(tax) + " of sales tax collected. If your state imposes the tax on the buyer, it is not gross receipts (Schedule C instructions, line 23); if on the seller, include it and deduct it as a tax. The figures below leave it out of gross receipts.");
-  if (tip) ex("TIPS_IN_GROSS", "care", "The 1099-K gross includes " + money(tip) + " of card tips. Tips paid over to staff are their income, run through payroll, not the business's sales. The figures below leave them out of gross receipts; check that payroll reported them.");
-  if (notCard) ex("NOT_ON_1099K", "info", money(notCard) + " was paid in cash, with the business's own gift cards, or by other tenders. That is still gross receipts, but it is not on the 1099-K. It is added below.");
+  if (L.key === "stripe") ex("NO_TAX_DETAIL", "info", "Stripe's balance export does not separate sales tax or tips from the charge. If the client collects sales tax online, take the amount from the sales tax returns.");
+  if (tax) ex("SALES_TAX_IN_GROSS", "care", "Sales include " + money(tax) + " of sales tax collected. Gross receipts below include it, as the 1099-K does; deduct the tax paid over as a tax (Schedule C line 23, Form 1120-S line 12, Form 1065 line 14). " +
+    "Where the tax is imposed on the buyer in every state the client collects for, it may be left out instead (tick the box below): line 1 is then below the 1099-K by that amount, so keep this reconciliation for any IRS notice.");
+  if (tip) ex("TIPS_IN_GROSS", "care", "Sales include " + money(tip) + " of tips. If the client has employees and paid the tips to them, they are the employees' wages (W-2 box 7, Form 941), and can be left out of gross receipts (tick the box below), unless payroll already booked them as wages expense. If the owner keeps the tips, they are gross receipts.");
+  if (cashOther || giftRedeemed) ex("NOT_ON_1099K", "info", (cashOther ? money(cashOther) + " was paid in cash or by other tenders: gross receipts, but not on the 1099-K. It is added below. " : "") +
+    (giftRedeemed ? money(giftRedeemed) + " was paid with the business's own gift cards. That is not added: the gift card was income when it was sold (on the cash method; an accrual-method business may defer it to redemption)." : ""));
+  if (giftSold) ex("GIFT_CARD_SALES", "info", money(giftSold) + " of gift cards were sold. They are in the 1099-K and in gross receipts when sold; the later redemptions are not added again.");
   var pers = of("personal");
-  if (pers.length) ex("PERSONAL_TRANSFERS", "care", pers.length + " payment(s) with no fee, " + money(personal) + ", look like personal transfers (friends and family), not sales: " +
-    pers.map(function(e){ return (e.name || "unnamed") + " on " + MONTHS[e.when.m - 1] + " " + e.when.d + ", " + money(e.amount); }).join("; ") + ". They are left out of the 1099-K figures. Ask the client what they were.");
-  var fx = of("foreign_sale");
-  if (fx.length) { rep.foreign = { count: fx.length, usd: dollars(convIn) };
-    ex("FOREIGN_CURRENCY", "care", fx.length + " sale(s) were paid in another currency (" + fx.map(function(e){ return e.currency + " " + (e.amount / 100).toFixed(2); }).join("; ") + "). PayPal converted them into " + money(convIn) +
-      ". The 1099-K will include them in dollars at the rate on the date of the sale; they are not in the figures above. Add them at that rate."); }
+  if (pers.length) ex("PERSONAL_TRANSFERS", "care", plural(pers.length, "payment") + " with no fee, " + money(personal) + ", look like friends-and-family transfers: " +
+    pers.map(function(e){ return (e.name || "unnamed") + " on " + MONTHS[e.when.m - 1] + " " + e.when.d + ", " + money(e.amount); }).join("; ") +
+    ". They are not added to gross receipts. Ask the client: if customers paid this way to avoid the fee, they are sales; add them.");
+  var fx = allSales.filter(function(e){ return e.foreign; });
+  if (fx.length) { rep.foreign = { count: fx.length, usd: dollars(sum(fx, function(e){ return e.card; })) };
+    ex("FOREIGN_CURRENCY", "care", plural(fx.length, "sale") + " were paid in another currency (" + fx.map(function(e){ return e.currency + " " + (e.fxGross / 100).toFixed(2) + " = " + money(e.card); }).join("; ") +
+      "), converted at PayPal's own rate and included above. The 1099-K converts at a rate on the date of the sale, which may differ by a little."); }
+  var fxLeft = E.filter(function(e){ return e.kind === "foreign_sale"; });
+  if (fxLeft.length) ex("FOREIGN_NOT_CONVERTED", "care", plural(fxLeft.length, "sale") + " in another currency had no conversion line, so I could not put them in dollars. Add them at the rate on the date of the sale.");
   var uns = E.filter(function(e){ return e.kind === "unsettled"; });
-  if (uns.length) ex("NOT_SETTLED", "info", uns.length + " payment(s) never completed (" + uns.map(function(e){ return (e.status || "not complete").toLowerCase() + " " + money(e.amount); }).join("; ") + "). They are left out.");
+  if (uns.length) ex("NOT_SETTLED", "info", plural(uns.length, "payment") + " never completed (" + uns.map(function(e){ return (e.status || "not complete").toLowerCase() + " " + money(e.amount); }).join("; ") + "). They are left out.");
+  var oth = of("other");
+  if (oth.length) {
+    var byLabel = {}; oth.forEach(function(e){ byLabel[e.label] = (byLabel[e.label] || 0) + e.amount; });
+    ex("OTHER_ACTIVITY", "care", "The balance also moved for other reasons: " + Object.keys(byLabel).map(function(k){ return k + " " + money(byLabel[k]); }).join("; ") +
+      ". These are not sales. Money out is often a business expense paid from the balance; record it, and do not count a supplier's refund as a sales refund.");
+  }
   if (L.key === "square") {
     var saleIds = {}; E.forEach(function(e){ if (e.kind === "sale") saleIds[e.id] = 1; });
     var orphan = of("refund").filter(function(e){ return !saleIds[e.id]; });
-    if (orphan.length) ex("REFUND_WITHOUT_SALE", "info", orphan.length + " refund(s), " + money(sum(orphan, function(e){ return e.card; })) + ", are for sales not in this file, usually last year's. They reduce this year's sales; the 1099-K does not net them.");
+    if (orphan.length) ex("REFUND_WITHOUT_SALE", "info", plural(orphan.length, "refund") + ", " + money(sum(orphan, function(e){ return e.card; })) + ", are for sales not in this file, usually last year's. They are this year's returns; the 1099-K never nets refunds.");
+    if (c_noDeposit(L)) ex("NO_DEPOSIT_DATES", "stop", "This export has no Deposit Date column, so I cannot say what was paid out in " + Y + ". Export again with deposit details, or use Square's Transfers report for the deposits.");
   }
+  if (L.key === "paypal" && (gross <= 2000000 || sales.length <= 200)) ex("BELOW_THRESHOLD", "info", "PayPal must issue a federal 1099-K only when payments for goods and services exceed $20,000 and 200 transactions; here they are " + money(gross) + " in " + plural(sales.length, "payment") +
+    ". The client may get none, or one anyway, and some states set lower thresholds. The income is reportable either way.");
 
   // ---- the entry, for books that recorded each payout as sales
   var lines = [];
   function add(a, c){ if (c) lines.push({ account: a, debit: c > 0 ? dollars(c) : 0, credit: c < 0 ? dollars(-c) : 0 }); }
-  add("Merchant fees", fees); add("Sales returns and allowances", returns);
-  add("Sales", -(fees + returns - tax - tip)); add("Sales tax payable", -tax); add("Tips payable", -tip);
-  rep.entry = { date: Y + "-12-31", lines: lines,
+  var owner = transfersIn + personal, salesCr = fees + chargebacks + refunds + held - owner - other;
+  add("Merchant fees", fees); add("Sales returns and allowances", refunds + chargebacks); add("Due from processor", held);
+  add("Owner contributions", -owner); add("Other activity to classify", -other); add("Sales", -salesCr);
+  rep.entry = { date: Y + "-12-31", lines: lines, salesBooked: dollars(payouts), salesAfter: dollars(payouts + salesCr),
     totalDebit: dollars(lines.reduce(function(s, l){ return s + Math.round(l.debit * 100); }, 0)), totalCredit: dollars(lines.reduce(function(s, l){ return s + Math.round(l.credit * 100); }, 0)) };
   rep.status = "COMPUTED";
   return rep;
 }
+function c_noDeposit(L){ return L.col["deposit date"] === undefined; }
 
 function compareTyped(rep, typedCents){
   rep.exceptions = rep.exceptions.filter(function(e){ return e.code !== "DIFFERS_FROM_1099K"; });
@@ -376,20 +421,20 @@ function compareTyped(rep, typedCents){
   rep.difference = dollars(d);
   if (d === 0) { rep.status = "TIES"; return rep; }
   rep.status = "DIFFERS";
-  var why = [];
+  var why = [], b = rep.boundary;
   if (d > 0) {
     why.push("another location, device or account on the same tax ID that is not in this export");
-    if (rep.boundary && rep.boundary.count) why.push("late December 31 sales dated January 1 in this UTC export (" + money(Math.round(rep.boundary.amount * 100)) + ")");
-    if (rep.foreign) why.push("the sales in another currency (" + money(Math.round(rep.foreign.usd * 100)) + " after conversion)");
+    if (b && b.intoNextYear.count) why.push("late December 31 sales that this UTC export dates January 1 (" + money(Math.round(b.intoNextYear.amount * 100)) + ")");
     if (rep.missingMonths) why.push("the months missing from this export");
     if (rep._c.personal) why.push("the transfers that look personal (" + money(rep._c.personal) + "), if the processor counted them");
   } else {
     why.push("the 1099-K is for a different account or year");
     why.push("this export includes another location or account that has its own 1099-K");
+    if (b && b.fromPriorYear.count) why.push("early January 1 sales that this UTC export dates in this year (" + money(Math.round(b.fromPriorYear.amount * 100)) + ")");
     if (rep._c.refunds) why.push("a figure net of refunds (" + money(rep._c.refunds) + ") typed in place of box 1a, which never nets refunds");
   }
   rep.exceptions.unshift({ code: "DIFFERS_FROM_1099K", level: "stop", message: "Box 1a on the 1099-K, " + money(typedCents) + ", is " + money(Math.abs(d)) + (d > 0 ? " more" : " less") +
-    " than the year's card and app sales in this export, " + money(rep._c.gross) + ". Likely causes: " + why.join("; ") + ". Compare the monthly boxes (5a to 5l) with the months below to find where." });
+    " than the year's card and app sales in this export, " + money(rep._c.gross) + ". Likely causes: " + why.join("; ") + ". Compare the form's monthly boxes 5a to 5l with the months below to find where." });
   return rep;
 }
 
@@ -398,79 +443,92 @@ function compareTyped(rep, typedCents){
    ===================================================================================== */
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-var current = null;
+var current = null, choice = { tax: false, tips: false }, keep = {};
 
 function render(rep){
   var o = [], C = rep._c || {};
-  var head = rep.status === "NOT_RECOGNIZED" ? { cls: "bad", h: "I cannot read this file.", s: "The reason is below." } :
-    rep.status === "TIES" ? { cls: "", h: "The 1099-K ties: box 1a is " + money(C.gross) + ", exactly the year's card and app sales.", s: "Use the figures below for the return, and keep this page in the file." } :
-    rep.status === "DIFFERS" ? { cls: "bad", h: "The 1099-K does not tie: box 1a is " + money(Math.abs(Math.round(rep.difference * 100))) + (rep.difference > 0 ? " more" : " less") + " than this export's sales.", s: "Find the difference before you file. Likely causes are listed below." } :
-    { cls: "", h: "The 1099-K for " + rep.year + " should show " + money(C.gross) + " in box 1a.", s: "Type box 1a from the client's 1099-K below to check it ties. Gross receipts for the return, from these sales: " + money(C.grossReceipts) + "." };
-  o.push('<div class="wp-head"><div><h1>Does the 1099-K tie?</h1><p class="meta">' + esc(rep.layout || "") + (rep.year ? " · " + rep.year : "") + '<br>File: ' + esc(rep.file) + '</p></div>');
-  if (rep.status !== "NOT_RECOGNIZED") o.push('<div class="sign"><label>Prepared by<input id="preparedBy" autocomplete="off"></label><label>Date<input id="preparedOn" autocomplete="off"></label><label>Reviewed by<input id="reviewedBy" autocomplete="off"></label><label>Date<input id="reviewedOn" autocomplete="off"></label></div>');
-  o.push('</div><div class="verdict ' + head.cls + '" id="verdict">' + esc(head.h) + '<span class="sub">' + esc(head.s) + '</span></div>');
   var stops = rep.exceptions.filter(function(e){ return e.level === "stop"; });
+  var head = rep.status === "NOT_RECOGNIZED" ? { cls: "bad", h: "I cannot read this file.", s: "The reason is below." } :
+    rep.status === "TIES" ? { cls: stops.length ? "bad" : "", h: "The 1099-K ties: box 1a is " + money(C.gross) + ", exactly the year's card and app sales.", s: stops.length ? "But see the red box before you use the figures." : "Use the figures below for the return, and keep this page in the file." } :
+    rep.status === "DIFFERS" ? { cls: "bad", h: "The 1099-K does not tie: box 1a is " + money(Math.abs(Math.round(rep.difference * 100))) + (rep.difference > 0 ? " more" : " less") + " than this export's sales.", s: "Find the difference before you file." } :
+    { cls: stops.length ? "bad" : "", h: "If a 1099-K is issued for " + rep.year + ", box 1a should be " + money(C.gross) + ".", s: "Type box 1a from the client's 1099-K below to check it ties." };
+  o.push('<div class="wp-head"><div><h1>Does the 1099-K tie?</h1><p class="meta">' + esc(rep.layout || "") + (rep.year ? " · " + rep.year + " (the year with the most sales in the file)" : "") + '<br>File: ' + esc(rep.file) + '</p></div>');
+  if (rep.status !== "NOT_RECOGNIZED") o.push('<div class="sign"><label>Client<input id="client" autocomplete="off" value="' + esc(keep.client || "") + '"></label><label>EIN<input id="ein" autocomplete="off" value="' + esc(keep.ein || "") + '"></label><label>Prepared by<input id="preparedBy" autocomplete="off" value="' + esc(keep.preparedBy || "") + '"></label><label>Date<input id="preparedOn" autocomplete="off" value="' + esc(keep.preparedOn || "") + '"></label><label>Reviewed by<input id="reviewedBy" autocomplete="off" value="' + esc(keep.reviewedBy || "") + '"></label><label>Date<input id="reviewedOn" autocomplete="off" value="' + esc(keep.reviewedOn || "") + '"></label></div>');
+  o.push('</div><div class="verdict ' + head.cls + '" id="verdict">' + esc(head.h) + '<span class="sub">' + esc(head.s) + '</span></div>');
   o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
   if (rep.status === "NOT_RECOGNIZED") { o.push(footer()); return o.join(""); }
+  var notForReturn = rep.status === "DIFFERS" ? '<p class="stopbox">Not for the return yet: this export is ' + money(Math.abs(Math.round(rep.difference * 100))) + (rep.difference > 0 ? " short of" : " more than") + ' the client’s 1099-K.</p>' : "";
 
   // the 1099-K
-  o.push('<h2>What the 1099-K should say <small>card and app payments for goods and services, before refunds and fees</small></h2><div class="k1099"><div>');
+  o.push('<h2>' + (rep.status === "DIFFERS" ? "What this export shows" : "What the 1099-K should say") + ' <small>card and app payments for goods and services, before refunds and fees, with sales tax and tips</small></h2><div class="k1099"><div>');
   o.push('<div class="box1a">' + money(C.gross) + '</div><p class="note">Box 1a, gross amount of payment transactions, ' + rep.year + '. Box 3, number of payment transactions: ' + rep.box3.toLocaleString("en-US") + '.</p></div>');
-  o.push('<div class="typed no-print-if-empty"><label for="box1a">Box 1a on the client’s 1099-K</label><input id="box1a" inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + (rep.typedBox1a != null ? rep.typedBox1a.toFixed(2) : "") + '"><button class="sec-btn" id="compare" type="button">Check it ties</button>' +
+  o.push('<div class="typed"><label for="box1a">Box 1a on the client’s 1099-K</label><input id="box1a" inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + (rep.typedBox1a != null ? rep.typedBox1a.toFixed(2) : "") + '"><button class="sec-btn" id="compare" type="button">Check it ties</button>' +
     (rep.typedBox1a != null ? '<p class="' + (rep.status === "TIES" ? "tie-ok" : "tie-bad") + '">' + (rep.status === "TIES" ? "Ties exactly." : "Differs by " + money(Math.abs(Math.round(rep.difference * 100))) + ".") + '</p>' : '<p class="note">Optional. Type the figure from the form, and press the button.</p>') + '</div></div>');
-  var cell = function(i){ var v = C.monthly[i]; return '<td class="num"><small class="note">5' + "abcdefghijkl"[i] + ' ' + MONTHS[i].slice(0, 3) + '</small><br>' + (v ? (v / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '<span class="tie-bad">0.00</span>') + '</td>'; };
-  o.push('<div class="scroll"><table id="monthly"><tbody>' + [0, 6].map(function(s0){ var r = []; for (var i = s0; i < s0 + 6; i++) r.push(cell(i)); return '<tr>' + r.join("") + '</tr>'; }).join("") + '</tbody></table></div>');
+  o.push('<div class="mgrid" id="monthly">' + C.monthly.map(function(v, i){ return '<div><small>5' + "abcdefghijkl"[i] + ' ' + MONTHS[i].slice(0, 3) + '</small><b>' + (v ? (v / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '<span class="tie-bad">0.00</span>') + '</b></div>'; }).join("") + '</div>');
 
   // check these first
   var order = { stop: 0, care: 1, info: 2 }, exs = rep.exceptions.filter(function(e){ return e.level !== "stop"; }).sort(function(a, b){ return order[a.level] - order[b.level]; });
   o.push('<h2>Check these first</h2>');
   if (!exs.length) o.push(stops.length ? '<p class="note">Only what is in the red box above.</p>' : '<p class="ok">Nothing to check.</p>');
-  else o.push('<ul class="first">' + exs.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + ({ care: "Your call. ", info: "For your file. " }[e.level]) + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>');
+  else o.push('<ul class="first">' + exs.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + ({ care: "Decide. ", info: "For your file. " }[e.level]) + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>');
 
   // to the return
-  o.push('<h2>From the 1099-K to the return</h2><div class="scroll"><table id="to-return"><tbody>');
-  o.push(r2("Card and app sales (1099-K box 1a)", C.gross));
-  if (C.tax) o.push(r2("Less sales tax collected, if the state imposes it on the buyer", -C.tax, true));
-  if (C.tip) o.push(r2("Less card tips paid over to staff", -C.tip, true));
-  if (C.notCard) o.push(r2("Add cash, own gift card and other sales (not on the 1099-K)", C.notCard, true));
-  o.push(r2("Gross receipts from these sales (Schedule C line 1; Form 1120-S or 1065 line 1a)", C.grossReceipts, false, true));
+  var gr = C.grossReceipts - (choice.tax ? C.tax : 0) - (choice.tips ? C.tip : 0);
+  o.push('<h2>From the 1099-K to the return</h2>' + notForReturn + '<div class="scroll"><table id="to-return"><tbody>');
+  o.push(r2("Card and app sales (1099-K box 1a), with sales tax and tips", C.gross));
+  if (C.cashOther) o.push(r2("Add cash and other-tender sales (not on the 1099-K)", C.cashOther, true));
+  if (choice.tax) o.push(r2("Less sales tax collected, left out (imposed on the buyer)", -C.tax, true));
+  if (choice.tips) o.push(r2("Less tips paid to employees, left out", -C.tip, true));
+  o.push(r2("Gross receipts (Schedule C line 1; Form 1120-S or 1065 line 1a)", gr, false, true));
   o.push(r2("Returns and allowances: refunds and chargebacks, net of reversals (Schedule C line 2; line 1b)", C.returns));
-  o.push(r2("Merchant fees, a deduction (often in other deductions)", C.fees));
+  o.push(r2("Merchant fees (Schedule C line 10; Form 1120-S line 19 or 1065 line 21, other deductions)", C.fees));
+  if (C.tax && !choice.tax) o.push(r2("Sales tax paid over, as a tax deduction (if paid in the year)", C.tax, true));
   o.push('</tbody></table></div>');
+  if (C.tax || C.tip) o.push('<div class="choices no-print-off">' + (C.tax ? '<label><input type="checkbox" id="leave-tax"' + (choice.tax ? " checked" : "") + '> Leave the ' + money(C.tax) + ' of sales tax out of gross receipts (tax imposed on the buyer)</label>' : "") +
+    (C.tip ? '<label><input type="checkbox" id="leave-tips"' + (choice.tips ? " checked" : "") + '> Leave the ' + money(C.tip) + ' of tips out of gross receipts (paid to employees through payroll)</label>' : "") +
+    ((choice.tax || choice.tips) ? '<p class="tie-bad">Line 1 is now ' + money(C.gross - gr + C.cashOther) + ' below the card sales on the 1099-K. Keep this page for any IRS notice.</p>' : '') + '</div>');
+  if (C.personal) o.push('<p class="note">Not added: ' + money(C.personal) + ' of transfers that look personal. Add them if the client says they were sales.</p>');
 
-  // to the bank
+  // to the bank: foots from top to bottom
   o.push('<h2>From the 1099-K to the bank deposits</h2><div class="scroll"><table id="to-bank"><tbody>');
   o.push(r2("Card and app sales (box 1a)", C.gross));
   o.push(r2("Less refunds", -C.refunds, true)); if (C.chargebacks) o.push(r2("Less chargebacks, net of reversals", -C.chargebacks, true));
   o.push(r2("Less fees", -C.fees, true));
   if (C.transfersIn) o.push(r2("Add money moved in from the bank", C.transfersIn, true));
   if (C.personal) o.push(r2("Add transfers that look personal", C.personal, true));
-  if (C.convIn) o.push(r2("Add sales in other currencies, after conversion", C.convIn, true));
-  if (C.other) o.push(r2("Other adjustments", C.other, true));
-  o.push(r2("Paid out to the bank in " + rep.year, C.payouts, false, true));
-  o.push(r2(rep.processor === "square" ? "Paid out after the year end (in transit on December 31)" : "Still held by the processor, or paid out after the year end", C.held));
-  o.push('</tbody></table></div><p class="note">The deposits in the bank for ' + rep.year + ' should add up to the payouts above, plus last year’s sales paid out in January.</p>');
+  if (C.other) o.push(r2("Other activity in the balance", C.other, true));
+  o.push(r2(rep.processor === "square" ? "Less sales of " + rep.year + " paid out in " + (rep.year + 1) + " (in transit on December 31)" : "Less the increase in the balance held by " + (rep.processor === "stripe" ? "Stripe" : "PayPal") + " during the year", -C.held, true));
+  o.push(r2(rep.processor === "square" ? "Expected deposits in " + rep.year + ", by Square's deposit dates" : "Paid out to the bank in " + rep.year, C.payouts, false, true));
+  o.push('</tbody></table></div><p class="note">' + (rep.processor === "square" ? "The bank will also show last year's late-December sales paid out in January, and anything Square took from deposits that this export does not show (loan repayments, instant-deposit fees, hardware). Square's Transfers report lists the actual deposits." :
+    "The payouts already include last year's ending balance paid out in January, so the balance line above is the change over the year, and can be negative.") + '</p>');
 
   // the entry
-  o.push('<h2>Entry, December 31, ' + rep.year + ' <small>only if the books recorded each payout as sales</small></h2>');
-  o.push('<p class="next">If the books recorded each deposit as sales, sales are understated by the fees and refunds, and include sales tax and tips. This entry corrects that. Do not post it if the books already record gross sales and fees (a sync app, or entries from the processor’s statements).</p>');
+  o.push('<h2>Entry, December 31, ' + rep.year + ' <small>only if the books recorded each payout as sales</small></h2>' + notForReturn);
+  o.push('<p class="next">Starts from: sales as booked = the year’s payouts, ' + money(Math.round(rep.entry.salesBooked * 100)) + '. After this entry, sales in the books = ' + money(Math.round(rep.entry.salesAfter * 100)) + ', the card and app sales above. Do not post it if the books already record gross sales and fees (a sync app, or entries from the processor’s statements).</p>');
   o.push('<div class="scroll"><table id="entry"><thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead><tbody>');
   rep.entry.lines.forEach(function(l){ o.push('<tr><td>' + esc(l.account) + '</td><td class="num">' + (l.debit ? money(Math.round(l.debit * 100)) : "") + '</td><td class="num">' + (l.credit ? money(Math.round(l.credit * 100)) : "") + '</td></tr>'); });
   o.push('<tr class="sum"><td>Total</td><td class="num">' + money(Math.round(rep.entry.totalDebit * 100)) + '</td><td class="num">' + money(Math.round(rep.entry.totalCredit * 100)) + '</td></tr></tbody></table></div>');
-  o.push('<p class="note">If sales tax was paid to the state from the bank and booked as an expense, move it to Sales tax payable too. Cash sales are not in this entry.</p>');
+  var notes = ["Due from processor is the change in what the processor held; if last year’s amount was booked, this restates it to the year end."];
+  if (C.transfersIn || C.personal) notes.push("Owner contributions holds the money moved in from the bank and the transfers that look personal; move any that were sales to Sales.");
+  if (C.tax) notes.push("If you leave sales tax out of gross receipts: Dr Sales, Cr Sales tax payable, " + money(C.tax) + " (and do not repeat it if a sales tax module already booked it).");
+  if (C.tip) notes.push("If tips were paid to employees through payroll: Dr Sales, Cr Wages expense or Tips payable, " + money(C.tip) + ", whichever payroll left open.");
+  if (C.cashOther) notes.push("Cash sales are not in this entry; they are in the books when the cash was deposited.");
+  o.push('<p class="note">' + esc(notes.join(" ")) + '</p>');
 
   // questions
   var q = [];
   if (C.personal) q.push("Some payments came in through PayPal with no fee, which usually means friends and family transfers. What were they?");
   if (rep.missingMonths) q.push("Your " + (rep.processor || "processor") + " export has no sales in " + rep.missingMonths.map(function(x){ return MONTHS[x - 1]; }).join(", ") + ". Were you closed, or can you send the full year?");
-  if (rep.status === "DIFFERS") q.push("Your 1099-K shows more than the sales in the export you sent. Do you have another location, device or account? Please send its export, or the monthly totals.");
+  if (rep.status === "DIFFERS") q.push("Your 1099-K shows " + (rep.difference > 0 ? "more" : "less") + " than the sales in the export you sent. Do you have another location, device or account? Please send its export, or the monthly totals.");
+  if (C.other) q.push("Some money left your " + (rep.processor === "paypal" ? "PayPal" : "processor") + " balance for things other than payouts. What were those payments for?");
   if (q.length) o.push('<h2>To ask the client</h2><ol class="ask">' + q.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + '</ol>');
 
-  // month by month
-  o.push('<h2>Month by month</h2><details class="big" id="months"><summary>Show the months</summary><div class="scroll"><table><thead><tr><th>Month</th><th class="num">Sales</th><th class="num">Gross (5a–5l)</th><th class="num">Refunds and chargebacks</th><th class="num">Fees</th></tr></thead><tbody>');
+  o.push('<h2>Also check on the 1099-K itself</h2><ul class="plain"><li>The payee name and TIN: a corporation’s sales on a form issued under the owner’s Social Security number need nominee treatment.</li><li>Box 4, federal tax withheld (backup withholding): a credit on the return; boxes 6 to 8, state withholding.</li><li>One 1099-K for each processor and each account: Shopify, Etsy, Amazon, eBay and Venmo business accounts issue their own.</li><li>Boxes 5a to 5l, month by month, against the months above.</li></ul>');
+
+  o.push('<h2>Month by month</h2><details class="big" id="months"' + (rep.status === "DIFFERS" ? " open" : "") + '><summary>Show the months</summary><div class="scroll"><table><thead><tr><th>Month</th><th class="num">Payments</th><th class="num">Gross (5a–5l)</th><th class="num">Refunds and chargebacks</th><th class="num">Fees</th></tr></thead><tbody>');
   rep.months.forEach(function(mo){ o.push('<tr><td>' + MONTHS[mo.month - 1] + '</td><td class="num">' + mo.sales + '</td><td class="num">' + money(Math.round(mo.gross * 100)) + '</td><td class="num">' + money(Math.round(mo.refunds * 100)) + '</td><td class="num">' + money(Math.round(mo.fees * 100)) + '</td></tr>'); });
   o.push('</tbody></table></div></details>');
-  o.push('<h2>What I read</h2><p class="note">' + esc(rep.layout) + '. ' + rep.rowsRead.toLocaleString("en-US") + ' lines read' + (rep.duplicates ? ", " + rep.duplicates + " of them duplicates" : "") + '. Year: ' + rep.year + ' (the year with the most sales). Sales counted: ' + rep.box3.toLocaleString("en-US") + '.</p>');
+  o.push('<h2>What I read</h2><p class="note">' + esc(rep.layout) + '. ' + rep.rowsRead.toLocaleString("en-US") + ' lines read' + (rep.duplicates ? ", " + rep.duplicates + " of them duplicates" : "") + '. Year: ' + rep.year + ' (the year with the most sales). Card and app payments counted: ' + rep.box3.toLocaleString("en-US") + '.</p>');
   o.push(footer());
   return o.join("");
 }
@@ -479,21 +537,24 @@ function footer(){ return '<p class="foot">Made by “Does the 1099-K Tie?” ve
 
 function publish(rep){
   current = rep;
+  ["client", "ein", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
   $("out").innerHTML = render(rep);
   $("start").hidden = true; $("report").hidden = false;
   window.__report = JSON.parse(JSON.stringify(rep, function(k, v){ return k.charAt(0) === "_" ? undefined : v; }));
+  window.__report.choice = { leaveOutTax: choice.tax, leaveOutTips: choice.tips };
   var b = $("compare");
   if (b) {
     var go = function(){ var c = parseAmount($("box1a").value); var y = window.scrollY; publish(compareTyped(current, c == null || isNaN(c) ? null : c)); window.scrollTo(0, y); };
     b.addEventListener("click", go);
     $("box1a").addEventListener("keydown", function(e){ if (e.key === "Enter") go(); });
   }
+  [["leave-tax", "tax"], ["leave-tips", "tips"]].forEach(function(p){ var x = $(p[0]); if (x) x.addEventListener("change", function(){ choice[p[1]] = this.checked; var y = window.scrollY; publish(current); window.scrollTo(0, y); }); });
 }
 function showProblem(msg){ var p = $("problem"); p.textContent = msg; p.hidden = false; }
 function handle(f){
-  if (/\.pdf$/i.test(f.name)) return showProblem("“" + f.name + "” is a PDF. I read the processor's export as Excel or CSV. If you only have the 1099-K as a PDF, you can type its box 1a once the export is in.");
+  if (/\.pdf$/i.test(f.name)) return showProblem("“" + f.name + "” is a PDF. I read the processor's export as Excel or CSV. If you only have the 1099-K as a PDF, type its box 1a above.");
   if (!/\.(xlsx|xlsm|xls|csv|txt)$/i.test(f.name)) return showProblem("“" + f.name + "” is not an Excel or CSV file.");
-  window.__report = undefined; $("problem").hidden = true;
+  window.__report = undefined; $("problem").hidden = true; choice = { tax: false, tips: false };
   var reader = new FileReader();
   reader.onload = function(){
     try {
@@ -503,6 +564,8 @@ function handle(f){
       wb.SheetNames.forEach(function(sn){ var rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: null, blankrows: true }); if (!best || rows.length > best.length) best = rows; });
       var rep = analyze(best || [], f.name);
       if (rep.status === "NOT_RECOGNIZED") { window.__report = JSON.parse(JSON.stringify(rep)); return showProblem(rep.exceptions[0].message); }
+      var pre = parseAmount($("box1a-start").value);
+      if (pre != null && !isNaN(pre)) compareTyped(rep, pre);
       publish(rep);
     } catch (e) { window.__report = { status: "ERROR", message: String(e) }; showProblem("Something in this file stopped me. Nothing was produced. (" + e + ")"); }
   };
@@ -515,18 +578,19 @@ document.addEventListener("drop", function(e){ var f = e.dataTransfer && e.dataT
 $("print").addEventListener("click", function(){ window.print(); });
 $("again").addEventListener("click", function(){ $("report").hidden = true; $("start").hidden = false; $("problem").hidden = true; window.scrollTo(0, 0); });
 
-// a made-up sample: a small café on Square, three months
+// a made-up sample: a small café on Square
 $("sample").addEventListener("click", function(){
   var H = ["Date","Time","Tax","Tip","Total Collected","Card","Cash","Square Gift Card","Other Tender","Fees","Net Total","Transaction ID","Event Type","Deposit Date","Transaction Status"];
   var rows = [H], n = 0;
   for (var m = 1; m <= 12; m++) for (var d = 1; d <= 28; d += 3) {
-    n++; var net = 1200 + (n * 37) % 900, tax = Math.round(net * 0.0825), tip = n % 4 ? Math.round(net * 0.15) : 0, cash = n % 5 === 0;
-    var tot = net + tax + (cash ? 0 : tip), fee = cash ? 0 : -(Math.round(tot * 0.026) + 15);
+    n++; var net = 1200 + (n * 37) % 900, tax = Math.round(net * 0.0825), cash = n % 5 === 0, tip = !cash && n % 4 ? Math.round(net * 0.15) : 0;
+    var tot = net + tax + tip, fee = cash ? 0 : -(Math.round(tot * 0.026) + 15);
     var ds = String(m).padStart(2, "0") + "/" + String(d).padStart(2, "0") + "/2025";
-    rows.push([ds, "12:00:00", (tax / 100).toFixed(2), ((cash ? 0 : tip) / 100).toFixed(2), (tot / 100).toFixed(2), cash ? "0.00" : (tot / 100).toFixed(2), cash ? (tot / 100).toFixed(2) : "0.00", "0.00", "0.00",
+    rows.push([ds, "12:00:00", (tax / 100).toFixed(2), (tip / 100).toFixed(2), (tot / 100).toFixed(2), cash ? "0.00" : (tot / 100).toFixed(2), cash ? (tot / 100).toFixed(2) : "0.00", "0.00", "0.00",
       (fee / 100).toFixed(2), ((tot + fee) / 100).toFixed(2), "S" + n, "Payment", cash ? "" : String(m).padStart(2, "0") + "/" + String(Math.min(d + 1, 28)).padStart(2, "0") + "/2025", "Complete"]);
   }
   rows.push(["06/20/2025", "15:00:00", "0.00", "0.00", "-24.00", "-24.00", "0.00", "0.00", "0.00", "0.00", "-24.00", "S10", "Refund", "06/21/2025", "Complete"]);
+  choice = { tax: false, tips: false };
   publish(analyze(rows, "made-up sample (Square)"));
 });
 </script>

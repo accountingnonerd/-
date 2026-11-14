@@ -56,9 +56,10 @@ function compare(key, rep) {
     check("box 1a typed", key.typedBox1a, rep.typedBox1a, near(key.typedBox1a, rep.typedBox1a));
     check("difference from the 1099-K", key.difference, rep.difference, near(key.difference, rep.difference));
   }
-  if (key.boundary) {
-    check("January 1 UTC sales: count", key.boundary.count, rep.boundary && rep.boundary.count);
-    check("January 1 UTC sales: amount", key.boundary.amount, rep.boundary && rep.boundary.amount, near(key.boundary.amount, rep.boundary && rep.boundary.amount));
+  if (key.boundary) for (const side of ["intoNextYear", "fromPriorYear"]) {
+    const got = rep.boundary && rep.boundary[side];
+    check("January 1 UTC sales, " + side + ": count", key.boundary[side].count, got && got.count);
+    check("January 1 UTC sales, " + side + ": amount", key.boundary[side].amount, got && got.amount, near(key.boundary[side].amount, got && got.amount));
   }
   if (key.duplicates !== undefined) check("duplicate lines removed", key.duplicates, rep.duplicates);
   if (key.missingMonths) check("missing months", key.missingMonths.join(","), (rep.missingMonths || []).join(","));
@@ -101,9 +102,9 @@ function compare(key, rep) {
     } catch (e) { errors.push(String(e).split("\n")[0]); }
     const ms = Date.now() - t0;
     const checks = compare(key, rep);
-    const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "DUPLICATE_ROWS", "MISSING_MONTH", "DIFFERS_FROM_1099K", "UNREAD_ROWS"].includes(c));
+    const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "DUPLICATE_ROWS", "DIFFERS_FROM_1099K", "UNREAD_ROWS", "NO_DEPOSIT_DATES"].includes(c));
     checks.push({ what: wantStop ? "shows the stop message" : "shows no stop message", expected: wantStop, got: !!shown.stop, ok: wantStop === !!shown.stop });
-    const vOk = { COMPUTED: /should show/i, TIES: /ties/i, DIFFERS: /does not tie/i, NOT_RECOGNIZED: /not an export|cannot read/i }[key.status].test(shown.verdict || "");
+    const vOk = { COMPUTED: /should be/i, TIES: /ties/i, DIFFERS: /does not tie/i, NOT_RECOGNIZED: /not an export|cannot read/i }[key.status].test(shown.verdict || "");
     checks.push({ what: "verdict on screen matches the status", expected: key.status, got: (shown.verdict || "").split("\n")[0].slice(0, 90), ok: vOk });
     if (errors.length) checks.push({ what: "runs without errors", expected: "no errors", got: errors.join(" | "), ok: false });
     results.push({ id, key, checks, ms, pass: checks.every((c) => c.ok) });
