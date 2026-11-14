@@ -1,0 +1,5 @@
+Free tool, test files and the full write-up: https://github.com/accountingnonerd/-
+
+Open order-to-cash/01-does-the-1099k-tie/agent/does-the-1099k-tie.html in your browser and drop in a Square, Stripe or PayPal export. The page also has a made-up sample.
+
+Sources: IRS Instructions for Form 1099-K (box 1a), https://www.irs.gov/instructions/i1099k ; Intuit ProConnect help on 1099-K and gross receipts.

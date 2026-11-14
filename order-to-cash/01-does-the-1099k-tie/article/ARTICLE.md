@@ -8,7 +8,7 @@ For the LinkedIn newsletter edition and the repository. Images are slides from t
 
 ![The 1099-K says $39,907.56. The deposits say $38,492.25. The return should say neither.](carousel/slides/01.png)
 
-A café owner drops off her tax papers in February. On top is a Form 1099-K from Square: $39,907.56. Her bookkeeper's books, built from the bank feed, show card sales of $38,492.25. Neither number is what goes on line 1 of her return.
+A café owner drops off the tax papers in February. On top is a Form 1099-K from Square: $39,907.56. The books, built from the bank feed, show card sales of $38,492.25. Neither number is what goes on line 1 of the return.
 
 That café, Juniper Street Coffee, is invented; it is one of our test files. The form is not. Every business that takes cards gets a 1099-K from its processor "no matter how many payments you got or how much they were for" ([IRS](https://www.irs.gov/businesses/understanding-your-form-1099-k)), and the 2026 forms arrive by January 31, 2027. This is Series 1, Agent 4: a free tool that turns a client's year of Square, Stripe or PayPal transactions into what the 1099-K should say, and ties it to the return and to the bank.
 

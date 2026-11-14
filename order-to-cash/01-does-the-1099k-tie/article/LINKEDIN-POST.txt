@@ -1,0 +1,23 @@
+The 1099-K says $39,907.56. The deposits say $38,492.25.
+The return should say neither.
+
+Every small-business client who takes cards gets a 1099-K from Square, Stripe or PayPal. It counts gross: before fees and refunds, with sales tax and tips inside. The bank only sees what's left. Books built from deposits come in below the 1099-K, and the IRS matching program notices.
+
+So Agent 4 of One Painful Problem is a free tool for exactly that. Drop in the client's year of Square, Stripe or PayPal transactions and get:
+
+→ What the 1099-K should say: box 1a, box 3, every month
+→ The bridge to line 1: cash added, gift cards not counted twice, sales tax and tips as your call
+→ The tie to the bank deposits, and the entry if the books booked deposits as sales
+→ The questions for the client when it doesn't tie
+
+Before release, a skeptical CPA review found 16 problems, including gift cards counted twice. All fixed. The 14 test cases and the full list are public.
+
+It runs in your browser. Nothing is uploaded.
+
+Tool, tests and the full write-up: link in the first comment.
+
+Follow me for Agent 5: fixed assets.
+
+Which tax-season reconciliation still eats your evenings?
+
+#Accounting #Tax #CPA
