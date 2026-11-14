@@ -1,0 +1,198 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- The LinkedIn carousel for Series 1, Agent 4. 12 slides, 1080 x 1350 each. Rendered by render.js. -->
+<style>
+:root{--paper:#ffffff;--ground:#f2f5f3;--ink:#14201c;--soft:#56635e;--faint:#8a9692;--rule:#d3dbd8;
+  --accent:#15614a;--accent-tint:#e2efe9;--alarm:#a3211b;--alarm-tint:#f9e6e4;
+  --display:"Inter Display","Inter",sans-serif;--text:"Inter",sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#888;font-family:var(--text);color:var(--ink);-webkit-font-smoothing:antialiased}
+.slide{width:1080px;height:1350px;background:var(--paper);padding:96px 88px 80px;position:relative;display:flex;flex-direction:column;overflow:hidden;margin-bottom:20px}
+.slide.ground{background:var(--ground)}
+.slide.dark{background:#123d30;color:#fff}
+.kicker{font:700 26px/1 var(--text);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.dark .kicker{color:#9fd3bd}
+h1{font:800 92px/1.02 var(--display);letter-spacing:-.025em;margin-top:28px}
+h2{font:800 74px/1.06 var(--display);letter-spacing:-.02em;margin-top:24px}
+p.big{font:500 40px/1.35 var(--text);color:var(--soft);margin-top:32px}
+.dark p.big{color:#d6e9e1}
+.foot{position:absolute;left:88px;right:88px;bottom:56px;display:flex;justify-content:space-between;font:600 24px/1 var(--text);color:var(--faint)}
+.dark .foot{color:#7fb7a1}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.stack{margin-top:56px;display:grid;gap:26px}
+.figure{border-radius:20px;padding:30px 36px;background:var(--ground)}
+.slide.ground .figure{background:var(--paper)}
+.figure .lab{font:600 28px/1.2 var(--text);color:var(--soft)}
+.figure .val{font:800 78px/1.05 var(--display);letter-spacing:-.02em;margin-top:8px}
+.figure.red{background:var(--alarm-tint)} .figure.red .val{color:var(--alarm)}
+.figure.green{background:var(--accent-tint)} .figure.green .val{color:var(--accent)}
+.rows{margin-top:44px;font:500 34px/1.3 var(--text)}
+.rows .r{display:flex;justify-content:space-between;gap:20px;padding:17px 0;border-bottom:2px solid var(--rule)}
+.rows .r.t{border-top:5px solid var(--ink);border-bottom:0;font-weight:800;font-size:38px}
+.rows .r .v{font-family:var(--mono);white-space:nowrap}
+.rows .r.m{color:var(--soft)}
+.quote{margin-top:44px;font:500 38px/1.38 var(--text);border-left:12px solid var(--accent);padding:6px 0 6px 34px}
+.quote small{display:block;font-size:26px;color:var(--faint);margin-top:18px}
+ul.ticks{list-style:none;margin-top:44px;display:grid;gap:30px}
+ul.ticks li{font:500 38px/1.3 var(--text);padding-left:66px;position:relative}
+ul.ticks li::before{content:"";position:absolute;left:0;top:6px;width:42px;height:42px;border-radius:50%;background:var(--accent)}
+ul.ticks.red li::before{background:var(--alarm)}
+ul.ticks li b{display:block;font-weight:800}
+ul.ticks li span{color:var(--soft);font-size:32px}
+.shot{margin-top:40px;border:3px solid var(--rule);border-radius:16px;overflow:hidden;flex:1;min-height:0}
+.shot img{display:block;width:100%}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
+.tile{background:var(--ground);border-radius:18px;padding:30px}
+.tile .n{font:800 84px/1 var(--display);letter-spacing:-.03em}
+.tile .t{font:500 29px/1.3 var(--text);color:var(--soft);margin-top:12px}
+.cta{margin-top:auto;background:#fff;color:var(--ink);border-radius:22px;padding:40px 44px;font:700 44px/1.25 var(--display)}
+.cta small{display:block;font:500 30px/1.35 var(--text);color:var(--soft);margin-top:14px}
+.swipe{position:absolute;right:88px;bottom:120px;font:700 30px/1 var(--text);color:var(--accent)}
+.flow{margin-top:52px;display:grid;gap:16px}
+.flow .b{display:flex;align-items:center;gap:22px;font:600 34px/1.2 var(--text)}
+.flow .bar{height:64px;border-radius:10px;background:var(--accent);display:flex;align-items:center;padding:0 22px;color:#fff;font:700 30px/1 var(--mono);white-space:nowrap}
+.flow .bar.cut{background:var(--alarm)}
+.flow .bar.fade{background:#9cb8ad}
+</style></head><body>
+
+<!-- 1: the hook -->
+<section class="slide ground">
+  <div class="kicker">One Painful Problem · Agent 4</div>
+  <h1>The 1099-K says <span class="num" style="color:var(--alarm)">$39,907.56</span>.<br>The deposits say <span class="num" style="color:var(--alarm)">$38,492.25</span>.</h1>
+  <p class="big">The return should say neither. Which number goes on line 1?</p>
+  <div class="swipe">Swipe →</div>
+  <div class="foot"><span>Free tool for accountants</span><span>1 / 12</span></div>
+</section>
+
+<!-- 2: why they differ -->
+<section class="slide">
+  <div class="kicker">Why they never match</div>
+  <h2>The 1099-K counts every swipe. The bank sees what's left.</h2>
+  <div class="flow">
+    <div class="b"><div class="bar" style="width:100%">$39,907.56 card sales, as the 1099-K counts them</div></div>
+    <div class="b"><div class="bar cut" style="width:12%">−$1,251.96</div>processor fees</div>
+    <div class="b"><div class="bar cut" style="width:6%">−$163.35</div>paid out in January</div>
+    <div class="b"><div class="bar fade" style="width:96%">$38,492.25 deposited in 2025</div></div>
+  </div>
+  <p class="big">And inside that $39,907.56: sales tax and tips that were never the café's sales.</p>
+  <div class="foot"><span>Juniper Street Coffee · an invented test client</span><span>2 / 12</span></div>
+</section>
+
+<!-- 3: the rule and the risk -->
+<section class="slide ground">
+  <div class="kicker">The rule</div>
+  <h2>Gross means gross.</h2>
+  <div class="quote">"…without regard to any adjustments for credits, cash equivalents, discount amounts, fees, refunded amounts, shipping amounts, or any other amounts."<small>IRS Instructions for Form 1099-K, box 1a</small></div>
+  <div class="quote" style="border-color:var(--alarm)">"…the client may receive an IRS notice if the gross receipts don't reflect amounts from the 1099-K."<small>Intuit ProConnect help</small></div>
+  <div class="foot"><span>Sources in the comments</span><span>3 / 12</span></div>
+</section>
+
+<!-- 4: what is inside, and outside -->
+<section class="slide">
+  <div class="kicker">What hides in box 1a</div>
+  <h2>Some of it isn't sales. Some sales aren't in it.</h2>
+  <div class="stack">
+    <div class="figure red"><div class="lab">Inside the 1099-K, not the café's sales</div><div class="val num">$2,733.84 tax · $4,034.52 tips</div></div>
+    <div class="figure green"><div class="lab">The café's sales, not in the 1099-K</div><div class="val num">$10,527.00 cash and gift cards</div></div>
+  </div>
+  <p class="big">Miss either and line 1 is wrong in a different direction.</p>
+  <div class="foot"><span>From the test file</span><span>4 / 12</span></div>
+</section>
+
+<!-- 5: the bridge to the return -->
+<section class="slide ground">
+  <div class="kicker">The bridge to the return</div>
+  <h2>From the 1099-K to line 1, in five lines.</h2>
+  <div class="rows">
+    <div class="r"><span>1099-K, box 1a</span><span class="v">$39,907.56</span></div>
+    <div class="r m"><span>Less sales tax collected*</span><span class="v">−2,733.84</span></div>
+    <div class="r m"><span>Less tips paid to staff</span><span class="v">−4,034.52</span></div>
+    <div class="r m"><span>Add cash and gift-card sales</span><span class="v">+10,527.00</span></div>
+    <div class="r t"><span>Gross receipts</span><span class="v">$43,666.20</span></div>
+  </div>
+  <p class="big" style="font-size:30px">*If the state imposes the tax on the buyer. The tool flags it as your call, with the instruction it comes from.</p>
+  <div class="foot"><span>Fees $1,251.96 go to deductions</span><span>5 / 12</span></div>
+</section>
+
+<!-- 6: what the tool does -->
+<section class="slide">
+  <div class="kicker">The free tool</div>
+  <h2>One export in. The 1099-K, the return and the bank, tied.</h2>
+  <ul class="ticks">
+    <li><b>Drop in a year from Square, Stripe or PayPal</b><span>The export the client can download in two minutes</span></li>
+    <li><b>Get what the 1099-K should say</b><span>Box 1a, box 3, and every month, 5a to 5l</span></li>
+    <li><b>Type box 1a from the form</b><span>It ties, or it says by how much and why</span></li>
+    <li><b>Print the workpaper</b><span>With the entry for books that booked deposits as sales</span></li>
+  </ul>
+  <div class="foot"><span>Runs in your browser. Nothing uploaded.</span><span>6 / 12</span></div>
+</section>
+
+<!-- 7: screenshot -->
+<section class="slide ground">
+  <div class="kicker">What comes back</div>
+  <h2 style="font-size:64px">A workpaper you can sign.</h2>
+  <div class="shot"><img src="_shot.png" alt="The workpaper"></div>
+  <div class="foot"><span>Real screen, invented client</span><span>7 / 12</span></div>
+</section>
+
+<!-- 8: what it caught -->
+<section class="slide">
+  <div class="kicker">What it catches</div>
+  <h2>The things that make a 1099-K "wrong".</h2>
+  <ul class="ticks red">
+    <li><b>Box 1a $2,184 higher than the export</b><span>A second location on the same EIN</span></li>
+    <li><b>$310 through PayPal with no fee</b><span>Friends-and-family transfers, not sales: ask</span></li>
+    <li><b>A Dec 31 sale dated Jan 1</b><span>Stripe exports in UTC; the 1099-K may not</span></li>
+    <li><b>June counted twice</b><span>Two exports pasted together</span></li>
+  </ul>
+  <div class="foot"><span>All from the test files</span><span>8 / 12</span></div>
+</section>
+
+<!-- 9: tested -->
+<section class="slide ground">
+  <div class="kicker">We tried to break it</div>
+  <h2>Tested before it was built.</h2>
+  <div class="tiles">
+    <div class="tile"><div class="n num">__CASES__</div><div class="t">test cases from three invented businesses</div></div>
+    <div class="tile"><div class="n num">__CHECKS__</div><div class="t">checks passed</div></div>
+    <div class="tile"><div class="n num">__MUTANTS__</div><div class="t">broken copies the tests caught</div></div>
+    <div class="tile"><div class="n">__REVIEW_N__</div><div class="t">__REVIEW_T__</div></div>
+  </div>
+  <div class="foot"><span>Every test file is public</span><span>9 / 12</span></div>
+</section>
+
+<!-- 10: limits -->
+<section class="slide">
+  <div class="kicker">What it won't do</div>
+  <h2>Honest limits.</h2>
+  <ul class="ticks" style="gap:24px">
+    <li><b>It doesn't read the 1099-K PDF</b><span>You type box 1a</span></li>
+    <li><b>Square, Stripe and PayPal only</b><span>Not Shopify, Venmo or marketplaces yet</span></li>
+    <li><b>It doesn't decide sales tax or tips for you</b><span>It shows the amounts and the rule</span></li>
+    <li><b>Layouts from published column names</b><span>Not yet tested on a real client's export</span></li>
+  </ul>
+  <div class="foot"><span>Full list in the repository</span><span>10 / 12</span></div>
+</section>
+
+<!-- 11: the series -->
+<section class="slide ground">
+  <div class="kicker">Series 1 · five agents</div>
+  <h2>One painful step of each process. Free.</h2>
+  <div class="rows" style="font-size:34px">
+    <div class="r"><span>1 · Who gets a 1099?</span><span class="v" style="color:var(--accent)">done</span></div>
+    <div class="r"><span>2 · Do the 941s match the W-3?</span><span class="v" style="color:var(--accent)">done</span></div>
+    <div class="r"><span>3 · Did last year change?</span><span class="v" style="color:var(--accent)">done</span></div>
+    <div class="r"><span><b>4 · Does the 1099-K tie?</b></span><span class="v"><b>today</b></span></div>
+    <div class="r m"><span>5 · Fixed assets</span><span class="v">next</span></div>
+  </div>
+  <div class="foot"><span>github.com/accountingnonerd/-</span><span>11 / 12</span></div>
+</section>
+
+<!-- 12: follow -->
+<section class="slide dark">
+  <div class="kicker">Get it free</div>
+  <h2>The tool, the tests and the full write-up: link in the comments.</h2>
+  <p class="big">Every agent ships with its test files and the prompt that rebuilds it.</p>
+  <div class="cta">Follow Zac Lu, CPA for Agent 5:<br>fixed assets.<small>Then tell me in the comments: which tax-season task still eats your evenings?</small></div>
+  <div class="foot"><span>One Painful Problem</span><span>12 / 12</span></div>
+</section>
+</body></html>

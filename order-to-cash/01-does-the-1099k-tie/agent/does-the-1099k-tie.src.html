@@ -418,8 +418,8 @@ function render(rep){
   o.push('<div class="box1a">' + money(C.gross) + '</div><p class="note">Box 1a, gross amount of payment transactions, ' + rep.year + '. Box 3, number of payment transactions: ' + rep.box3.toLocaleString("en-US") + '.</p></div>');
   o.push('<div class="typed no-print-if-empty"><label for="box1a">Box 1a on the client’s 1099-K</label><input id="box1a" inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + (rep.typedBox1a != null ? rep.typedBox1a.toFixed(2) : "") + '"><button class="sec-btn" id="compare" type="button">Check it ties</button>' +
     (rep.typedBox1a != null ? '<p class="' + (rep.status === "TIES" ? "tie-ok" : "tie-bad") + '">' + (rep.status === "TIES" ? "Ties exactly." : "Differs by " + money(Math.abs(Math.round(rep.difference * 100))) + ".") + '</p>' : '<p class="note">Optional. Type the figure from the form, and press the button.</p>') + '</div></div>');
-  o.push('<div class="scroll"><table><thead><tr><th>Box</th>' + MONTHS.map(function(mn){ return '<th class="num">' + mn.slice(0, 3) + '</th>'; }).join("") + '</tr></thead><tbody><tr><td>5a–5l</td>' +
-    C.monthly.map(function(v){ return '<td class="num">' + (v ? (v / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '<span class="tie-bad">0.00</span>') + '</td>'; }).join("") + '</tr></tbody></table></div>');
+  var cell = function(i){ var v = C.monthly[i]; return '<td class="num"><small class="note">5' + "abcdefghijkl"[i] + ' ' + MONTHS[i].slice(0, 3) + '</small><br>' + (v ? (v / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '<span class="tie-bad">0.00</span>') + '</td>'; };
+  o.push('<div class="scroll"><table id="monthly"><tbody>' + [0, 6].map(function(s0){ var r = []; for (var i = s0; i < s0 + 6; i++) r.push(cell(i)); return '<tr>' + r.join("") + '</tr>'; }).join("") + '</tbody></table></div>');
 
   // check these first
   var order = { stop: 0, care: 1, info: 2 }, exs = rep.exceptions.filter(function(e){ return e.level !== "stop"; }).sort(function(a, b){ return order[a.level] - order[b.level]; });
