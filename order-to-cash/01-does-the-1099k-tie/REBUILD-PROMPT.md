@@ -13,7 +13,7 @@ The rule (IRS instructions for Form 1099-K, box 1a): "gross amount" is the total
 ## Screen
 - Load SheetJS 0.18.5: `<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>`.
 - Start screen: title "Does the 1099-K tie?", one sentence saying what it does; an optional field `<input id="box1a-start">` labelled "Have the client's 1099-K? Type box 1a first (optional)"; one large drop area wrapping `<input type="file" id="file" accept=".csv,.txt,.xlsx,.xls,.xlsm">` ("Drop the processor's export for the year here"); short notes on which export to get from each processor (Square: Transactions, Export, Transactions CSV; Stripe: Reports, Balance, itemized balance change from activity; PayPal: Activity download, CSV); why it matters (the 1099-K reports gross, the bank sees payouts, gross receipts below the 1099-K may bring an IRS notice); a "See it work on a made-up sample" link; "Where your data goes: nowhere"; "You stay in charge". Footer "Version 1.0.0."
-- A PDF, or anything other than xlsx/xlsm/xls/csv/txt, is refused with a plain message under the drop area. A file that is not one of the three exports is refused the same way, with status NOT_RECOGNIZED (set `window.__report` with that status and the exception).
+- Refusals are shown in `<div id="problem" role="alert">` directly under the drop area, staying on the start screen. A PDF, or anything other than xlsx/xlsm/xls/csv/txt, is refused there with a plain message. A file that is not one of the three exports is refused the same way, with status NOT_RECOGNIZED (set `window.__report` with that status and the exception).
 - Read CSV/TXT with `XLSX.read(text, {type:"string", raw:true})`; other files with `{type:"array"}`. Use the sheet with the most rows (`sheet_to_json(ws, {header:1, raw:true, defval:null, blankrows:true})`).
 - After reading, replace the start screen with the workpaper. Above it: one main button "Print or save as PDF" and a "Start over" link. In the workpaper: `<input id="box1a">` and `<button id="compare">` ("Check it ties"); pressing the button (or Enter) compares and re-renders. If `#box1a-start` held a number when the file was dropped, compare at once. Large type, plain words, print styles. Set `window.__report` (the report object without internal fields) after every render.
 
@@ -56,7 +56,7 @@ Skip blank rows. A row whose date cannot be read is "unread" (Square: a row whos
 - The entry (for books that recorded each payout as sales), dated December 31 of Y. owner = transfersIn + personal; salesCredit = fees + refunds + chargebacks + held − owner − other. Lines, each with a nonzero amount as debit if positive, credit if negative: "Merchant fees" (fees), "Sales returns and allowances" (refunds + chargebacks), "Due from processor" (held), "Owner contributions" (−owner), "Other activity to classify" (−other), "Sales" (−salesCredit). Report the total debit and credit, salesBooked = payouts and salesAfter = payouts + salesCredit (which equals gross).
 
 ## Warnings: code, level (stop, care or info), and a plain-English message
-- UNREAD_ROWS (stop); DUPLICATE_ROWS (stop; the count and months; set `duplicates`).
+- UNREAD_ROWS (stop); DUPLICATE_ROWS (stop; the count and months in the message; set `duplicates` to the count, a plain number).
 - MISSING_MONTH (care): months of Y with no card sales, when some months have them; set `missingMonths`.
 - OUTSIDE_YEAR (info): lines dated outside Y; set `outside = {count, sales, amount}`.
 - UTC_DATES (care) when the Stripe file is UTC only: report sales dated January 1 of Y+1 before 8:00 (they may be December 31 sales in the US) and January 1 of Y before 8:00, separately, as `boundary = {intoNextYear:{count, amount}, fromPriorYear:{count, amount}}`, with box 1a both ways.
@@ -86,7 +86,7 @@ Status without a typed figure: COMPUTED.
   bridge:{ gross, salesTax, tips, notOn1099K, giftRedeemed, grossReceipts, grossReceiptsExcluding, refunds, chargebacks, returns,
            refundTax, fees, personal, transfersIn, other, netActivity, payouts, held },
   entry:{ date, lines:[{account, debit, credit}], salesBooked, salesAfter, totalDebit, totalCredit },
-  exceptions:[{code, level, message}], typedBox1a, difference, boundary, duplicates, missingMonths, outside, foreign, months:[...] }
+  exceptions:[{code, level, message}], typedBox1a, difference, boundary, duplicates (a number), missingMonths (an array of month numbers), outside, foreign, months:[...] }
 ```
 Use exactly these account names in the entry.
 

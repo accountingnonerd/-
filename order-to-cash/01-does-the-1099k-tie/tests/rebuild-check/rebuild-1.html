@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does the 1099-K tie?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#f7f5f0; --paper:#ffffff; --ink:#1d1b18; --muted:#5d5850; --line:#d9d4c9;
+  --accent:#1f4e79; --accent-ink:#ffffff; --stop:#a4161a; --stop-bg:#fdecec;
+  --care:#8a5a00; --care-bg:#fff4dc; --info:#2b5d8a; --info-bg:#eaf2fa; --ok:#1e6b3a; --ok-bg:#e7f5ec;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.5 Georgia,"Iowan Old Style","Times New Roman",serif}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:2.2rem;line-height:1.15;margin:.2em 0 .3em}
+h2{font-size:1.35rem;margin:1.6em 0 .5em;border-bottom:2px solid var(--ink);padding-bottom:.15em}
+h3{font-size:1.1rem;margin:1.2em 0 .4em}
+p{margin:.4em 0 .8em}
+.lede{font-size:1.2rem;color:var(--muted);max-width:44em}
+.sans{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+label.field{display:block;font-weight:bold;margin:1.2em 0 .3em}
+input[type=text]{font:inherit;font-size:1.25rem;padding:.4em .6em;border:2px solid var(--line);border-radius:6px;width:16em;max-width:100%;background:var(--paper);color:var(--ink)}
+input[type=text]:focus{outline:3px solid var(--accent);outline-offset:1px}
+.drop{position:relative;display:block;margin:1.2em 0 .4em;padding:56px 20px;border:3px dashed var(--accent);border-radius:12px;background:var(--paper);text-align:center;cursor:pointer}
+.drop.over{background:var(--info-bg)}
+.drop strong{display:block;font-size:1.5rem}
+.drop span{color:var(--muted)}
+.drop input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+#start-error{min-height:1.5em;color:var(--stop);font-weight:bold}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+.card h3{margin-top:0}
+a{color:var(--accent)}
+button,.btn{font:inherit;font-weight:bold;font-size:1.05rem;padding:.5em 1.1em;border-radius:8px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+button.secondary{background:var(--paper);color:var(--accent)}
+.toolbar{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px 24px}
+.signoff{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 24px;margin:.6em 0 1em;font-size:.95rem}
+.signoff div{border-bottom:1px solid var(--line);padding:.35em 0;color:var(--muted)}
+#verdict{font-size:1.55rem;font-weight:bold;padding:16px 18px;border-radius:10px;margin:14px 0;border-left:8px solid var(--accent);background:var(--info-bg)}
+#verdict.TIES{border-color:var(--ok);background:var(--ok-bg)}
+#verdict.DIFFERS,#verdict.NOT_RECOGNIZED{border-color:var(--stop);background:var(--stop-bg)}
+#stop-banner{border:3px solid var(--stop);background:var(--stop-bg);border-radius:10px;padding:12px 18px;margin:12px 0}
+#stop-banner h3{margin:.2em 0;color:var(--stop)}
+.big{font-size:2rem;font-weight:bold}
+.boxes{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-end}
+.boxes .lbl{font-size:.9rem;color:var(--muted)}
+.months{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:1em 0}
+.months div{border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:.95rem}
+.months b{display:block;font-size:.8rem;color:var(--muted);font-weight:normal}
+@media (max-width:700px){.months{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:420px){.months{grid-template-columns:repeat(2,1fr)}}
+table{border-collapse:collapse;width:100%;margin:.5em 0 1em}
+td,th{padding:.35em .5em;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.total td{border-top:2px solid var(--ink);font-weight:bold}
+.tbl-wrap{overflow-x:auto}
+.warn{border-radius:8px;padding:10px 14px;margin:8px 0;border-left:6px solid}
+.warn.stop{border-color:var(--stop);background:var(--stop-bg)}
+.warn.care{border-color:var(--care);background:var(--care-bg)}
+.warn.info{border-color:var(--info);background:var(--info-bg)}
+.tag{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:.75rem;font-weight:bold;text-transform:uppercase;letter-spacing:.05em;margin-right:.5em}
+.notyet{font-weight:bold;color:var(--stop);border:2px solid var(--stop);border-radius:8px;padding:6px 12px;display:inline-block}
+.muted{color:var(--muted)}
+.check{display:block;margin:.3em 0}
+footer{margin-top:2em;color:var(--muted);font-size:.9rem}
+details summary{cursor:pointer;font-weight:bold}
+@media print{
+  body{background:#fff;font-size:12pt}
+  .noprint,.toolbar,#start{display:none!important}
+  .paper{border:none;padding:0}
+  details{display:block}
+  details>*{display:block}
+  h2{break-after:avoid}
+  table,.warn{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="start">
+  <h1>Does the 1099-K tie?</h1>
+  <p class="lede">Drop in a client's year of Square, Stripe or PayPal transactions and get back what the Form 1099-K should say, the figures for the return, the tie to the bank deposits, and a year-end entry.</p>
+
+  <label class="field" for="box1a-start">Have the client's 1099-K? Type box 1a first (optional)</label>
+  <input type="text" id="box1a-start" inputmode="decimal" placeholder="$0.00" autocomplete="off">
+
+  <label class="drop" id="drop">
+    <strong>Drop the processor's export for the year here</strong>
+    <span>or click to choose a file (.csv, .txt, .xlsx, .xls, .xlsm)</span>
+    <input type="file" id="file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+  </label>
+  <div id="start-error" role="alert"></div>
+  <p><a href="#" id="sample">See it work on a made-up sample</a></p>
+
+  <div class="notes">
+    <div class="card"><h3>Which export to get</h3>
+      <p><b>Square:</b> Transactions, Export, Transactions CSV.</p>
+      <p><b>Stripe:</b> Reports, Balance, itemized balance change from activity.</p>
+      <p><b>PayPal:</b> Activity, download, CSV.</p></div>
+    <div class="card"><h3>Why it matters</h3>
+      <p>The 1099-K reports gross: every card and app payment before refunds and fees. The bank sees payouts, after them. Gross receipts reported below the 1099-K may bring an IRS notice.</p></div>
+    <div class="card"><h3>Where your data goes: nowhere</h3>
+      <p>The file is read in this browser tab. Nothing is uploaded or stored.</p>
+      <h3>You stay in charge</h3>
+      <p>Every figure is shown with how it was reached. Your judgment decides what goes on the return.</p></div>
+  </div>
+  <footer>Version 1.0.0.</footer>
+</section>
+<section id="work" hidden></section>
+</div>
+
+<script>
+"use strict";
+const VERSION = "1.0.0";
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const LETTERS = "abcdefghijkl";
+const LAYOUTS = {
+  square: "Square Transactions CSV",
+  stripe: "Stripe itemized balance change from activity",
+  paypal: "PayPal Activity download"
+};
+const state = { parsed: null, typed: null, leaveTax: false, leaveTips: false };
+
+/* ---------- small helpers ---------- */
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function fm(c){
+  const neg = c < 0; c = Math.abs(Math.round(c));
+  const s = Math.floor(c / 100).toLocaleString("en-US") + "." + String(c % 100).padStart(2, "0");
+  return (neg ? "-$" : "$") + s;
+}
+function dol(c){ return Math.round(c) / 100; }
+function sum(arr, f){ let t = 0; for (const x of arr) t += f(x) || 0; return t; }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function monthList(ms){ return ms.map(m => MONTHS[m - 1]).join(", "); }
+
+/* Amounts to integer cents. Blank is 0. */
+function toCents(v){
+  if (v === null || v === undefined) return 0;
+  if (typeof v === "number") return isFinite(v) ? Math.round(v * 100) : 0;
+  let s = String(v).trim();
+  if (!s) return 0;
+  let neg = false;
+  if (/^\(.*\)$/.test(s)){ neg = !neg; s = s.slice(1, -1).trim(); }
+  if (/-$/.test(s)){ neg = !neg; s = s.slice(0, -1).trim(); }
+  s = s.replace(/[\s,$€£]/g, "").replace(/^(USD|US)/i, "").replace(/(USD)$/i, "");
+  if (s.startsWith("-")){ neg = !neg; s = s.slice(1); }
+  else if (s.startsWith("+")) s = s.slice(1);
+  s = s.replace(/^\$/, "");
+  if (!/^\d*(\.\d*)?$/.test(s) || s === "" || s === ".") return 0;
+  const parts = s.split(".");
+  const ip = parseInt(parts[0] || "0", 10);
+  const fr = ((parts[1] || "") + "000").slice(0, 3);
+  const c = ip * 100 + Math.round(parseInt(fr, 10) / 10);
+  return neg ? -c : c;
+}
+function hasValue(v){ return !(v === null || v === undefined || String(v).trim() === ""); }
+
+function hourFrom(hs, ms, ampm){
+  let h = parseInt(hs, 10);
+  if (ampm){ const a = ampm.toUpperCase(); if (a === "PM" && h < 12) h += 12; if (a === "AM" && h === 12) h = 0; }
+  return h;
+}
+function validDate(y, m, d){ return y >= 1900 && y <= 2200 && m >= 1 && m <= 12 && d >= 1 && d <= 31; }
+/* Dates: MM/DD/YYYY or YYYY-MM-DD, optionally with time; Excel serials too. */
+function parseDT(v){
+  if (v === null || v === undefined) return null;
+  if (v instanceof Date && !isNaN(v)) return { y: v.getFullYear(), m: v.getMonth() + 1, d: v.getDate(), h: v.getHours() };
+  if (typeof v === "number"){
+    if (v > 20000 && v < 120000 && typeof XLSX !== "undefined"){
+      const p = XLSX.SSF.parse_date_code(v);
+      if (p && validDate(p.y, p.m, p.d)) return { y: p.y, m: p.m, d: p.d, h: p.H || 0, hasTime: (v % 1) !== 0 };
+    }
+    return null;
+  }
+  const s = String(v).trim();
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?![\d])(?:[\sT,]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
+  if (m){
+    const y = +m[3], mo = +m[1], d = +m[2];
+    if (!validDate(y, mo, d)) return null;
+    return { y, m: mo, d, h: m[4] ? hourFrom(m[4], m[5], m[7]) : 0, hasTime: !!m[4] };
+  }
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?![\d])(?:[\sT]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?/i);
+  if (m){
+    const y = +m[1], mo = +m[2], d = +m[3];
+    if (!validDate(y, mo, d)) return null;
+    return { y, m: mo, d, h: m[4] ? hourFrom(m[4], m[5], m[7]) : 0, hasTime: !!m[4] };
+  }
+  return null;
+}
+function parseHour(t){
+  if (t === null || t === undefined) return null;
+  if (typeof t === "number"){ const f = t % 1; return Math.floor(f * 24 + 1e-9); }
+  const m = String(t).trim().match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i);
+  return m ? hourFrom(m[1], m[2], m[4]) : null;
+}
+function fmtDate(dt){ return dt ? String(dt.m).padStart(2, "0") + "/" + String(dt.d).padStart(2, "0") + "/" + dt.y : ""; }
+
+/* ---------- recognizing the export ---------- */
+function detect(rows){
+  const lim = Math.min(rows.length, 15);
+  for (let i = 0; i < lim; i++){
+    const r = rows[i] || [];
+    const h = r.map(c => c == null ? "" : String(c).trim().toLowerCase());
+    const has = k => h.includes(k);
+    let proc = null;
+    if (["transaction id","event type","total collected","card","net total"].every(has)) proc = "square";
+    else if (["reporting_category","gross","fee","net"].every(has) && (has("created_utc") || has("created"))) proc = "stripe";
+    else if (["type","status","currency","gross","fee","net","transaction id"].every(has)) proc = "paypal";
+    if (proc){
+      const cols = {};
+      h.forEach((k, j) => { if (k && cols[k] === undefined) cols[k] = j; });
+      return { processor: proc, headerIdx: i, cols };
+    }
+  }
+  return null;
+}
+
+/* ---------- each line becomes an event ---------- */
+function buildEvents(rows, det){
+  const { processor, headerIdx, cols } = det;
+  const get = (row, k) => cols[k] === undefined ? null : row[cols[k]];
+  const c = (row, k) => toCents(get(row, k));
+  const events = [], unread = [], dupMonths = new Set(), seen = new Set();
+  let dupCount = 0, rowsRead = 0, skippedTotals = 0, usedUtc = 0, usedCreated = 0;
+
+  const dateOf = (row) => {
+    if (processor === "stripe"){
+      const cr = get(row, "created");
+      if (hasValue(cr)){ const d = parseDT(cr); if (d){ d.utc = false; return d; } }
+      const cu = get(row, "created_utc");
+      if (hasValue(cu)){ const d = parseDT(cu); if (d){ d.utc = true; return d; } }
+      return null;
+    }
+    const d = parseDT(get(row, "date"));
+    if (d && !d.hasTime && cols["time"] !== undefined){
+      const h = parseHour(get(row, "time")); if (h !== null) d.h = h;
+    }
+    return d;
+  };
+
+  for (let i = headerIdx + 1; i < rows.length; i++){
+    const row = rows[i] || [];
+    if (!row.some(hasValue)) continue;
+    if (processor === "square"){
+      const f = String(row[0] == null ? "" : row[0]).trim().toLowerCase();
+      if (f === "total" || f === "totals"){ skippedTotals++; continue; }
+    }
+    rowsRead++;
+    const key = JSON.stringify(row.map(x => x == null ? null : x));
+    if (seen.has(key)){
+      dupCount++;
+      const d = dateOf(row); if (d) dupMonths.add(d.m);
+      continue;
+    }
+    seen.add(key);
+    const date = dateOf(row);
+    if (!date){ unread.push(i + 1); continue; }
+    if (processor === "stripe"){ if (date.utc) usedUtc++; else usedCreated++; }
+    const ev = { row: i + 1, date, kind: "other", card: 0, fee: 0, amount: 0 };
+
+    if (processor === "square"){
+      const status = get(row, "transaction status");
+      const card = c(row, "card") + c(row, "cash app");
+      const cashOther = c(row, "cash") + c(row, "other tender");
+      const gift = c(row, "square gift card");
+      const total = c(row, "total collected");
+      const share = (x, t) => total ? Math.round(x * t / total) : 0;
+      const tax = c(row, "tax"), tip = c(row, "tip");
+      ev.depositNet = c(row, "net total") - cashOther - gift;
+      ev.depositWhen = parseDT(get(row, "deposit date"));
+      ev.fee = -c(row, "fees");
+      ev.txnId = String(get(row, "transaction id") == null ? "" : get(row, "transaction id")).trim();
+      const typeRaw = String(get(row, "event type") == null ? "" : get(row, "event type")).trim();
+      const type = typeRaw.toLowerCase();
+      if (cols["transaction status"] !== undefined && hasValue(status) && !/^complete/i.test(String(status).trim())){
+        ev.kind = "unsettled"; ev.amount = total; ev.label = (typeRaw || "Line") + " (" + String(status).trim() + ")";
+      } else if (type === "payment"){
+        Object.assign(ev, { kind: "sale", card, tax: share(tax, card), tip: share(tip, card), cashOther,
+          cashOtherTax: share(tax, cashOther), cashOtherTip: share(tip, cashOther), gift, giftSold: c(row, "gift card sales") });
+      } else if (type === "refund"){
+        Object.assign(ev, { kind: "refund", amount: -card, cashRefund: -cashOther, taxRefund: -tax });
+      } else {
+        Object.assign(ev, { kind: "other", amount: ev.depositNet, label: typeRaw || "Other activity" });
+      }
+    } else if (processor === "stripe"){
+      const gross = c(row, "gross"), fee = c(row, "fee"), net = c(row, "net");
+      const catRaw = String(get(row, "reporting_category") == null ? "" : get(row, "reporting_category")).trim();
+      const cat = catRaw.toLowerCase();
+      if (cat === "charge") Object.assign(ev, { kind: "sale", card: gross, fee });
+      else if (["refund","refund_failure","partial_capture_reversal"].includes(cat)) Object.assign(ev, { kind: "refund", amount: -gross, fee });
+      else if (["dispute","dispute_reversal"].includes(cat)) Object.assign(ev, { kind: "chargeback", amount: -gross, fee });
+      else if (["payout","payout_reversal"].includes(cat)) Object.assign(ev, { kind: "payout", amount: -net, fee: 0 });
+      else if (["fee","network_cost","tax"].includes(cat)) Object.assign(ev, { kind: "fee", fee: -net });
+      else Object.assign(ev, { kind: "other", amount: net, fee: 0, label: catRaw || "uncategorized" });
+    } else {
+      const statusRaw = String(get(row, "status") == null ? "" : get(row, "status")).trim();
+      const status = statusRaw.toLowerCase();
+      const typeRaw = String(get(row, "type") == null ? "" : get(row, "type")).trim();
+      const type = typeRaw.toLowerCase();
+      const cur = (String(get(row, "currency") == null ? "" : get(row, "currency")).trim().toUpperCase()) || "USD";
+      const gross = c(row, "gross"), fee = c(row, "fee");
+      ev.txnId = String(get(row, "transaction id") == null ? "" : get(row, "transaction id")).trim();
+      ev.refTxn = String(get(row, "reference txn id") == null ? "" : get(row, "reference txn id")).trim();
+      ev.name = String(get(row, "name") == null ? "" : get(row, "name")).trim();
+      ev.currency = cur; ev.type = typeRaw;
+      const paid = ["completed","refunded","partially refunded","reversed","cleared"].includes(status);
+      if (type.includes("hold") || type.includes("authorization")){ ev.kind = "hold"; }
+      else if (!paid){ ev.kind = "unsettled"; ev.amount = gross; ev.label = typeRaw + " (" + (statusRaw || "no status") + ")"; ev.unsettledCurrency = cur; }
+      else if (cur !== "USD"){
+        if (type.includes("payment") && gross > 0 && !type.includes("refund")) Object.assign(ev, { kind: "foreignSale", fgross: gross, ffee: fee });
+        else if (type.includes("currency conversion")) Object.assign(ev, { kind: "foreignConversion", amount: gross });
+        else Object.assign(ev, { kind: "foreignOther", amount: gross });
+      }
+      else if (type.includes("currency conversion")){
+        if (gross > 0) Object.assign(ev, { kind: "conversionIn", amount: gross + fee });
+        else Object.assign(ev, { kind: "other", amount: gross + fee, label: typeRaw + " (money out)" });
+      }
+      else if (type.includes("refund")){
+        if (gross < 0) Object.assign(ev, { kind: "refund", amount: -gross, fee: -fee });
+        else Object.assign(ev, { kind: "other", amount: gross + fee, label: "Refunds received (money in)" });
+      }
+      else if (type.includes("chargeback fee") || type.includes("dispute fee")) Object.assign(ev, { kind: "fee", fee: -gross - fee });
+      else if (type.includes("chargeback") || type.includes("dispute")) Object.assign(ev, { kind: "chargeback", amount: -gross, fee: -fee });
+      else if (type.includes("withdraw")) Object.assign(ev, { kind: "payout", amount: -(gross + fee) });
+      else if (["bank deposit","add funds","credit card deposit","transfer from"].some(k => type.includes(k))) Object.assign(ev, { kind: "transferIn", amount: gross + fee, label: typeRaw });
+      else if (type.includes("general payment") && gross > 0 && fee === 0) Object.assign(ev, { kind: "personal", amount: gross });
+      else if (type.includes("payment") && gross > 0) Object.assign(ev, { kind: "sale", card: gross, fee: -fee, tax: c(row, "sales tax") });
+      else { const amt = gross + fee; Object.assign(ev, { kind: "other", amount: amt, label: typeRaw + (amt >= 0 ? " (money in)" : " (money out)") }); }
+    }
+    events.push(ev);
+  }
+
+  /* PayPal foreign sales, converted at PayPal's own rate */
+  if (processor === "paypal"){
+    for (const s of events.filter(e => e.kind === "foreignSale")){
+      if (!s.txnId){ s.kind = "foreignUnconverted"; continue; }
+      const fconv = events.filter(e => e.kind === "foreignConversion" && e.refTxn === s.txnId);
+      const uconv = events.filter(e => e.kind === "conversionIn" && e.refTxn === s.txnId);
+      const foreignAmt = -sum(fconv.filter(e => e.amount < 0), e => e.amount);
+      const usd = sum(uconv, e => e.amount);
+      if (foreignAmt > 0 && usd > 0){
+        const card = Math.round(s.fgross * usd / foreignAmt);
+        Object.assign(s, { kind: "sale", converted: true, card, fee: card - usd, usdReceived: usd });
+        fconv.forEach(e => e.absorbed = true);
+        uconv.forEach(e => e.absorbed = true);
+      } else s.kind = "foreignUnconverted";
+    }
+  }
+  const utcOnly = processor === "stripe" && usedUtc > 0 && usedCreated === 0;
+  return { events, unread, duplicates: dupCount ? { count: dupCount, months: [...dupMonths].sort((a, b) => a - b) } : null,
+    rowsRead, skippedTotals, utcOnly, noDepositCol: processor === "square" && cols["deposit date"] === undefined };
+}
+
+/* ---------- the year and the figures ---------- */
+const NOT_COUNTED = new Set(["hold","unsettled","foreignSale","foreignUnconverted","foreignConversion","foreignOther"]);
+
+function compute(parsed, typed){
+  const { processor, events, file } = parsed;
+  const byYear = {};
+  events.filter(e => e.kind === "sale").forEach(e => byYear[e.date.y] = (byYear[e.date.y] || 0) + 1);
+  let Y = null, best = -1;
+  Object.keys(byYear).map(Number).sort((a, b) => a - b).forEach(y => { if (byYear[y] >= best){ best = byYear[y]; Y = y; } });
+  if (Y === null){
+    const any = {};
+    events.forEach(e => any[e.date.y] = (any[e.date.y] || 0) + 1);
+    Object.keys(any).map(Number).sort((a, b) => a - b).forEach(y => { if (any[y] >= best){ best = any[y]; Y = y; } });
+  }
+  if (Y === null) Y = new Date().getFullYear() - 1;
+
+  const live = events.filter(e => e.kind !== "hold" && !e.absorbed);
+  const inY = live.filter(e => e.date.y === Y);
+  const outY = live.filter(e => e.date.y !== Y);
+  const counted = inY.filter(e => !NOT_COUNTED.has(e.kind));
+  const of = k => counted.filter(e => e.kind === k);
+
+  const saleEvents = of("sale");
+  const sales = saleEvents.filter(e => e.card > 0);
+  const gross = sum(sales, e => e.card);
+  const box3 = sales.length;
+  const monthly = Array(12).fill(0), monthCount = Array(12).fill(0);
+  sales.forEach(e => { monthly[e.date.m - 1] += e.card; monthCount[e.date.m - 1]++; });
+
+  const salesTax = sum(saleEvents, e => (e.tax || 0) + (e.cashOtherTax || 0));
+  const tips = sum(saleEvents, e => (e.tip || 0) + (e.cashOtherTip || 0));
+  const cashOther = sum(saleEvents, e => e.cashOther);
+  const giftRedeemed = sum(saleEvents, e => e.gift);
+  const giftSold = sum(saleEvents, e => e.giftSold);
+  const refundEvents = of("refund");
+  const refunds = sum(refundEvents, e => e.amount);
+  const cashRefunds = sum(refundEvents, e => e.cashRefund);
+  const refundTax = sum(refundEvents, e => e.taxRefund);
+  const chargebacks = sum(of("chargeback"), e => e.amount);
+  const fees = sum(counted, e => e.fee);
+  const personal = sum(of("personal"), e => e.amount);
+  const transfersIn = sum(of("transferIn"), e => e.amount);
+  const otherEvents = of("other").concat(of("conversionIn"));
+  const other = sum(otherEvents, e => e.amount);
+  let payouts;
+  if (processor === "square") payouts = sum(saleEvents.concat(refundEvents).filter(e => e.depositWhen && e.depositWhen.y === Y), e => e.depositNet);
+  else payouts = sum(of("payout"), e => e.amount);
+  const netActivity = gross - refunds - chargebacks - fees;
+  const held = netActivity + transfersIn + personal + other - payouts;
+  const grossReceipts = gross + cashOther;
+  const grossReceiptsExcluding = grossReceipts - salesTax - tips;
+  const returns = refunds + cashRefunds + chargebacks;
+
+  /* the entry */
+  const owner = transfersIn + personal;
+  const salesCredit = fees + refunds + chargebacks + held - owner - other;
+  const lines = [];
+  [["Merchant fees", fees], ["Sales returns and allowances", refunds + chargebacks], ["Due from processor", held],
+   ["Owner contributions", -owner], ["Other activity to classify", -other], ["Sales", -salesCredit]].forEach(([account, amt]) => {
+    if (amt !== 0) lines.push({ account, debit: amt > 0 ? amt : 0, credit: amt < 0 ? -amt : 0 });
+  });
+  const totalDebit = sum(lines, l => l.debit), totalCredit = sum(lines, l => l.credit);
+
+  /* warnings */
+  const ex = [];
+  const add = (code, level, message) => ex.push({ code, level, message });
+  const monthsWithSales = monthly.map((v, i) => v > 0 ? i + 1 : 0).filter(Boolean);
+  const missingMonths = monthsWithSales.length ? [1,2,3,4,5,6,7,8,9,10,11,12].filter(m => !monthsWithSales.includes(m)) : [];
+
+  if (parsed.unread.length) add("UNREAD_ROWS", "stop", `${plural(parsed.unread.length, "line")} could not be read because the date is missing or not a date (row${parsed.unread.length === 1 ? "" : "s"} ${parsed.unread.slice(0, 12).join(", ")}${parsed.unread.length > 12 ? ", …" : ""}). They are not in any figure. Look at them in the file before relying on the totals.`);
+  if (parsed.duplicates) add("DUPLICATE_ROWS", "stop", `${plural(parsed.duplicates.count, "line")} appear${parsed.duplicates.count === 1 ? "s" : ""} twice, identical in every cell${parsed.duplicates.months.length ? " (" + monthList(parsed.duplicates.months) + ")" : ""}. The copies were left out. This usually means two exports were pasted together; if they are genuine separate sales, the figures are understated.`);
+  if (parsed.noDepositCol) add("NO_DEPOSIT_DATES", "stop", "This Square export has no Deposit Date column, so the payouts to the bank cannot be worked out. Export again with the Deposit Date column included.");
+  if (missingMonths.length) add("MISSING_MONTH", "care", `No card or app sales in ${monthList(missingMonths)} ${Y}. A closed season explains it; otherwise the export may be missing part of the year, or the sales went through another account.`);
+  let boundary = null;
+  if (processor === "stripe" && parsed.utcOnly){
+    const early = (y) => live.filter(e => e.kind === "sale" && e.card > 0 && e.date.y === y && e.date.m === 1 && e.date.d === 1 && e.date.h < 8);
+    const into = early(Y + 1), from = early(Y);
+    boundary = { intoNextYear: { count: into.length, amount: sum(into, e => e.card) }, fromPriorYear: { count: from.length, amount: sum(from, e => e.card) } };
+    const alt = gross + boundary.intoNextYear.amount - boundary.fromPriorYear.amount;
+    add("UTC_DATES", "care", `This Stripe export has dates in UTC only. A sale before 8:00 on January 1 UTC may be a December 31 sale in the US. January 1, ${Y + 1} before 8:00: ${plural(into.length, "sale")}, ${fm(boundary.intoNextYear.amount)} (left out here). January 1, ${Y} before 8:00: ${plural(from.length, "sale")}, ${fm(boundary.fromPriorYear.amount)} (counted here). Box 1a by UTC date: ${fm(gross)}; by US date: ${fm(alt)}. Stripe dates the 1099-K in the account's time zone, so either may be right.`);
+  }
+  if (outY.length){
+    const os = outY.filter(e => e.kind === "sale" && e.card > 0);
+    add("OUTSIDE_YEAR", "info", `${plural(outY.length, "line")} dated outside ${Y} ${outY.length === 1 ? "was" : "were"} left out, including ${plural(os.length, "sale")} of ${fm(sum(os, e => e.card))}.`);
+  }
+  const outside = outY.length ? { count: outY.length, sales: outY.filter(e => e.kind === "sale" && e.card > 0).length, amount: dol(sum(outY.filter(e => e.kind === "sale" && e.card > 0), e => e.card)) } : null;
+  if (processor === "stripe") add("NO_TAX_DETAIL", "info", "A Stripe balance export does not split out sales tax or tips. If the client charged sales tax, it is inside box 1a; get the tax collected from the sales-tax returns.");
+  if (salesTax > 0) add("SALES_TAX_IN_GROSS", "care", `Sales tax of ${fm(salesTax)} is included in box 1a and gross receipts, as the 1099-K includes it. Where the client remits it, you may leave it out of gross receipts (then deduct nothing for it); line 1 is then below the 1099-K, so keep this reconciliation.`);
+  if (tips > 0) add("TIPS_IN_GROSS", "care", `Tips of ${fm(tips)} are included in box 1a and gross receipts, as the 1099-K includes them. Where tips are paid out to staff through payroll, you may leave them out of gross receipts; line 1 is then below the 1099-K, so keep this reconciliation.`);
+  if (cashOther > 0 || giftRedeemed > 0){
+    const bits = [];
+    if (cashOther > 0) bits.push(`cash and other-tender sales of ${fm(cashOther)}`);
+    if (giftRedeemed > 0) bits.push(`sales paid with the merchant's own gift cards of ${fm(giftRedeemed)}`);
+    add("NOT_ON_1099K", "info", `Not on the 1099-K: ${bits.join("; ")}. Cash and other tender are added to reach gross receipts; gift-card redemptions were income when the card was sold.`);
+  }
+  if (giftSold > 0) add("GIFT_CARD_SALES", "info", `Gift cards sold: ${fm(giftSold)}. Sold for card, they are in box 1a now; redeemed later, they are not counted again.`);
+  const pers = of("personal");
+  if (pers.length) add("PERSONAL_TRANSFERS", "care", `${plural(pers.length, "payment")} of ${fm(personal)} ${pers.length === 1 ? "looks" : "look"} like personal transfers (friends and family, no fee): ${pers.map(e => `${e.name || "unnamed"} ${fmtDate(e.date)} ${fm(e.amount)}`).join("; ")}. They are not sales and not in box 1a; ask the client what each was.`);
+  const conv = saleEvents.filter(e => e.converted);
+  const foreign = conv.length ? { count: conv.length, usd: dol(sum(conv, e => e.card)) } : null;
+  if (conv.length) add("FOREIGN_CURRENCY", "care", `${plural(conv.length, "sale")} in another currency, converted at PayPal's own rate to ${fm(sum(conv, e => e.card))} and counted in box 1a. PayPal may convert at a different rate on the form.`);
+  const unconv = inY.filter(e => e.kind === "foreignUnconverted");
+  if (unconv.length){
+    const byCur = {}; unconv.forEach(e => byCur[e.currency] = (byCur[e.currency] || 0) + e.fgross);
+    add("FOREIGN_NOT_CONVERTED", "care", `${plural(unconv.length, "sale")} in another currency had no conversion lines, so ${unconv.length === 1 ? "it is" : "they are"} not counted: ${Object.keys(byCur).map(k => k + " " + (byCur[k] / 100).toFixed(2)).join(", ")}. The money may still be held in that currency.`);
+  }
+  const uns = inY.filter(e => e.kind === "unsettled");
+  if (uns.length) add("NOT_SETTLED", "info", `${plural(uns.length, "line")} not completed (pending, failed, denied or similar) ${uns.length === 1 ? "was" : "were"} left out: ${uns.slice(0, 8).map(e => e.label).join("; ")}${uns.length > 8 ? "; …" : ""}.`);
+  const otherByLabel = {};
+  otherEvents.forEach(e => { const l = e.kind === "conversionIn" ? "Currency conversion (money in)" : (e.label || "Other"); otherByLabel[l] = (otherByLabel[l] || 0) + e.amount; });
+  if (otherEvents.length) add("OTHER_ACTIVITY", "care", `Activity that is not a sale, refund, fee or payout, totalling ${fm(other)}: ${Object.keys(otherByLabel).map(l => `${l} ${fm(otherByLabel[l])}`).join("; ")}. Classify it before closing the books.`);
+  if (processor === "square"){
+    const saleIds = new Set(events.filter(e => e.kind === "sale" && e.txnId).map(e => e.txnId));
+    const orphan = refundEvents.filter(e => !e.txnId || !saleIds.has(e.txnId));
+    if (orphan.length) add("REFUND_WITHOUT_SALE", "info", `${plural(orphan.length, "refund")} of ${fm(sum(orphan, e => e.amount))} match${orphan.length === 1 ? "es" : ""} no sale in this export; the sale was probably in an earlier year or another location.`);
+  }
+  if (processor === "paypal" && (gross <= 2000000 || box3 <= 200)) add("BELOW_THRESHOLD", "info", `Gross of ${fm(gross)} in ${plural(box3, "sale")} is not over both $20,000 and 200 sales, so PayPal need not issue a federal 1099-K. Some states require one at lower amounts. The income is reportable either way.`);
+
+  let status = "COMPUTED", difference = null;
+  if (typed !== null && typed !== undefined){
+    const d = typed - gross; difference = d;
+    if (d === 0) status = "TIES";
+    else {
+      status = "DIFFERS";
+      let why;
+      if (d > 0) why = `The 1099-K is ${fm(d)} more than this export's sales. Likely causes: another location or account on the same TIN not in this export${boundary ? ", the UTC edge at the year end" : ""}${missingMonths.length ? ", missing months (" + monthList(missingMonths) + ")" : ", months missing from the export"}${personal ? ", personal transfers the processor counted as payments (" + fm(personal) + ")" : ", personal transfers counted as payments"}. Compare the 1099-K's boxes 5a to 5l with the month-by-month table.`;
+      else why = `The 1099-K is ${fm(-d)} less than this export's sales. Likely causes: a different account or year in this export, or a figure net of refunds${(gross - refunds) === typed ? " (box 1a equals the sales less refunds exactly)" : ""}. Box 1a should be gross, before refunds and fees.`;
+      ex.unshift({ code: "DIFFERS_FROM_1099K", level: "stop", message: why });
+    }
+  }
+  const rank = { stop: 0, care: 1, info: 2 };
+  const first = ex[0] && ex[0].code === "DIFFERS_FROM_1099K" ? [ex.shift()] : [];
+  const exceptions = first.concat(ex.map((e, i) => ({ e, i })).sort((a, b) => rank[a.e.level] - rank[b.e.level] || a.i - b.i).map(x => x.e));
+
+  /* month by month */
+  const months = MONTHS.map((name, i) => {
+    const m = i + 1, inM = counted.filter(e => e.date.m === m);
+    const ref = sum(inM.filter(e => e.kind === "refund"), e => e.amount);
+    const cb = sum(inM.filter(e => e.kind === "chargeback"), e => e.amount);
+    const fe = sum(inM, e => e.fee);
+    return { month: m, name, box: "5" + LETTERS[i], sales: monthCount[i], gross: dol(monthly[i]), refunds: dol(ref), chargebacks: dol(cb), fees: dol(fe), net: dol(monthly[i] - ref - cb - fe) };
+  });
+
+  const counts = {};
+  events.forEach(e => counts[e.kind] = (counts[e.kind] || 0) + 1);
+
+  return {
+    version: VERSION, file, status, processor, layout: LAYOUTS[processor], year: Y, rowsRead: parsed.rowsRead,
+    box1a: dol(gross), box3, monthly: monthly.map(dol),
+    bridge: { gross: dol(gross), salesTax: dol(salesTax), tips: dol(tips), notOn1099K: dol(cashOther), giftRedeemed: dol(giftRedeemed),
+      grossReceipts: dol(grossReceipts), grossReceiptsExcluding: dol(grossReceiptsExcluding), refunds: dol(refunds), chargebacks: dol(chargebacks),
+      returns: dol(returns), refundTax: dol(refundTax), fees: dol(fees), personal: dol(personal), transfersIn: dol(transfersIn), other: dol(other),
+      netActivity: dol(netActivity), payouts: dol(payouts), held: dol(held) },
+    entry: { date: Y + "-12-31", lines: lines.map(l => ({ account: l.account, debit: dol(l.debit), credit: dol(l.credit) })),
+      salesBooked: dol(payouts), salesAfter: dol(payouts + salesCredit), totalDebit: dol(totalDebit), totalCredit: dol(totalCredit) },
+    exceptions, typedBox1a: typed === null || typed === undefined ? null : dol(typed), difference: difference === null ? null : dol(difference),
+    boundary: boundary ? { intoNextYear: { count: boundary.intoNextYear.count, amount: dol(boundary.intoNextYear.amount) }, fromPriorYear: { count: boundary.fromPriorYear.count, amount: dol(boundary.fromPriorYear.amount) } } : null,
+    duplicates: parsed.duplicates, missingMonths, outside, foreign, months,
+    _c: { gross, salesTax, tips, cashOther, giftRedeemed, giftSold, grossReceipts, refunds, cashRefunds, refundTax, chargebacks, returns, fees, personal, transfersIn, other, netActivity, payouts, held, salesCredit, owner, lines, totalDebit, totalCredit, monthly, typed, difference },
+    _counts: counts, _parsed: parsed, _uns: uns, _unconv: unconv, _otherByLabel: otherByLabel, _pers: pers
+  };
+}
+function publicReport(r){ const o = {}; for (const k of Object.keys(r)) if (!k.startsWith("_")) o[k] = r[k]; return o; }
+
+/* ---------- reading the file ---------- */
+const startEl = document.getElementById("start"), workEl = document.getElementById("work"), errEl = document.getElementById("start-error");
+
+function refuse(file, message, code){
+  errEl.innerHTML = `<div id="verdict" class="NOT_RECOGNIZED">I cannot read this file.</div><p>${esc(message)}</p>`;
+  window.__report = { version: VERSION, file, status: "NOT_RECOGNIZED", exceptions: [{ code: code || "NOT_RECOGNIZED", level: "stop", message }] };
+  document.getElementById("file").value = "";
+}
+
+function processRows(rows, file){
+  const det = detect(rows);
+  if (!det){
+    refuse(file, "This is not a Square Transactions CSV, a Stripe itemized balance change from activity report, or a PayPal Activity download CSV. Export one of those for the year and drop it here.");
+    return;
+  }
+  const b = buildEvents(rows, det);
+  state.parsed = Object.assign({ file, processor: det.processor, headerRow: det.headerIdx + 1 }, b);
+  state.leaveTax = false; state.leaveTips = false;
+  const t = parseTyped(document.getElementById("box1a-start").value);
+  state.typed = t;
+  errEl.innerHTML = "";
+  startEl.hidden = true; startEl.style.display = "none";
+  workEl.hidden = false;
+  render();
+}
+
+function parseTyped(s){
+  if (s === null || s === undefined) return null;
+  s = String(s).trim();
+  if (!s || !/\d/.test(s)) return null;
+  return toCents(s);
+}
+
+async function handleFile(f){
+  if (!f) return;
+  const name = f.name || "file";
+  const ext = (name.match(/\.([^.]+)$/) || [, ""])[1].toLowerCase();
+  if (!["csv","txt","xlsx","xls","xlsm"].includes(ext)){
+    refuse(name, `${ext ? "A ." + ext + " file" : "This file"} cannot be read here. Drop the processor's export as CSV or Excel (.csv, .txt, .xlsx, .xls, .xlsm). A PDF statement will not do; download the transaction export instead.`, "UNSUPPORTED_FILE");
+    return;
+  }
+  try {
+    if (typeof XLSX === "undefined") throw new Error("The spreadsheet reader did not load.");
+    let wb;
+    if (ext === "csv" || ext === "txt"){ const text = await f.text(); wb = XLSX.read(text, { type: "string", raw: true }); }
+    else { const buf = await f.arrayBuffer(); wb = XLSX.read(new Uint8Array(buf), { type: "array" }); }
+    let rows = [];
+    for (const n of wb.SheetNames){
+      const r = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: null, blankrows: true });
+      if (r.length > rows.length) rows = r;
+    }
+    processRows(rows, name);
+  } catch (e){
+    refuse(name, "The file could not be opened: " + (e && e.message ? e.message : e));
+  }
+}
+
+/* ---------- rendering the workpaper ---------- */
+function render(){
+  const r = compute(state.parsed, state.typed);
+  const C = r._c, Y = r.year, P = state.parsed;
+  const stops = r.exceptions.filter(e => e.level === "stop");
+  const others = r.exceptions.filter(e => e.level !== "stop");
+  let verdict;
+  if (r.status === "TIES") verdict = `The 1099-K ties: box 1a is ${fm(C.gross)}, exactly the year's card and app sales.`;
+  else if (r.status === "DIFFERS") verdict = `The 1099-K does not tie: box 1a is ${fm(Math.abs(C.difference))} ${C.difference > 0 ? "more" : "less"} than this export's sales.`;
+  else verdict = `If a 1099-K is issued for ${Y}, box 1a should be ${fm(C.gross)}.`;
+  const differs = r.status === "DIFFERS";
+  const notYet = differs ? `<p class="notyet">Not for the return yet: the 1099-K does not tie. Resolve the difference first.</p>` : "";
+  const row = (label, c, cls) => `<tr${cls ? ` class="${cls}"` : ""}><td>${label}</td><td class="n">${fm(c)}</td></tr>`;
+  const warn = e => `<div class="warn ${e.level}" data-code="${e.code}"><span class="tag">${e.level === "stop" ? "Stop" : e.level === "care" ? "Take care" : "For information"}</span>${esc(e.message)}</div>`;
+
+  const showTax = C.salesTax > 0, showTips = C.tips > 0;
+  let reduced = C.grossReceipts;
+  if (showTax && state.leaveTax) reduced -= C.salesTax;
+  if (showTips && state.leaveTips) reduced -= C.tips;
+  const anyLeft = reduced !== C.grossReceipts;
+
+  const ask = [];
+  ask.push("Is this every Square, Stripe, PayPal or other card account and location the business used in " + Y + "? Each account gets its own 1099-K.");
+  if (C.cashOther > 0) ask.push("Were all cash and other-tender sales rung through the register? Cash taken outside it is still income.");
+  if (r._pers.length) ask.push("What was each personal transfer (" + r._pers.map(e => esc(e.name || "unnamed") + " " + fm(e.amount)).join("; ") + ")? Gift, loan, owner money or a sale?");
+  if (Object.keys(r._otherByLabel).length) ask.push("What was the other activity (" + Object.keys(r._otherByLabel).map(l => esc(l)).join("; ") + ")?");
+  if (C.salesTax > 0) ask.push("Which sales-tax returns cover these sales, and how much was remitted for " + Y + "?");
+  if (C.tips > 0) ask.push("Were card tips paid out to staff through payroll?");
+  if (r.missingMonths.length) ask.push("Was the business closed in " + monthList(r.missingMonths) + ", or did sales go through another account?");
+  if (r.foreign || r._unconv.length) ask.push("Is any money still held in a foreign currency balance?");
+  if (r.boundary) ask.push("Which time zone is the Stripe account set to?");
+  if (C.held !== 0) ask.push("Does the processor balance at December 31 agree with " + fm(C.held) + (P.processor === "square" ? " (sales deposited after the year end)" : " (change in the balance held)") + "?");
+
+  const counts = r._counts;
+  const kindNames = { sale: "sales", refund: "refunds", chargeback: "chargebacks and reversals", payout: "payouts", fee: "fee lines", other: "other activity", transferIn: "money moved in", personal: "personal transfers", conversionIn: "currency conversions in", hold: "holds (ignored)", unsettled: "not completed", foreignSale: "foreign sales", foreignUnconverted: "foreign sales not converted", foreignConversion: "foreign conversions", foreignOther: "other foreign lines" };
+
+  workEl.innerHTML = `
+  <div class="toolbar noprint">
+    <button id="print" type="button">Print or save as PDF</button>
+    <a href="#" id="startover">Start over</a>
+  </div>
+  <div class="paper">
+    <h1>Does the 1099-K tie?</h1>
+    <p class="muted">${esc(r.layout)} · tax year ${Y} · ${esc(r.file)}</p>
+    <div class="signoff"><div>Client:</div><div>EIN:</div><div>Prepared by:</div><div>Date:</div><div>Reviewed by:</div><div>Date:</div></div>
+
+    <div id="verdict" class="${r.status}">${esc(verdict)}</div>
+    <div id="stop-banner" ${stops.length ? "" : "hidden"}>${stops.length ? `<h3>Stop: look at ${stops.length === 1 ? "this" : "these"} before using the figures</h3>${stops.map(e => `<p data-code="${e.code}">${esc(e.message)}</p>`).join("")}` : ""}</div>
+
+    <h2>What the 1099-K should say</h2>
+    <div class="boxes">
+      <div><div class="lbl">Box 1a, gross amount of payment transactions</div><div class="big" id="out-box1a">${fm(C.gross)}</div></div>
+      <div><div class="lbl">Box 3, number of payment transactions</div><div class="big" id="out-box3">${r.box3.toLocaleString("en-US")}</div></div>
+    </div>
+    <div class="noprint-not">
+      <label class="field" for="box1a">Box 1a on the client's 1099-K</label>
+      <input type="text" id="box1a" inputmode="decimal" placeholder="$0.00" autocomplete="off" value="${C.typed === null ? "" : esc((C.typed / 100).toFixed(2))}">
+      <button id="compare" type="button">Check it ties</button>
+    </div>
+    <div class="months">${r.monthly.map((v, i) => `<div><b>5${LETTERS[i]} ${MONTHS[i].slice(0, 3)}</b>${fm(C.monthly[i])}</div>`).join("")}</div>
+
+    ${others.length ? `<h2>Check these first</h2>${others.map(warn).join("")}` : ""}
+
+    <h2>From the 1099-K to the return</h2>
+    ${notYet}
+    <div class="tbl-wrap"><table>
+      ${row("Box 1a, card and app sales", C.gross)}
+      ${row("Add cash and other-tender sales (not on the 1099-K)", C.cashOther)}
+      ${row("Gross receipts (sales tax and tips included, as on the 1099-K)", C.grossReceipts, "total")}
+    </table></div>
+    ${showTax || showTips ? `<div class="noprint-not">
+      ${showTax ? `<label class="check"><input type="checkbox" id="leave-tax" ${state.leaveTax ? "checked" : ""}> Leave sales tax of ${fm(C.salesTax)} out of gross receipts</label>` : ""}
+      ${showTips ? `<label class="check"><input type="checkbox" id="leave-tips" ${state.leaveTips ? "checked" : ""}> Leave tips of ${fm(C.tips)} out of gross receipts</label>` : ""}
+    </div>` : ""}
+    ${anyLeft ? `<div class="tbl-wrap"><table>${row("Gross receipts for line 1, as reduced", reduced, "total")}</table></div><p class="warn care">Left out: ${fm(C.grossReceipts - reduced)}. ${reduced < C.gross ? `Line 1 is now below the 1099-K, by ${fm(C.gross - reduced)}.` : `Line 1 is now closer to the 1099-K but still ${fm(reduced - C.gross)} above it.`} Keep this reconciliation with the return.</p>` : ""}
+    <div class="tbl-wrap"><table>
+      ${row("Returns and allowances (Schedule C line 2; Forms 1120-S and 1065 line 1b)" + (C.cashRefunds ? `, including cash refunds of ${fm(C.cashRefunds)}` : ""), C.returns)}
+      ${row("Merchant fees (Schedule C line 10; Form 1120-S line 19; Form 1065 line 21)", C.fees)}
+    </table></div>
+    ${C.refundTax ? `<p class="muted">Sales tax refunded with the refunds: ${fm(C.refundTax)}.</p>` : ""}
+
+    <h2>From the 1099-K to the bank</h2>
+    <div class="tbl-wrap"><table id="bridge">
+      ${row("Gross card and app sales (box 1a)", C.gross)}
+      ${row("Less refunds", -C.refunds)}
+      ${row("Less chargebacks", -C.chargebacks)}
+      ${row("Less fees", -C.fees)}
+      ${row("Net activity", C.netActivity, "total")}
+      ${row("Add money moved in", C.transfersIn)}
+      ${row("Add personal transfers", C.personal)}
+      ${row("Add other activity", C.other)}
+      ${row(P.processor === "square" ? "Less sales paid out after the year end" : "Less increase in the balance held", -C.held)}
+      ${row("Payouts to the bank", C.payouts, "total")}
+    </table></div>
+
+    <h2>The year-end entry</h2>
+    ${notYet}
+    <p>For books that recorded each payout as sales. Dated December 31, ${Y}.</p>
+    <div class="tbl-wrap"><table id="entry">
+      <tr><th>Account</th><th class="n">Debit</th><th class="n">Credit</th></tr>
+      ${C.lines.map(l => `<tr><td>${l.account}</td><td class="n">${l.debit ? fm(l.debit) : ""}</td><td class="n">${l.credit ? fm(l.credit) : ""}</td></tr>`).join("")}
+      <tr class="total"><td>Total</td><td class="n">${fm(C.totalDebit)}</td><td class="n">${fm(C.totalCredit)}</td></tr>
+    </table></div>
+    <p>Sales as booked from payouts: ${fm(C.payouts)}. Sales after the entry: ${fm(C.payouts + C.salesCredit)}, which equals box 1a of ${fm(C.gross)}.</p>
+    ${C.salesTax ? `<p class="muted">Sales tax: ${fm(C.salesTax)} is inside the sales credited. If the books carry sales tax payable, move it there instead.</p>` : ""}
+    ${C.tips ? `<p class="muted">Tips: ${fm(C.tips)} is inside the sales credited. If tips are paid to staff, move them to tips payable or wages instead.</p>` : ""}
+
+    <h2>To ask the client</h2>
+    <ul>${ask.map(a => `<li>${a}</li>`).join("")}</ul>
+
+    <h2>Checks on the 1099-K itself</h2>
+    <ul>
+      <li>The payee TIN and name are the client's, not the owner's SSN when the business has an EIN.</li>
+      <li>Box 4, federal income tax withheld (backup withholding), is claimed as a payment if not zero.</li>
+      <li>The state boxes (6 to 8) and any state filing match.</li>
+      <li>One form per account: count the forms against the accounts the client used.</li>
+      <li>Boxes 5a to 5l agree with the months above; a month off points to the cause.</li>
+    </ul>
+
+    <details id="months-detail" ${differs ? "open" : ""}>
+      <summary>Month by month</summary>
+      <div class="tbl-wrap"><table>
+        <tr><th>Month</th><th class="n">Box</th><th class="n">Sales</th><th class="n">Gross</th><th class="n">Refunds</th><th class="n">Chargebacks</th><th class="n">Fees</th><th class="n">Net</th></tr>
+        ${r.months.map((m, i) => `<tr><td>${m.name}</td><td class="n">${m.box}</td><td class="n">${m.sales}</td><td class="n">${fm(C.monthly[i])}</td><td class="n">${fm(Math.round(m.refunds * 100))}</td><td class="n">${fm(Math.round(m.chargebacks * 100))}</td><td class="n">${fm(Math.round(m.fees * 100))}</td><td class="n">${fm(Math.round(m.net * 100))}</td></tr>`).join("")}
+        <tr class="total"><td>Total</td><td></td><td class="n">${r.box3}</td><td class="n">${fm(C.gross)}</td><td class="n">${fm(C.refunds)}</td><td class="n">${fm(C.chargebacks)}</td><td class="n">${fm(C.fees)}</td><td class="n">${fm(C.netActivity)}</td></tr>
+      </table></div>
+    </details>
+
+    <h2>What was read</h2>
+    <ul>
+      <li>File: ${esc(r.file)} (${esc(r.layout)}), heading on row ${P.headerRow}.</li>
+      <li>${plural(r.rowsRead, "line")} read${P.skippedTotals ? `; ${plural(P.skippedTotals, "total line")} skipped` : ""}${P.unread.length ? `; ${P.unread.length} unread` : ""}${P.duplicates ? `; ${P.duplicates.count} duplicate${P.duplicates.count === 1 ? "" : "s"} skipped` : ""}.</li>
+      <li>${Object.keys(counts).map(k => `${counts[k]} ${counts[k] === 1 ? (kindNames[k] || k).replace(/^(sale|refund|chargeback|payout|personal transfer|holds|foreign sale|foreign conversion|currency conversion)s/, (m, w) => w === "holds" ? "hold" : w).replace("fee lines", "fee line").replace("other foreign lines", "other foreign line").replace("foreign sales not converted", "foreign sale not converted") : (kindNames[k] || k)}`).join(", ") || "No lines"}.</li>
+      ${r.outside ? `<li>${plural(r.outside.count, "line")} outside ${Y} left out.</li>` : ""}
+      ${P.processor === "stripe" ? `<li>Dates from ${P.utcOnly ? "created_utc (UTC only)" : "created (the account's time zone)"}.</li>` : ""}
+    </ul>
+
+    <footer>The data stayed in this browser; nothing was uploaded. All amounts are worked in whole cents. This is a working aid: the accountant is responsible for the return. Version ${VERSION}.</footer>
+  </div>`;
+
+  const doCompare = () => { state.typed = parseTyped(document.getElementById("box1a").value); render(); };
+  document.getElementById("compare").addEventListener("click", doCompare);
+  document.getElementById("box1a").addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); doCompare(); } });
+  document.getElementById("print").addEventListener("click", () => window.print());
+  document.getElementById("startover").addEventListener("click", e => { e.preventDefault(); startOver(); });
+  const lt = document.getElementById("leave-tax"); if (lt) lt.addEventListener("change", () => { state.leaveTax = lt.checked; render(); });
+  const lp = document.getElementById("leave-tips"); if (lp) lp.addEventListener("change", () => { state.leaveTips = lp.checked; render(); });
+
+  window.__report = publicReport(r);
+}
+
+function startOver(){
+  state.parsed = null; state.typed = null;
+  workEl.innerHTML = ""; workEl.hidden = true;
+  startEl.hidden = false; startEl.style.display = "";
+  errEl.innerHTML = "";
+  document.getElementById("file").value = "";
+  document.getElementById("box1a-start").value = "";
+  window.__report = undefined;
+  window.scrollTo(0, 0);
+}
+
+/* ---------- the made-up sample: a small café's Square year ---------- */
+function sampleRows(){
+  const H = ["Date","Time","Time Zone","Gross Sales","Discounts","Net Sales","Gift Card Sales","Tax","Tip","Partial Refunds","Total Collected","Source","Card","Card Entry Methods","Cash","Square Gift Card","Other Tender","Other Tender Type","Fees","Net Total","Transaction ID","Payment ID","Card Brand","Description","Event Type","Location","Deposit ID","Deposit Date","Transaction Status","Cash App"];
+  const money = c => (c < 0 ? "-$" : "$") + (Math.abs(c) / 100).toFixed(2);
+  const d2 = n => String(n).padStart(2, "0");
+  const mdY = (y, m, d) => d2(m) + "/" + d2(d) + "/" + y;
+  const next = (y, m, d) => { const t = new Date(Date.UTC(y, m - 1, d + 1)); return [t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate()]; };
+  const rows = [H]; let n = 0; let refundOf = null;
+  const Y = 2025;
+  const days = [2, 5, 8, 11, 14, 17, 20, 23, 26, 28];
+  for (let m = 1; m <= 12; m++){
+    const ds = m === 12 ? days.concat([31]) : days;
+    for (const d of ds){
+      for (let k = 0; k < 5; k++){
+        n++;
+        const net = 650 + ((m * 37 + d * 13 + k * 29) % 41) * 45;
+        const tax = Math.round(net * 0.0825);
+        const isCash = (d + k) % 4 === 0;
+        const tip = isCash ? 0 : Math.round(net * (k === 0 ? 0.18 : k === 1 ? 0.15 : k === 2 ? 0.2 : 0));
+        const total = net + tax + tip;
+        const fee = isCash ? 0 : Math.round(total * 0.026) + 15;
+        const dep = isCash ? null : next(Y, m, d);
+        const id = "TX" + String(100000 + n);
+        rows.push([mdY(Y, m, d), d2(7 + k * 2) + ":" + d2((n * 7) % 60) + ":00", "Pacific Time (US & Canada)", money(net), "$0.00", money(net), "$0.00", money(tax), money(tip), "$0.00", money(total), "Point of Sale",
+          isCash ? "$0.00" : money(total), isCash ? "" : "Contactless", isCash ? money(total) : "$0.00", "$0.00", "$0.00", "", money(-fee), money(total - fee), id, "P" + id, isCash ? "" : "Visa", "Coffee and pastry", "Payment", "Main St Café",
+          dep ? "D" + dep.join("") : "", dep ? mdY(dep[0], dep[1], dep[2]) : "", "Complete", "$0.00"]);
+        if (m === 6 && d === 8 && k === 0) refundOf = { id, net, tax, tip, total };
+      }
+    }
+  }
+  const r = refundOf;
+  rows.push(["06/10/2025", "10:15:00", "Pacific Time (US & Canada)", money(-r.net), "$0.00", money(-r.net), "$0.00", money(-r.tax), money(-r.tip), "$0.00", money(-r.total), "Point of Sale",
+    money(-r.total), "Contactless", "$0.00", "$0.00", "$0.00", "", "$0.00", money(-r.total), r.id, "R" + r.id, "Visa", "Refund: wrong order", "Refund", "Main St Café", "D20250611", "06/11/2025", "Complete", "$0.00"]);
+  return rows;
+}
+
+/* ---------- wiring ---------- */
+const fileIn = document.getElementById("file"), drop = document.getElementById("drop");
+fileIn.addEventListener("change", () => handleFile(fileIn.files && fileIn.files[0]));
+["dragenter","dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) handleFile(f); });
+document.getElementById("sample").addEventListener("click", e => { e.preventDefault(); processRows(sampleRows(), "made-up-sample-cafe-square-2025.csv"); });
+</script>
+</body>
+</html>
