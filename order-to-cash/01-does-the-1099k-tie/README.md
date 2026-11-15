@@ -1,6 +1,6 @@
 # Order-to-Cash, episode 01: Does the 1099-K tie?
 
-Version 1.0.0, 2026-11-14. Series 1, Agent 4. Part of [Order-to-Cash](../README.md), which holds
+**Parked 2026-11-15: built and tested, not released.** Version 1.0.0, 2026-11-14. Part of [Order-to-Cash](../README.md), which holds
 the Stage 1 evidence and the value test this tool had to pass.
 
 ## The problem

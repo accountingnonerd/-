@@ -11,9 +11,10 @@ Invoice or sale  ->  Card, app or marketplace payment  ->  Payout to the bank  -
 
 | No. | Tool | Step | What it adds to what she already has | Version | Date |
 |---|---|---|---|---|---|
-| 01 | [Does the 1099-K tie?](01-does-the-1099k-tie/) | Year end | Turns a client's year of Square, Stripe or PayPal transactions into what the 1099-K should show, month by month, and the bridge from that gross to the books and to the bank deposits, with the entry that grosses up net deposits. | 1.0.0 | in progress |
+| 01 | [Does the 1099-K tie?](01-does-the-1099k-tie/) | Year end | Turns a client's year of Square, Stripe or PayPal transactions into what the 1099-K should show, month by month, and the bridge from that gross to the books and to the bank deposits, with the entry that grosses up net deposits. | 1.0.0 | **parked** 2026-11-15: built and tested, not released |
+| 02 | Receivables and collections | Monthly | In progress. | | |
 
-## Stage 1: how episode 01 was chosen
+## Stage 1: how episode 01 was chosen (parked)
 
 ### Evidence
 - **The rule.** The IRS instructions for Form 1099-K define box 1a: "'Gross amount' means the
