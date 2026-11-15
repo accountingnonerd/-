@@ -21,8 +21,16 @@ Every tool in this repository:
 | 1 | [Procure-to-Pay](procure-to-pay/) | 01 | [Who gets a 1099?](procure-to-pay/01-who-gets-a-1099/) | Reads a client's year of payments and produces the 1099 worksheet: who to file, whose W-9 to check, and why, including vendors the software's 1099 report misses because nobody flagged them. | 2026-11-11 | 1.1.0 |
 | 2 | [Hire-to-Retire (payroll)](hire-to-retire/) | 01 | [Do the 941s match the W-3?](hire-to-retire/01-do-the-941s-match-the-w3/) | Reads the filed 941s and W-3 (PDFs) and produces the reconciliation the IRS says to keep, with every difference explained or flagged, including the W-3 that leaves out a previous provider's quarters. | 2026-11-12 | 1.0.0 |
 | 3 | [Record-to-Report (close)](record-to-report/) | 01 | [Did last year change?](record-to-report/01-did-last-year-change/) | Compares last year's final trial balance from your file with the client's books today, for the same date: what changed, whether last year's profit or an earlier year changed, which of your adjustments were never posted, and the entry that puts the opening balances back. | 2026-11-13 | 1.0.0 |
-| 4 | [Order-to-Cash](order-to-cash/) | 01 | [Does the 1099-K tie?](order-to-cash/01-does-the-1099k-tie/) | Turns a client's year of Square, Stripe or PayPal transactions into what the 1099-K should say, month by month, and ties it to the return's lines and the bank deposits, with the entry for books that recorded deposits as sales. | not yet published | 1.0.0 |
+| 4 | [Order-to-Cash](order-to-cash/) | 02 | Receivables and collections | In progress: the AR aging turned into a collections worklist, a clean-up list, a proposed allowance, and a tie to the balance sheet. | | |
 | 5 | Acquire-to-Retire (fixed assets) | | next | | | |
+
+## Parked tools
+
+Built and tested, not released. Each can be released later as it stands.
+
+| Process | Folder | Tool | Why parked |
+|---|---|---|---|
+| Order-to-Cash | 01 | [Does the 1099-K tie?](order-to-cash/01-does-the-1099k-tie/) (14/14 cases, rebuilt from its prompt) | Too close to Agent 1's 1099 topic in the same week, and a narrower problem than the series should lead with. Candidate for a January tax-season release. |
 
 ## How to get any past build
 

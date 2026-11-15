@@ -10,11 +10,27 @@ Series 1 takes the most painful step of each process; later series take the next
 | Agent 1 | Procure-to-Pay | Who gets a 1099? | published 2026-11-11 |
 | Agent 2 | Hire-to-Retire | Do the 941s match the W-3? | published 2026-11-12 |
 | Agent 3 | Record-to-Report | Did last year change? | published 2026-11-13 |
-| Agent 4 | Order-to-Cash | Does the 1099-K tie? | built 2026-11-14, awaiting approval to publish |
+| Agent 4 | Order-to-Cash | Receivables and collections | in progress (Does the 1099-K tie? built and parked) |
 | Agent 5 | Acquire-to-Retire | to be chosen in Stage 1 | |
 
 The folders in this repository are organized by process, so later series' agents for the
 same process sit beside Series 1's.
+
+## Common problems first (set 2026-11-15)
+
+Each agent solves a problem that most small-firm accountants meet every month in the core work,
+not a niche corner. The roadmap, from the account owner's list:
+
+| Area | Process | Example tool |
+|---|---|---|
+| Receivables and collections | Order-to-Cash | AR aging review: collections worklist, clean-up, allowance |
+| Cash in and out through AR and AP | Order-to-Cash and Procure-to-Pay | 13-week cash flow forecast from the AR and AP agings |
+| Bank reconciliation | Record-to-Report | bank rec matcher with stale-item cleanup |
+| Fixed assets (PPE register) | Acquire-to-Retire | register and depreciation roll-forward tied to the trial balance |
+| Debt | Acquire-to-Retire and financing | loan schedule: interest and principal tied to the lender statement |
+| Leases | Acquire-to-Retire and financing | lease schedule |
+
+A narrower tool that is built and tested but fails this test is parked, not deleted (see README).
 
 ## The idea behind every tool: work between the apps, not instead of them
 
