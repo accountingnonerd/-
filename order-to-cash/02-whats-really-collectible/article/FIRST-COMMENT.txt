@@ -1,0 +1,5 @@
+Free tool, test files and the full write-up: https://github.com/accountingnonerd/-
+
+Open order-to-cash/02-whats-really-collectible/agent/whats-really-collectible.html in your browser and drop in an A/R aging detail (QuickBooks Online, QuickBooks Desktop or Xero, Excel or CSV). The page also has a made-up sample.
+
+Sources: CPA Practice Advisor's year-end A/R checklist; ASU 2025-05 (RSM summary); IRS Topic 453 on bad debts. Links in the write-up.

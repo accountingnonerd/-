@@ -1,0 +1,229 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- The LinkedIn carousel for Series 1, Agent 4. 12 slides, 1080 x 1350 each. Rendered by render.js. -->
+<style>
+:root{--paper:#ffffff;--ground:#f2f5f3;--ink:#14201c;--soft:#56635e;--faint:#8a9692;--rule:#d3dbd8;
+  --accent:#15614a;--accent-tint:#e2efe9;--alarm:#a3211b;--alarm-tint:#f9e6e4;
+  --display:"Inter Display","Inter",sans-serif;--text:"Inter",sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#888;font-family:var(--text);color:var(--ink);-webkit-font-smoothing:antialiased}
+.slide{width:1080px;height:1350px;background:var(--paper);padding:96px 88px 80px;position:relative;display:flex;flex-direction:column;overflow:hidden;margin-bottom:20px}
+.slide.ground{background:var(--ground)}
+.slide.dark{background:#123d30;color:#fff}
+.kicker{font:700 26px/1 var(--text);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.dark .kicker{color:#9fd3bd}
+h1{font:800 108px/1.02 var(--display);letter-spacing:-.025em;margin-top:36px}
+h2{font:800 84px/1.06 var(--display);letter-spacing:-.02em;margin-top:28px}
+p.big{font:500 46px/1.35 var(--text);color:var(--soft);margin-top:40px}
+.dark p.big{color:#d6e9e1}
+.foot{position:absolute;left:88px;right:88px;bottom:56px;display:flex;justify-content:space-between;font:600 24px/1 var(--text);color:var(--faint)}
+.dark .foot{color:#7fb7a1}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.stack{margin-top:64px;display:grid;gap:30px}
+.figure{border-radius:20px;padding:30px 36px;background:var(--ground)}
+.slide.ground .figure{background:var(--paper)}
+.figure .lab{font:600 32px/1.25 var(--text);color:var(--soft)}
+.figure .val{font:800 86px/1.05 var(--display);letter-spacing:-.02em;margin-top:8px}
+.figure.red{background:var(--alarm-tint)} .figure.red .val{color:var(--alarm)}
+.figure.green{background:var(--accent-tint)} .figure.green .val{color:var(--accent)}
+.rows{margin-top:56px;font:500 40px/1.3 var(--text)}
+.rows .r{display:flex;justify-content:space-between;gap:20px;padding:24px 0;border-bottom:2px solid var(--rule)}
+.rows .r.t{border-top:5px solid var(--ink);border-bottom:0;font-weight:800;font-size:46px}
+.rows .r .v{font-family:var(--mono);white-space:nowrap}
+.rows .r.m{color:var(--soft)}
+.quote{margin-top:56px;font:500 44px/1.38 var(--text);border-left:12px solid var(--accent);padding:6px 0 6px 34px}
+.quote small{display:block;font-size:26px;color:var(--faint);margin-top:18px}
+ul.ticks{list-style:none;margin-top:60px;display:grid;gap:44px}
+ul.ticks li{font:500 44px/1.3 var(--text);padding-left:72px;position:relative}
+ul.ticks li::before{content:"";position:absolute;left:0;top:6px;width:42px;height:42px;border-radius:50%;background:var(--accent)}
+ul.ticks.red li::before{background:var(--alarm)}
+ul.ticks li b{display:block;font-weight:800}
+ul.ticks li span{color:var(--soft);font-size:36px}
+.shot{margin-top:48px;border:3px solid var(--rule);border-radius:16px;overflow:hidden}
+.shot img{display:block;width:100%}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
+.tile{background:var(--ground);border-radius:18px;padding:40px 34px;min-height:330px}
+.tile .n{font:800 104px/1 var(--display);letter-spacing:-.03em}
+.tile .t{font:500 34px/1.3 var(--text);color:var(--soft);margin-top:14px}
+.cta{margin:auto 0 40px;background:#fff;color:var(--ink);border-radius:22px;padding:40px 44px;font:700 44px/1.25 var(--display)}
+.cta small{display:block;font:500 30px/1.35 var(--text);color:var(--soft);margin-top:14px}
+.swipe{position:absolute;right:88px;bottom:120px;font:700 30px/1 var(--text);color:var(--accent)}
+.flow{margin-top:64px;display:grid;gap:24px}
+.flow .b{display:flex;align-items:center;gap:22px;font:600 38px/1.2 var(--text)}
+.flow .bar{height:84px;border-radius:10px;flex:none;background:var(--accent);display:flex;align-items:center;padding:0 22px;color:#fff;font:700 30px/1 var(--mono);white-space:nowrap}
+.flow .bar.cut{background:var(--alarm)}
+.flow .bar.fade{background:#9cb8ad}
+.letter{margin-top:44px;background:#fff;border:3px solid var(--rule);border-radius:16px;padding:40px 44px;font:500 30px/1.45 var(--text);white-space:pre-wrap}
+.letter .ph{background:#fff3c4;border-radius:6px;padding:0 6px}
+.slide.ground .letter{background:#fff}
+table.t{width:100%;border-collapse:collapse;margin-top:48px;font:500 32px/1.3 var(--text)}
+table.t th{font:700 24px/1.2 var(--text);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:left;padding:0 0 14px;border-bottom:3px solid var(--ink)}
+table.t td{padding:20px 0;border-bottom:2px solid var(--rule);vertical-align:top}
+table.t .r{text-align:right;font-family:var(--mono);white-space:nowrap}
+table.t td.s{color:var(--soft);font-size:28px;padding-left:36px}
+table.t th.p{padding-left:36px}
+.src{position:absolute;left:88px;right:88px;bottom:100px;font:500 22px/1.35 var(--text);color:var(--faint)}
+</style></head><body>
+
+<!-- 1: the hook -->
+<section class="slide ground">
+  <div class="kicker">One Painful Problem · Series 1 · Agent 4</div>
+  <h1><span style="color:var(--alarm)">$20,858</span> of “overdue” wasn’t owed.</h1>
+  <p class="big">The A/R aging listed $350,484 past due. Payments and credits had never been applied, and one customer was about to be chased for an invoice it had paid twice.</p>
+  <div class="stack" style="margin-top:auto;margin-bottom:90px;grid-template-columns:1fr 1fr 1fr;gap:18px">
+    <div class="figure"><div class="lab">Past due, as listed</div><div class="val num" style="font-size:46px">350,484</div></div>
+    <div class="figure red"><div class="lab">Paid or credited</div><div class="val num" style="font-size:46px">20,858</div></div>
+    <div class="figure green"><div class="lab">Really to chase</div><div class="val num" style="font-size:46px">329,626</div></div>
+  </div>
+  <div class="swipe">Swipe →</div>
+  <div class="foot"><span>Free tool for accountants</span><span>1 / 12</span></div>
+</section>
+
+<!-- 2: how it happens -->
+<section class="slide">
+  <div class="kicker">How it happens</div>
+  <h2>The customer paid. Nobody applied the payment.</h2>
+  <div class="rows">
+    <div class="r"><span>Invoice #1118, due Aug 2</span><span class="v">$7,006.34</span></div>
+    <div class="r"><span>Payment received Jul 28, never applied</span><span class="v" style="color:var(--accent)">−$7,006.34</span></div>
+    <div class="r t"><span>What the customer owes</span><span class="v">$0.00</span></div>
+  </div>
+  <p class="big" style="font-size:40px">The aging shows both lines. The total is right. But #1118 sits in “61–90 days” and Orchard Hardware gets a reminder for an invoice it paid before it was due.</p>
+  <div class="foot"><span>Test case 03, an invented business</span><span>2 / 12</span></div>
+</section>
+
+<!-- 3: it is common -->
+<section class="slide ground">
+  <div class="kicker">Not a niche problem</div>
+  <h2>Every client that invoices has an aging. Most have late payers.</h2>
+  <div class="tiles">
+    <div class="tile"><div class="n num">56%</div><div class="t">of US small businesses have unpaid invoices</div></div>
+    <div class="tile"><div class="n num">$17.5k</div><div class="t">owed to them, on average</div></div>
+    <div class="tile"><div class="n num">47%</div><div class="t">have invoices more than 30 days overdue</div></div>
+    <div class="tile"><div class="n num">8.4</div><div class="t">days late: the average invoice (Xero)</div></div>
+  </div>
+  <div class="src">Intuit QuickBooks 2025 small business late payments report (2,487 businesses) and Xero Small Business Insights, as reported in press summaries.</div>
+  <div class="foot"><span>Free tool for accountants</span><span>3 / 12</span></div>
+</section>
+
+<!-- 4: what it does -->
+<section class="slide">
+  <div class="kicker">Agent 4 · What’s really collectible?</div>
+  <h2>Drop in the A/R aging detail. Get the review.</h2>
+  <ul class="ticks">
+    <li><b>1. Clean first</b><span>Payments and credits never applied, customers in credit, invoices entered twice, payments on the wrong customer</span></li>
+    <li><b>2. Who to chase</b><span>Ranked by money over 60 days, with the next step and a draft letter for each</span></li>
+    <li><b>3. The close</b><span>Allowance from your loss rates, write-offs, the entries</span></li>
+  </ul>
+  <div class="foot"><span>QuickBooks Online, Desktop and Xero</span><span>4 / 12</span></div>
+</section>
+
+<!-- 5: clean first -->
+<section class="slide ground">
+  <div class="kicker">1 · Clean first</div>
+  <h2>Six credits that were never applied.</h2>
+  <table class="t">
+    <tr><th>Customer</th><th>Apply to</th><th class="r">Amount</th></tr>
+    <tr><td>Orchard Hardware</td><td>#1118, exact</td><td class="r">7,006.34</td></tr>
+    <tr><td>Garnet Logistics</td><td>#1035, exact</td><td class="r">6,222.05</td></tr>
+    <tr><td>Granite Schools</td><td>#1139, exact</td><td class="r">5,539.66</td></tr>
+    <tr><td>Quarry Hotel</td><td>#9001, exact</td><td class="r">840.00</td></tr>
+    <tr><td>Pioneer Bakery</td><td>oldest invoice</td><td class="r">1,000.00</td></tr>
+    <tr><td>Yarrow Auto Body</td><td>oldest, credit memo</td><td class="r">250.00</td></tr>
+  </table>
+  <p class="big" style="font-size:36px;margin-top:36px">Post them, run it again, then chase. Matches are likely, not certain: the remittance decides.</p>
+  <div class="foot"><span>Test case 03</span><span>5 / 12</span></div>
+</section>
+
+<!-- 6: the client owes them -->
+<section class="slide">
+  <div class="kicker">Customers the client owes</div>
+  <h2>Some “receivables” are liabilities.</h2>
+  <ul class="ticks red">
+    <li><b>Quarry Hotel paid #9001 twice</b><span>$840 owed back. Refund it or confirm the credit, and reclassify it to a liability at the close. Never write it off to income: old credits become unclaimed property.</span></li>
+    <li><b>Keystone’s $1,250 payment matches Indigo Storage’s open #9150</b><span>Probably posted to the wrong customer. Move it, and Indigo stops getting reminders.</span></li>
+  </ul>
+  <div class="foot"><span>Test cases 03 and 17</span><span>6 / 12</span></div>
+</section>
+
+<!-- 7: what else it catches -->
+<section class="slide ground">
+  <div class="kicker">It also stops you when</div>
+  <h2>The file can’t be trusted yet.</h2>
+  <ul class="ticks red" style="gap:34px">
+    <li><b>The same invoice entered twice</b><span>$9,632.43, two days apart. But not a $450 bill sent twice a week: that is recurring billing.</span></li>
+    <li><b>The aging doesn’t tie to the balance sheet</b><span>$3,150 apart: letters are held until it does</span></li>
+    <li><b>Part of the report pasted twice</b><span>proved by the report’s own total, not guessed</span></li>
+    <li><b>A journal entry sitting in A/R</b><span>not an invoice anyone can pay</span></li>
+  </ul>
+  <div class="foot"><span>Test cases 04, 05, 13, 14</span><span>7 / 12</span></div>
+</section>
+
+<!-- 8: who to chase -->
+<section class="slide">
+  <div class="kicker">2 · Who to chase</div>
+  <h2>Biggest money over 60 days first. Not A to Z.</h2>
+  <table class="t">
+    <tr><th>Customer</th><th class="r">Over 60 days</th><th class="p">Next step</th></tr>
+    <tr><td>Yarrow Auto Body</td><td class="r">9,885.49</td><td class="s">Past-due notice</td></tr>
+    <tr><td>Yarrow Electric</td><td class="r">8,556.33</td><td class="s">Past-due notice</td></tr>
+    <tr><td>Linden Storage</td><td class="r">7,909.33</td><td class="s">Final request</td></tr>
+    <tr><td>Alder Property Mgmt</td><td class="r">7,269.13</td><td class="s">Past-due notice</td></tr>
+    <tr><td>Indigo Roofing</td><td class="r">6,478.01</td><td class="s">Past-due notice</td></tr>
+  </table>
+  <p class="big" style="font-size:36px;margin-top:36px">31 customers. Write-offs, duplicate copies and journal entries are left out. Tick “hold” for a dispute or a bankruptcy.</p>
+  <div class="foot"><span>Test case 03</span><span>8 / 12</span></div>
+</section>
+
+<!-- 9: the letter -->
+<section class="slide ground">
+  <div class="kicker">A draft for each customer</div>
+  <h2 style="font-size:72px">The client reviews it and sends it.</h2>
+  <div class="letter">Dear <span class="ph">[contact name]</span>, Yarrow Electric,
+
+Your account is past due; the oldest invoice below is now 136 days past due. Please send payment, or contact us to set up a payment plan.
+
+  Invoice 1085, dated 5/18/2026: $8,556.33
+  Invoice 1084, dated 9/14/2026: $1,981.13
+  Total: $10,537.46
+
+If you have already paid, thank you, and please send the payment details so we can apply it.</div>
+  <div class="foot"><span>Five steps, by the oldest invoice’s age</span><span>9 / 12</span></div>
+</section>
+
+<!-- 10: the close -->
+<section class="slide">
+  <div class="kicker">3 · The close</div>
+  <h2>Your loss rates in. The entry out.</h2>
+  <div class="rows" style="font-size:36px;margin-top:44px">
+    <div class="r m"><span>Allowance on the books</span><span class="v">$15,000.00</span></div>
+    <div class="r m"><span>Write-offs: 2 invoices over a year old, 3 small leftovers</span><span class="v">−$5,118.37</span></div>
+    <div class="r m"><span>Left after write-offs</span><span class="v">$9,881.63</span></div>
+    <div class="r"><span>Required at your loss rates</span><span class="v">$33,582.18</span></div>
+    <div class="r t"><span>Dr Bad debt expense</span><span class="v">$23,700.55</span></div>
+  </div>
+  <p class="big" style="font-size:32px;margin-top:36px">The page never guesses the rates. It notes ASU 2025-05, and that a bad debt is deductible only if it was in income.</p>
+  <div class="foot"><span>Test case 08</span><span>10 / 12</span></div>
+</section>
+
+<!-- 11: tested -->
+<section class="slide ground">
+  <div class="kicker">Before you trust it</div>
+  <h2>Tested like a workpaper.</h2>
+  <div class="tiles">
+    <div class="tile"><div class="n num">17</div><div class="t">test files in QuickBooks Online, Desktop and Xero layouts; 2,066 checks</div></div>
+    <div class="tile"><div class="n num">16</div><div class="t">problems found by a skeptical-CPA review. All fixed.</div></div>
+    <div class="tile"><div class="n num">20/20</div><div class="t">deliberately broken copies caught by the tests</div></div>
+    <div class="tile"><div class="n num">2h 20m</div><div class="t">the same review by hand, with reminders</div></div>
+  </div>
+  <div class="foot"><span>Results in the repository</span><span>11 / 12</span></div>
+</section>
+
+<!-- 12: follow -->
+<section class="slide dark">
+  <div class="kicker">Get it free</div>
+  <h2>Runs in your browser. Nothing is uploaded.</h2>
+  <p class="big">The tool, the 17 test files and the full write-up: link in the comments.</p>
+  <div class="cta">Follow Zac Lu, CPA for Agent 5:<br>fixed assets.<small>Then tell me: what do you check first on a client’s aging?</small></div>
+  <div class="foot"><span>One Painful Problem</span><span>12 / 12</span></div>
+</section>
+</body></html>

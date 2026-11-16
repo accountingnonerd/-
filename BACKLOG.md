@@ -41,7 +41,12 @@ killed ideas. A candidate is chosen only after it passes Stage 1 and the value t
   business, Etsy, Amazon and eBay; Square's Transfers report for the actual deposits.
 - **Real exports:** one Square, Stripe and PayPal export each, client data removed, to test the
   layouts the tool was built from published column names.
-- **Receivables aging review** with a memo for the file.
+- **Built:** 02 What's really collectible? (version 1.0.0), the receivables review.
+- **Receivables, next:** a real QuickBooks and Xero aging export each, client data removed; Sage
+  and FreshBooks layouts; a customer statement for each letter; foreign-currency balances; the
+  loss rates worked out from the client's own write-off history (a roll-rate table); a memo for
+  the file.
+- **13-week cash flow forecast** from the A/R and A/P agings: the next Order-to-Cash candidate.
 
 ## 5. Acquire-to-Retire (fixed assets)
 - **A general ledger sweep for purchases that may need to be capitalized**, measured

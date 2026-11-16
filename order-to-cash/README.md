@@ -12,7 +12,7 @@ Invoice or sale  ->  Card, app or marketplace payment  ->  Payout to the bank  -
 | No. | Tool | Step | What it adds to what she already has | Version | Date |
 |---|---|---|---|---|---|
 | 01 | [Does the 1099-K tie?](01-does-the-1099k-tie/) | Year end | Turns a client's year of Square, Stripe or PayPal transactions into what the 1099-K should show, month by month, and the bridge from that gross to the books and to the bank deposits, with the entry that grosses up net deposits. | 1.0.0 | **parked** 2026-11-15: built and tested, not released |
-| 02 | Receivables and collections | Monthly | In progress. | | |
+| 02 | [What's really collectible?](02-whats-really-collectible/) | Monthly and year end | Turns the A/R aging detail into the review: credits matched to the invoices they belong to, customers in credit, duplicates and mis-postings, a ranked list of who to chase with a draft letter each, and the allowance and write-offs from the accountant's loss rates. | 1.0.0 | awaiting approval |
 
 ## Stage 1: how episode 01 was chosen (parked)
 

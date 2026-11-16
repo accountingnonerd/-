@@ -1,0 +1,23 @@
+Series 1 · Agent 4 | $20,858 of "overdue" wasn't owed
+
+One customer was about to get a past-due notice for an invoice it had paid twice.
+
+The A/R aging listed $350,484 past due. 32 reminders were ready to go. But payments had come in and nobody had applied them. The aging showed the invoice as overdue and the payment as a credit, and the total still looked right.
+
+So Agent 4 of One Painful Problem is a free tool for the review every client's aging needs at the close. Drop in the A/R aging detail from QuickBooks or Xero and get:
+
+→ Clean first: unapplied payments matched to their invoices, customers the client owes, invoices entered twice, a payment posted to the wrong customer
+→ Who to chase: ranked by money over 60 days, with the next step and a draft letter for each
+→ The close: the allowance from your loss rates, the write-offs, the entry
+
+Before release, a skeptical CPA review found 16 problems, including two real $500 payments treated as one pasted line. All fixed. 17 test files, 2,066 checks, all public.
+
+It runs in your browser. Nothing is uploaded.
+
+Tool, test files and the full write-up: link in the first comment.
+
+Follow me for Agent 5: the fixed asset register.
+
+What do you check first on a client's aging?
+
+#Accounting #CPA #Bookkeeping
