@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's really collectible?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root { --ink:#111; --muted:#444; --bg:#fbfaf7; --line:#bbb; --accent:#0b4f8a; --stop:#9b1c1c; --stopbg:#fdecec; --care:#7a4b00; --carebg:#fff4de; }
+  * { box-sizing: border-box; }
+  html { font-size: 19px; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: Georgia, "Times New Roman", serif; line-height:1.5; }
+  main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 2rem; margin: .2em 0 .3em; }
+  h2 { font-size: 1.4rem; margin-top: 1.8em; border-bottom: 2px solid var(--ink); padding-bottom: .2em; }
+  h3 { font-size: 1.1rem; margin-top: 1.3em; }
+  p, li { max-width: 46em; }
+  .muted { color: var(--muted); }
+  label.drop { display:block; border: 3px dashed var(--accent); border-radius: 10px; padding: 48px 20px; text-align:center; font-size: 1.25rem; cursor:pointer; background:#fff; margin: 18px 0; }
+  label.drop:hover, body.dragging label.drop { background:#eef5fc; }
+  label.drop input { display:none; }
+  input[type=text] { font-size: 1rem; padding: 6px 8px; border:1px solid #777; border-radius:4px; background:#fff; color:var(--ink); min-width: 10em; }
+  button { font-size: 1rem; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--accent); background: #fff; color: var(--accent); cursor:pointer; }
+  button.main { background: var(--accent); color: #fff; font-size: 1.1rem; padding: 10px 18px; }
+  a { color: var(--accent); }
+  #problem { border: 2px solid var(--stop); background: var(--stopbg); color: var(--stop); padding: 12px 14px; border-radius: 6px; margin: 12px 0; }
+  #stop-banner { border: 2px solid var(--stop); background: var(--stopbg); color: var(--stop); padding: 12px 14px; border-radius: 6px; margin: 12px 0; }
+  #verdict { font-size: 1.2rem; font-weight: bold; border-left: 6px solid var(--accent); padding: 8px 14px; background: #fff; margin: 16px 0; }
+  .box { overflow-x: auto; max-width: 100%; border: 1px solid var(--line); background:#fff; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { padding: 5px 8px; border-bottom: 1px solid #ddd; text-align: left; vertical-align: top; }
+  th { background: #f0eee8; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.tot td { font-weight: bold; border-top: 2px solid var(--ink); }
+  .care { border-left: 5px solid var(--care); background: var(--carebg); padding: 6px 10px; margin: 6px 0; }
+  .info { border-left: 5px solid #777; background: #f3f3f3; padding: 6px 10px; margin: 6px 0; }
+  .fields { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 8px 16px; margin: 12px 0; }
+  .fields label { display:block; font-size: .9rem; }
+  .fields input { width: 100%; }
+  .rates { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 8px 12px; }
+  .rates label { font-size: .9rem; display:block; }
+  .rates input { width: 100%; min-width: 0; }
+  details.letter { border:1px solid var(--line); background:#fff; padding: 8px 12px; margin: 8px 0; }
+  details.letter summary { cursor:pointer; font-weight:bold; }
+  .letter-body p { margin: .5em 0; }
+  footer { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 10px; font-size: .9rem; color: var(--muted); }
+  .row { display:flex; flex-wrap:wrap; gap: 8px; align-items: center; }
+  @media print {
+    button, .noprint, #start { display:none !important; }
+    body { background:#fff; }
+    .box { overflow: visible; border: none; }
+    details.letter { break-inside: avoid; }
+    details.letter > *:not(summary) { display:block; }
+  }
+</style>
+</head>
+<body>
+<main>
+<section id="start">
+  <h1>What's really collectible?</h1>
+  <p>Drop a client's A/R aging detail and get back a receivables review: what to clean up in the ledger first, who to chase with a draft letter each, and the allowance and write-offs at the close.</p>
+  <p><label for="ar-start">Accounts receivable on the balance sheet, same date (optional)</label><br>
+    <input type="text" id="ar-start" inputmode="decimal" placeholder="e.g. 48,215.37"></p>
+  <label class="drop" id="drop">
+    <input type="file" id="file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+    Drop the A/R aging detail here, or click here to choose it
+  </label>
+  <div id="problem" hidden role="alert"></div>
+  <h3>Which report to export</h3>
+  <ul>
+    <li><b>QuickBooks Online:</b> Reports, A/R Aging Detail (not the summary), Export to Excel.</li>
+    <li><b>QuickBooks Desktop:</b> Reports, Customers &amp; Receivables, A/R Aging Detail, Excel, Create new worksheet.</li>
+    <li><b>Xero:</b> Reports, Aged Receivables Detail (not the summary), Export, Excel.</li>
+  </ul>
+  <p>What it adds: it applies credits and payments sitting unapplied, finds customers in credit and payments that may be posted to the wrong customer, spots invoices entered twice, re-ages by due date, ranks who to chase with a draft letter each, and lays out the allowance and write-offs.</p>
+  <p><button type="button" id="sample">See it work on a made-up sample</button></p>
+  <p><b>Where your data goes: nowhere.</b> The file is read in this browser and never uploaded.</p>
+  <p><b>You propose; the client decides.</b></p>
+  <p class="muted">Version 1.0.0.</p>
+</section>
+
+<section id="report" hidden></section>
+</main>
+
+<script>
+"use strict";
+const VERSION = "1.0.0";
+const BUCKETS = ["current", "d1_30", "d31_60", "d61_90", "d91_180", "d181_365", "over365"];
+const BUCKET_LABEL = { current: "Current", d1_30: "1-30", d31_60: "31-60", d61_90: "61-90", d91_180: "91-180", d181_365: "181-365", over365: "Over 365" };
+const LAYOUT_NAME = { qbo: "QuickBooks Online", desktop: "QuickBooks Desktop", xero: "Xero" };
+
+/* ---------- small helpers ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const str = (c) => (c == null ? "" : String(c).trim());
+const low = (c) => str(c).toLowerCase();
+const dollars = (c) => c / 100;
+function money(c) {
+  const neg = c < 0; const a = Math.abs(c);
+  const s = Math.floor(a / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + String(a % 100).padStart(2, "0");
+  return (neg ? "-$" : "$") + s;
+}
+const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+function isoDay(d) { if (d == null) return null; const t = new Date(d * 86400000); return t.toISOString().slice(0, 10); }
+function usDay(d) { if (d == null) return ""; const t = new Date(d * 86400000); return (t.getUTCMonth() + 1) + "/" + t.getUTCDate() + "/" + t.getUTCFullYear(); }
+
+/* ---------- amounts and dates ---------- */
+function parseAmount(v) {
+  if (v == null) return 0;
+  if (typeof v === "number") { if (!isFinite(v)) return 0; const s = v < 0 ? -1 : 1; return s * Math.round(Math.abs(v) * 100); }
+  let s = String(v).trim();
+  if (s === "" || s === "-" || s === "–" || s === "—") return 0;
+  s = s.replace(/[$,\s]/g, "");
+  let neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); }
+  if (s.startsWith("-")) { neg = true; s = s.slice(1); }
+  if (s.endsWith("-")) { neg = true; s = s.slice(0, -1); }
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1); }
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return 0;
+  const parts = s.split(".");
+  const whole = parseInt(parts[0] || "0", 10);
+  let frac = (parts[1] || "");
+  let cents = whole * 100 + parseInt((frac + "00").slice(0, 2), 10);
+  if (frac.length > 2 && parseInt(frac[2], 10) >= 5) cents += 1;
+  return neg ? -cents : cents;
+}
+const MON = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+function dayNum(y, m, d) {
+  if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31)) return null;
+  const t = Date.UTC(y, m - 1, d); const dt = new Date(t);
+  if (dt.getUTCDate() !== d || dt.getUTCMonth() !== m - 1) return null;
+  return Math.round(t / 86400000);
+}
+function parseDate(v) {
+  if (v == null) return null;
+  if (typeof v === "number") { return v >= 20000 && v <= 80000 ? Math.floor(v) - 25569 : null; }
+  if (v instanceof Date) return Math.floor(Date.UTC(v.getFullYear(), v.getMonth(), v.getDate()) / 86400000);
+  const s = String(v).trim();
+  if (!s) return null;
+  let m;
+  if (/^\d+(\.\d+)?$/.test(s)) { const n = Number(s); return n >= 20000 && n <= 80000 ? Math.floor(n) - 25569 : null; }
+  if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ].*)?$/))) return dayNum(+m[1], +m[2], +m[3]);
+  if ((m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})$/))) { let y = +m[3]; if (m[3].length === 2) y += 2000; return dayNum(y, +m[1], +m[2]); }
+  if ((m = s.match(/^(\d{1,2})[\s-]+([A-Za-z]{3,})\.?[\s-]+(\d{4})$/))) { const mo = MON[m[2].slice(0, 3).toLowerCase()]; return mo ? dayNum(+m[3], mo, +m[1]) : null; }
+  if ((m = s.match(/^([A-Za-z]{3,})\.?\s+(\d{1,2}),?\s+(\d{4})$/))) { const mo = MON[m[1].slice(0, 3).toLowerCase()]; return mo ? dayNum(+m[3], mo, +m[2]) : null; }
+  return null;
+}
+
+/* ---------- Part 1: reading the aging ---------- */
+const SUMMARY_CELLS = ["current", "1 - 30", "1-30", "31 - 60", "older", "91 and over", "> 90"];
+function detectLayout(cells) {
+  const has = (t) => cells.includes(t);
+  if (has("transaction type") && has("num") && has("open balance")) return "qbo";
+  if (has("type") && has("num") && has("open balance") && (has("name") || has("customer"))) return "desktop";
+  if (has("invoice number") && has("due date") && has("total")) return "xero";
+  if (cells.some((c) => SUMMARY_CELLS.includes(c)) && has("total") && !has("num") && !has("invoice number")) return "summary";
+  return null;
+}
+const joinRow = (r) => (r || []).map(str).filter((c) => c !== "").join(" ");
+const isBlank = (r) => !r || r.every((c) => str(c) === "");
+
+function readAging(rows) {
+  rows = rows || [];
+  let headIdx = -1, layout = null;
+  for (let i = 0; i < Math.min(20, rows.length); i++) {
+    const cells = (rows[i] || []).map(low);
+    const l = detectLayout(cells);
+    if (l) { headIdx = i; layout = l; break; }
+  }
+  const titleRows = headIdx >= 0 ? rows.slice(0, headIdx) : rows.slice(0, 12);
+  const titles = titleRows.map(joinRow).filter((t) => t !== "");
+  const titleText = titles.join("\n");
+  const headCells = headIdx >= 0 ? (rows[headIdx] || []).map(low) : [];
+  if (/a\/p aging|accounts payable|aged payables|payables/i.test(titleText) || headCells.some((c) => c === "vendor" || c === "supplier" || /\bvendor\b|\bsupplier\b/.test(c))) {
+    return { status: "NOT_RECOGNIZED", exception: { code: "NOT_RECOGNIZED", level: "stop", message: "This is an accounts payable aging: what the client owes. I need the accounts receivable aging (A/R aging detail): what customers owe the client." } };
+  }
+  if (layout === "summary" || (!layout && /aging summary|aged receivables summary/i.test(titleText))) {
+    return { status: "NOT_RECOGNIZED", exception: { code: "SUMMARY_ONLY", level: "stop", message: "This is the A/R aging summary: one line per customer. I need the A/R aging detail, with one line per invoice, payment and credit. Export the detail report and drop that." } };
+  }
+  if (!layout) {
+    return { status: "NOT_RECOGNIZED", exception: { code: "NOT_RECOGNIZED", level: "stop", message: "I could not find the A/R aging detail in this file. Export the A/R aging detail from QuickBooks Online, QuickBooks Desktop or Xero to Excel or CSV and drop that." } };
+  }
+  const col = {};
+  headCells.forEach((h, i) => { if (h !== "" && !(h in col)) col[h] = i; });
+  const get = (r, name) => (name in col ? r[col[name]] : null);
+  const xero = layout === "xero";
+  const items = [], unread = [], unknown = [], footer = [];
+  let reportTotal = null, totalRead = false, contact = "";
+  for (let i = headIdx + 1; i < rows.length; i++) {
+    const r = rows[i] || [];
+    if (isBlank(r)) continue;
+    if (totalRead) { footer.push(joinRow(r)); continue; }
+    const first = low(r[0]);
+    if (first === "total") {
+      reportTotal = parseAmount(get(r, xero ? "total" : "open balance"));
+      totalRead = true; continue;
+    }
+    if (/^total\s+\S/.test(first)) continue;
+    const dateCol = xero ? "invoice date" : "date";
+    const dateCell = get(r, dateCol);
+    const date = parseDate(dateCell);
+    if (date == null) {
+      const nonEmpty = r.map((c, j) => j).filter((j) => str(r[j]) !== "");
+      if (xero && nonEmpty.length === 1 && nonEmpty[0] === 0) { contact = str(r[0]); continue; }
+      const dIdx = col[dateCol];
+      const others = nonEmpty.filter((j) => j !== dIdx);
+      if (others.length > 0 && str(dateCell) !== "") unread.push(i + 1);
+      continue;
+    }
+    let it;
+    if (xero) {
+      const open = parseAmount(get(r, "total"));
+      const ref = low(get(r, "reference"));
+      let type;
+      if (open < 0) type = /overpayment|prepayment/.test(ref) ? "Payment" : "Credit Memo";
+      else type = /journal/.test(ref) ? "Journal Entry" : "Invoice";
+      it = { customer: contact, num: str(get(r, "invoice number")), date, due: parseDate(get(r, "due date")), open, amount: open, type };
+    } else {
+      const t = low(get(r, "transaction type") != null && str(get(r, "transaction type")) !== "" ? get(r, "transaction type") : get(r, "type"));
+      let type = null;
+      if (t.includes("credit")) type = "Credit Memo";
+      else if (t.includes("payment") || t.includes("deposit")) type = "Payment";
+      else if (t.includes("journal")) type = "Journal Entry";
+      else if (t.includes("check") || t.includes("refund")) type = "Refund";
+      else if (t.includes("invoice") || t.includes("statement charge") || t.includes("charge") || t.includes("finance")) type = "Invoice";
+      if (!type) { unknown.push({ row: i + 1, type: str(get(r, "transaction type") != null ? get(r, "transaction type") : get(r, "type")) }); continue; }
+      const custA = layout === "qbo" ? get(r, "customer") : get(r, "name");
+      const custB = layout === "qbo" ? get(r, "name") : get(r, "customer");
+      const customer = str(custA) !== "" ? str(custA) : str(custB);
+      const open = parseAmount(get(r, "open balance"));
+      const amount = "amount" in col ? parseAmount(get(r, "amount")) : open;
+      it = { customer, num: str(get(r, "num")), date, due: parseDate(get(r, "due date")), open, amount, type };
+      if ("aging" in col) { const a = str(get(r, "aging")); it.aging = a === "" ? 0 : Math.round(Number(a.replace(/,/g, "")) || 0); }
+    }
+    it.job = str(it.customer);
+    const ci = it.job.indexOf(":");
+    it.parent = (ci >= 0 ? it.job.slice(0, ci) : it.job).trim();
+    if (it.due == null) it.due = it.date;
+    it.sig = r.map((c) => (c == null ? "" : String(c))).join("\u0001") + "\u0002" + contact;
+    it.row = i + 1;
+    items.push(it);
+  }
+  let asOf = null;
+  const AS_RE = /\bas\s+(?:of|at)\s+([A-Za-z]{3,}\.?\s+\d{1,2},?\s+\d{4}|\d{1,2}\s+[A-Za-z]{3,}\.?\s+\d{4}|\d{1,2}\/\d{1,2}\/\d{4})/i;
+  for (const t of titles) { const m = t.match(AS_RE); if (m) { const d = parseDate(m[1].replace(/\s+/g, " ")); if (d != null) { asOf = d; break; } } }
+  let basis = null;
+  const bm = (titleText + "\n" + footer.join("\n")).match(/(cash|accrual) basis/i);
+  if (bm) basis = bm[1].toLowerCase() === "cash" ? "Cash basis" : "Accrual basis";
+  const company = titles.find((t) => !/aging|aged|as (of|at)|ageing|basis/i.test(t)) || "";
+  return { status: "READ", layout, items, unread, unknown, reportTotal, footer, titles, asOf, basis, company, hasAging: "aging" in col };
+}
+
+/* ---------- Part 2: the review ---------- */
+function bucketOf(days) {
+  if (days <= 0) return "current";
+  if (days <= 30) return "d1_30";
+  if (days <= 60) return "d31_60";
+  if (days <= 90) return "d61_90";
+  if (days <= 180) return "d91_180";
+  if (days <= 365) return "d181_365";
+  return "over365";
+}
+const zeroBuckets = () => Object.fromEntries(BUCKETS.map((b) => [b, 0]));
+const toDollarsBuckets = (o) => Object.fromEntries(BUCKETS.map((b) => [b, dollars(o[b])]));
+const byDateNum = (a, b) => a.date - b.date || cmp(a.num, b.num);
+const plural = (n, one, many) => n + " " + (n === 1 ? one : many);
+
+function review(rows, fileName, opts) {
+  opts = opts || {};
+  const read = readAging(rows);
+  const base = { version: VERSION, file: fileName };
+  if (read.status === "NOT_RECOGNIZED") {
+    const rep = Object.assign(base, { status: "NOT_RECOGNIZED", exceptions: [read.exception] });
+    return { report: rep, read };
+  }
+  const typedAsOf = opts.asOf ? parseDate(opts.asOf) : null;
+  const asOf = read.asOf != null ? read.asOf : typedAsOf;
+  const common = { layout: LAYOUT_NAME[read.layout], company: read.company, asOf: isoDay(asOf), basis: read.basis };
+  if (asOf == null && !read.hasAging) {
+    const rep = Object.assign(base, { status: "NEEDS_DATE", exceptions: [{ code: "DATE_REQUIRED", level: "stop", message: "This report has no as-of date and no Aging column, so I cannot tell how old anything is. Type the as-of date of the aging (the balance sheet date) and press Review it." }] }, common, { rows: read.items.length });
+    return { report: rep, read };
+  }
+  const ex = [];
+  const add = (code, level, message) => ex.push({ code, level, message });
+
+  // identical lines
+  let items = read.items.slice();
+  const seen = new Set(); const extras = [];
+  for (const it of items) { if (seen.has(it.sig)) extras.push(it); else seen.add(it.sig); }
+  let duplicatesRemoved;
+  let identical = null, dupRows = null;
+  if (extras.length) {
+    const sumAll = items.reduce((s, it) => s + it.open, 0);
+    const sumEx = extras.reduce((s, it) => s + it.open, 0);
+    if (read.reportTotal != null && sumAll - sumEx === read.reportTotal) {
+      const ex2 = new Set(extras); items = items.filter((it) => !ex2.has(it));
+      duplicatesRemoved = extras.length;
+      dupRows = "The report has " + plural(extras.length, "line", "lines") + " exactly repeated (rows " + extras.map((e) => e.row).join(", ") + "), and the report's own total only ties once they are taken out: the rows were pasted or exported twice. I have removed the copies. Check the export before relying on it.";
+    } else {
+      identical = "Identical lines kept: " + extras.map((e) => esc(e.job) + " " + esc(e.type) + " " + esc(e.num) + " " + money(e.open) + " (row " + e.row + ")").join("; ") + ". Two real payments on the same day look like this; confirm they are both real.";
+    }
+  }
+  items.forEach((it) => { it.rem = it.open; it.days = asOf != null ? asOf - it.due : (it.aging || 0); it.bucket = bucketOf(it.days); });
+
+  const total = items.reduce((s, it) => s + it.open, 0);
+  const customers = new Set(items.map((it) => it.parent)).size;
+  const buckets = zeroBuckets();
+  items.forEach((it) => { buckets[it.bucket] += it.open; });
+
+  // clean-up, job by job
+  const jobs = new Map();
+  items.forEach((it) => { if (!jobs.has(it.job)) jobs.set(it.job, []); jobs.get(it.job).push(it); });
+  const jobNames = [...jobs.keys()].sort(cmp);
+  const matches = [], applyOldest = [], creditBal = [];
+  for (const job of jobNames) {
+    const list = jobs.get(job);
+    const credits = list.filter((it) => it.open < 0).sort(byDateNum);
+    const targets = list.filter((it) => it.open > 0 && (it.type === "Invoice" || it.type === "Refund")).sort(byDateNum);
+    const jobMatches = [];
+    for (const c of credits) {
+      const t = targets.find((t) => t.rem === -c.rem && t.rem === t.open);
+      if (t) {
+        const m = { customer: job, credit: c.num || c.type, creditType: c.type, creditDate: isoDay(c.date), invoice: t.num, invoiceDate: isoDay(t.date), amount: dollars(t.rem), _cents: t.rem };
+        matches.push(m); jobMatches.push(m);
+        c.rem = 0; t.rem = 0;
+      }
+    }
+    for (const c of credits) {
+      if (c.rem === 0) continue;
+      let left = -c.rem, applied = 0; const invs = [];
+      for (const t of targets) {
+        if (left <= 0) break;
+        if (t.rem <= 0) continue;
+        const take = Math.min(left, t.rem);
+        t.rem -= take; left -= take; applied += take; invs.push(t.num);
+      }
+      if (applied > 0) applyOldest.push({ customer: job, credit: c.num || c.type, creditType: c.type, amount: dollars(applied), invoices: invs, _cents: applied });
+      c.rem = -left;
+    }
+    const leftover = credits.reduce((s, c) => s + -c.rem, 0);
+    if (leftover !== 0) creditBal.push({ job, parent: list[0].parent, cents: leftover, jobMatches });
+  }
+  const pos = items.filter((it) => it.rem > 0);
+  const mispostings = [];
+  const creditBalances = creditBal.map((cb) => {
+    const C = cb.cents, P = cb.parent;
+    const cands = pos.filter((it) => it.parent !== P && it.type === "Invoice" && it.rem === C && it.open === C);
+    let maybeFor = null;
+    if (cands.length === 1) { maybeFor = cands[0].job; mispostings.push({ customer: cb.job, maybeFor, invoice: cands[0].num }); }
+    const pt = cb.jobMatches.find((m) => m._cents === C);
+    const paidTwice = pt ? pt.invoice : null;
+    const otherJobs = pos.some((it) => it.parent === P && it.job !== cb.job);
+    return { customer: cb.job, amount: dollars(C), paidTwice, otherJobs, maybeFor, _cents: C };
+  });
+
+  // duplicates
+  const duplicates = []; const laterCopies = new Set();
+  for (const job of jobNames) {
+    const inv = jobs.get(job).filter((it) => it.type === "Invoice" && it.open > 0).sort(byDateNum);
+    const countAmt = (a) => inv.filter((it) => it.amount === a).length;
+    for (let i = 0; i < inv.length; i++) for (let j = i + 1; j < inv.length; j++) {
+      const x = inv[i], y = inv[j];
+      const isDup = x.num === y.num || (x.amount === y.amount && x.amount >= 100 && Math.abs(y.date - x.date) < 7);
+      if (isDup && countAmt(x.amount) < 3) { duplicates.push({ customer: job, a: x.num, b: y.num, amount: dollars(x.amount) }); laterCopies.add(y); }
+    }
+  }
+
+  // write-offs, worklist, concentration
+  const keep = opts.keep || {};
+  const small = pos.filter((it) => it.type === "Invoice" && it.rem < 1000 && it.open < it.amount && it.days > 60);
+  const smallSet = new Set(small);
+  const old = pos.filter((it) => it.type === "Invoice" && it.days > 365 && !smallSet.has(it));
+  const woItems = small.concat(old.filter((it) => !keep[it.num]));
+  const woSet = new Set(woItems);
+  const writeOff = woItems.reduce((s, it) => s + it.rem, 0);
+  const chased = pos.filter((it) => it.type === "Invoice" && it.days > 0 && !woSet.has(it) && !laterCopies.has(it));
+  const byParent = new Map();
+  chased.forEach((it) => { if (!byParent.has(it.parent)) byParent.set(it.parent, []); byParent.get(it.parent).push(it); });
+  const worklist = [...byParent.keys()].sort(cmp).map((p) => {
+    const l = byParent.get(p);
+    const overdue = l.reduce((s, it) => s + it.rem, 0);
+    const over60 = l.filter((it) => it.days > 60).reduce((s, it) => s + it.rem, 0);
+    const oldestDays = Math.max(...l.map((it) => it.days));
+    const step = oldestDays <= 30 ? "Friendly reminder" : oldestDays <= 60 ? "Second request and a call" : oldestDays <= 90 ? "Call about the account" : oldestDays <= 180 ? "Past-due notice" : "Final request";
+    return { customer: p, overdue, over60, oldestDays, step, invoices: l.length, _items: l.slice().sort(byDateNum) };
+  }).sort((a, b) => b.over60 - a.over60 || b.overdue - a.overdue || cmp(a.customer, b.customer));
+  const owed = pos.reduce((s, it) => s + it.rem, 0);
+  const inCredit = creditBalances.reduce((s, c) => s + c._cents, 0);
+  const bucketsClean = zeroBuckets();
+  pos.forEach((it) => { bucketsClean[it.bucket] += it.rem; });
+  const parentOwed = new Map();
+  pos.forEach((it) => parentOwed.set(it.parent, (parentOwed.get(it.parent) || 0) + it.rem));
+  const concentration = [];
+  if (owed > 0) [...parentOwed.keys()].sort(cmp).forEach((p) => { const c = parentOwed.get(p); if (c * 100 >= 20 * owed) concentration.push({ customer: p, share: Math.round(c * 1000 / owed) / 10 }); });
+  const journalEntries = items.filter((it) => it.type === "Journal Entry").length;
+  const owedParents = parentOwed.size;
+  const creditParents = new Set(creditBal.map((c) => c.parent)).size;
+
+  // exceptions
+  if (read.unknown.length) add("UNKNOWN_TYPE", "stop", "Rows with a transaction type I do not know were left out: " + read.unknown.map((u) => "row " + u.row + " (" + esc(u.type || "blank") + ")").join(", ") + ". Tell me what they are or fix the export, then run this again.");
+  if (read.unread.length) add("UNREAD_ROWS", "stop", "Rows whose date I could not read were left out: rows " + read.unread.join(", ") + ". Fix the dates in the export and run this again.");
+  if (dupRows) add("DUPLICATE_ROWS", "stop", dupRows);
+  if (read.reportTotal != null && total !== read.reportTotal) add("TOTAL_MISMATCH", "stop", "The report's own total line, " + money(read.reportTotal) + ", differs from the sum of its lines, " + money(total) + ", by " + money(read.reportTotal - total) + ". The export is incomplete or was edited. Re-export it before relying on anything here.");
+  if (read.reportTotal == null) add("NO_TOTAL_LINE", "info", "The report has no total line, so I could not check that I read every line against the report's own total.");
+  if (asOf == null) add("DATE_UNKNOWN", "care", "The file has no as-of date and none was typed; I used the report's Aging column for days past due.");
+  if (asOf != null) { const fut = items.filter((it) => it.date > asOf); if (fut.length) add("FUTURE_DATED", "care", plural(fut.length, "item is", "items are") + " dated after the as-of date (" + fut.map((f) => esc(f.num || f.type)).join(", ") + "). Check that the report was run as of the right date."); }
+  if (read.basis === "Cash basis") add("CASH_BASIS", "care", "This report is cash basis. A cash-basis aging leaves out unpaid invoices' income; the allowance and the tie to the balance sheet do not apply. Run it on accrual basis for the close.");
+  if (identical) add("IDENTICAL_LINES", "care", identical);
+  if (matches.length || applyOldest.length) add("UNAPPLIED_CREDITS", "care", (matches.length + applyOldest.length) + " unapplied payments or credits sit in receivables next to open invoices. Apply them in the ledger first (see 1. Clean first).");
+  if (creditBalances.length) {
+    const bits = creditBalances.map((c) => esc(c.customer) + " " + money(c._cents) + (c.paidTwice ? " (looks paid twice: invoice " + esc(c.paidTwice) + ")" : "") + (c.maybeFor ? " (maybe meant for " + esc(c.maybeFor) + ")" : "") + (c.otherJobs ? " (has other jobs with open invoices)" : ""));
+    add("CREDIT_BALANCES", "care", plural(creditBalances.length, "customer is", "customers are") + " in credit: " + bits.join("; ") + ". The client owes them; these are not collectible.");
+  }
+  if (duplicates.length) add("DUPLICATE_INVOICES", "care", "Possible invoices entered twice: " + duplicates.map((d) => esc(d.customer) + " " + esc(d.a) + " / " + esc(d.b)).join("; ") + ".");
+  if (old.length) add("OVER_A_YEAR", "care", plural(old.length, "invoice is", "invoices are") + " over a year past due and proposed for write-off; untick any to keep in the allowance instead.");
+  if (small.length) add("SMALL_BALANCES", "info", plural(small.length, "small part-paid balance", "small part-paid balances") + " over 60 days, usually a discount, card fee or sales tax short-paid; proposed for write-off.");
+  if (journalEntries) add("JOURNAL_ENTRIES", "care", plural(journalEntries, "journal entry sits", "journal entries sit") + " in receivables; they are left out of the reminders. Find out what each one is.");
+  if (concentration.length) add("CONCENTRATION", "info", "Concentration: " + concentration.map((c) => esc(c.customer) + " " + c.share + "%").join(", ") + " of what customers owe.");
+
+  const rep = Object.assign(base, { status: "COMPUTED", exceptions: ex }, common, {
+    rows: items.length, total: dollars(total), reportTotal: read.reportTotal == null ? null : dollars(read.reportTotal), customers,
+    buckets: toDollarsBuckets(buckets), bucketsClean: toDollarsBuckets(bucketsClean),
+    matches: matches.map(({ _cents, ...m }) => m), applyOldest: applyOldest.map(({ _cents, ...m }) => m),
+    creditBalances: creditBalances.map(({ _cents, ...m }) => m), mispostings, duplicates,
+    small: small.map((it) => it.num).sort(cmp), old: old.map((it) => it.num).sort(cmp),
+    writeOff: dollars(writeOff), owed: dollars(owed), inCredit: dollars(inCredit),
+    worklist: worklist.map((w) => ({ customer: w.customer, overdue: dollars(w.overdue), over60: dollars(w.over60), oldestDays: w.oldestDays, step: w.step, invoices: w.invoices })),
+    concentration, journalEntries,
+  });
+  if (duplicatesRemoved !== undefined) rep.duplicates_removed = duplicatesRemoved;
+
+  // typed A/R
+  const typedARText = str(opts.typedAR);
+  if (typedARText !== "") {
+    const typed = parseAmount(typedARText);
+    rep.typedAR = dollars(typed); rep.difference = dollars(typed - total);
+    if (typed - total === 0) rep.status = "TIES";
+    else { rep.status = "DIFFERS"; ex.unshift({ code: "DIFFERS_FROM_BALANCE_SHEET", level: "stop", message: "The aging total, " + money(total) + ", does not agree with A/R on the balance sheet, " + money(typed) + ": " + money(Math.abs(typed - total)) + " apart. Find the difference before anything else; the letters are held until it ties." }); }
+  }
+
+  // allowance
+  let allow = null;
+  if (opts.rates) {
+    const byB = {}; let allowance = 0; const rates = {};
+    for (const b of BUCKETS) {
+      const rTxt = str(opts.rates[b]).replace(/%/g, "");
+      const rate = rTxt === "" ? 0 : Number(rTxt) || 0;
+      rates[b] = rate;
+      const bs = pos.filter((it) => it.bucket === b && !woSet.has(it) && it.type !== "Refund").reduce((s, it) => s + it.rem, 0);
+      const scaled = Math.round(rate * 1e6);
+      const num = bs * scaled; // cents * rate * 1e6
+      const amt = num >= 0 ? Math.floor((num + 50000000) / 100000000) : -Math.floor((-num + 50000000) / 100000000);
+      byB[b] = { base: bs, rate, amount: amt }; allowance += amt;
+    }
+    rep.rates = rates; rep.allowance = dollars(allowance);
+    rep.allowanceByBucket = Object.fromEntries(BUCKETS.map((b) => [b, { base: dollars(byB[b].base), rate: byB[b].rate, amount: dollars(byB[b].amount) }]));
+    allow = { allowance, byB, existing: null, adj: null };
+    const exTxt = str(opts.existing);
+    if (exTxt !== "") {
+      const existing = parseAmount(exTxt);
+      const adj = allowance - (existing - writeOff);
+      rep.existingAllowance = dollars(existing); rep.allowanceAdjustment = dollars(adj);
+      allow.existing = existing; allow.adj = adj;
+    }
+  }
+  return { report: rep, read, internal: { items, pos, matches, applyOldest, creditBalances, duplicates, small, old, woSet, keep, worklist, owed, inCredit, total, buckets, bucketsClean, writeOff, owedParents, creditParents, allow, asOf, read } };
+}
+
+/* ---------- page ---------- */
+const state = { rows: null, file: "", asOf: "", keep: {}, typedAR: "", ratesApplied: false, rates: {}, existing: "", held: {}, fields: {} };
+
+function showProblem(msg) { const p = $("#problem"); p.textContent = msg; p.hidden = false; }
+function clearProblem() { const p = $("#problem"); p.textContent = ""; p.hidden = true; }
+
+function gatherInputs() {
+  const v = (id) => { const el = document.getElementById(id); return el ? el.value : null; };
+  if (v("asof") != null) state.asOf = v("asof");
+  if (v("ar") != null) state.typedAR = v("ar");
+  for (const b of BUCKETS) { const x = v("rate-" + b); if (x != null) state.rates[b] = x; }
+  if (v("existing-allowance") != null) state.existing = v("existing-allowance");
+  for (const id of ["f-client", "f-prepared", "f-prepared-on", "f-reviewed", "f-reviewed-on"]) { const x = v(id); if (x != null) state.fields[id] = x; }
+  document.querySelectorAll("input.wo").forEach((el) => { state.keep[el.dataset.num] = !el.checked; });
+  document.querySelectorAll("input.hold").forEach((el) => { state.held[el.dataset.customer] = el.checked; });
+}
+
+function run() {
+  const scroll = window.scrollY;
+  try {
+    const out = review(state.rows, state.file, { asOf: state.asOf, keep: state.keep, typedAR: state.typedAR, rates: state.ratesApplied ? state.rates : null, existing: state.existing });
+    const rep = out.report;
+    if (rep.status === "NOT_RECOGNIZED") {
+      window.__report = rep;
+      $("#report").hidden = true; $("#start").hidden = false;
+      showProblem(rep.exceptions[0].message);
+      return;
+    }
+    window.__report = rep;
+    clearProblem();
+    $("#start").hidden = true;
+    const sec = $("#report");
+    sec.innerHTML = render(rep, out.internal);
+    sec.hidden = false;
+    window.scrollTo(0, scroll);
+  } catch (e) {
+    console.error(e);
+    const message = (e && e.message) || String(e);
+    window.__report = { status: "ERROR", message };
+    $("#report").hidden = true; $("#start").hidden = false;
+    showProblem("Something went wrong reading this file: " + message);
+  }
+}
+
+function inputVal(id, fallback) { return esc(state.fields[id] != null ? state.fields[id] : (fallback || "")); }
+
+function letterFor(w, rep, I) {
+  const its = w._items;
+  const oldest = its.reduce((a, b) => (b.days > a.days ? b : a), its[0]);
+  const d = oldest.days;
+  const open = {
+    "Friendly reminder": `This is a friendly reminder that the invoice below is now ${d} days past due. It may simply have been missed.`,
+    "Second request and a call": `We wrote recently about the account; the oldest invoice is now ${d} days past due. We will also call this week to make sure nothing is holding it up.`,
+    "Call about the account": `The oldest invoice on the account is now ${d} days past due. We would like to speak with you about the account and agree when it will be paid.`,
+    "Past-due notice": `This is a past-due notice. The oldest invoice on the account is now ${d} days past due, and we have not had payment despite earlier reminders.`,
+    "Final request": `This is our final request for payment. The oldest invoice on the account is now ${d} days past due. Please pay the balance below, or contact us within ten days to agree a plan.`,
+  }[w.step];
+  const rows = its.map((it) => `<tr><td>${esc(it.num)}</td><td>${usDay(it.date)}</td><td class="n">${money(it.rem)}</td><td class="n">${it.days}</td></tr>`).join("");
+  const company = rep.company || "[company]";
+  return `<details class="letter"><summary>${esc(w.customer)}: ${esc(w.step)}, ${money(w.overdue)}</summary><div class="letter-body">
+  <p>Dear [contact name], ${esc(w.customer)},</p>
+  <p>${open}</p>
+  <div class="box"><table><thead><tr><th>Invoice</th><th>Date</th><th class="n">Open amount</th><th class="n">Days past due</th></tr></thead><tbody>${rows}
+  <tr class="tot"><td colspan="2">Total</td><td class="n">${money(w.overdue)}</td><td></td></tr></tbody></table></div>
+  <p>Payment details: [how to pay]. If you have already paid, thank you, and please send the payment details so we can apply it.</p>
+  <p>Kind regards,<br>[name]<br>${esc(company)}<br>[phone or email]</p></div></details>`;
+}
+
+function render(rep, I) {
+  const c = (n) => money(Math.round(n * 100));
+  const stops = (rep.exceptions || []).filter((e) => e.level === "stop");
+  const head = `<div class="row noprint" style="justify-content:space-between"><button type="button" class="main" id="print">Print or save as PDF</button><a href="#" id="again">Start over with another file</a></div>
+  <h1>What's really collectible?</h1>
+  <p class="muted">${esc(rep.layout || "")} A/R aging detail${rep.asOf ? ", as of " + esc(rep.asOf) : ""}. File: ${esc(rep.file)}.</p>
+  <div class="fields">
+    <label>Client<input type="text" id="f-client" value="${inputVal("f-client", rep.company)}"></label>
+    <label>Prepared by<input type="text" id="f-prepared" value="${inputVal("f-prepared")}"></label>
+    <label>Prepared on<input type="text" id="f-prepared-on" value="${inputVal("f-prepared-on")}"></label>
+    <label>Reviewed by<input type="text" id="f-reviewed" value="${inputVal("f-reviewed")}"></label>
+    <label>Reviewed on<input type="text" id="f-reviewed-on" value="${inputVal("f-reviewed-on")}"></label>
+  </div>`;
+  const stopBanner = `<div id="stop-banner" role="alert"${stops.length ? "" : " hidden"}>${stops.map((e) => `<p><b>Stop.</b> ${e.message}</p>`).join("")}</div>`;
+  if (rep.status === "NEEDS_DATE") {
+    return head + `<div id="verdict">${esc(rep.company || "This client")}: I need the as-of date before I can review this aging.</div>` + stopBanner +
+      `<p><label for="asof">As-of date of the aging</label><br><span class="row"><input type="text" id="asof" placeholder="10/31/2026" value="${esc(state.asOf)}"><button type="button" id="set-asof">Review it</button></span></p>` + footerHtml();
+  }
+  const company = rep.company || "This client";
+  const worklistTotal = I.worklist.reduce((s, w) => s + w.overdue, 0);
+  const K = I.matches.length + I.applyOldest.length + I.creditBalances.length + I.duplicates.length;
+  let verdict = `${esc(company)}: ${money(I.owed)} owed by ${plural(I.owedParents, "customer", "customers")}` + (I.inCredit ? ` (and ${money(I.inCredit)} owed to ${plural(I.creditParents, "customer", "customers")} in credit)` : "") + `; ${money(worklistTotal)} to chase. ` +
+    (K ? `${plural(K, "item", "items")} to post in the ledger first, then run this again.` : "Nothing to post in the ledger first.");
+  if (rep.status === "DIFFERS") verdict += ` The aging does not agree with the balance sheet: ${c(Math.abs(rep.difference))} apart.`;
+  const arLine = `<p class="row"><label for="ar">A/R on the balance sheet, same date:</label> <input type="text" id="ar" inputmode="decimal" value="${esc(state.typedAR)}"> <button type="button" id="compare">Compare</button>
+    ${rep.status === "TIES" ? "<b>Ties exactly.</b>" : rep.status === "DIFFERS" ? `<b>Differs by ${c(rep.difference)}.</b>` : ""}</p>`;
+  const asofLine = I.asOf == null || (I.read.asOf == null) ? `<p class="row"><label for="asof">As-of date:</label> <input type="text" id="asof" value="${esc(state.asOf)}"> <button type="button" id="set-asof">Set the date</button></p>` : "";
+
+  const agingRows = (lab, o) => `<tr><td>${lab}</td>${BUCKETS.map((b) => `<td class="n">${c(o[b])}</td>`).join("")}<td class="n"><b>${c(BUCKETS.reduce((s, b) => s + Math.round(o[b] * 100), 0) / 100)}</b></td></tr>`;
+  const aging = `<h2>The aging</h2><div class="box"><table><thead><tr><th></th>${BUCKETS.map((b) => `<th class="n">${BUCKET_LABEL[b]}</th>`).join("")}<th class="n">Total</th></tr></thead><tbody>
+    ${agingRows("As reported, re-aged by due date", rep.buckets)}${agingRows("Owed after the clean-up", rep.bucketsClean)}</tbody></table></div>
+    <p>The aging total, ${money(I.total)}, = owed by customers ${money(I.owed)} less owed to customers in credit ${money(I.inCredit)}. Credit balances belong with the liabilities, not netted against receivables.</p>`;
+
+  const cares = rep.exceptions.filter((e) => e.level === "care"), infos = rep.exceptions.filter((e) => e.level === "info");
+  const check = `<h2>Check these first</h2>` + (cares.length + infos.length ? cares.map((e) => `<div class="care"><b>Decide.</b> ${e.message}</div>`).join("") + infos.map((e) => `<div class="info"><b>For your file.</b> ${e.message}</div>`).join("") : "<p>Nothing.</p>");
+
+  let clean = `<h2>1. Clean first</h2>`;
+  clean += `<h3>Credits that match an invoice exactly</h3>` + (I.matches.length ? `<p>Likely; confirm with the remittance.</p><div class="box"><table><thead><tr><th>Customer</th><th>Credit</th><th>Date</th><th>Apply to invoice</th><th>Invoice date</th><th class="n">Amount</th></tr></thead><tbody>${I.matches.map((m) => `<tr><td>${esc(m.customer)}</td><td>${esc(m.creditType)} ${esc(m.credit)}</td><td>${esc(m.creditDate)}</td><td>${esc(m.invoice)}</td><td>${esc(m.invoiceDate)}</td><td class="n">${c(m.amount)}</td></tr>`).join("")}</tbody></table></div>` : "<p>None.</p>");
+  clean += `<h3>Credits applied to the oldest invoices</h3>` + (I.applyOldest.length ? `<p>If the remittance names other invoices, follow the remittance.</p><div class="box"><table><thead><tr><th>Customer</th><th>Credit</th><th>Applied to</th><th class="n">Amount</th></tr></thead><tbody>${I.applyOldest.map((m) => `<tr><td>${esc(m.customer)}</td><td>${esc(m.creditType)} ${esc(m.credit)}</td><td>${m.invoices.map(esc).join(", ")}</td><td class="n">${c(m.amount)}</td></tr>`).join("")}</tbody></table></div>` : "<p>None.</p>");
+  clean += `<h3>Customers the client owes</h3>` + (I.creditBalances.length ? `<div class="box"><table><thead><tr><th>Customer</th><th class="n">Owed to them</th><th>What to do</th></tr></thead><tbody>${I.creditBalances.map((cb) => {
+    const todo = cb.maybeFor ? `Possibly posted to the wrong customer: it matches invoice for ${esc(cb.maybeFor)}. Move it and apply it.` : cb.paidTwice ? `Looks paid twice (invoice ${esc(cb.paidTwice)}). Refund it or confirm with the customer.` : cb.otherJobs ? `The customer has other jobs with open invoices. Confirm which job it belongs to.` : `A deposit or overpayment. Confirm and refund or apply it.`;
+    return `<tr><td>${esc(cb.customer)}</td><td class="n">${c(cb.amount)}</td><td>${todo}</td></tr>`; }).join("")}</tbody></table></div>
+    <p>At the close, reclassify credit balances to a liability (Dr Accounts receivable, Cr Customer credits payable). Never write them off to income: unclaimed credits may be unclaimed property owed to the state.</p>` : "<p>None.</p>");
+  clean += `<h3>Invoices that may have been entered twice</h3>` + (I.duplicates.length ? `<div class="box"><table><thead><tr><th>Customer</th><th>Invoice</th><th>Possible copy</th><th class="n">Amount</th></tr></thead><tbody>${I.duplicates.map((d) => `<tr><td>${esc(d.customer)}</td><td>${esc(d.a)}</td><td>${esc(d.b)}</td><td class="n">${c(d.amount)}</td></tr>`).join("")}</tbody></table></div>
+    <p>If one is a copy, issue a credit memo against it in the current period; do not void it in a closed period.</p>` : "<p>None.</p>");
+
+  const held = rep.status === "DIFFERS";
+  let chase = `<h2>2. Who to chase</h2>` + (I.worklist.length ? `<div class="box"><table><thead><tr><th>Customer</th><th class="n">Overdue</th><th class="n">Over 60 days</th><th class="n">Oldest (days)</th><th class="n">Invoices</th><th>Next step</th><th>Hold letter</th></tr></thead><tbody>${I.worklist.map((w) => `<tr><td>${esc(w.customer)}</td><td class="n">${money(w.overdue)}</td><td class="n">${money(w.over60)}</td><td class="n">${w.oldestDays}</td><td class="n">${w.invoices}</td><td>${esc(w.step)}</td><td><input type="checkbox" class="hold" data-customer="${esc(w.customer)}"${state.held[w.customer] ? " checked" : ""} aria-label="Hold letter"></td></tr>`).join("")}</tbody></table></div>
+    <p class="muted">Hold a letter for a dispute, a bankruptcy (the automatic stay forbids collection), or an agreed payment plan.</p>` : "<p>No one is past due.</p>");
+  if (I.worklist.length) {
+    if (held) chase += `<p><b>Letters are held</b> until the aging agrees with the balance sheet.</p>`;
+    else chase += `<h3>Draft letters</h3>` + I.worklist.filter((w) => !state.held[w.customer]).map((w) => letterFor(w, rep, I)).join("");
+  }
+
+  const A = I.allow;
+  let allowance = `<h2>3. Allowance and write-offs</h2>
+  <p>The rates are your judgment from the client's own collection history; this page does not guess them. Under ASU 2025-05 (years beginning after December 15, 2025), any entity may assume current conditions continue for current receivables, and a private company may also elect to consider collections after the balance sheet date, and must disclose that it did.</p>
+  <div class="rates">${BUCKETS.map((b) => `<label>${BUCKET_LABEL[b]} (%)<input type="text" id="rate-${b}" inputmode="decimal" value="${esc(state.rates[b] || "")}"></label>`).join("")}
+  <label>Existing allowance ($)<input type="text" id="existing-allowance" inputmode="decimal" value="${esc(state.existing)}"></label></div>
+  <p><button type="button" id="apply-rates">Work out the allowance</button></p>`;
+  if (A) {
+    allowance += `<h3>Allowance for credit losses</h3><div class="box"><table><thead><tr><th>Bucket</th><th class="n">Base</th><th class="n">Rate</th><th class="n">Allowance</th></tr></thead><tbody>${BUCKETS.map((b) => `<tr><td>${BUCKET_LABEL[b]}</td><td class="n">${money(A.byB[b].base)}</td><td class="n">${A.byB[b].rate}%</td><td class="n">${money(A.byB[b].amount)}</td></tr>`).join("")}
+      <tr class="tot"><td>Total</td><td></td><td></td><td class="n">${money(A.allowance)}</td></tr></tbody></table></div>
+      <p>Net realizable receivables = owed ${money(I.owed)} less write-off ${money(I.writeOff)} less allowance ${money(A.allowance)} = <b>${money(I.owed - I.writeOff - A.allowance)}</b>.</p>`;
+    if (A.adj != null) allowance += A.adj >= 0 ? `<p>Entry: Dr Bad debt expense ${money(A.adj)} / Cr Allowance for credit losses ${money(A.adj)} (existing allowance ${money(A.existing)} less write-offs ${money(I.writeOff)}).</p>` : `<p>Entry: a release. Dr Allowance for credit losses ${money(-A.adj)} / Cr Bad debt expense ${money(-A.adj)} (existing allowance ${money(A.existing)} less write-offs ${money(I.writeOff)}).</p>`;
+  }
+  const woRows = I.old.map((it) => `<tr><td><input type="checkbox" class="wo" data-num="${esc(it.num)}"${I.keep[it.num] ? "" : " checked"} aria-label="Write off"></td><td>${esc(it.parent)}</td><td>${esc(it.num)}</td><td>${usDay(it.date)}</td><td class="n">${it.days}</td><td class="n">${money(it.rem)}</td><td>Over a year</td></tr>`).join("") +
+    I.small.map((it) => `<tr><td>always</td><td>${esc(it.parent)}</td><td>${esc(it.num)}</td><td>${usDay(it.date)}</td><td class="n">${it.days}</td><td class="n">${money(it.rem)}</td><td>Small part-paid balance</td></tr>`).join("");
+  allowance += `<h3>Proposed write-offs</h3>` + (woRows ? `<div class="box"><table><thead><tr><th>Write off</th><th>Customer</th><th>Invoice</th><th>Date</th><th class="n">Days</th><th class="n">Open</th><th>Why</th></tr></thead><tbody>${woRows}<tr class="tot"><td colspan="5">Total proposed</td><td class="n">${money(I.writeOff)}</td><td></td></tr></tbody></table></div>
+    <p>Record each as one credit memo per invoice with a non-taxable "Bad debt" item, dated in the open period, not a journal entry to A/R, so the invoice closes in the customer's account.</p>` : "<p>None.</p>") +
+    `<p><b>Sales tax:</b> if a written-off invoice included sales tax already remitted, many states let the client recover it on a later return; check the state's bad-debt rule.</p>
+    <p><b>Tax:</b> a bad debt is deductible only if the income was included in income and the debt is shown worthless; age alone is not proof. The allowance itself is not deductible.</p>`;
+
+  const readSec = `<h2>What I read</h2><ul><li>Layout: ${esc(rep.layout)}</li><li>Items: ${rep.rows}</li><li>Customers: ${rep.customers}</li><li>Total of the lines: ${money(I.total)}; the report's own total: ${rep.reportTotal == null ? "none" : c(rep.reportTotal)}</li><li>Basis: ${esc(rep.basis || "not stated")}</li>${rep.duplicates_removed ? `<li>Repeated lines removed: ${rep.duplicates_removed}</li>` : ""}</ul>`;
+
+  return head + `<div id="verdict">${verdict}</div>` + stopBanner + arLine + asofLine + aging + check + clean + chase + allowance + readSec + footerHtml();
+}
+function footerHtml() {
+  return `<footer>Made by "What's Really Collectible?" version 1.0.0, on this computer. The file was read here and not sent anywhere. Arithmetic is done in whole cents. This is a workpaper for review: you propose; the client decides what to apply, write off and send.</footer>`;
+}
+
+/* ---------- loading ---------- */
+function resetState() { Object.assign(state, { rows: null, file: "", asOf: "", keep: {}, typedAR: "", ratesApplied: false, rates: {}, existing: "", held: {}, fields: {} }); }
+function startWith(rows, name) {
+  const arStart = $("#ar-start").value;
+  resetState();
+  state.rows = rows; state.file = name; state.typedAR = arStart || "";
+  run();
+}
+function loadFile(f) {
+  window.__report = undefined;
+  clearProblem();
+  if (!f) return;
+  const name = f.name || "file";
+  const ext = (name.match(/\.([^.]+)$/) || [, ""])[1].toLowerCase();
+  if (ext === "pdf") { showProblem(name + " is a PDF. Export the A/R aging detail to Excel or CSV and drop that."); return; }
+  if (!["xlsx", "xlsm", "xls", "csv", "txt"].includes(ext)) { showProblem(name + " is not a file I can read. Export the A/R aging detail to Excel (.xlsx) or CSV and drop that."); return; }
+  const reader = new FileReader();
+  reader.onerror = () => { window.__report = { status: "ERROR", message: "Could not read the file." }; showProblem("Could not read the file."); };
+  reader.onload = () => {
+    try {
+      if (typeof XLSX === "undefined") throw new Error("The spreadsheet reader (SheetJS) did not load. Check the internet connection and reload the page.");
+      const wb = (ext === "csv" || ext === "txt") ? XLSX.read(reader.result, { type: "string", raw: true }) : XLSX.read(new Uint8Array(reader.result), { type: "array" });
+      let best = null, bestN = -1;
+      for (const n of wb.SheetNames) {
+        const rows = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: null, blankrows: true });
+        if (rows.length > bestN) { best = rows; bestN = rows.length; }
+      }
+      startWith(best || [], name);
+    } catch (e) {
+      const message = (e && e.message) || String(e);
+      window.__report = { status: "ERROR", message };
+      showProblem("Something went wrong reading this file: " + message);
+    }
+  };
+  if (ext === "csv" || ext === "txt") reader.readAsText(f); else reader.readAsArrayBuffer(f);
+}
+
+const SAMPLE = [
+  ["Harbor Light Bakery LLC"], ["A/R Aging Detail Report"], ["As of October 31, 2026"], [],
+  [null, "Date", "Transaction Type", "Num", "Customer", "Due Date", "Amount", "Open Balance"],
+  ["Current"],
+  [null, "10/20/2026", "Invoice", "1108", "Corner Cafe", "11/19/2026", 1250, 1250],
+  [null, "10/25/2026", "Invoice", "1109", "Maple Street Market", "11/24/2026", 3400, 3400],
+  [null, "10/28/2026", "Payment", "", "Maple Street Market", "10/28/2026", -980, -980],
+  ["Total for Current", null, null, null, null, null, null, 3670],
+  ["1 - 30 days past due"],
+  [null, "09/15/2026", "Invoice", "1095", "Corner Cafe", "10/15/2026", 2100, 2100],
+  [null, "09/22/2026", "Invoice", "1098", "Riverside Hotel:Banquets", "10/22/2026", 4800, 4800],
+  [null, "09/25/2026", "Invoice", "1099", "Riverside Hotel:Banquets", "10/25/2026", 4800, 4800],
+  ["Total for 1 - 30 days past due", null, null, null, null, null, null, 11700],
+  ["31 - 60 days past due"],
+  [null, "08/28/2026", "Invoice", "1087", "Maple Street Market", "09/27/2026", 980, 980],
+  [null, "08/30/2026", "Credit Memo", "CM-12", "Green Fork Catering", "08/30/2026", -600, -600],
+  ["Total for 31 - 60 days past due", null, null, null, null, null, null, 380],
+  ["61 - 90 days past due"],
+  [null, "07/10/2026", "Invoice", "1071", "Green Fork Catering", "08/09/2026", 1500, 6.5],
+  ["Total for 61 - 90 days past due", null, null, null, null, null, null, 6.5],
+  ["91 and over"],
+  [null, "06/01/2026", "Invoice", "1052", "Riverside Hotel:Rooms", "07/01/2026", 2600, 2600],
+  [null, "05/02/2025", "Invoice", "0988", "Old Mill Diner", "06/01/2025", 740, 740],
+  ["Total for 91 and over", null, null, null, null, null, null, 3340],
+  ["TOTAL", null, null, null, null, null, null, 19096.5],
+  [], ["Accrual basis  Monday, November 2, 2026"],
+];
+
+$("#file").addEventListener("change", (e) => { const f = e.target.files && e.target.files[0]; loadFile(f); e.target.value = ""; });
+$("#sample").addEventListener("click", () => { window.__report = undefined; clearProblem(); startWith(SAMPLE.map((r) => r.slice()), "made-up-sample.xlsx"); });
+["dragenter", "dragover"].forEach((t) => document.addEventListener(t, (e) => { e.preventDefault(); document.body.classList.add("dragging"); }));
+["dragleave", "drop"].forEach((t) => document.addEventListener(t, (e) => { e.preventDefault(); document.body.classList.remove("dragging"); }));
+document.addEventListener("drop", (e) => { const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) loadFile(f); });
+
+const reportSec = $("#report");
+reportSec.addEventListener("click", (e) => {
+  const t = e.target;
+  if (t.id === "print") { window.print(); return; }
+  if (t.id === "again") { e.preventDefault(); window.__report = undefined; resetState(); reportSec.hidden = true; reportSec.innerHTML = ""; $("#start").hidden = false; clearProblem(); window.scrollTo(0, 0); return; }
+  if (t.id === "compare" || t.id === "set-asof") { gatherInputs(); run(); return; }
+  if (t.id === "apply-rates") { gatherInputs(); state.ratesApplied = true; run(); return; }
+});
+reportSec.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.classList && (t.classList.contains("wo") || t.classList.contains("hold"))) { gatherInputs(); run(); }
+});
+reportSec.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+  const t = e.target;
+  if (t.id === "ar") { e.preventDefault(); gatherInputs(); run(); }
+  else if (t.id === "asof") { e.preventDefault(); gatherInputs(); run(); }
+  else if (t.id && (t.id.startsWith("rate-") || t.id === "existing-allowance")) { e.preventDefault(); gatherInputs(); state.ratesApplied = true; run(); }
+});
+</script>
+</body>
+</html>

@@ -115,4 +115,14 @@ bills were exactly 7 days apart and never reached the rule; the bills are now tw
 
 ## Rebuild from the prompt
 
-See the bottom of this file once the rebuild check has run.
+A fresh AI session was given only `REBUILD-PROMPT.md` (and allowed to read `run-tests.js` to see
+how the test drives the page). It was not allowed to open the original build, the case generator or
+the answer key. Its build, in `rebuild-check/rebuild-1/`, passed on the **first run: 17 of 17 cases,
+2,066 of 2,066 checks**. No fixes were needed.
+
+It listed 14 places where the prompt was silent and it had to choose (in
+`rebuild-check/rebuild-1/NOTES.md`). None changed an answer in the tests. Where its choice could
+differ from the original's in a future case, the prompt now says what the original does: the
+recurring-billing exception covers both duplicate tests, the total line is read from column A, the
+file's as-of date wins over a typed one, the order of the two identical-line warnings, how the
+verdict counts items to post, and when the allowance is worked out.

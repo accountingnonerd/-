@@ -32,14 +32,14 @@ Scan the first 20 rows; lower-case and trim each cell. The first row that matche
 3. it has `invoice number`, `due date` and `total` → Xero ("xero");
 4. it has a cell exactly `current`, `1 - 30`, `1-30`, `31 - 60`, `older`, `91 and over` or `> 90`, and `total`, and neither `num` nor `invoice number` → a summary.
 Title lines are the rows above the heading row (or the first 12 rows if none), each row's non-empty cells joined by spaces.
-- If the title lines match `a/p aging|accounts payable|aged payables|payables` (any case), or the heading row has `vendor` or `supplier`: status NOT_RECOGNIZED with exception `NOT_RECOGNIZED` (stop): "This is an accounts payable aging: what the client owes. I need the accounts receivable aging ...".
+- If the title lines match `a/p aging|accounts payable|aged payables|payables` (any case), or a heading cell is exactly `vendor` or `supplier`: status NOT_RECOGNIZED with exception `NOT_RECOGNIZED` (stop): "This is an accounts payable aging: what the client owes. I need the accounts receivable aging ...".
 - Else if it is a summary, or the titles say `aging summary` or `aged receivables summary` and no layout was found: status NOT_RECOGNIZED with exception `SUMMARY_ONLY` (stop): "This is the A/R aging summary ... I need the A/R aging detail ...".
 - Else if no layout: status NOT_RECOGNIZED with exception `NOT_RECOGNIZED` (stop).
 
 ### Rows
 Map each heading text to its first column. For each row below the heading row:
 - Skip blank rows. Once the grand total has been read, every later row is footer text (keep it for the basis).
-- First cell exactly `total` (any case): the grand total; its amount is in the `total` column (Xero) or `open balance` column (QuickBooks). A first cell starting with `total` followed by more words is a subtotal: skip it.
+- The first cell (column A) exactly `total` (any case): the grand total; its amount is in the `total` column (Xero) or `open balance` column (QuickBooks). A first cell starting with `total` followed by more words is a subtotal: skip it.
 - The date is in `invoice date` (Xero) or `date` (QuickBooks). If it does not parse: in Xero, a row whose only non-empty cell is the first one is a contact heading (remember it as the current customer); otherwise, if the row has other content and a non-empty date cell, record it as unread (row number); otherwise it is a section heading such as "Current" or "1 - 30 days past due". Skip it either way.
 - Xero item: customer = the current contact; num = `invoice number`; due = `due date`; open = amount = `total`. Type: if open < 0, "Payment" if `reference` contains `overpayment` or `prepayment`, else "Credit Memo"; if open >= 0, "Journal Entry" if `reference` contains `journal`, else "Invoice".
 - QuickBooks item: customer = `customer` (QBO) or `name` (Desktop), falling back to the other; num = `num`; due = `due date`; open = `open balance`; amount = `amount` if that column exists, else open. Type from `transaction type` or `type`, lower-cased: contains `credit` → "Credit Memo"; else `payment` or `deposit` → "Payment"; else `journal` → "Journal Entry"; else `check` or `refund` → "Refund"; else `invoice`, `statement charge`, `charge` or `finance` → "Invoice"; anything else → record as unknown (row number and type) and leave the row out. If there is an `aging` column, keep its number (blank = 0).
@@ -51,6 +51,7 @@ Map each heading text to its first column. For each row below the heading row:
 ## Part 2. The review: review(rows, fileName, {asOf, keep})
 - If the file has no as-of date, no typed as-of date, and no Aging column: status `NEEDS_DATE`, exception `DATE_REQUIRED` (stop). Show (in the report section) a #verdict, a #stop-banner with the message, an input `id="asof"` and a button `id="set-asof"` "Review it". When she types a date and presses it, run the review again with that date.
 - Identical lines: items with the same signature as an earlier item are extra copies. If the report has a total line and (sum of all items' open - sum of the extra copies' open) equals it exactly, remove the copies, set `duplicates_removed` = the number removed, and raise `DUPLICATE_ROWS` (stop). Otherwise keep them and raise `IDENTICAL_LINES` (care), listing them ("two real payments on the same day look like this").
+- If the file has an as-of date, it wins over a typed one.
 - days past due = as-of day - due day; with no as-of date, the Aging column's value. Buckets: days <= 0 current; 1-30 d1_30; 31-60 d31_60; 61-90 d61_90; 91-180 d91_180; 181-365 d181_365; over 365 over365.
 - total = sum of open of all items (after any removed copies). customers = number of distinct parents. buckets = sum of open by bucket of every item ("as reported, re-aged by due date").
 
@@ -66,7 +67,7 @@ After all jobs: pos = items with rem > 0. For each credit balance (cents C, pare
 creditBalances = `[{customer, amount, paidTwice, otherJobs, maybeFor}]`.
 
 ### Duplicates, job by job
-Invoices of the job with open > 0, sorted by date then num. For every pair (x earlier, y later): a duplicate if (x.num == y.num, or x.amount == y.amount and x.amount >= 100 cents and |y.date - x.date| < 7 days), unless the job has 3 or more such invoices with x's amount (recurring billing). Record `{customer: job, a: x.num, b: y.num, amount}`; y is a "later copy".
+Invoices of the job with open > 0, sorted by date then num. For every pair (x earlier, y later): a duplicate if (x.num == y.num, or x.amount == y.amount and x.amount >= 100 cents and |y.date - x.date| < 7 days), unless the job has 3 or more such invoices with x's amount (recurring billing; this exception applies to both tests). Two blank numbers count as the same number. Record `{customer: job, a: x.num, b: y.num, amount}`; y is a "later copy".
 
 ### Write-offs, worklist, concentration
 - small = items in pos of type Invoice with rem < 1000 cents, open < amount (part-paid) and days > 60.
@@ -79,6 +80,7 @@ Invoices of the job with open > 0, sorted by date then num. For every pair (x ea
 - journalEntries = the number of items of type Journal Entry.
 
 ### Exceptions `{code, level, message}`, in this order, only when they apply
+- `DUPLICATE_ROWS` or `IDENTICAL_LINES` first, as above, then:
 - `UNKNOWN_TYPE` stop: rows with a transaction type it does not know, left out.
 - `UNREAD_ROWS` stop: rows whose date could not be read, left out.
 - `TOTAL_MISMATCH` stop: the report's total line differs from the sum of its lines (after removed copies).
@@ -99,7 +101,7 @@ Status `COMPUTED`.
 If she typed A/R (on the start screen in #ar-start, or later in `input#ar` and `button#compare`, Enter also works): typedAR = typed, difference = typed - total. Zero → status `TIES`. Otherwise status `DIFFERS` and add `DIFFERS_FROM_BALANCE_SHEET` (stop) at the front of the exceptions; letters are held. Blank → back to COMPUTED.
 
 ### Allowance: rates by bucket
-Inputs `input#rate-current`, `#rate-d1_30`, `#rate-d31_60`, `#rate-d61_90`, `#rate-d91_180`, `#rate-d181_365`, `#rate-over365` (percent; blank = 0), optional `input#existing-allowance` (dollars), and `button#apply-rates`. For each bucket: base = sum of rem of items in pos in that bucket, not in the write-off, not of type Refund; amount = round-half-up(base * rate / 100) cents. allowance = sum of the bucket amounts; allowanceByBucket = `{bucket: {base, rate, amount}}`. If existing allowance was typed: allowanceAdjustment = allowance - (existing - writeOff) (positive: Dr Bad debt expense / Cr Allowance; negative: a release).
+Inputs `input#rate-current`, `#rate-d1_30`, `#rate-d31_60`, `#rate-d61_90`, `#rate-d91_180`, `#rate-d181_365`, `#rate-over365` (percent; blank = 0), optional `input#existing-allowance` (dollars), and `button#apply-rates`. For each bucket: base = sum of rem of items in pos in that bucket, not in the write-off, not of type Refund; amount = Math.round(base * rate / 100) cents. The allowance is worked out only once she has pressed #apply-rates. allowance = sum of the bucket amounts; allowanceByBucket = `{bucket: {base, rate, amount}}`. If existing allowance was typed: allowanceAdjustment = allowance - (existing - writeOff) (positive: Dr Bad debt expense / Cr Allowance; negative: a release).
 
 Every time she types something and presses a button (or ticks a box), run the whole review again from the file with everything she has typed so far (as-of date, kept invoices, typed A/R, rates, existing allowance, held letters), re-render, and keep the scroll position and what she typed.
 
@@ -108,7 +110,7 @@ version "1.0.0", file, status, exceptions, layout (readable name), company, asOf
 
 ## The workpaper
 - Heading "What's really collectible?", layout, as-of date, file name; fields Client (pre-filled with the company), Prepared by, Prepared on, Reviewed by, Reviewed on.
-- `<div id="verdict">`: "[Company]: $X owed by N customers (and $Y owed to M customers in credit); $Z to chase." where N counts customers with something owed, M the customers in credit, Z the worklist total; then "K items to post in the ledger first, then run this again." or "Nothing to post in the ledger first." When DIFFERS: "The aging does not agree with the balance sheet: $D apart."
+- `<div id="verdict">`: "[Company]: $X owed by N customers (and $Y owed to M customers in credit); $Z to chase." where N counts customers with something owed, M the customers in credit, Z the worklist total; then "K items to post in the ledger first, then run this again." (K = exact matches + applyOldest entries + credit balances + duplicate pairs + journal entries) or "Nothing to post in the ledger first." When DIFFERS: "The aging does not agree with the balance sheet: $D apart."
 - `<div id="stop-banner">` listing every stop exception, each starting "Stop."; hidden (the `hidden` attribute) when there are none.
 - The typed A/R line (#ar, #compare, "Ties exactly." or "Differs by $D."), and when there is no as-of date, #asof and #set-asof "Set the date".
 - The aging table: "As reported, re-aged by due date" and "Owed after the clean-up", seven buckets and a total; under it "The aging total, $T, = owed by customers $O less owed to customers in credit $C", and that credit balances belong with the liabilities, not netted against receivables.

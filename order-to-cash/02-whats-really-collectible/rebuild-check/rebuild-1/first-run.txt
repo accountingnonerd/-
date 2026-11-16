@@ -1,0 +1,21 @@
+Testing: /home/user/one-painful-problem/order-to-cash/02-whats-really-collectible/rebuild-check/rebuild-1/whats-really-collectible.html
+
+PASS  01  QuickBooks Online, a clean book  (154/154 checks, 132 ms)
+PASS  02  QuickBooks Online, A/R from the balance sheet typed in: it ties  (155/155 checks, 161 ms)
+PASS  03  Planted: unapplied payments, a credit memo, a customer who paid twice  (160/160 checks, 91 ms)
+PASS  04  Planted: the same invoice entered twice; a twice-weekly flat bill that is not a duplicate  (163/163 checks, 101 ms)
+PASS  05  Planted: the balance sheet's A/R is $3,150.00 more than the aging  (156/156 checks, 156 ms)
+PASS  06  Xero: a credit note and an overpayment  (111/111 checks, 89 ms)
+PASS  07  QuickBooks Desktop: no as-of date, days from the Aging column; a credit memo refunded by check  (152/152 checks, 82 ms)
+PASS  08  Invoices over a year old, small leftover balances; allowance rates and the allowance on the books  (166/166 checks, 222 ms)
+PASS  09  QuickBooks Online as CSV: dollar signs, parentheses, jobs under customers  (95/95 checks, 69 ms)
+PASS  10  The wrong report: A/P aging detail  (4/4 checks, 62 ms)
+PASS  11  The summary report, with no invoices in it  (4/4 checks, 57 ms)
+PASS  12  Planted: the report's total line does not agree with its lines  (167/167 checks, 92 ms)
+PASS  13  Planted: three lines pasted in twice  (160/160 checks, 95 ms)
+PASS  14  Allowance rates typed in; a journal entry in A/R; one customer holds a large share  (89/89 checks, 190 ms)
+PASS  15  Two real payments of $500 on the same day, no number: identical lines, both kept  (112/112 checks, 88 ms)
+PASS  16  No as-of date in the file: the page asks for it, then reviews  (102/102 checks, 175 ms)
+PASS  17  Planted: one check for two invoices; a payment posted to the wrong customer  (116/116 checks, 99 ms)
+
+17/17 cases passed, 2066/2066 checks.
