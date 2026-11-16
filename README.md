@@ -21,7 +21,7 @@ Every tool in this repository:
 | 1 | [Procure-to-Pay](procure-to-pay/) | 01 | [Who gets a 1099?](procure-to-pay/01-who-gets-a-1099/) | Reads a client's year of payments and produces the 1099 worksheet: who to file, whose W-9 to check, and why, including vendors the software's 1099 report misses because nobody flagged them. | 2026-11-11 | 1.1.0 |
 | 2 | [Hire-to-Retire (payroll)](hire-to-retire/) | 01 | [Do the 941s match the W-3?](hire-to-retire/01-do-the-941s-match-the-w3/) | Reads the filed 941s and W-3 (PDFs) and produces the reconciliation the IRS says to keep, with every difference explained or flagged, including the W-3 that leaves out a previous provider's quarters. | 2026-11-12 | 1.0.0 |
 | 3 | [Record-to-Report (close)](record-to-report/) | 01 | [Did last year change?](record-to-report/01-did-last-year-change/) | Compares last year's final trial balance from your file with the client's books today, for the same date: what changed, whether last year's profit or an earlier year changed, which of your adjustments were never posted, and the entry that puts the opening balances back. | 2026-11-13 | 1.0.0 |
-| 4 | [Order-to-Cash](order-to-cash/) | 02 | [What's really collectible?](order-to-cash/02-whats-really-collectible/) | Reads a client's A/R aging detail and produces the receivables review: payments and credits never applied, customers the client owes, duplicates and mis-postings to clean first; who to chase, ranked, with a draft letter each; the allowance from your loss rates, the write-offs and the entry. | awaiting approval | 1.0.0 |
+| 4 | [Order-to-Cash](order-to-cash/) | 02 | [What's really collectible?](order-to-cash/02-whats-really-collectible/) | Reads a client's A/R aging detail and produces the receivables review: payments and credits never applied, customers the client owes, duplicates and mis-postings to clean first; who to chase, ranked, with a draft letter each; the allowance from your loss rates, the write-offs and the entry. | 2026-11-16 | 1.0.0 |
 | 5 | Acquire-to-Retire (fixed assets) | | next | | | |
 
 ## Parked tools
@@ -39,6 +39,7 @@ Each release is recorded by its commit:
 | Episode | Version | Commit |
 |---|---|---|
 | Record-to-Report 01, Did last year change? | 1.0.0 | `56f31c977a7c288989d9ac18d69bd822335be03a` |
+| Order-to-Cash 02, What's really collectible? | 1.0.0 | `79f2bc17f10628e1640a0d771d34e4f021f20b14` |
 | Hire-to-Retire 01, Do the 941s match the W-3? | 1.0.0 | `92f777018c6e9c4627ab063f56aa2f4ce4e9a15f` |
 | Procure-to-Pay 01, Who gets a 1099? | 1.1.0 | `a2f00b20007b931f654214c2783b4f2662e7406f` |
 | Procure-to-Pay 01, Who gets a 1099? | 1.0.0 (before the series structure) | `e9c23172b253bc0f8c1a76bcf97f2d6d1040dfb2` |

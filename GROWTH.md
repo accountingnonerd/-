@@ -65,4 +65,4 @@ reposts and followers gained are read from LinkedIn's post analytics and recorde
 | S1 A1, Who gets a 1099? | 2026-11-11 | text + 14-page PDF | | | | | baseline |
 | S1 A2, The payroll letter | 2026-11-12 | text + 13-page PDF | | | | | baseline |
 | S1 A3, The year that won't stay closed | 2026-11-13 | text + 14-page PDF | | | | | baseline |
-| S1 A4, $20,858 of "overdue" wasn't owed | (pending approval) | text + 12-slide carousel; link in first comment | | | | | first post under this plan |
+| S1 A4, $20,858 of "overdue" wasn't owed | 2026-11-16 (Mon, 1:36 pm ET, published at once; [post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7528164032999194625)) | text + 12-slide carousel; link in first comment | | | | | first post under this plan |

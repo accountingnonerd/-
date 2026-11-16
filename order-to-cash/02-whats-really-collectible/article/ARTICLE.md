@@ -1,5 +1,5 @@
 <!--
-DRAFT FOR APPROVAL. Not published.
+Post published on LinkedIn 2026-11-16 via Typefully. Newsletter edition: to be published by the account owner.
 Series: One Painful Problem, Series 1, Agent 4 (Order-to-Cash).
 For the LinkedIn newsletter edition and the repository. Images are slides from the carousel (carousel/slides/).
 -->
