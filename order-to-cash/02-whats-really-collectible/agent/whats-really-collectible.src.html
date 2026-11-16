@@ -61,6 +61,7 @@ ul.first li.info{border-color:var(--rule);background:#f6f8f7}
 ul.first li .tag{font-weight:700}
 .ok{padding:12px 18px;border-left:8px solid var(--ledger);background:var(--ledger-tint)}
 .scroll{overflow-x:auto}
+.scroll table{min-width:640px}
 table{border-collapse:collapse;width:100%;font-size:1rem}
 th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
 th{font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);border-bottom:2px solid var(--ink)}
@@ -116,7 +117,7 @@ details.big>summary{cursor:pointer;font-size:1.1rem;padding:10px 0;color:var(--l
   <p class="how">No file handy? <button class="linkish" id="sample" type="button">See it work on a made-up sample.</button></p>
   <div class="promise">
     <p><b>Where your data goes: nowhere.</b> This page reads the file on this computer. Nothing is uploaded, stored or sent.</p>
-    <p><b>You stay in charge.</b> Applying credits, writing off, the allowance rates and every letter are yours to decide and send.</p>
+    <p><b>You propose; the client decides.</b> Applying credits, writing off and sending letters are the client's decisions; the allowance rates are your judgment.</p>
   </div>
   <p class="made">Version 1.0.0.</p>
 </section>
@@ -202,7 +203,7 @@ function readAging(rows){
   var c = {}; head.forEach(function(x, i){ if (x && c[x] === undefined) c[x] = i; });
   var g = function(row, name){ return c[name] === undefined ? null : row[c[name]]; };
   var asOf = findAsOf(titles);
-  var items = [], unread = [], dupes = 0, seen = {}, total = null, contact = "", footer = [];
+  var items = [], unread = [], unknown = [], seen = {}, total = null, contact = "", footer = [];
   for (r = hr + 1; r < rows.length; r++) {
     var row = rows[r] || [], cells = row.map(txt);
     if (!cells.some(Boolean)) continue;
@@ -217,27 +218,30 @@ function readAging(rows){
       else if (cells.slice(1).some(Boolean) && txt(dateCell)) unread.push({ row: r + 1, label: first || txt(dateCell) });
       continue;   // a section heading such as "Current" or "1 - 30 days past due"
     }
-    var sig = cells.join("\u0001") + (layout === "xero" ? "\u0001" + contact : "");
-    if (seen[sig]) { dupes++; continue; } seen[sig] = 1;
     var it = { row: r + 1, date: d };
+    it.sig = cells.join("\u0001") + "\u0001" + contact;
     if (layout === "xero") {
       it.customer = contact; it.num = txt(g(row, "invoice number")); it.due = parseDay(g(row, "due date"));
       it.open = amt(g(row, "total")); it.amount = it.open;
       var ref = txt(g(row, "reference")).toLowerCase();
-      it.type = /credit note/.test(ref) ? "Credit Memo" : /overpayment|prepayment|payment/.test(ref) ? "Payment" : /journal/.test(ref) ? "Journal Entry" : it.open < 0 ? "Credit Memo" : "Invoice";
+      it.type = it.open < 0 ? (/overpayment|prepayment/.test(ref) ? "Payment" : "Credit Memo") : (/journal/.test(ref) ? "Journal Entry" : "Invoice");
     } else {
       it.customer = txt(layout === "qbo" ? (g(row, "customer") || g(row, "name")) : (g(row, "name") || g(row, "customer")));
       it.num = txt(g(row, "num")); it.due = parseDay(g(row, "due date"));
       it.open = amt(g(row, "open balance")); it.amount = c["amount"] !== undefined ? amt(g(row, "amount")) : it.open;
       var t = txt(g(row, "transaction type") || g(row, "type")).toLowerCase();
-      it.type = /credit/.test(t) ? "Credit Memo" : /payment|deposit/.test(t) ? "Payment" : /journal/.test(t) ? "Journal Entry" : /invoice|statement charge|charge/.test(t) ? "Invoice" : (it.open < 0 ? "Credit Memo" : "Invoice");
+      it.type = /credit/.test(t) ? "Credit Memo" : /payment|deposit/.test(t) ? "Payment" : /journal/.test(t) ? "Journal Entry" : /check|refund/.test(t) ? "Refund" :
+        /invoice|statement charge|charge|finance/.test(t) ? "Invoice" : null;
+      if (!it.type) { unknown.push({ row: r + 1, type: txt(g(row, "transaction type") || g(row, "type")) }); continue; }
       if (c["aging"] !== undefined) it.aging = txt(g(row, "aging")) ? Math.round(+txt(g(row, "aging"))) : 0;
     }
-    it.parent = it.customer.split(":")[0].trim();
+    it.job = it.customer.trim(); it.parent = it.customer.split(":")[0].trim();
     if (it.due == null) it.due = it.date;
     items.push(it);
   }
-  return { layout: layout, asOf: asOf, items: items, unread: unread, duplicates: dupes, total: total, titles: titles, company: titles.filter(function(l){ return l && !/aging|aged|as (of|at)|ageing|basis/i.test(l); })[0] || "" };
+  var basis = (titleText + " " + footer.join(" ")).match(/\b(cash|accrual) basis\b/i);
+  return { layout: layout, asOf: asOf, hasAging: c["aging"] !== undefined, items: items, unread: unread, unknown: unknown, total: total, titles: titles,
+    basis: basis ? basis[1].toLowerCase() : null, company: titles.filter(function(l){ return l && !/aging|aged|as (of|at)|ageing|basis/i.test(l); })[0] || "" };
 }
 
 /* =====================================================================================
@@ -247,70 +251,101 @@ function money(c){ var s = Math.abs(c), d = Math.floor(s / 100), r = String(s % 
 function dollars(c){ return Math.round(c) / 100; }
 function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
 function bucketOf(d){ return d <= 0 ? "current" : d <= 30 ? "d1_30" : d <= 60 ? "d31_60" : d <= 90 ? "d61_90" : d <= 180 ? "d91_180" : d <= 365 ? "d181_365" : "over365"; }
-function stepFor(d){ return d <= 30 ? "Friendly reminder" : d <= 60 ? "Second reminder and a call" : d <= 90 ? "Call; hold new orders" : d <= 180 ? "Final notice" : d <= 365 ? "Collection agency or payment plan" : "Consider writing off"; }
+function stepFor(d){ return d <= 30 ? "Friendly reminder" : d <= 60 ? "Second request and a call" : d <= 90 ? "Call about the account" : d <= 180 ? "Past-due notice" : "Final request"; }
 function byDateNum(a, b){ return a.date - b.date || (a.num < b.num ? -1 : a.num > b.num ? 1 : 0); }
 
-function review(rows, fileName){
+function review(rows, fileName, opts){
+  opts = opts || {};
   var rep = { version: "1.0.0", file: fileName, status: null, exceptions: [] };
   function ex(code, level, message, extra){ var e = { code: code, level: level, message: message }; if (extra) for (var k in extra) e[k] = extra[k]; rep.exceptions.push(e); }
   var A = readAging(rows);
   if (A.notAR) { rep.status = "NOT_RECOGNIZED"; ex(A.notAR, "stop", A.message); return rep; }
-  var items = A.items;
   rep.layout = { qbo: "QuickBooks Online A/R Aging Detail", desktop: "QuickBooks Desktop A/R Aging Detail", xero: "Xero Aged Receivables Detail" }[A.layout];
-  rep.company = A.company; rep.asOf = A.asOf != null ? isoOf(A.asOf) : null;
-  items.forEach(function(it){ it.days = A.asOf != null ? A.asOf - it.due : (it.aging != null ? it.aging : 0); it.rem = it.open; });
+  rep.company = A.company;
+  var asOf = A.asOf != null ? A.asOf : (opts.asOf != null ? opts.asOf : null);
+  if (asOf == null && !A.hasAging) {
+    rep.status = "NEEDS_DATE"; rep._needsDate = true;
+    ex("DATE_REQUIRED", "stop", "The file does not say what date the aging is as of, and has no Aging column, so I cannot tell what is overdue. Type the as-of date from the report (usually the month end) below.");
+    return rep;
+  }
+  // identical lines: removed only when the report's own total proves they were pasted in twice
+  var items = A.items, counts = {}, extras = [];
+  items.forEach(function(i){ counts[i.sig] = (counts[i.sig] || 0) + 1; if (counts[i.sig] > 1) extras.push(i); });
   var sum = function(list, f){ return list.reduce(function(s, x){ return s + f(x); }, 0); };
+  if (extras.length) {
+    var all = sum(items, function(i){ return i.open; }), ex_ = sum(extras, function(i){ return i.open; });
+    if (A.total != null && all - ex_ === A.total) {
+      items = items.filter(function(i){ return extras.indexOf(i) < 0; });
+      rep.duplicates_removed = extras.length;
+      ex("DUPLICATE_ROWS", "stop", plural(extras.length, "line") + " appear twice, exactly the same, and the report's own total does not include the copies: part of the report was pasted in twice. I counted each line once.");
+    } else ex("IDENTICAL_LINES", "care", plural(extras.length, "line") + " are exactly the same as another line (" + extras.map(function(i){ return i.type + (i.num ? " " + i.num : "") + ", " + i.parent + ", " + money(i.open); }).join("; ") + "). The report's total includes them, so I kept them: two real payments on the same day look like this. Check them against the deposits.");
+  }
+  rep.layoutKey = A.layout; rep.asOf = asOf != null ? isoOf(asOf) : null; rep.basis = A.basis;
+  items.forEach(function(it){ it.days = asOf != null ? asOf - it.due : (it.aging != null ? it.aging : 0); it.rem = it.open; });
   var total = sum(items, function(i){ return i.open; });
-  rep.rows = items.length; rep.total = dollars(total);
-  rep.reportTotal = A.total != null ? dollars(A.total) : null;
-  var custs = []; items.forEach(function(i){ if (custs.indexOf(i.parent) < 0) custs.push(i.parent); }); custs.sort();
-  rep.customers = custs.length;
+  rep.rows = items.length; rep.total = dollars(total); rep.reportTotal = A.total != null ? dollars(A.total) : null;
+  var jobs = [], parents = [];
+  items.forEach(function(i){ if (jobs.indexOf(i.job) < 0) jobs.push(i.job); if (parents.indexOf(i.parent) < 0) parents.push(i.parent); });
+  jobs.sort(); parents.sort();
+  rep.customers = parents.length;
   rep.buckets = {}; BUCKETS.forEach(function(b){ rep.buckets[b] = dollars(sum(items.filter(function(i){ return bucketOf(i.days) === b; }), function(i){ return i.open; })); });
 
-  // ---- clean-up, customer by customer
-  var matches = [], creditBal = [], applyOldest = [];
-  custs.forEach(function(c){
-    var mine = items.filter(function(i){ return i.parent === c; });
-    var credits = mine.filter(function(i){ return i.open < 0; }).sort(byDateNum), invs = mine.filter(function(i){ return i.open > 0; }).sort(byDateNum);
+  // ---- clean-up, job by job
+  var matches = [], applyOldest = [], creditBal = [];
+  jobs.forEach(function(j){
+    var mine = items.filter(function(i){ return i.job === j; });
+    var credits = mine.filter(function(i){ return i.open < 0; }).sort(byDateNum);
+    var tg = mine.filter(function(i){ return i.open > 0 && (i.type === "Invoice" || i.type === "Refund"); }).sort(byDateNum);
     credits.forEach(function(cr){
-      var hit = invs.filter(function(v){ return v.rem === -cr.rem && v.rem === v.open; })[0];
+      var hit = tg.filter(function(v){ return v.rem === -cr.rem && v.rem === v.open; })[0];
       if (!hit) return;
-      matches.push({ customer: c, credit: cr.num || cr.type, creditType: cr.type, creditDate: isoOf(cr.date), invoice: hit.num, invoiceDate: isoOf(hit.date), amount: dollars(hit.open) });
+      matches.push({ customer: j, credit: cr.num || cr.type, creditType: cr.type, creditDate: isoOf(cr.date), invoice: hit.num, invoiceDate: isoOf(hit.date), amount: dollars(hit.open) });
       hit.rem = 0; cr.rem = 0;
     });
-    var net = sum(mine, function(i){ return i.rem; }), left = credits.filter(function(cr){ return cr.rem < 0; });
-    if (net <= 0 && (left.length || net < 0)) {
-      if (net < 0) creditBal.push({ customer: c, amount: dollars(-net) });
-      mine.forEach(function(i){ i.rem = 0; });
-      return;
-    }
-    left.forEach(function(cr){
-      var a = -cr.rem, applied = [];
-      invs.forEach(function(v){ if (!a || !v.rem) return; var t = Math.min(a, v.rem); v.rem -= t; a -= t; applied.push(v.num); });
-      applyOldest.push({ customer: c, credit: cr.num || cr.type, creditType: cr.type, amount: dollars(-cr.rem), invoices: applied });
-      cr.rem = 0;
+    credits.forEach(function(cr){
+      if (!cr.rem) return;
+      var a = -cr.rem, used = [];
+      tg.forEach(function(v){ if (!a) return; var t = Math.min(a, v.rem); if (t) { v.rem -= t; a -= t; used.push(v.num); } });
+      if (used.length) applyOldest.push({ customer: j, credit: cr.num || cr.type, creditType: cr.type, amount: dollars(-cr.rem - a), invoices: used });
+      cr.rem = -a;
     });
+    var left = -sum(credits, function(cr){ return cr.rem; });
+    if (left) creditBal.push({ customer: j, amount: dollars(left), _cents: left });
   });
   var pos = items.filter(function(i){ return i.rem > 0; });
-  var small = pos.filter(function(i){ return i.type === "Invoice" && i.rem < 1000; });
-  var old = pos.filter(function(i){ return i.type === "Invoice" && i.days > 365 && small.indexOf(i) < 0; });
-  var wo = small.concat(old);
-  var dups = [];
-  custs.forEach(function(c){
-    var iv = items.filter(function(i){ return i.parent === c && i.type === "Invoice" && i.open > 0; }).sort(byDateNum);
+  var misp = [];
+  creditBal.forEach(function(cb){
+    var par = cb.customer.split(":")[0].trim();
+    var hits = pos.filter(function(i){ return i.parent !== par && i.type === "Invoice" && i.rem === cb._cents && i.open === cb._cents; });
+    if (hits.length === 1) { misp.push({ customer: cb.customer, maybeFor: hits[0].job, invoice: hits[0].num }); cb.maybeFor = hits[0].job; cb.maybeInvoice = hits[0].num; }
+    var twice = matches.filter(function(m){ return m.customer === cb.customer && Math.round(m.amount * 100) === cb._cents; })[0];
+    cb.paidTwice = twice ? twice.invoice : null;
+    cb.otherJobs = pos.some(function(i){ return i.parent === par && i.job !== cb.customer; });
+  });
+  // duplicates, job by job
+  var dups = [], second = [];
+  jobs.forEach(function(j){
+    var iv = items.filter(function(i){ return i.job === j && i.type === "Invoice" && i.open > 0; }).sort(byDateNum);
     for (var a = 0; a < iv.length; a++) for (var b = a + 1; b < iv.length; b++) {
       var x = iv[a], y = iv[b];
-      if (x.amount === y.amount && x.amount >= 100 && Math.abs(y.date - x.date) <= 7 && x.num !== y.num) dups.push({ customer: c, a: x.num, b: y.num, amount: dollars(x.amount) });
+      var recurring = iv.filter(function(z){ return z.amount === x.amount; }).length >= 3;
+      if ((x.num === y.num || (x.amount === y.amount && x.amount >= 100 && Math.abs(y.date - x.date) < 7)) && !recurring) { dups.push({ customer: j, a: x.num, b: y.num, amount: dollars(x.amount) }); second.push(y); }
     }
   });
-  rep.matches = matches; rep.creditBalances = creditBal; rep.applyOldest = applyOldest; rep.duplicates = dups;
+  var small = pos.filter(function(i){ return i.type === "Invoice" && i.rem < 1000 && i.open < i.amount && i.days > 60; });
+  var old = pos.filter(function(i){ return i.type === "Invoice" && i.days > 365 && small.indexOf(i) < 0; });
+  var keepOld = opts.keep || {};
+  var wo = small.concat(old.filter(function(i){ return !keepOld[i.num]; }));
+  var chased = pos.filter(function(i){ return i.type === "Invoice" && i.days > 0 && wo.indexOf(i) < 0 && second.indexOf(i) < 0; });
+  rep.matches = matches; rep.applyOldest = applyOldest; rep.duplicates = dups; rep.mispostings = misp;
+  rep.creditBalances = creditBal.map(function(cb){ return { customer: cb.customer, amount: cb.amount, paidTwice: cb.paidTwice, otherJobs: cb.otherJobs, maybeFor: cb.maybeFor || null }; });
   rep.small = small.map(function(i){ return i.num; }).sort(); rep.old = old.map(function(i){ return i.num; }).sort();
   rep.writeOff = dollars(sum(wo, function(i){ return i.rem; }));
+  rep.owed = dollars(sum(pos, function(i){ return i.rem; })); rep.inCredit = dollars(sum(creditBal, function(cb){ return cb._cents; }));
   rep.bucketsClean = {}; BUCKETS.forEach(function(b){ rep.bucketsClean[b] = dollars(sum(pos.filter(function(i){ return bucketOf(i.days) === b; }), function(i){ return i.rem; })); });
-  // ---- who to chase
   var work = [];
-  custs.forEach(function(c){
-    var mine = pos.filter(function(i){ return i.parent === c && i.days > 0; });
+  parents.forEach(function(c){
+    var mine = chased.filter(function(i){ return i.parent === c; });
     if (!mine.length) return;
     var oldest = Math.max.apply(null, mine.map(function(i){ return i.days; }));
     work.push({ customer: c, overdue: dollars(sum(mine, function(i){ return i.rem; })), over60: dollars(sum(mine.filter(function(i){ return i.days > 60; }), function(i){ return i.rem; })),
@@ -318,25 +353,28 @@ function review(rows, fileName){
   });
   work.sort(function(a, b){ return b.over60 - a.over60 || b.overdue - a.overdue || (a.customer < b.customer ? -1 : 1); });
   rep.worklist = work;
-  var allRem = sum(pos, function(i){ return i.rem; });
+  var owed = sum(pos, function(i){ return i.rem; });
   rep.concentration = [];
-  custs.forEach(function(c){ var cr = sum(pos.filter(function(i){ return i.parent === c; }), function(i){ return i.rem; }); if (allRem && cr * 100 >= 20 * allRem) rep.concentration.push({ customer: c, share: Math.round(cr * 1000 / allRem) / 10 }); });
+  parents.forEach(function(c){ var cr = sum(pos.filter(function(i){ return i.parent === c; }), function(i){ return i.rem; }); if (owed && cr * 100 >= 20 * owed) rep.concentration.push({ customer: c, share: Math.round(cr * 1000 / owed) / 10 }); });
   var jes = items.filter(function(i){ return i.type === "Journal Entry"; });
   rep.journalEntries = jes.length;
-  rep._pos = pos; rep._wo = wo; rep._total = total; rep._items = items;
+  rep._pos = pos; rep._wo = wo; rep._old = old; rep._total = total; rep._items = items; rep._second = second; rep._creditBal = creditBal;
 
   // ---- what to look at first
+  if (A.unknown.length) ex("UNKNOWN_TYPE", "stop", plural(A.unknown.length, "line has", "lines have") + " a transaction type I do not know (" + A.unknown.slice(0, 4).map(function(u){ return "row " + u.row + ": " + u.type; }).join("; ") + "). They are left out, so the totals will not tie. Tell me what they are, or check them in the ledger.");
   if (A.unread.length) ex("UNREAD_ROWS", "stop", "I could not read the date on " + plural(A.unread.length, "line") + " (" + A.unread.slice(0, 5).map(function(u){ return "row " + u.row; }).join(", ") + "). They are left out.");
-  if (A.duplicates) { rep.duplicates_removed = A.duplicates; ex("DUPLICATE_ROWS", "stop", plural(A.duplicates, "line") + " appear twice, exactly the same. It looks like part of the report was pasted in twice. I counted each line once."); }
   if (A.total != null && A.total !== total) ex("TOTAL_MISMATCH", "stop", "The report's own total line, " + money(A.total) + ", does not agree with its lines, " + money(total) + " (" + money(Math.abs(A.total - total)) + " " + (A.total > total ? "more" : "less") + "). A line is missing, or the total was typed over. Export the report again.");
-  if (A.asOf == null) ex("DATE_UNKNOWN", "care", "The file does not say what date the aging is as of (QuickBooks Desktop puts it in the page header, not the cells). Days past due are taken from its Aging column. Make sure it is the month-end date you meant.");
+  if (A.total == null) ex("NO_TOTAL_LINE", "info", "The file has no total line, so I could not check that every line was read. Compare " + money(total) + " with the report on screen.");
+  if (A.asOf == null && asOf == null) ex("DATE_UNKNOWN", "care", "The file does not say what date the aging is as of (QuickBooks Desktop puts it in the page header, not the cells). Days past due come from its Aging column. Type the date below so the workpaper and letters carry it.");
+  if (asOf != null) { var fut = items.filter(function(i){ return i.date > asOf; }); if (fut.length) ex("FUTURE_DATED", "care", plural(fut.length, "line is", "lines are") + " dated after the as-of date (" + fut.slice(0, 4).map(function(i){ return i.type + " " + i.num + ", " + i.parent; }).join("; ") + "). An aging as of a date should not include them: check the report date."); }
+  if (A.basis === "cash") ex("CASH_BASIS", "care", "This report was run on cash basis. Receivables are not income to a cash-basis client and are often not on its balance sheet: use the clean-up and the reminders, but the allowance, the write-off entry and the tie to the balance sheet do not apply.");
   if (matches.length || applyOldest.length) ex("UNAPPLIED_CREDITS", "care", plural(matches.length + applyOldest.length, "payment or credit", "payments and credits") + " were never applied to an invoice. " +
-    (matches.length ? plural(matches.length, "matches an open invoice", "match open invoices") + " exactly. " : "") + "Apply them in the ledger before anyone chases a customer for an invoice that is already paid. The list is under “Clean first”.");
-  if (creditBal.length) ex("CREDIT_BALANCES", "care", plural(creditBal.length, "customer is", "customers are") + " owed money by the client (" + creditBal.map(function(x){ return x.customer + " " + money(Math.round(x.amount * 100)); }).join("; ") + "). Refund, or confirm with the customer that the credit should stay. Do not chase them.");
-  if (dups.length) ex("DUPLICATE_INVOICES", "care", plural(dups.length, "pair") + " of invoices look entered twice: same customer, same amount, within a week (" + dups.map(function(x){ return x.customer + " #" + x.a + " and #" + x.b + ", " + money(Math.round(x.amount * 100)); }).join("; ") + "). If so, void one: it overstates sales and receivables.");
-  if (old.length) ex("OVER_A_YEAR", "care", plural(old.length, "invoice") + " are more than a year past due (" + money(sum(old, function(i){ return i.rem; })) + "). Unless the customer is paying, they are write-off candidates. They are in the proposed write-off below.");
-  if (small.length) ex("SMALL_BALANCES", "info", plural(small.length, "invoice") + " have less than $10 left open (" + money(sum(small, function(i){ return i.rem; })) + "): short payments, bank fees or rounding. Write them off rather than chase them.");
-  if (jes.length) ex("JOURNAL_ENTRIES", "care", plural(jes.length, "journal entry", "journal entries") + " sit in receivables (" + jes.map(function(i){ return (i.num || "no number") + ", " + i.parent + ", " + money(i.open); }).join("; ") + "). A journal entry is not an invoice a customer can pay; find out what it was and reclassify or apply it.");
+    (matches.length ? plural(matches.length, "matches an open invoice", "match open invoices") + " exactly. " : "") + "Apply them in the ledger, then run this again, before anyone chases a customer for an invoice that is already paid. The list is under “Clean first”.");
+  if (creditBal.length) ex("CREDIT_BALANCES", "care", plural(creditBal.length, "customer is", "customers are") + " owed money by the client (" + rep.creditBalances.map(function(x){ return x.customer + " " + money(Math.round(x.amount * 100)) + (x.paidTwice ? ", which looks like invoice #" + x.paidTwice + " paid twice" : "") + (x.maybeFor ? ", which matches an open invoice of " + x.maybeFor + " and may have been posted to the wrong customer" : "") + (x.otherJobs ? ", which may belong to another job of the same customer" : ""); }).join("; ") + "). See “Clean first”. Do not chase them.");
+  if (dups.length) ex("DUPLICATE_INVOICES", "care", plural(dups.length, "pair") + " of invoices look entered twice: same customer and job, same amount, less than a week apart, or the same number twice (" + dups.map(function(x){ return x.customer + " #" + x.a + " and #" + x.b + ", " + money(Math.round(x.amount * 100)); }).join("; ") + "). The later one is left out of the reminders. If it is a copy, credit it in the current period.");
+  if (old.length) ex("OVER_A_YEAR", "care", plural(old.length, "invoice") + " are more than a year past due (" + money(sum(old, function(i){ return i.rem; })) + "). Unless the customer is paying or has agreed a plan, they are write-off candidates. Untick any to keep in the allowance instead.");
+  if (small.length) ex("SMALL_BALANCES", "info", plural(small.length, "part-paid invoice") + " have less than $10 left and are more than 60 days past due (" + money(sum(small, function(i){ return i.rem; })) + "). Short payments like these are usually an early-payment discount, a card fee or sales tax: write them off to that account rather than chase them.");
+  if (jes.length) ex("JOURNAL_ENTRIES", "care", plural(jes.length, "journal entry", "journal entries") + " sit in receivables (" + jes.map(function(i){ return (i.num || "no number") + ", " + i.parent + ", " + money(i.open); }).join("; ") + "). A journal entry is not an invoice a customer can pay; find out what it was and reclassify or apply it. It is left out of the reminders.");
   if (rep.concentration.length) ex("CONCENTRATION", "info", rep.concentration.map(function(x){ return x.customer + " holds " + x.share + "%"; }).join("; ") + " of what customers owe. Worth a sentence in the file, and a word with the client about credit limits.");
   rep.status = "COMPUTED";
   return rep;
@@ -350,16 +388,22 @@ function compareAR(rep, typed){
   if (!d) { rep.status = "TIES"; return rep; }
   rep.status = "DIFFERS";
   rep.exceptions.unshift({ code: "DIFFERS_FROM_BALANCE_SHEET", level: "stop", message: "Accounts receivable on the balance sheet, " + money(typed) + ", is " + money(Math.abs(d)) + (d > 0 ? " more" : " less") +
-    " than the aging, " + money(rep._total) + ". Usually a journal entry posted straight to A/R without a customer, a second A/R account, or the two reports run for different dates or bases. Find it before relying on the review." });
+    " than the aging, " + money(rep._total) + ". Usually a journal entry posted straight to A/R without a customer, a second A/R account, or the two reports run for different dates or bases. The reminders are held until it agrees." });
   return rep;
 }
-function allowance(rep, rates){
+function allowance(rep, rates, existing){
   var a = 0, by = {};
   BUCKETS.forEach(function(b){
-    var base = rep._pos.filter(function(i){ return bucketOf(i.days) === b && rep._wo.indexOf(i) < 0; }).reduce(function(s, i){ return s + i.rem; }, 0);
+    var base = rep._pos.filter(function(i){ return bucketOf(i.days) === b && rep._wo.indexOf(i) < 0 && i.type !== "Refund"; }).reduce(function(s, i){ return s + i.rem; }, 0);
     var x = Math.round(base * (rates[b] || 0) / 100); by[b] = { base: dollars(base), rate: rates[b] || 0, amount: dollars(x) }; a += x;
   });
-  rep.rates = rates; rep.allowance = dollars(a); rep.allowanceByBucket = by; return rep;
+  rep.rates = rates; rep.allowance = dollars(a); rep.allowanceByBucket = by;
+  delete rep.existingAllowance; delete rep.allowanceAdjustment;
+  if (existing != null && !isNaN(existing)) {
+    var wo = Math.round(rep.writeOff * 100);
+    rep.existingAllowance = dollars(existing); rep.allowanceAdjustment = dollars(a - (existing - wo));
+  }
+  return rep;
 }
 
 /* =====================================================================================
@@ -367,41 +411,49 @@ function allowance(rep, rates){
    ===================================================================================== */
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-var current = null, keep = {}, rates = {};
+var current = null, keep = {}, rates = {}, existing = null, lastRows = null, lastName = "", typedAsOf = null, keepOld = {}, hold = {}, typedAR = null;
 
 function letter(w, rep){
-  var intro = { "Friendly reminder": "A friendly reminder that the following invoices are now past due:",
-    "Second reminder and a call": "We wrote recently about the invoices below, which remain unpaid. We will call this week to make sure nothing is holding them up:",
-    "Call; hold new orders": "The invoices below are now more than 60 days past due. Until they are settled we will need to hold new orders. Please let us know when we can expect payment:",
-    "Final notice": "This is a final notice for the invoices below, now more than 90 days past due. Please pay within 10 days, or contact us to agree a payment plan:",
-    "Collection agency or payment plan": "The invoices below are long overdue. Unless we agree a payment plan within 10 days, we will refer the account for collection:",
-    "Consider writing off": "The invoices below are more than a year overdue. Please contact us about them." }[w.step];
-  var lines = w._items.map(function(i){ return "  Invoice " + i.num + ", dated " + shortDay(i.date) + ": " + money(i.rem) + " (" + i.days + " days past due)"; }).join("\n");
-  return "Dear " + w.customer + ",\n\n" + intro + "\n\n" + lines + "\n  Total: " + money(Math.round(w.overdue * 100)) + "\n\nIf you have already paid, thank you, and please send the payment details so we can apply it.\n\nKind regards,\n" + (rep.company || "[Your client's name]");
+  var oldest = w.oldestDays;
+  var intro = { "Friendly reminder": "This is a friendly reminder that the invoices below are past due.",
+    "Second request and a call": "This is a second request for the invoices below; the oldest is now " + oldest + " days past due. We will also call to make sure nothing is holding them up.",
+    "Call about the account": "The invoices below remain unpaid; the oldest is now " + oldest + " days past due. Please let us know when we can expect payment.",
+    "Past-due notice": "Your account is past due; the oldest invoice below is now " + oldest + " days past due. Please send payment, or contact us to set up a payment plan.",
+    "Final request": "We have not been able to collect the invoices below; the oldest is now " + oldest + " days past due. Please contact us within 10 days so we can agree how the account will be settled." }[w.step];
+  var lines = w._items.map(function(i){ return "  Invoice " + i.num + ", dated " + shortDay(i.date) + ": " + money(i.rem) + " (" + plural(i.days, "day") + " past due)"; }).join("\n");
+  return "Dear [contact name], " + w.customer + ",\n\n" + intro + "\n\n" + lines + "\n  Total: " + money(Math.round(w.overdue * 100)) +
+    "\n\nPayment details: [how to pay]. If you have already paid, thank you, and please send the payment details so we can apply it.\n\nKind regards,\n[name], " + (rep.company || "[company]") + "\n[phone or email]";
 }
 
 function render(rep){
   var o = [];
+  if (rep.status === "NEEDS_DATE") {
+    o.push('<h1>What’s really collectible?</h1><div class="verdict bad" id="verdict">I need the as-of date to tell what is overdue.<span class="sub">' + esc(rep.exceptions[0].message) + '</span></div>');
+    o.push('<div id="stop-banner" class="stopbox"><p><b>Stop.</b> ' + esc(rep.exceptions[0].message) + '</p></div>');
+    o.push('<div class="typed"><label for="asof">As-of date of the aging</label><input id="asof" placeholder="10/31/2026" autocomplete="off"><button class="sec-btn" id="set-asof" type="button">Review it</button></div>');
+    return o.join("");
+  }
   var stops = rep.exceptions.filter(function(e){ return e.level === "stop"; });
   var cleanCount = rep.matches.length + rep.applyOldest.length + rep.creditBalances.length + rep.duplicates.length + rep.journalEntries;
   var overdue = rep.worklist.reduce(function(s, w){ return s + Math.round(w.overdue * 100); }, 0);
-  var head = rep.status === "DIFFERS" ? { cls: "bad", h: "The aging does not agree with the balance sheet: " + money(Math.abs(Math.round(rep.difference * 100))) + " apart.", s: "Find the difference before relying on the review below." } :
-    { cls: stops.length ? "bad" : "", h: (rep.company ? rep.company + ": " : "") + money(rep._total) + " owed by " + plural(rep.customers, "customer") + "; " + money(overdue) + " overdue after clean-up.",
-      s: (cleanCount ? plural(cleanCount, "thing", "things") + " to clean up in the ledger before anyone chases a customer. " : "Nothing to clean up first. ") + (rep.status === "TIES" ? "The aging agrees with the balance sheet." : "") };
-  o.push('<div class="wp-head"><div><h1>What’s really collectible?</h1><p class="meta">' + esc(rep.layout) + (rep.asOf ? " · as of " + longDay(Math.round(Date.parse(rep.asOf) / 86400000)) : " · date not shown in the file") + '<br>File: ' + esc(rep.file) + '</p></div>');
-  o.push('<div class="sign">' + [["client", "Client"], ["preparedBy", "Prepared by"], ["preparedOn", "Date"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Date"]].map(function(p){ return '<label>' + p[1] + '<input id="' + p[0] + '" autocomplete="off" value="' + esc(keep[p[0]] || (p[0] === "client" ? rep.company : "")) + '"></label>'; }).join("") + '</div></div>');
+  var inCredit = rep.creditBalances.length, owing = rep.customers - rep.creditBalances.filter(function(c){ return !rep._pos.some(function(i){ return i.parent === c.customer.split(":")[0].trim(); }); }).length;
+  var head = rep.status === "DIFFERS" ? { cls: "bad", h: "The aging does not agree with the balance sheet: " + money(Math.abs(Math.round(rep.difference * 100))) + " apart.", s: "Find the difference before relying on the review. The reminders are held until it agrees." } :
+    { cls: stops.length ? "bad" : "", h: (rep.company ? rep.company + ": " : "") + money(Math.round(rep.owed * 100)) + " owed by " + plural(owing, "customer") + (inCredit ? " (and " + money(Math.round(rep.inCredit * 100)) + " owed to " + plural(inCredit, "customer") + " in credit)" : "") + "; " + money(overdue) + " to chase.",
+      s: (cleanCount ? plural(cleanCount, "item", "items") + " to post in the ledger first, then run this again. " : "Nothing to post in the ledger first. ") + (rep.status === "TIES" ? "The aging agrees with the balance sheet." : "") };
+  o.push('<div class="wp-head"><div><h1>What’s really collectible?</h1><p class="meta">' + esc(rep.layout) + (rep.asOf ? " · as of " + longDay(Math.round(Date.parse(rep.asOf) / 86400000)) : " · as-of date not in the file") + '<br>File: ' + esc(rep.file) + '</p></div>');
+  o.push('<div class="sign">' + [["client", "Client"], ["preparedBy", "Prepared by"], ["preparedOn", "Prepared on"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Reviewed on"]].map(function(p){ return '<label>' + p[1] + '<input id="' + p[0] + '" autocomplete="off" value="' + esc(keep[p[0]] || (p[0] === "client" ? rep.company : "")) + '"></label>'; }).join("") + '</div></div>');
   o.push('<div class="verdict ' + head.cls + '" id="verdict">' + esc(head.h) + '<span class="sub">' + esc(head.s) + '</span></div>');
   o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
   o.push('<div class="typed"><label for="ar">A/R on the balance sheet, same date</label><input id="ar" inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + (rep.typedAR != null ? rep.typedAR.toFixed(2) : "") + '"><button class="sec-btn" id="compare" type="button">Check it ties</button>' +
-    (rep.typedAR != null ? ' <span class="' + (rep.status === "TIES" ? "tie-ok" : "tie-bad") + '">' + (rep.status === "TIES" ? "Ties exactly." : "Differs by " + money(Math.abs(Math.round(rep.difference * 100))) + ".") + '</span>' : "") + '</div>');
+    (rep.typedAR != null ? ' <span class="' + (rep.status === "TIES" ? "tie-ok" : "tie-bad") + '">' + (rep.status === "TIES" ? "Ties exactly." : "Differs by " + money(Math.abs(Math.round(rep.difference * 100))) + ".") + '</span>' : "") +
+    (!rep.asOf ? '<br><label for="asof">As-of date (not in the file)</label><input id="asof" placeholder="10/31/2026" autocomplete="off"><button class="sec-btn" id="set-asof" type="button">Set the date</button>' : "") + '</div>');
 
-  // aging
   o.push('<div class="scroll"><table id="aging"><thead><tr><th>Days past due</th>' + BUCKETS.map(function(b){ return '<th class="num">' + BUCKET_LABEL[b] + '</th>'; }).join("") + '<th class="num">Total</th></tr></thead><tbody>');
-  [["As the report shows", rep.buckets], ["After the clean-up below", rep.bucketsClean]].forEach(function(p){
+  [["As reported, re-aged by due date", rep.buckets], ["Owed after the clean-up", rep.bucketsClean]].forEach(function(p){
     var t = BUCKETS.reduce(function(s, b){ return s + Math.round(p[1][b] * 100); }, 0);
     o.push('<tr><td>' + p[0] + '</td>' + BUCKETS.map(function(b){ return '<td class="num">' + money(Math.round(p[1][b] * 100)) + '</td>'; }).join("") + '<td class="num"><b>' + money(t) + '</b></td></tr>');
   });
-  o.push('</tbody></table></div><p class="note">After the clean-up, credits are applied and customers in credit are set aside, so the total is what customers really owe.</p>');
+  o.push('</tbody></table></div><p class="note">The aging total, ' + money(rep._total) + ', = owed by customers ' + money(Math.round(rep.owed * 100)) + (rep.inCredit ? ' less owed to customers in credit ' + money(Math.round(rep.inCredit * 100)) : '') + '. On the balance sheet, credit balances belong with the liabilities (customer credits or refunds payable, or customer deposits), not netted against receivables.</p>');
 
   var order = { stop: 0, care: 1, info: 2 }, exs = rep.exceptions.filter(function(e){ return e.level !== "stop"; }).sort(function(a, b){ return order[a.level] - order[b.level]; });
   o.push('<h2>Check these first</h2>');
@@ -409,70 +461,106 @@ function render(rep){
   else o.push('<ul class="first">' + exs.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + ({ care: "Decide. ", info: "For your file. " }[e.level]) + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>');
 
   // 1. clean first
-  o.push('<h2>1. Clean first <small>in the ledger, before anyone calls a customer</small></h2>');
-  if (!cleanCount) o.push('<p class="ok">Nothing to clean.</p>');
+  o.push('<h2>1. Clean first <small>post in the ledger, then run this again</small></h2>');
+  if (!cleanCount) o.push('<p class="ok">Nothing to post.</p>');
   if (rep.matches.length) {
-    o.push('<h3>Apply these credits to the invoice they match exactly</h3><div class="scroll"><table id="matches"><thead><tr><th>Customer</th><th>Credit</th><th>Apply to invoice</th><th class="num">Amount</th></tr></thead><tbody>');
+    o.push('<h3>Apply these credits to the invoice they match exactly (likely; confirm with the remittance)</h3><div class="scroll"><table id="matches"><thead><tr><th>Customer</th><th>Credit</th><th>Apply to invoice</th><th class="num">Amount</th></tr></thead><tbody>');
     rep.matches.forEach(function(m){ o.push('<tr><td>' + esc(m.customer) + '</td><td>' + esc(m.creditType + (m.credit !== m.creditType ? " " + m.credit : "") + ", " + m.creditDate) + '</td><td>#' + esc(m.invoice) + ', ' + esc(m.invoiceDate) + '</td><td class="num">' + money(Math.round(m.amount * 100)) + '</td></tr>'); });
     o.push('</tbody></table></div>');
   }
   if (rep.applyOldest.length) {
     o.push('<h3>Apply these credits to the oldest invoices (no exact match)</h3><div class="scroll"><table id="apply-oldest"><thead><tr><th>Customer</th><th>Credit</th><th>Applies to</th><th class="num">Amount</th></tr></thead><tbody>');
     rep.applyOldest.forEach(function(m){ o.push('<tr><td>' + esc(m.customer) + '</td><td>' + esc(m.creditType + (m.credit !== m.creditType ? " " + m.credit : "")) + '</td><td>' + esc(m.invoices.map(function(n){ return "#" + n; }).join(", ")) + '</td><td class="num">' + money(Math.round(m.amount * 100)) + '</td></tr>'); });
-    o.push('</tbody></table></div><p class="note">Confirm with the customer which invoice a partial payment was for, if the remittance does not say.</p>');
+    o.push('</tbody></table></div><p class="note">If the remittance names other invoices, follow the remittance.</p>');
   }
-  if (rep.creditBalances.length) o.push('<h3>Customers the client owes</h3><p>' + esc(rep.creditBalances.map(function(x){ return x.customer + ": " + money(Math.round(x.amount * 100)); }).join("; ")) + '. Refund, or confirm the credit with the customer.</p>');
-  if (rep.duplicates.length) o.push('<h3>Invoices that look entered twice</h3><p>' + esc(rep.duplicates.map(function(x){ return x.customer + ": #" + x.a + " and #" + x.b + ", " + money(Math.round(x.amount * 100)) + " each"; }).join("; ")) + '. Check with the client; void the copy.</p>');
+  if (rep.creditBalances.length) {
+    o.push('<h3>Customers the client owes</h3><ul>' + rep.creditBalances.map(function(x){ return '<li><b>' + esc(x.customer) + ', ' + money(Math.round(x.amount * 100)) + '.</b> ' +
+      esc(x.maybeFor ? "Matches open invoice #" + rep.mispostings.filter(function(m){ return m.customer === x.customer; })[0].invoice + " of " + x.maybeFor + ": probably posted to the wrong customer. Move it and apply it." :
+        x.paidTwice ? "Invoice #" + x.paidTwice + " looks paid twice. Refund, or confirm with the customer that the credit should stay." :
+        x.otherJobs ? "Another job of the same customer has open invoices: confirm whether this credit belongs to one of them." : "A deposit or an overpayment: confirm with the customer, then refund or keep as a deposit.") + '</li>'; }).join("") + '</ul>');
+    o.push('<p class="note">At the close, reclassify credit balances to a liability: Dr Accounts receivable, Cr Customer credits payable (or Customer deposits). Never write a customer credit off to income: unclaimed credits become reportable unclaimed property after the state’s dormancy period.</p>');
+  }
+  if (rep.duplicates.length) o.push('<h3>Invoices that look entered twice</h3><p>' + esc(rep.duplicates.map(function(x){ return x.customer + ": #" + x.a + " and #" + x.b + ", " + money(Math.round(x.amount * 100)) + " each"; }).join("; ")) + '. Check with the client. If one is a copy, issue a credit memo against it in the current period rather than voiding an invoice in a closed period.</p>');
 
   // 2. who to chase
-  o.push('<h2>2. Who to chase <small>largest amounts over 60 days first</small></h2>');
+  o.push('<h2>2. Who to chase <small>largest amounts over 60 days first; write-offs, duplicate copies and journal entries left out</small></h2>');
   if (!rep.worklist.length) o.push('<p class="ok">No customer is overdue.</p>');
   else {
-    o.push('<div class="scroll"><table id="worklist"><thead><tr><th>#</th><th>Customer</th><th class="num">Overdue</th><th class="num">Over 60 days</th><th class="num">Oldest</th><th>Next step</th></tr></thead><tbody>');
-    rep.worklist.forEach(function(w, i){ o.push('<tr><td>' + (i + 1) + '</td><td>' + esc(w.customer) + '</td><td class="num">' + money(Math.round(w.overdue * 100)) + '</td><td class="num">' + money(Math.round(w.over60 * 100)) + '</td><td class="num">' + w.oldestDays + ' days</td><td>' + esc(w.step) + '</td></tr>'); });
-    o.push('</tbody></table></div><h3>Draft reminders <small class="note">open a customer to read and copy its letter</small></h3>');
-    rep.worklist.forEach(function(w){ o.push('<details class="cust"><summary>' + esc(w.customer) + ' – ' + esc(w.step) + '</summary><div class="letter">' + esc(letter(w, rep)) + '</div></details>'); });
+    o.push('<div class="scroll"><table id="worklist"><thead><tr><th>#</th><th>Customer</th><th class="num">Overdue</th><th class="num">Over 60 days</th><th class="num">Oldest</th><th>Next step</th><th class="no-print">Hold letter</th></tr></thead><tbody>');
+    rep.worklist.forEach(function(w, i){ o.push('<tr><td>' + (i + 1) + '</td><td>' + esc(w.customer) + '</td><td class="num">' + money(Math.round(w.overdue * 100)) + '</td><td class="num">' + money(Math.round(w.over60 * 100)) + '</td><td class="num">' + plural(w.oldestDays, "day") + '</td><td>' + esc(w.step) + '</td><td class="no-print"><input type="checkbox" class="hold" data-c="' + esc(w.customer) + '"' + (hold[w.customer] ? " checked" : "") + ' title="Disputed, in bankruptcy, or on a payment plan"></td></tr>'); });
+    o.push('</tbody></table></div><p class="note">Tick “Hold letter” for a customer who disputes the invoice, is in bankruptcy (a letter can breach the automatic stay) or is on a payment plan. Base the step on what the client knows about the customer too: these are drafts.</p>');
+    if (rep.status === "DIFFERS") o.push('<p class="stopbox">Letters held until the aging agrees with the balance sheet.</p>');
+    else {
+      o.push('<h3>Draft reminders <small class="note">for the client to review and send; open a customer to read its letter</small></h3>');
+      rep.worklist.forEach(function(w){ if (hold[w.customer]) return; o.push('<details class="cust"><summary>' + esc(w.customer) + ' – ' + esc(w.step) + '</summary><div class="letter">' + esc(letter(w, rep)) + '</div></details>'); });
+    }
   }
 
   // 3. allowance and write-offs
-  o.push('<h2>3. Allowance and write-offs <small>at the close</small></h2>');
-  o.push('<p>Type the client’s loss rates by age, from its own history of what went unpaid. The page does not guess them. Under ASU 2025-05, from years beginning after December 15, 2025, a private company may assume current conditions continue, and may leave out balances collected before the statements are issued.</p>');
-  o.push('<div class="rates">' + BUCKETS.map(function(b){ return '<label>' + BUCKET_LABEL[b] + ' %<input id="rate-' + b + '" inputmode="decimal" value="' + (rates[b] != null ? rates[b] : "") + '"></label>'; }).join("") + '</div><button class="sec-btn" id="apply-rates" type="button">Work out the allowance</button>');
+  o.push('<h2>3. Allowance and write-offs <small>at the close, for accrual-basis statements</small></h2>');
+  o.push('<p>Type the client’s expected loss rates by age, from its own history of what went unpaid, adjusted for current conditions. The page does not guess them, and current balances need a rate too. Under ASC 326 as amended by ASU 2025-05 (years beginning after December 15, 2025), any entity may assume conditions at the balance sheet date continue for current receivables; a private company that does so may also elect to consider cash collected after the balance sheet date, up to when the statements are available to be issued, and must disclose it.</p>');
+  o.push('<div class="rates">' + BUCKETS.map(function(b){ return '<label>' + BUCKET_LABEL[b] + ' %<input id="rate-' + b + '" inputmode="decimal" value="' + (rates[b] != null ? rates[b] : "") + '"></label>'; }).join("") + '</div>');
+  o.push('<p><label>Allowance on the books now (optional): <input id="existing-allowance" inputmode="decimal" value="' + (existing != null ? (existing / 100).toFixed(2) : "") + '" style="width:9em"></label> <button class="sec-btn" id="apply-rates" type="button">Work out the allowance</button></p>');
   if (rep.allowance != null) {
     o.push('<div class="scroll"><table id="allowance"><thead><tr><th>Days past due</th><th class="num">Owed, after clean-up and write-offs</th><th class="num">Rate</th><th class="num">Allowance</th></tr></thead><tbody>');
     BUCKETS.forEach(function(b){ var x = rep.allowanceByBucket[b]; o.push('<tr><td>' + BUCKET_LABEL[b] + '</td><td class="num">' + money(Math.round(x.base * 100)) + '</td><td class="num">' + x.rate + '%</td><td class="num">' + money(Math.round(x.amount * 100)) + '</td></tr>'); });
-    o.push('<tr class="sum"><td>Allowance for doubtful accounts</td><td></td><td></td><td class="num">' + money(Math.round(rep.allowance * 100)) + '</td></tr></tbody></table></div>');
+    o.push('<tr class="sum"><td>Allowance for credit losses</td><td></td><td></td><td class="num">' + money(Math.round(rep.allowance * 100)) + '</td></tr></tbody></table></div>');
+    o.push('<p>Net realizable receivables: ' + money(Math.round(rep.owed * 100) - Math.round(rep.writeOff * 100) - Math.round(rep.allowance * 100)) + '.</p>');
+    if (rep.allowanceAdjustment != null) { var adj = Math.round(rep.allowanceAdjustment * 100);
+      o.push('<p><b>Entries:</b> write-offs, Dr Allowance for credit losses / Cr Accounts receivable, ' + money(Math.round(rep.writeOff * 100)) + '; then the allowance from ' + money(Math.round(rep.existingAllowance * 100) - Math.round(rep.writeOff * 100)) + ' to ' + money(Math.round(rep.allowance * 100)) + ': ' +
+        (adj >= 0 ? 'Dr Bad debt expense / Cr Allowance for credit losses, ' + money(adj) : 'Dr Allowance for credit losses / Cr Bad debt expense, ' + money(-adj) + ' (a release)') + '.</p>'); }
   }
-  if (rep.writeOff) {
-    o.push('<h3>Proposed write-offs: ' + money(Math.round(rep.writeOff * 100)) + '</h3><div class="scroll"><table id="writeoff"><thead><tr><th>Customer</th><th>Invoice</th><th class="num">Days past due</th><th class="num">Left open</th><th>Why</th></tr></thead><tbody>');
-    rep._wo.forEach(function(i){ o.push('<tr><td>' + esc(i.parent) + '</td><td>#' + esc(i.num) + '</td><td class="num">' + i.days + '</td><td class="num">' + money(i.rem) + '</td><td>' + (i.rem < 1000 ? "small balance left open" : "more than a year past due") + '</td></tr>'); });
-    o.push('</tbody></table></div><p>Entry: Dr Bad debt expense (or the allowance, if one was set up for these), Cr Accounts receivable, ' + money(Math.round(rep.writeOff * 100)) + '; in the ledger, a credit memo or write-off against each invoice so the aging clears.</p>');
-    o.push('<p class="note">Tax: a business bad debt is deductible only if the amount was included in income, so on the accrual method; a cash-method client has nothing to deduct. The allowance itself is not deductible; it is a book-tax difference.</p>');
+  if (rep._wo.length || rep._old.length) {
+    o.push('<h3>Proposed write-offs: ' + money(Math.round(rep.writeOff * 100)) + '</h3><div class="scroll"><table id="writeoff"><thead><tr><th>Write off</th><th>Customer</th><th>Invoice</th><th class="num">Days past due</th><th class="num">Left open</th><th>Why</th></tr></thead><tbody>');
+    rep._wo.concat(rep._old.filter(function(i){ return rep._wo.indexOf(i) < 0; })).forEach(function(i){ var isOld = rep._old.indexOf(i) >= 0;
+      o.push('<tr><td>' + (isOld ? '<input type="checkbox" class="wo" data-n="' + esc(i.num) + '"' + (rep._wo.indexOf(i) >= 0 ? " checked" : "") + '>' : "yes") + '</td><td>' + esc(i.job) + '</td><td>#' + esc(i.num) + '</td><td class="num">' + i.days + '</td><td class="num">' + money(i.rem) + '</td><td>' + (isOld ? "more than a year past due" : "small part-paid balance") + '</td></tr>'); });
+    o.push('</tbody></table></div><p>In the ledger: one credit memo per invoice, with a non-taxable “Bad debt” item (Xero: a credit note to the bad debt account), dated in the open period. Under the allowance method it is charged to the allowance; under the direct write-off method, to bad debt expense. Not a journal entry to A/R. Sales tax on a written-off invoice may be recoverable on the sales tax return.</p>');
   }
-  o.push('<h2>What I read</h2><p class="note">' + esc(rep.layout) + '. ' + plural(rep.rows, "open item") + (rep.duplicates_removed ? " (after removing " + rep.duplicates_removed + " duplicate lines)" : "") + ', ' + plural(rep.customers, "customer") + ' (jobs counted under their customer). Total ' + money(rep._total) + (rep.reportTotal != null ? "; the report’s own total line says " + money(Math.round(rep.reportTotal * 100)) : "") + '.</p>');
-  o.push('<p class="foot">Made by “What’s Really Collectible?” version 1.0.0, on this computer. The file was read here and not sent anywhere. Arithmetic is done in whole cents. This is a workpaper for review: the accountant remains responsible for every entry, write-off and letter.</p>');
+  if (rep._wo.length || rep.allowance != null) o.push('<p class="note">Tax: a business bad debt is deductible only if the amount was included in income (so on the accrual method), and only when it is shown to be worthless, in whole or charged off in part; age alone is not proof. A recovery later is income. The allowance is not deductible: a book-tax difference. Qualifying service businesses may use the nonaccrual-experience method instead.</p>');
+  o.push('<h2>What I read</h2><p class="note">' + esc(rep.layout) + '. ' + plural(rep.rows, "open item") + (rep.duplicates_removed ? " (after removing " + rep.duplicates_removed + " pasted copies)" : "") + ', ' + plural(rep.customers, "customer") + ' (jobs reviewed one by one, chased under their customer). Total ' + money(rep._total) + (rep.reportTotal != null ? "; the report’s own total line says " + money(Math.round(rep.reportTotal * 100)) : "") + (rep.basis ? "; " + rep.basis + " basis" : "") + '.</p>');
+  o.push('<p class="foot">Made by “What’s Really Collectible?” version 1.0.0, on this computer. The file was read here and not sent anywhere. Arithmetic is done in whole cents. This is a workpaper for review: you propose; the client decides what to apply, write off and send.</p>');
   return o.join("");
 }
 
+function rebuild(){   // review again with what the accountant has typed, and keep what she typed
+  var rep = review(lastRows, lastName, { asOf: typedAsOf, keep: keepOld });
+  if (rep.status === "NOT_RECOGNIZED" || rep.status === "NEEDS_DATE") return rep;
+  if (typedAR != null) compareAR(rep, typedAR);
+  if (Object.keys(rates).length) allowance(rep, rates, existing);
+  return rep;
+}
 function publish(rep){
   current = rep;
   ["client", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
   $("out").innerHTML = render(rep);
   $("start").hidden = true; $("report").hidden = false;
   window.__report = JSON.parse(JSON.stringify(rep, function(k, v){ return k.charAt(0) === "_" ? undefined : v; }));
-  var go = function(){ var c = parseAmount($("ar").value); var y = window.scrollY; publish(compareAR(current, c == null || isNaN(c) ? null : c)); window.scrollTo(0, y); };
-  $("compare").addEventListener("click", go);
-  $("ar").addEventListener("keydown", function(e){ if (e.key === "Enter") go(); });
-  $("apply-rates").addEventListener("click", function(){
+  var y = function(f){ return function(){ var s = window.scrollY; f(); publish(rebuild()); window.scrollTo(0, s); }; };
+  if ($("set-asof")) $("set-asof").addEventListener("click", y(function(){ typedAsOf = parseDay($("asof").value); }));
+  if ($("compare")) {
+    var go = y(function(){ var c = parseAmount($("ar").value); typedAR = c == null || isNaN(c) ? null : c; });
+    $("compare").addEventListener("click", go);
+    $("ar").addEventListener("keydown", function(e){ if (e.key === "Enter") go(); });
+  }
+  if ($("apply-rates")) $("apply-rates").addEventListener("click", y(function(){
     BUCKETS.forEach(function(b){ var v = parseFloat(($("rate-" + b).value || "").replace("%", "")); rates[b] = isNaN(v) ? 0 : v; });
-    var y = window.scrollY; publish(allowance(current, rates)); window.scrollTo(0, y);
-  });
+    var e = parseAmount($("existing-allowance").value); existing = e == null || isNaN(e) ? null : e;
+  }));
+  Array.prototype.forEach.call(document.querySelectorAll("input.wo"), function(x){ x.addEventListener("change", y(function(){ keepOld[x.getAttribute("data-n")] = !x.checked; })); });
+  Array.prototype.forEach.call(document.querySelectorAll("input.hold"), function(x){ x.addEventListener("change", y(function(){ hold[x.getAttribute("data-c")] = x.checked; })); });
 }
 function showProblem(msg){ var p = $("problem"); p.textContent = msg; p.hidden = false; }
+function start(rows, name){
+  lastRows = rows; lastName = name; rates = {}; existing = null; typedAsOf = null; keepOld = {}; hold = {};
+  var pre = parseAmount($("ar-start").value); typedAR = pre == null || isNaN(pre) ? null : pre;
+  var rep = rebuild();
+  if (rep.status === "NOT_RECOGNIZED") { window.__report = JSON.parse(JSON.stringify(rep)); return showProblem(rep.exceptions[0].message); }
+  publish(rep);
+}
 function handle(f){
   if (/\.pdf$/i.test(f.name)) return showProblem("“" + f.name + "” is a PDF. Export the A/R aging detail to Excel or CSV and drop that.");
   if (!/\.(xlsx|xlsm|xls|csv|txt)$/i.test(f.name)) return showProblem("“" + f.name + "” is not an Excel or CSV file.");
-  window.__report = undefined; $("problem").hidden = true; rates = {};
+  window.__report = undefined; $("problem").hidden = true;
   var reader = new FileReader();
   reader.onload = function(){
     try {
@@ -480,11 +568,7 @@ function handle(f){
       var wb = text ? XLSX.read(new TextDecoder("utf-8").decode(reader.result), { type: "string", raw: true }) : XLSX.read(new Uint8Array(reader.result), { type: "array" });
       var best = null;
       wb.SheetNames.forEach(function(sn){ var rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: null, blankrows: true }); if (!best || rows.length > best.length) best = rows; });
-      var rep = review(best || [], f.name);
-      if (rep.status === "NOT_RECOGNIZED") { window.__report = JSON.parse(JSON.stringify(rep)); return showProblem(rep.exceptions[0].message); }
-      var pre = parseAmount($("ar-start").value);
-      if (pre != null && !isNaN(pre)) compareAR(rep, pre);
-      publish(rep);
+      start(best || [], f.name);
     } catch (e) { window.__report = { status: "ERROR", message: String(e) }; showProblem("Something in this file stopped me. Nothing was produced. (" + e + ")"); }
   };
   reader.readAsArrayBuffer(f);
@@ -503,11 +587,11 @@ $("sample").addEventListener("click", function(){
     ["10/14/2026", "Payment", "", "Alder Builders", "10/14/2026", -4200, -4200], ["06/20/2026", "Invoice", "0971", "Birch Dental Group", "07/20/2026", 2600, 2600],
     ["08/10/2026", "Invoice", "0990", "Birch Dental Group", "09/09/2026", 980, 980], ["10/20/2026", "Invoice", "1009", "Cedar Apartments", "11/19/2026", 3100, 3100],
     ["10/22/2026", "Invoice", "1012", "Cedar Apartments", "11/21/2026", 3100, 3100], ["03/15/2025", "Invoice", "0702", "Delta Fitness", "04/14/2025", 640, 640],
-    ["09/18/2026", "Invoice", "0999", "Ember Hotel", "10/18/2026", 1500, 6.5]];
+    ["06/18/2026", "Invoice", "0951", "Ember Hotel", "07/18/2026", 1500, 6.5]];
   data.forEach(function(d){ rows.push([""].concat(d)); });
   rows.push(["TOTAL", "", "", "", "", "", "", data.reduce(function(s, d){ return s + d[6]; }, 0)]);
-  rates = {};
-  publish(review(rows, "made-up sample"));
+  $("ar-start").value = "";
+  start(rows, "made-up sample");
 });
 </script>
 </body>

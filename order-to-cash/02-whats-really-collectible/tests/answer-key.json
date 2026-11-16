@@ -11,6 +11,8 @@
   "rows": 145,
   "total": 677097.53,
   "customers": 36,
+  "owed": 677097.53,
+  "inCredit": 0.0,
   "buckets": {
    "current": 369410.66,
    "d1_30": 150712.54,
@@ -42,7 +44,7 @@
     "overdue": 27534.81,
     "over60": 13596.44,
     "oldestDays": 247,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 5
    },
    {
@@ -50,7 +52,7 @@
     "overdue": 15930.43,
     "over60": 12321.94,
     "oldestDays": 180,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -58,7 +60,7 @@
     "overdue": 11031.8,
     "over60": 11031.8,
     "oldestDays": 308,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -66,7 +68,7 @@
     "overdue": 17817.93,
     "over60": 8347.88,
     "oldestDays": 117,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -74,7 +76,7 @@
     "overdue": 20203.03,
     "over60": 8236.92,
     "oldestDays": 211,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 4
    },
    {
@@ -82,7 +84,7 @@
     "overdue": 6913.81,
     "over60": 6913.81,
     "oldestDays": 236,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -90,7 +92,7 @@
     "overdue": 22315.39,
     "over60": 5638.53,
     "oldestDays": 153,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -98,7 +100,7 @@
     "overdue": 11388.59,
     "over60": 5396.17,
     "oldestDays": 216,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -106,7 +108,7 @@
     "overdue": 10879.88,
     "over60": 5340.72,
     "oldestDays": 120,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -114,7 +116,7 @@
     "overdue": 10152.69,
     "over60": 5234.8,
     "oldestDays": 153,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -122,7 +124,7 @@
     "overdue": 3906.29,
     "over60": 3906.29,
     "oldestDays": 229,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -130,7 +132,7 @@
     "overdue": 10044.46,
     "over60": 3867.16,
     "oldestDays": 67,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -138,7 +140,7 @@
     "overdue": 6804.01,
     "over60": 2513.21,
     "oldestDays": 63,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -146,7 +148,7 @@
     "overdue": 2195.57,
     "over60": 2027.38,
     "oldestDays": 201,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -154,7 +156,7 @@
     "overdue": 1561.18,
     "over60": 1561.18,
     "oldestDays": 170,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -162,7 +164,7 @@
     "overdue": 29951.82,
     "over60": 0.0,
     "oldestDays": 46,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
    },
    {
@@ -170,7 +172,7 @@
     "overdue": 20983.1,
     "over60": 0.0,
     "oldestDays": 43,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -218,289 +220,7 @@
     "overdue": 5454.62,
     "over60": 0.0,
     "oldestDays": 50,
-    "step": "Second reminder and a call",
-    "invoices": 1
-   },
-   {
-    "customer": "Summit Builders",
-    "overdue": 5354.42,
-    "over60": 0.0,
-    "oldestDays": 15,
-    "step": "Friendly reminder",
-    "invoices": 1
-   },
-   {
-    "customer": "Birch Roofing",
-    "overdue": 4866.96,
-    "over60": 0.0,
-    "oldestDays": 2,
-    "step": "Friendly reminder",
-    "invoices": 1
-   },
-   {
-    "customer": "Summit Electric",
-    "overdue": 4309.21,
-    "over60": 0.0,
-    "oldestDays": 14,
-    "step": "Friendly reminder",
-    "invoices": 1
-   },
-   {
-    "customer": "Granite Storage",
-    "overdue": 3447.34,
-    "over60": 0.0,
-    "oldestDays": 29,
-    "step": "Friendly reminder",
-    "invoices": 1
-   },
-   {
-    "customer": "Yarrow Property Management",
-    "overdue": 2522.38,
-    "over60": 0.0,
-    "oldestDays": 3,
-    "step": "Friendly reminder",
-    "invoices": 1
-   },
-   {
-    "customer": "Summit Bakery",
-    "overdue": 2435.63,
-    "over60": 0.0,
-    "oldestDays": 28,
-    "step": "Friendly reminder",
-    "invoices": 3
-   },
-   {
-    "customer": "Granite Dental Group",
-    "overdue": 198.94,
-    "over60": 0.0,
-    "oldestDays": 29,
-    "step": "Friendly reminder",
-    "invoices": 1
-   }
-  ],
-  "concentration": [],
-  "journalEntries": 0
- },
- "02": {
-  "title": "QuickBooks Online, A/R from the balance sheet typed in: it ties",
-  "kind": "clean",
-  "file": "01-northgate-ar-aging-detail.xlsx",
-  "status": "TIES",
-  "exceptions": [],
-  "noOtherExceptions": true,
-  "layout": "qbo",
-  "asOf": "2026-10-31",
-  "rows": 145,
-  "total": 677097.53,
-  "customers": 36,
-  "buckets": {
-   "current": 369410.66,
-   "d1_30": 150712.54,
-   "d31_60": 61040.1,
-   "d61_90": 6380.37,
-   "d91_180": 54117.77,
-   "d181_365": 35436.09,
-   "over365": 0.0
-  },
-  "bucketsClean": {
-   "current": 369410.66,
-   "d1_30": 150712.54,
-   "d31_60": 61040.1,
-   "d61_90": 6380.37,
-   "d91_180": 54117.77,
-   "d181_365": 35436.09,
-   "over365": 0.0
-  },
-  "matches": [],
-  "creditBalances": [],
-  "applyOldest": [],
-  "duplicates": [],
-  "small": [],
-  "old": [],
-  "writeOff": 0.0,
-  "worklist": [
-   {
-    "customer": "Birch Builders",
-    "overdue": 27534.81,
-    "over60": 13596.44,
-    "oldestDays": 247,
-    "step": "Collection agency or payment plan",
-    "invoices": 5
-   },
-   {
-    "customer": "Orchard Medical Center",
-    "overdue": 15930.43,
-    "over60": 12321.94,
-    "oldestDays": 180,
-    "step": "Final notice",
-    "invoices": 4
-   },
-   {
-    "customer": "Northwind Electric",
-    "overdue": 11031.8,
-    "over60": 11031.8,
-    "oldestDays": 308,
-    "step": "Collection agency or payment plan",
-    "invoices": 2
-   },
-   {
-    "customer": "Copper Logistics",
-    "overdue": 17817.93,
-    "over60": 8347.88,
-    "oldestDays": 117,
-    "step": "Final notice",
-    "invoices": 2
-   },
-   {
-    "customer": "Evergreen Storage",
-    "overdue": 20203.03,
-    "over60": 8236.92,
-    "oldestDays": 211,
-    "step": "Collection agency or payment plan",
-    "invoices": 4
-   },
-   {
-    "customer": "Beacon Bakery",
-    "overdue": 6913.81,
-    "over60": 6913.81,
-    "oldestDays": 236,
-    "step": "Collection agency or payment plan",
-    "invoices": 1
-   },
-   {
-    "customer": "Yarrow Logistics",
-    "overdue": 22315.39,
-    "over60": 5638.53,
-    "oldestDays": 153,
-    "step": "Final notice",
-    "invoices": 3
-   },
-   {
-    "customer": "Valley Brewing",
-    "overdue": 11388.59,
-    "over60": 5396.17,
-    "oldestDays": 216,
-    "step": "Collection agency or payment plan",
-    "invoices": 3
-   },
-   {
-    "customer": "Union Builders",
-    "overdue": 10879.88,
-    "over60": 5340.72,
-    "oldestDays": 120,
-    "step": "Final notice",
-    "invoices": 2
-   },
-   {
-    "customer": "Ember Hotel",
-    "overdue": 10152.69,
-    "over60": 5234.8,
-    "oldestDays": 153,
-    "step": "Final notice",
-    "invoices": 2
-   },
-   {
-    "customer": "Iron Bakery",
-    "overdue": 3906.29,
-    "over60": 3906.29,
-    "oldestDays": 229,
-    "step": "Collection agency or payment plan",
-    "invoices": 1
-   },
-   {
-    "customer": "Cedar Storage",
-    "overdue": 10044.46,
-    "over60": 3867.16,
-    "oldestDays": 67,
-    "step": "Call; hold new orders",
-    "invoices": 3
-   },
-   {
-    "customer": "Harbor Storage",
-    "overdue": 6804.01,
-    "over60": 2513.21,
-    "oldestDays": 63,
-    "step": "Call; hold new orders",
-    "invoices": 2
-   },
-   {
-    "customer": "Copper Dental Group",
-    "overdue": 2195.57,
-    "over60": 2027.38,
-    "oldestDays": 201,
-    "step": "Collection agency or payment plan",
-    "invoices": 2
-   },
-   {
-    "customer": "Maple Fitness",
-    "overdue": 1561.18,
-    "over60": 1561.18,
-    "oldestDays": 170,
-    "step": "Final notice",
-    "invoices": 1
-   },
-   {
-    "customer": "Linden Apartments",
-    "overdue": 29951.82,
-    "over60": 0.0,
-    "oldestDays": 46,
-    "step": "Second reminder and a call",
-    "invoices": 4
-   },
-   {
-    "customer": "Ridge Apartments",
-    "overdue": 20983.1,
-    "over60": 0.0,
-    "oldestDays": 43,
-    "step": "Second reminder and a call",
-    "invoices": 3
-   },
-   {
-    "customer": "Hawthorn Brewing",
-    "overdue": 17013.84,
-    "over60": 0.0,
-    "oldestDays": 28,
-    "step": "Friendly reminder",
-    "invoices": 3
-   },
-   {
-    "customer": "Driftwood Brewing",
-    "overdue": 11007.76,
-    "over60": 0.0,
-    "oldestDays": 14,
-    "step": "Friendly reminder",
-    "invoices": 2
-   },
-   {
-    "customer": "Jasper Apartments",
-    "overdue": 7930.84,
-    "over60": 0.0,
-    "oldestDays": 30,
-    "step": "Friendly reminder",
-    "invoices": 2
-   },
-   {
-    "customer": "Pioneer Roofing",
-    "overdue": 6888.98,
-    "over60": 0.0,
-    "oldestDays": 6,
-    "step": "Friendly reminder",
-    "invoices": 2
-   },
-   {
-    "customer": "Jasper Roofing",
-    "overdue": 6641.16,
-    "over60": 0.0,
-    "oldestDays": 3,
-    "step": "Friendly reminder",
-    "invoices": 1
-   },
-   {
-    "customer": "Zenith Schools",
-    "overdue": 5454.62,
-    "over60": 0.0,
-    "oldestDays": 50,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -562,6 +282,292 @@
   ],
   "concentration": [],
   "journalEntries": 0,
+  "mispostings": []
+ },
+ "02": {
+  "title": "QuickBooks Online, A/R from the balance sheet typed in: it ties",
+  "kind": "clean",
+  "file": "01-northgate-ar-aging-detail.xlsx",
+  "status": "TIES",
+  "exceptions": [],
+  "noOtherExceptions": true,
+  "layout": "qbo",
+  "asOf": "2026-10-31",
+  "rows": 145,
+  "total": 677097.53,
+  "customers": 36,
+  "owed": 677097.53,
+  "inCredit": 0.0,
+  "buckets": {
+   "current": 369410.66,
+   "d1_30": 150712.54,
+   "d31_60": 61040.1,
+   "d61_90": 6380.37,
+   "d91_180": 54117.77,
+   "d181_365": 35436.09,
+   "over365": 0.0
+  },
+  "bucketsClean": {
+   "current": 369410.66,
+   "d1_30": 150712.54,
+   "d31_60": 61040.1,
+   "d61_90": 6380.37,
+   "d91_180": 54117.77,
+   "d181_365": 35436.09,
+   "over365": 0.0
+  },
+  "matches": [],
+  "creditBalances": [],
+  "applyOldest": [],
+  "duplicates": [],
+  "small": [],
+  "old": [],
+  "writeOff": 0.0,
+  "worklist": [
+   {
+    "customer": "Birch Builders",
+    "overdue": 27534.81,
+    "over60": 13596.44,
+    "oldestDays": 247,
+    "step": "Final request",
+    "invoices": 5
+   },
+   {
+    "customer": "Orchard Medical Center",
+    "overdue": 15930.43,
+    "over60": 12321.94,
+    "oldestDays": 180,
+    "step": "Past-due notice",
+    "invoices": 4
+   },
+   {
+    "customer": "Northwind Electric",
+    "overdue": 11031.8,
+    "over60": 11031.8,
+    "oldestDays": 308,
+    "step": "Final request",
+    "invoices": 2
+   },
+   {
+    "customer": "Copper Logistics",
+    "overdue": 17817.93,
+    "over60": 8347.88,
+    "oldestDays": 117,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Evergreen Storage",
+    "overdue": 20203.03,
+    "over60": 8236.92,
+    "oldestDays": 211,
+    "step": "Final request",
+    "invoices": 4
+   },
+   {
+    "customer": "Beacon Bakery",
+    "overdue": 6913.81,
+    "over60": 6913.81,
+    "oldestDays": 236,
+    "step": "Final request",
+    "invoices": 1
+   },
+   {
+    "customer": "Yarrow Logistics",
+    "overdue": 22315.39,
+    "over60": 5638.53,
+    "oldestDays": 153,
+    "step": "Past-due notice",
+    "invoices": 3
+   },
+   {
+    "customer": "Valley Brewing",
+    "overdue": 11388.59,
+    "over60": 5396.17,
+    "oldestDays": 216,
+    "step": "Final request",
+    "invoices": 3
+   },
+   {
+    "customer": "Union Builders",
+    "overdue": 10879.88,
+    "over60": 5340.72,
+    "oldestDays": 120,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Ember Hotel",
+    "overdue": 10152.69,
+    "over60": 5234.8,
+    "oldestDays": 153,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Iron Bakery",
+    "overdue": 3906.29,
+    "over60": 3906.29,
+    "oldestDays": 229,
+    "step": "Final request",
+    "invoices": 1
+   },
+   {
+    "customer": "Cedar Storage",
+    "overdue": 10044.46,
+    "over60": 3867.16,
+    "oldestDays": 67,
+    "step": "Call about the account",
+    "invoices": 3
+   },
+   {
+    "customer": "Harbor Storage",
+    "overdue": 6804.01,
+    "over60": 2513.21,
+    "oldestDays": 63,
+    "step": "Call about the account",
+    "invoices": 2
+   },
+   {
+    "customer": "Copper Dental Group",
+    "overdue": 2195.57,
+    "over60": 2027.38,
+    "oldestDays": 201,
+    "step": "Final request",
+    "invoices": 2
+   },
+   {
+    "customer": "Maple Fitness",
+    "overdue": 1561.18,
+    "over60": 1561.18,
+    "oldestDays": 170,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Linden Apartments",
+    "overdue": 29951.82,
+    "over60": 0.0,
+    "oldestDays": 46,
+    "step": "Second request and a call",
+    "invoices": 4
+   },
+   {
+    "customer": "Ridge Apartments",
+    "overdue": 20983.1,
+    "over60": 0.0,
+    "oldestDays": 43,
+    "step": "Second request and a call",
+    "invoices": 3
+   },
+   {
+    "customer": "Hawthorn Brewing",
+    "overdue": 17013.84,
+    "over60": 0.0,
+    "oldestDays": 28,
+    "step": "Friendly reminder",
+    "invoices": 3
+   },
+   {
+    "customer": "Driftwood Brewing",
+    "overdue": 11007.76,
+    "over60": 0.0,
+    "oldestDays": 14,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Jasper Apartments",
+    "overdue": 7930.84,
+    "over60": 0.0,
+    "oldestDays": 30,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Pioneer Roofing",
+    "overdue": 6888.98,
+    "over60": 0.0,
+    "oldestDays": 6,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Jasper Roofing",
+    "overdue": 6641.16,
+    "over60": 0.0,
+    "oldestDays": 3,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Zenith Schools",
+    "overdue": 5454.62,
+    "over60": 0.0,
+    "oldestDays": 50,
+    "step": "Second request and a call",
+    "invoices": 1
+   },
+   {
+    "customer": "Summit Builders",
+    "overdue": 5354.42,
+    "over60": 0.0,
+    "oldestDays": 15,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Birch Roofing",
+    "overdue": 4866.96,
+    "over60": 0.0,
+    "oldestDays": 2,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Summit Electric",
+    "overdue": 4309.21,
+    "over60": 0.0,
+    "oldestDays": 14,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Granite Storage",
+    "overdue": 3447.34,
+    "over60": 0.0,
+    "oldestDays": 29,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Yarrow Property Management",
+    "overdue": 2522.38,
+    "over60": 0.0,
+    "oldestDays": 3,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Summit Bakery",
+    "overdue": 2435.63,
+    "over60": 0.0,
+    "oldestDays": 28,
+    "step": "Friendly reminder",
+    "invoices": 3
+   },
+   {
+    "customer": "Granite Dental Group",
+    "overdue": 198.94,
+    "over60": 0.0,
+    "oldestDays": 29,
+    "step": "Friendly reminder",
+    "invoices": 1
+   }
+  ],
+  "concentration": [],
+  "journalEntries": 0,
+  "mispostings": [],
   "typedAR": 677097.53,
   "difference": 0.0
  },
@@ -580,6 +586,8 @@
   "rows": 152,
   "total": 636379.03,
   "customers": 37,
+  "owed": 637219.03,
+  "inCredit": 840.0,
   "buckets": {
    "current": 307593.02,
    "d1_30": 185367.63,
@@ -631,7 +639,9 @@
   "creditBalances": [
    {
     "customer": "Quarry Hotel",
-    "amount": 840.0
+    "amount": 840.0,
+    "paidTwice": "9001",
+    "otherJobs": false
    }
   ],
   "applyOldest": [
@@ -656,7 +666,7 @@
     "overdue": 19967.93,
     "over60": 9885.49,
     "oldestDays": 177,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -664,7 +674,7 @@
     "overdue": 10537.46,
     "over60": 8556.33,
     "oldestDays": 136,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -672,7 +682,7 @@
     "overdue": 7909.33,
     "over60": 7909.33,
     "oldestDays": 232,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -680,7 +690,7 @@
     "overdue": 26339.99,
     "over60": 7269.13,
     "oldestDays": 126,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -688,7 +698,7 @@
     "overdue": 6478.01,
     "over60": 6478.01,
     "oldestDays": 101,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -696,7 +706,7 @@
     "overdue": 6552.58,
     "over60": 6278.04,
     "oldestDays": 122,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -704,7 +714,7 @@
     "overdue": 5485.47,
     "over60": 5485.47,
     "oldestDays": 249,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -712,7 +722,7 @@
     "overdue": 9594.52,
     "over60": 4847.86,
     "oldestDays": 77,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -720,7 +730,7 @@
     "overdue": 4791.01,
     "over60": 4791.01,
     "oldestDays": 96,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -728,7 +738,7 @@
     "overdue": 11482.89,
     "over60": 4100.52,
     "oldestDays": 127,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -736,7 +746,7 @@
     "overdue": 12255.93,
     "over60": 3888.97,
     "oldestDays": 90,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -744,7 +754,7 @@
     "overdue": 10748.59,
     "over60": 2387.04,
     "oldestDays": 188,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -752,7 +762,7 @@
     "overdue": 11524.81,
     "over60": 1949.99,
     "oldestDays": 243,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 4
    },
    {
@@ -760,7 +770,7 @@
     "overdue": 3456.19,
     "over60": 1854.81,
     "oldestDays": 148,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -768,7 +778,7 @@
     "overdue": 6519.02,
     "over60": 1478.92,
     "oldestDays": 129,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -776,7 +786,7 @@
     "overdue": 28228.55,
     "over60": 905.57,
     "oldestDays": 256,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 6
    },
    {
@@ -792,7 +802,7 @@
     "overdue": 20765.57,
     "over60": 0.0,
     "oldestDays": 42,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 5
    },
    {
@@ -800,7 +810,7 @@
     "overdue": 16017.9,
     "over60": 0.0,
     "oldestDays": 36,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -808,7 +818,7 @@
     "overdue": 15603.7,
     "over60": 0.0,
     "oldestDays": 51,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -840,7 +850,7 @@
     "overdue": 7706.34,
     "over60": 0.0,
     "oldestDays": 46,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -856,7 +866,7 @@
     "overdue": 5750.25,
     "over60": 0.0,
     "oldestDays": 38,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -872,7 +882,7 @@
     "overdue": 5273.02,
     "over60": 0.0,
     "oldestDays": 49,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -880,7 +890,7 @@
     "overdue": 4770.48,
     "over60": 0.0,
     "oldestDays": 41,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -901,10 +911,11 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": []
  },
  "04": {
-  "title": "Planted: the same invoice entered twice",
+  "title": "Planted: the same invoice entered twice; a twice-weekly flat bill that is not a duplicate",
   "kind": "planted",
   "file": "04-planted-duplicate-invoice.xlsx",
   "status": "COMPUTED",
@@ -914,12 +925,14 @@
   "noOtherExceptions": true,
   "layout": "qbo",
   "asOf": "2026-10-31",
-  "rows": 146,
-  "total": 747691.31,
-  "customers": 36,
+  "rows": 150,
+  "total": 749491.31,
+  "customers": 37,
+  "owed": 749491.31,
+  "inCredit": 0.0,
   "buckets": {
    "current": 363049.81,
-   "d1_30": 188971.32,
+   "d1_30": 190771.32,
    "d31_60": 68323.13,
    "d61_90": 42688.28,
    "d91_180": 50315.69,
@@ -928,7 +941,7 @@
   },
   "bucketsClean": {
    "current": 363049.81,
-   "d1_30": 188971.32,
+   "d1_30": 190771.32,
    "d31_60": 68323.13,
    "d61_90": 42688.28,
    "d91_180": 50315.69,
@@ -955,7 +968,7 @@
     "overdue": 15708.93,
     "over60": 14464.48,
     "oldestDays": 79,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -963,7 +976,7 @@
     "overdue": 19053.2,
     "over60": 13516.75,
     "oldestDays": 159,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -971,7 +984,7 @@
     "overdue": 15063.35,
     "over60": 11538.57,
     "oldestDays": 166,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -979,7 +992,7 @@
     "overdue": 11272.79,
     "over60": 11272.79,
     "oldestDays": 273,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -987,7 +1000,7 @@
     "overdue": 9597.16,
     "over60": 9597.16,
     "oldestDays": 215,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -995,7 +1008,7 @@
     "overdue": 14965.45,
     "over60": 9554.41,
     "oldestDays": 154,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1003,7 +1016,7 @@
     "overdue": 14196.32,
     "over60": 9463.96,
     "oldestDays": 191,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1011,7 +1024,7 @@
     "overdue": 18465.11,
     "over60": 9118.62,
     "oldestDays": 106,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1019,7 +1032,7 @@
     "overdue": 18410.58,
     "over60": 7405.29,
     "oldestDays": 86,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -1027,7 +1040,7 @@
     "overdue": 5430.85,
     "over60": 5430.85,
     "oldestDays": 146,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -1035,7 +1048,7 @@
     "overdue": 18758.84,
     "over60": 5219.38,
     "oldestDays": 143,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -1043,7 +1056,7 @@
     "overdue": 6416.1,
     "over60": 4009.17,
     "oldestDays": 271,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1051,7 +1064,7 @@
     "overdue": 12136.75,
     "over60": 3698.93,
     "oldestDays": 103,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -1059,7 +1072,7 @@
     "overdue": 12870.71,
     "over60": 3481.52,
     "oldestDays": 74,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -1067,7 +1080,7 @@
     "overdue": 3455.09,
     "over60": 3455.09,
     "oldestDays": 100,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -1075,7 +1088,7 @@
     "overdue": 16478.06,
     "over60": 2441.57,
     "oldestDays": 75,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -1083,7 +1096,7 @@
     "overdue": 1866.88,
     "over60": 1866.88,
     "oldestDays": 77,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 1
    },
    {
@@ -1091,7 +1104,7 @@
     "overdue": 1811.63,
     "over60": 1811.63,
     "oldestDays": 64,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 1
    },
    {
@@ -1099,7 +1112,7 @@
     "overdue": 29306.38,
     "over60": 0.0,
     "oldestDays": 43,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
    },
    {
@@ -1107,16 +1120,8 @@
     "overdue": 27557.17,
     "over60": 0.0,
     "oldestDays": 41,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
-   },
-   {
-    "customer": "Pioneer Fitness",
-    "overdue": 19264.86,
-    "over60": 0.0,
-    "oldestDays": 12,
-    "step": "Friendly reminder",
-    "invoices": 2
    },
    {
     "customer": "Birch Hotel",
@@ -1147,8 +1152,16 @@
     "overdue": 12097.1,
     "over60": 0.0,
     "oldestDays": 54,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
+   },
+   {
+    "customer": "Pioneer Fitness",
+    "overdue": 9632.43,
+    "over60": 0.0,
+    "oldestDays": 12,
+    "step": "Friendly reminder",
+    "invoices": 1
    },
    {
     "customer": "Valley Roofing",
@@ -1163,7 +1176,7 @@
     "overdue": 8688.03,
     "over60": 0.0,
     "oldestDays": 50,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -1179,7 +1192,7 @@
     "overdue": 4258.38,
     "over60": 0.0,
     "oldestDays": 45,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -1191,6 +1204,14 @@
     "invoices": 1
    },
    {
+    "customer": "Willow Property Management",
+    "overdue": 1800.0,
+    "over60": 0.0,
+    "oldestDays": 10,
+    "step": "Friendly reminder",
+    "invoices": 4
+   },
+   {
     "customer": "Timber Brewing",
     "overdue": 1115.77,
     "over60": 0.0,
@@ -1200,7 +1221,8 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": []
  },
  "05": {
   "title": "Planted: the balance sheet's A/R is $3,150.00 more than the aging",
@@ -1216,6 +1238,8 @@
   "rows": 145,
   "total": 677097.53,
   "customers": 36,
+  "owed": 677097.53,
+  "inCredit": 0.0,
   "buckets": {
    "current": 369410.66,
    "d1_30": 150712.54,
@@ -1247,7 +1271,7 @@
     "overdue": 27534.81,
     "over60": 13596.44,
     "oldestDays": 247,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 5
    },
    {
@@ -1255,7 +1279,7 @@
     "overdue": 15930.43,
     "over60": 12321.94,
     "oldestDays": 180,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -1263,7 +1287,7 @@
     "overdue": 11031.8,
     "over60": 11031.8,
     "oldestDays": 308,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1271,7 +1295,7 @@
     "overdue": 17817.93,
     "over60": 8347.88,
     "oldestDays": 117,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1279,7 +1303,7 @@
     "overdue": 20203.03,
     "over60": 8236.92,
     "oldestDays": 211,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 4
    },
    {
@@ -1287,7 +1311,7 @@
     "overdue": 6913.81,
     "over60": 6913.81,
     "oldestDays": 236,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -1295,7 +1319,7 @@
     "overdue": 22315.39,
     "over60": 5638.53,
     "oldestDays": 153,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -1303,7 +1327,7 @@
     "overdue": 11388.59,
     "over60": 5396.17,
     "oldestDays": 216,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1311,7 +1335,7 @@
     "overdue": 10879.88,
     "over60": 5340.72,
     "oldestDays": 120,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1319,7 +1343,7 @@
     "overdue": 10152.69,
     "over60": 5234.8,
     "oldestDays": 153,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1327,7 +1351,7 @@
     "overdue": 3906.29,
     "over60": 3906.29,
     "oldestDays": 229,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -1335,7 +1359,7 @@
     "overdue": 10044.46,
     "over60": 3867.16,
     "oldestDays": 67,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -1343,7 +1367,7 @@
     "overdue": 6804.01,
     "over60": 2513.21,
     "oldestDays": 63,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -1351,7 +1375,7 @@
     "overdue": 2195.57,
     "over60": 2027.38,
     "oldestDays": 201,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1359,7 +1383,7 @@
     "overdue": 1561.18,
     "over60": 1561.18,
     "oldestDays": 170,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -1367,7 +1391,7 @@
     "overdue": 29951.82,
     "over60": 0.0,
     "oldestDays": 46,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
    },
    {
@@ -1375,7 +1399,7 @@
     "overdue": 20983.1,
     "over60": 0.0,
     "oldestDays": 43,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -1423,7 +1447,7 @@
     "overdue": 5454.62,
     "over60": 0.0,
     "oldestDays": 50,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -1485,6 +1509,7 @@
   ],
   "concentration": [],
   "journalEntries": 0,
+  "mispostings": [],
   "typedAR": 680247.53,
   "difference": 3150.0
  },
@@ -1502,6 +1527,8 @@
   "rows": 85,
   "total": 381706.39,
   "customers": 24,
+  "owed": 381706.39,
+  "inCredit": 0.0,
   "buckets": {
    "current": 153218.62,
    "d1_30": 89884.13,
@@ -1547,7 +1574,7 @@
     "overdue": 22170.95,
     "over60": 18685.47,
     "oldestDays": 208,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1555,7 +1582,7 @@
     "overdue": 21123.58,
     "over60": 11538.96,
     "oldestDays": 149,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -1563,7 +1590,7 @@
     "overdue": 16006.77,
     "over60": 10564.04,
     "oldestDays": 185,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 4
    },
    {
@@ -1571,7 +1598,7 @@
     "overdue": 15182.24,
     "over60": 9919.07,
     "oldestDays": 197,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 5
    },
    {
@@ -1579,7 +1606,7 @@
     "overdue": 13878.36,
     "over60": 9778.56,
     "oldestDays": 272,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1587,7 +1614,7 @@
     "overdue": 9182.61,
     "over60": 9182.61,
     "oldestDays": 64,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -1595,7 +1622,7 @@
     "overdue": 18795.58,
     "over60": 6569.14,
     "oldestDays": 113,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -1603,7 +1630,7 @@
     "overdue": 15497.11,
     "over60": 6567.1,
     "oldestDays": 157,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -1611,7 +1638,7 @@
     "overdue": 14525.67,
     "over60": 6376.64,
     "oldestDays": 248,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1619,7 +1646,7 @@
     "overdue": 17417.1,
     "over60": 3935.16,
     "oldestDays": 79,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -1627,7 +1654,7 @@
     "overdue": 6361.04,
     "over60": 3915.95,
     "oldestDays": 111,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1643,7 +1670,7 @@
     "overdue": 12402.66,
     "over60": 0.0,
     "oldestDays": 46,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -1659,7 +1686,7 @@
     "overdue": 4253.59,
     "over60": 0.0,
     "oldestDays": 54,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -1696,22 +1723,26 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": []
  },
  "07": {
-  "title": "QuickBooks Desktop: no as-of date, days from the Aging column",
+  "title": "QuickBooks Desktop: no as-of date, days from the Aging column; a credit memo refunded by check",
   "kind": "ugly",
   "file": "07-desktop-hollis-tate-ar-aging.xlsx",
   "status": "COMPUTED",
   "exceptions": [
-   "DATE_UNKNOWN"
+   "DATE_UNKNOWN",
+   "UNAPPLIED_CREDITS"
   ],
   "noOtherExceptions": true,
   "layout": "desktop",
   "asOf": null,
-  "rows": 144,
+  "rows": 146,
   "total": 635094.14,
   "customers": 36,
+  "owed": 635094.14,
+  "inCredit": 0.0,
   "buckets": {
    "current": 342212.95,
    "d1_30": 140493.01,
@@ -1730,7 +1761,15 @@
    "d181_365": 39613.7,
    "over365": 0.0
   },
-  "matches": [],
+  "matches": [
+   {
+    "customer": "Granite Mechanical",
+    "credit": "CM-31",
+    "creditType": "Credit Memo",
+    "invoice": "5531",
+    "amount": 300.0
+   }
+  ],
   "creditBalances": [],
   "applyOldest": [],
   "duplicates": [],
@@ -1743,7 +1782,7 @@
     "overdue": 18552.86,
     "over60": 8167.1,
     "oldestDays": 181,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1751,7 +1790,7 @@
     "overdue": 13125.22,
     "over60": 7889.08,
     "oldestDays": 95,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -1759,7 +1798,7 @@
     "overdue": 10007.18,
     "over60": 7833.16,
     "oldestDays": 116,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1767,7 +1806,7 @@
     "overdue": 8936.84,
     "over60": 7672.4,
     "oldestDays": 271,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1775,7 +1814,7 @@
     "overdue": 7450.15,
     "over60": 7450.15,
     "oldestDays": 247,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -1783,7 +1822,7 @@
     "overdue": 15205.71,
     "over60": 7408.08,
     "oldestDays": 239,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1791,7 +1830,7 @@
     "overdue": 7224.3,
     "over60": 7224.3,
     "oldestDays": 114,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1799,7 +1838,7 @@
     "overdue": 21159.39,
     "over60": 7063.25,
     "oldestDays": 161,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -1807,7 +1846,7 @@
     "overdue": 11150.69,
     "over60": 5909.07,
     "oldestDays": 154,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -1815,7 +1854,7 @@
     "overdue": 5621.58,
     "over60": 4385.92,
     "oldestDays": 220,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1823,7 +1862,7 @@
     "overdue": 4240.05,
     "over60": 2774.18,
     "oldestDays": 292,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -1831,7 +1870,7 @@
     "overdue": 8103.66,
     "over60": 2597.77,
     "oldestDays": 219,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 5
    },
    {
@@ -1839,7 +1878,7 @@
     "overdue": 12836.5,
     "over60": 1400.07,
     "oldestDays": 113,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -1847,7 +1886,7 @@
     "overdue": 11496.53,
     "over60": 1007.72,
     "oldestDays": 67,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -1855,7 +1894,7 @@
     "overdue": 3427.62,
     "over60": 197.1,
     "oldestDays": 289,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -1863,7 +1902,7 @@
     "overdue": 21942.64,
     "over60": 189.54,
     "oldestDays": 99,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -1871,7 +1910,7 @@
     "overdue": 21969.9,
     "over60": 0.0,
     "oldestDays": 47,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
    },
    {
@@ -1879,7 +1918,7 @@
     "overdue": 16383.59,
     "over60": 0.0,
     "oldestDays": 43,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -1887,7 +1926,7 @@
     "overdue": 11300.13,
     "over60": 0.0,
     "oldestDays": 56,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -1895,7 +1934,7 @@
     "overdue": 11148.21,
     "over60": 0.0,
     "oldestDays": 43,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -1919,7 +1958,7 @@
     "overdue": 7475.16,
     "over60": 0.0,
     "oldestDays": 36,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -1927,7 +1966,7 @@
     "overdue": 7091.98,
     "over60": 0.0,
     "oldestDays": 55,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -1935,7 +1974,7 @@
     "overdue": 6475.93,
     "over60": 0.0,
     "oldestDays": 47,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -1972,10 +2011,11 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": []
  },
  "08": {
-  "title": "Invoices over a year old, and small leftover balances",
+  "title": "Invoices over a year old, small leftover balances; allowance rates and the allowance on the books",
   "kind": "ugly",
   "file": "08-old-and-small-balances.xlsx",
   "status": "COMPUTED",
@@ -1986,23 +2026,25 @@
   "noOtherExceptions": true,
   "layout": "qbo",
   "asOf": "2026-10-31",
-  "rows": 137,
-  "total": 633848.81,
+  "rows": 138,
+  "total": 633855.21,
   "customers": 36,
+  "owed": 633855.21,
+  "inCredit": 0.0,
   "buckets": {
-   "current": 282377.97,
-   "d1_30": 155146.44,
-   "d31_60": 100244.2,
-   "d61_90": 33160.93,
+   "current": 282384.37,
+   "d1_30": 155142.19,
+   "d31_60": 100235.08,
+   "d61_90": 33174.3,
    "d91_180": 38317.92,
    "d181_365": 19496.35,
    "over365": 5105.0
   },
   "bucketsClean": {
-   "current": 282377.97,
-   "d1_30": 155146.44,
-   "d31_60": 100244.2,
-   "d61_90": 33160.93,
+   "current": 282384.37,
+   "d1_30": 155142.19,
+   "d31_60": 100235.08,
+   "d61_90": 33174.3,
    "d91_180": 38317.92,
    "d181_365": 19496.35,
    "over365": 5105.0
@@ -2027,23 +2069,15 @@
     "overdue": 31722.31,
     "over60": 15048.48,
     "oldestDays": 152,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 7
-   },
-   {
-    "customer": "Maple Contracting",
-    "overdue": 12476.68,
-    "over60": 11047.19,
-    "oldestDays": 476,
-    "step": "Consider writing off",
-    "invoices": 3
    },
    {
     "customer": "Birch Medical Center",
     "overdue": 29676.04,
     "over60": 10757.86,
     "oldestDays": 125,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -2051,7 +2085,7 @@
     "overdue": 18619.47,
     "over60": 8821.28,
     "oldestDays": 106,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2059,7 +2093,7 @@
     "overdue": 8058.89,
     "over60": 8058.89,
     "oldestDays": 83,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 1
    },
    {
@@ -2067,15 +2101,23 @@
     "overdue": 16702.24,
     "over60": 7924.5,
     "oldestDays": 65,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
+   },
+   {
+    "customer": "Maple Contracting",
+    "overdue": 8351.68,
+    "over60": 6922.19,
+    "oldestDays": 254,
+    "step": "Final request",
+    "invoices": 2
    },
    {
     "customer": "Iron Dental Group",
     "overdue": 6860.47,
     "over60": 6860.47,
     "oldestDays": 121,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2083,7 +2125,7 @@
     "overdue": 18444.75,
     "over60": 6593.46,
     "oldestDays": 196,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -2091,55 +2133,55 @@
     "overdue": 29222.13,
     "over60": 6273.13,
     "oldestDays": 124,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
     "customer": "Pioneer Brewing",
-    "overdue": 13471.35,
+    "overdue": 13470.6,
     "over60": 5980.7,
     "oldestDays": 278,
-    "step": "Collection agency or payment plan",
-    "invoices": 4
+    "step": "Final request",
+    "invoices": 3
    },
    {
     "customer": "Hawthorn Apartments",
     "overdue": 3930.06,
     "over60": 3930.06,
     "oldestDays": 164,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
     "customer": "Meadow Schools",
-    "overdue": 2124.84,
+    "overdue": 2115.72,
     "over60": 2115.72,
     "oldestDays": 139,
-    "step": "Final notice",
-    "invoices": 2
-   },
-   {
-    "customer": "Nimbus Roofing",
-    "overdue": 4328.15,
-    "over60": 1361.62,
-    "oldestDays": 578,
-    "step": "Consider writing off",
-    "invoices": 3
+    "step": "Past-due notice",
+    "invoices": 1
    },
    {
     "customer": "Delta Hardware",
     "overdue": 1306.84,
     "over60": 1306.84,
     "oldestDays": 98,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
+   },
+   {
+    "customer": "Nimbus Roofing",
+    "overdue": 3348.15,
+    "over60": 381.62,
+    "oldestDays": 165,
+    "step": "Past-due notice",
+    "invoices": 2
    },
    {
     "customer": "Beacon Property Management",
     "overdue": 21677.59,
     "over60": 0.0,
     "oldestDays": 59,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -2147,7 +2189,7 @@
     "overdue": 21579.09,
     "over60": 0.0,
     "oldestDays": 41,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
    },
    {
@@ -2155,7 +2197,7 @@
     "overdue": 16384.0,
     "over60": 0.0,
     "oldestDays": 37,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -2179,7 +2221,7 @@
     "overdue": 9771.5,
     "over60": 0.0,
     "oldestDays": 57,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2187,7 +2229,7 @@
     "overdue": 9724.17,
     "over60": 0.0,
     "oldestDays": 34,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -2203,7 +2245,7 @@
     "overdue": 8923.07,
     "over60": 0.0,
     "oldestDays": 32,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2211,7 +2253,7 @@
     "overdue": 7799.07,
     "over60": 0.0,
     "oldestDays": 53,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2219,7 +2261,7 @@
     "overdue": 6902.44,
     "over60": 0.0,
     "oldestDays": 40,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -2240,11 +2282,11 @@
    },
    {
     "customer": "Zenith Restaurants",
-    "overdue": 3930.09,
+    "overdue": 3926.59,
     "over60": 0.0,
-    "oldestDays": 20,
+    "oldestDays": 18,
     "step": "Friendly reminder",
-    "invoices": 2
+    "invoices": 1
    },
    {
     "customer": "Summit Logistics",
@@ -2280,7 +2322,20 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": [],
+  "rates": {
+   "current": 1,
+   "d1_30": 2,
+   "d31_60": 5,
+   "d61_90": 10,
+   "d91_180": 25,
+   "d181_365": 50,
+   "over365": 100
+  },
+  "allowance": 33582.18,
+  "existingAllowance": 15000.0,
+  "allowanceAdjustment": 23700.55
  },
  "09": {
   "title": "QuickBooks Online as CSV: dollar signs, parentheses, jobs under customers",
@@ -2288,7 +2343,7 @@
   "file": "09-qbo-csv-sub-customers.csv",
   "status": "COMPUTED",
   "exceptions": [
-   "UNAPPLIED_CREDITS"
+   "CREDIT_BALANCES"
   ],
   "noOtherExceptions": true,
   "layout": "qbo",
@@ -2296,6 +2351,8 @@
   "rows": 82,
   "total": 371201.63,
   "customers": 20,
+  "owed": 371321.63,
+  "inCredit": 120.0,
   "buckets": {
    "current": 175104.51,
    "d1_30": 96482.83,
@@ -2307,7 +2364,7 @@
   },
   "bucketsClean": {
    "current": 175104.51,
-   "d1_30": 96482.83,
+   "d1_30": 96602.83,
    "d31_60": 40423.38,
    "d61_90": 3349.62,
    "d91_180": 45866.42,
@@ -2315,14 +2372,15 @@
    "over365": 0.0
   },
   "matches": [],
-  "creditBalances": [],
-  "applyOldest": [
+  "creditBalances": [
    {
-    "customer": "Yarrow Hotel",
-    "credit": "CM-9",
-    "amount": 120.0
+    "customer": "Yarrow Hotel:Job 2",
+    "amount": 120.0,
+    "paidTwice": null,
+    "otherJobs": true
    }
   ],
+  "applyOldest": [],
   "duplicates": [],
   "small": [],
   "old": [],
@@ -2333,7 +2391,7 @@
     "overdue": 15951.65,
     "over60": 9543.27,
     "oldestDays": 156,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2341,7 +2399,7 @@
     "overdue": 16968.74,
     "over60": 9039.66,
     "oldestDays": 160,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -2349,7 +2407,7 @@
     "overdue": 24741.35,
     "over60": 8438.18,
     "oldestDays": 100,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -2357,7 +2415,7 @@
     "overdue": 19343.39,
     "over60": 8128.91,
     "oldestDays": 291,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -2365,7 +2423,7 @@
     "overdue": 8061.03,
     "over60": 8061.03,
     "oldestDays": 274,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -2373,7 +2431,7 @@
     "overdue": 14873.63,
     "over60": 6676.85,
     "oldestDays": 159,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 4
    },
    {
@@ -2381,7 +2439,7 @@
     "overdue": 20590.85,
     "over60": 3538.22,
     "oldestDays": 100,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -2389,7 +2447,7 @@
     "overdue": 18589.61,
     "over60": 3138.55,
     "oldestDays": 174,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -2397,7 +2455,7 @@
     "overdue": 2626.24,
     "over60": 2626.24,
     "oldestDays": 91,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -2405,7 +2463,7 @@
     "overdue": 14046.12,
     "over60": 0.0,
     "oldestDays": 42,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2421,7 +2479,7 @@
     "overdue": 10861.33,
     "over60": 0.0,
     "oldestDays": 49,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2429,7 +2487,7 @@
     "overdue": 8751.06,
     "over60": 0.0,
     "oldestDays": 31,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2437,12 +2495,12 @@
     "overdue": 5814.43,
     "over60": 0.0,
     "oldestDays": 49,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
     "customer": "Yarrow Hotel",
-    "overdue": 2044.99,
+    "overdue": 2164.99,
     "over60": 0.0,
     "oldestDays": 2,
     "step": "Friendly reminder",
@@ -2450,7 +2508,8 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": []
  },
  "10": {
   "title": "The wrong report: A/P aging detail",
@@ -2486,6 +2545,8 @@
   "rows": 148,
   "total": 692611.16,
   "customers": 36,
+  "owed": 692611.16,
+  "inCredit": 0.0,
   "buckets": {
    "current": 330092.89,
    "d1_30": 174677.11,
@@ -2517,7 +2578,7 @@
     "overdue": 21671.54,
     "over60": 16493.21,
     "oldestDays": 262,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 5
    },
    {
@@ -2525,7 +2586,7 @@
     "overdue": 23895.02,
     "over60": 9518.1,
     "oldestDays": 251,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 6
    },
    {
@@ -2533,7 +2594,7 @@
     "overdue": 15985.56,
     "over60": 9169.73,
     "oldestDays": 113,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -2541,7 +2602,7 @@
     "overdue": 11077.53,
     "over60": 8981.44,
     "oldestDays": 74,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -2549,7 +2610,7 @@
     "overdue": 9459.73,
     "over60": 8950.26,
     "oldestDays": 203,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -2557,7 +2618,7 @@
     "overdue": 13315.11,
     "over60": 8752.17,
     "oldestDays": 99,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2565,7 +2626,7 @@
     "overdue": 9814.72,
     "over60": 7503.67,
     "oldestDays": 150,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2573,7 +2634,7 @@
     "overdue": 10830.21,
     "over60": 7405.47,
     "oldestDays": 167,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2581,7 +2642,7 @@
     "overdue": 9899.43,
     "over60": 5904.25,
     "oldestDays": 212,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -2589,7 +2650,7 @@
     "overdue": 10546.61,
     "over60": 5890.83,
     "oldestDays": 118,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2597,7 +2658,7 @@
     "overdue": 5458.39,
     "over60": 5458.39,
     "oldestDays": 137,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -2605,7 +2666,7 @@
     "overdue": 19376.01,
     "over60": 5276.03,
     "oldestDays": 153,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 6
    },
    {
@@ -2613,7 +2674,7 @@
     "overdue": 18722.3,
     "over60": 4062.71,
     "oldestDays": 288,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -2621,7 +2682,7 @@
     "overdue": 24349.2,
     "over60": 3688.29,
     "oldestDays": 121,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -2629,7 +2690,7 @@
     "overdue": 14968.68,
     "over60": 3304.19,
     "oldestDays": 180,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2637,7 +2698,7 @@
     "overdue": 24065.12,
     "over60": 3291.54,
     "oldestDays": 241,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 5
    },
    {
@@ -2645,7 +2706,7 @@
     "overdue": 12883.53,
     "over60": 2502.31,
     "oldestDays": 124,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2653,7 +2714,7 @@
     "overdue": 10854.43,
     "over60": 1949.32,
     "oldestDays": 295,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 2
    },
    {
@@ -2661,7 +2722,7 @@
     "overdue": 1936.31,
     "over60": 1936.31,
     "oldestDays": 107,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 1
    },
    {
@@ -2669,7 +2730,7 @@
     "overdue": 17662.03,
     "over60": 0.0,
     "oldestDays": 57,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 3
    },
    {
@@ -2693,7 +2754,7 @@
     "overdue": 10793.52,
     "over60": 0.0,
     "oldestDays": 38,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -2749,7 +2810,7 @@
     "overdue": 2909.11,
     "over60": 0.0,
     "oldestDays": 36,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -2778,7 +2839,8 @@
    }
   ],
   "concentration": [],
-  "journalEntries": 0
+  "journalEntries": 0,
+  "mispostings": []
  },
  "13": {
   "title": "Planted: three lines pasted in twice",
@@ -2794,6 +2856,8 @@
   "rows": 135,
   "total": 608079.62,
   "customers": 36,
+  "owed": 608079.62,
+  "inCredit": 0.0,
   "buckets": {
    "current": 373510.77,
    "d1_30": 97070.15,
@@ -2825,7 +2889,7 @@
     "overdue": 9791.21,
     "over60": 9791.21,
     "oldestDays": 71,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 1
    },
    {
@@ -2833,7 +2897,7 @@
     "overdue": 15007.4,
     "over60": 9760.21,
     "oldestDays": 128,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2841,7 +2905,7 @@
     "overdue": 9370.9,
     "over60": 9370.9,
     "oldestDays": 69,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 1
    },
    {
@@ -2849,7 +2913,7 @@
     "overdue": 20981.28,
     "over60": 8866.76,
     "oldestDays": 113,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2857,7 +2921,7 @@
     "overdue": 9539.34,
     "over60": 8697.83,
     "oldestDays": 94,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2865,7 +2929,7 @@
     "overdue": 11787.33,
     "over60": 8470.94,
     "oldestDays": 164,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 3
    },
    {
@@ -2873,7 +2937,7 @@
     "overdue": 11972.42,
     "over60": 7443.14,
     "oldestDays": 132,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2881,7 +2945,7 @@
     "overdue": 7299.91,
     "over60": 7299.91,
     "oldestDays": 241,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 1
    },
    {
@@ -2889,7 +2953,7 @@
     "overdue": 10606.86,
     "over60": 6777.86,
     "oldestDays": 67,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -2897,7 +2961,7 @@
     "overdue": 6761.7,
     "over60": 6761.7,
     "oldestDays": 62,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 1
    },
    {
@@ -2905,7 +2969,7 @@
     "overdue": 12575.74,
     "over60": 6183.27,
     "oldestDays": 301,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -2913,7 +2977,7 @@
     "overdue": 7254.83,
     "over60": 3848.1,
     "oldestDays": 123,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2921,7 +2985,7 @@
     "overdue": 12106.9,
     "over60": 2986.89,
     "oldestDays": 241,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 3
    },
    {
@@ -2929,7 +2993,7 @@
     "overdue": 7237.92,
     "over60": 2653.31,
     "oldestDays": 78,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -2937,7 +3001,7 @@
     "overdue": 11753.59,
     "over60": 1090.4,
     "oldestDays": 66,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 3
    },
    {
@@ -2945,7 +3009,7 @@
     "overdue": 2879.04,
     "over60": 446.91,
     "oldestDays": 98,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 2
    },
    {
@@ -2953,7 +3017,7 @@
     "overdue": 9946.5,
     "over60": 0.0,
     "oldestDays": 44,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -3017,7 +3081,7 @@
     "overdue": 3379.14,
     "over60": 0.0,
     "oldestDays": 34,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -3025,7 +3089,7 @@
     "overdue": 2208.67,
     "over60": 0.0,
     "oldestDays": 55,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -3033,7 +3097,7 @@
     "overdue": 1926.34,
     "over60": 0.0,
     "oldestDays": 50,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -3041,7 +3105,7 @@
     "overdue": 1804.25,
     "over60": 0.0,
     "oldestDays": 45,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -3071,6 +3135,7 @@
   ],
   "concentration": [],
   "journalEntries": 0,
+  "mispostings": [],
   "duplicates_removed": 3
  },
  "14": {
@@ -3088,6 +3153,8 @@
   "rows": 63,
   "total": 385466.02,
   "customers": 18,
+  "owed": 385466.02,
+  "inCredit": 0.0,
   "buckets": {
    "current": 147436.65,
    "d1_30": 76976.03,
@@ -3119,7 +3186,7 @@
     "overdue": 96627.4,
     "over60": 94000.0,
     "oldestDays": 79,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -3127,7 +3194,7 @@
     "overdue": 14653.58,
     "over60": 6382.52,
     "oldestDays": 80,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -3135,23 +3202,23 @@
     "overdue": 23791.12,
     "over60": 6275.88,
     "oldestDays": 235,
-    "step": "Collection agency or payment plan",
+    "step": "Final request",
     "invoices": 4
    },
    {
     "customer": "Granite Auto Body",
-    "overdue": 18718.95,
+    "overdue": 6218.95,
     "over60": 6218.95,
     "oldestDays": 143,
-    "step": "Final notice",
-    "invoices": 2
+    "step": "Past-due notice",
+    "invoices": 1
    },
    {
     "customer": "Nimbus Roofing",
     "overdue": 31800.7,
     "over60": 4185.97,
     "oldestDays": 142,
-    "step": "Final notice",
+    "step": "Past-due notice",
     "invoices": 5
    },
    {
@@ -3159,7 +3226,7 @@
     "overdue": 6054.56,
     "over60": 2569.63,
     "oldestDays": 61,
-    "step": "Call; hold new orders",
+    "step": "Call about the account",
     "invoices": 2
    },
    {
@@ -3167,7 +3234,7 @@
     "overdue": 19995.54,
     "over60": 0.0,
     "oldestDays": 58,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 4
    },
    {
@@ -3175,7 +3242,7 @@
     "overdue": 7362.89,
     "over60": 0.0,
     "oldestDays": 51,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 2
    },
    {
@@ -3199,7 +3266,7 @@
     "overdue": 4217.36,
     "over60": 0.0,
     "oldestDays": 43,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    },
    {
@@ -3215,7 +3282,7 @@
     "overdue": 2011.04,
     "over60": 0.0,
     "oldestDays": 50,
-    "step": "Second reminder and a call",
+    "step": "Second request and a call",
     "invoices": 1
    }
   ],
@@ -3226,6 +3293,7 @@
    }
   ],
   "journalEntries": 1,
+  "mispostings": [],
   "rates": {
    "current": 1,
    "d1_30": 2,
@@ -3236,5 +3304,629 @@
    "over365": 100
   },
   "allowance": 21119.3
+ },
+ "15": {
+  "title": "Two real payments of $500 on the same day, no number: identical lines, both kept",
+  "kind": "ugly",
+  "file": "15-two-identical-payments.xlsx",
+  "status": "COMPUTED",
+  "exceptions": [
+   "IDENTICAL_LINES",
+   "UNAPPLIED_CREDITS"
+  ],
+  "noOtherExceptions": true,
+  "layout": "qbo",
+  "asOf": "2026-10-31",
+  "rows": 101,
+  "total": 463451.63,
+  "customers": 21,
+  "owed": 463451.63,
+  "inCredit": 0.0,
+  "buckets": {
+   "current": 214636.68,
+   "d1_30": 109018.84,
+   "d31_60": 44387.82,
+   "d61_90": 24508.12,
+   "d91_180": 40251.18,
+   "d181_365": 30648.99,
+   "over365": 0.0
+  },
+  "bucketsClean": {
+   "current": 214636.68,
+   "d1_30": 109518.84,
+   "d31_60": 43887.82,
+   "d61_90": 24508.12,
+   "d91_180": 40251.18,
+   "d181_365": 30648.99,
+   "over365": 0.0
+  },
+  "matches": [
+   {
+    "customer": "Hawthorn Fitness",
+    "credit": "Payment",
+    "creditType": "Payment",
+    "invoice": "8801",
+    "amount": 500.0
+   },
+   {
+    "customer": "Hawthorn Fitness",
+    "credit": "Payment",
+    "creditType": "Payment",
+    "invoice": "8802",
+    "amount": 500.0
+   }
+  ],
+  "creditBalances": [],
+  "applyOldest": [],
+  "duplicates": [],
+  "small": [],
+  "old": [],
+  "writeOff": 0.0,
+  "worklist": [
+   {
+    "customer": "Pioneer Electric",
+    "overdue": 16406.7,
+    "over60": 14664.31,
+    "oldestDays": 240,
+    "step": "Final request",
+    "invoices": 3
+   },
+   {
+    "customer": "Willow Apartments",
+    "overdue": 21922.28,
+    "over60": 14155.33,
+    "oldestDays": 268,
+    "step": "Final request",
+    "invoices": 4
+   },
+   {
+    "customer": "Evergreen Bakery",
+    "overdue": 23272.27,
+    "over60": 13054.91,
+    "oldestDays": 74,
+    "step": "Call about the account",
+    "invoices": 4
+   },
+   {
+    "customer": "Beacon Hotel",
+    "overdue": 32475.94,
+    "over60": 11874.57,
+    "oldestDays": 243,
+    "step": "Final request",
+    "invoices": 6
+   },
+   {
+    "customer": "Juniper Mechanical",
+    "overdue": 24888.77,
+    "over60": 9930.49,
+    "oldestDays": 142,
+    "step": "Past-due notice",
+    "invoices": 5
+   },
+   {
+    "customer": "Willow Hotel",
+    "overdue": 17346.44,
+    "over60": 9326.96,
+    "oldestDays": 168,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Nimbus Mechanical",
+    "overdue": 7369.64,
+    "over60": 7369.64,
+    "oldestDays": 67,
+    "step": "Call about the account",
+    "invoices": 1
+   },
+   {
+    "customer": "Valley Medical Center",
+    "overdue": 17456.59,
+    "over60": 6131.33,
+    "oldestDays": 228,
+    "step": "Final request",
+    "invoices": 3
+   },
+   {
+    "customer": "Union Apartments",
+    "overdue": 4554.0,
+    "over60": 4215.79,
+    "oldestDays": 182,
+    "step": "Final request",
+    "invoices": 2
+   },
+   {
+    "customer": "Timber Brewing",
+    "overdue": 8163.06,
+    "over60": 4083.57,
+    "oldestDays": 63,
+    "step": "Call about the account",
+    "invoices": 4
+   },
+   {
+    "customer": "Jasper Contracting",
+    "overdue": 780.95,
+    "over60": 601.39,
+    "oldestDays": 153,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Meadow Medical Center",
+    "overdue": 23108.88,
+    "over60": 0.0,
+    "oldestDays": 45,
+    "step": "Second request and a call",
+    "invoices": 3
+   },
+   {
+    "customer": "Copper Storage",
+    "overdue": 17706.02,
+    "over60": 0.0,
+    "oldestDays": 51,
+    "step": "Second request and a call",
+    "invoices": 3
+   },
+   {
+    "customer": "Keystone Apartments",
+    "overdue": 8382.91,
+    "over60": 0.0,
+    "oldestDays": 30,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Copper Apartments",
+    "overdue": 8200.28,
+    "over60": 0.0,
+    "oldestDays": 51,
+    "step": "Second request and a call",
+    "invoices": 3
+   },
+   {
+    "customer": "Union Medical Center",
+    "overdue": 5296.69,
+    "over60": 0.0,
+    "oldestDays": 18,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Falcon Medical Center",
+    "overdue": 4997.68,
+    "over60": 0.0,
+    "oldestDays": 51,
+    "step": "Second request and a call",
+    "invoices": 1
+   },
+   {
+    "customer": "Meadow Mechanical",
+    "overdue": 3839.28,
+    "over60": 0.0,
+    "oldestDays": 15,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Birch Contracting",
+    "overdue": 2646.57,
+    "over60": 0.0,
+    "oldestDays": 4,
+    "step": "Friendly reminder",
+    "invoices": 1
+   }
+  ],
+  "concentration": [],
+  "journalEntries": 0,
+  "mispostings": []
+ },
+ "16": {
+  "title": "No as-of date in the file: the page asks for it, then reviews",
+  "kind": "ugly",
+  "file": "16-no-as-of-date.xlsx",
+  "status": "COMPUTED",
+  "exceptions": [],
+  "noOtherExceptions": true,
+  "layout": "qbo",
+  "asOf": "2026-10-31",
+  "rows": 82,
+  "total": 392017.88,
+  "customers": 22,
+  "owed": 392017.88,
+  "inCredit": 0.0,
+  "buckets": {
+   "current": 223915.34,
+   "d1_30": 66067.82,
+   "d31_60": 24234.4,
+   "d61_90": 24897.35,
+   "d91_180": 41788.37,
+   "d181_365": 11114.6,
+   "over365": 0.0
+  },
+  "bucketsClean": {
+   "current": 223915.34,
+   "d1_30": 66067.82,
+   "d31_60": 24234.4,
+   "d61_90": 24897.35,
+   "d91_180": 41788.37,
+   "d181_365": 11114.6,
+   "over365": 0.0
+  },
+  "matches": [],
+  "creditBalances": [],
+  "applyOldest": [],
+  "duplicates": [],
+  "small": [],
+  "old": [],
+  "writeOff": 0.0,
+  "worklist": [
+   {
+    "customer": "Foxglove Auto Body",
+    "overdue": 25547.35,
+    "over60": 18766.81,
+    "oldestDays": 188,
+    "step": "Final request",
+    "invoices": 3
+   },
+   {
+    "customer": "Evergreen Builders",
+    "overdue": 15238.96,
+    "over60": 12252.92,
+    "oldestDays": 63,
+    "step": "Call about the account",
+    "invoices": 4
+   },
+   {
+    "customer": "Meadow Fitness",
+    "overdue": 8332.15,
+    "over60": 8332.15,
+    "oldestDays": 112,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Copper Apartments",
+    "overdue": 7887.29,
+    "over60": 7887.29,
+    "oldestDays": 116,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Timber Builders",
+    "overdue": 6618.61,
+    "over60": 6618.61,
+    "oldestDays": 134,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Quarry Builders",
+    "overdue": 6144.0,
+    "over60": 6144.0,
+    "oldestDays": 156,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Juniper Auto Body",
+    "overdue": 21102.79,
+    "over60": 5810.0,
+    "oldestDays": 129,
+    "step": "Past-due notice",
+    "invoices": 3
+   },
+   {
+    "customer": "Birch Medical Center",
+    "overdue": 8602.04,
+    "over60": 4548.44,
+    "oldestDays": 153,
+    "step": "Past-due notice",
+    "invoices": 3
+   },
+   {
+    "customer": "Hawthorn Landscaping",
+    "overdue": 3213.31,
+    "over60": 3213.31,
+    "oldestDays": 80,
+    "step": "Call about the account",
+    "invoices": 2
+   },
+   {
+    "customer": "Quarry Landscaping",
+    "overdue": 7940.28,
+    "over60": 2447.88,
+    "oldestDays": 128,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Alder Fitness",
+    "overdue": 16729.48,
+    "over60": 1778.91,
+    "oldestDays": 244,
+    "step": "Final request",
+    "invoices": 5
+   },
+   {
+    "customer": "Falcon Mechanical",
+    "overdue": 19821.6,
+    "over60": 0.0,
+    "oldestDays": 26,
+    "step": "Friendly reminder",
+    "invoices": 4
+   },
+   {
+    "customer": "Jasper Dental Group",
+    "overdue": 6632.99,
+    "over60": 0.0,
+    "oldestDays": 54,
+    "step": "Second request and a call",
+    "invoices": 1
+   },
+   {
+    "customer": "Northwind Contracting",
+    "overdue": 5283.51,
+    "over60": 0.0,
+    "oldestDays": 14,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Yarrow Storage",
+    "overdue": 4817.55,
+    "over60": 0.0,
+    "oldestDays": 15,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Summit Apartments",
+    "overdue": 3020.97,
+    "over60": 0.0,
+    "oldestDays": 34,
+    "step": "Second request and a call",
+    "invoices": 1
+   },
+   {
+    "customer": "Orchard Auto Body",
+    "overdue": 1169.66,
+    "over60": 0.0,
+    "oldestDays": 6,
+    "step": "Friendly reminder",
+    "invoices": 1
+   }
+  ],
+  "concentration": [],
+  "journalEntries": 0,
+  "mispostings": [],
+  "typeAsOf": "10/31/2026"
+ },
+ "17": {
+  "title": "Planted: one check for two invoices; a payment posted to the wrong customer",
+  "kind": "planted",
+  "file": "17-planted-netting-and-misposting.xlsx",
+  "status": "COMPUTED",
+  "exceptions": [
+   "CREDIT_BALANCES",
+   "UNAPPLIED_CREDITS"
+  ],
+  "noOtherExceptions": true,
+  "layout": "qbo",
+  "asOf": "2026-10-31",
+  "rows": 99,
+  "total": 444939.19,
+  "customers": 25,
+  "owed": 446189.19,
+  "inCredit": 1250.0,
+  "buckets": {
+   "current": 215497.92,
+   "d1_30": 112524.35,
+   "d31_60": 55594.45,
+   "d61_90": 6771.87,
+   "d91_180": 36394.87,
+   "d181_365": 18155.73,
+   "over365": 0.0
+  },
+  "bucketsClean": {
+   "current": 215497.92,
+   "d1_30": 113324.35,
+   "d31_60": 56544.45,
+   "d61_90": 6271.87,
+   "d91_180": 36394.87,
+   "d181_365": 18155.73,
+   "over365": 0.0
+  },
+  "matches": [],
+  "creditBalances": [
+   {
+    "customer": "Keystone Apartments",
+    "amount": 1250.0,
+    "paidTwice": null,
+    "otherJobs": false
+   }
+  ],
+  "applyOldest": [
+   {
+    "customer": "Zenith Builders",
+    "credit": "Payment",
+    "amount": 800.0
+   }
+  ],
+  "duplicates": [],
+  "small": [],
+  "old": [],
+  "writeOff": 0.0,
+  "worklist": [
+   {
+    "customer": "Linden Schools",
+    "overdue": 29984.88,
+    "over60": 17555.85,
+    "oldestDays": 164,
+    "step": "Past-due notice",
+    "invoices": 6
+   },
+   {
+    "customer": "Kestrel Hotel",
+    "overdue": 10199.93,
+    "over60": 9076.94,
+    "oldestDays": 255,
+    "step": "Final request",
+    "invoices": 4
+   },
+   {
+    "customer": "Delta Mechanical",
+    "overdue": 12270.06,
+    "over60": 6727.66,
+    "oldestDays": 131,
+    "step": "Past-due notice",
+    "invoices": 2
+   },
+   {
+    "customer": "Summit Dental Group",
+    "overdue": 6479.26,
+    "over60": 6479.26,
+    "oldestDays": 152,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Yarrow Bakery",
+    "overdue": 14765.09,
+    "over60": 6257.29,
+    "oldestDays": 296,
+    "step": "Final request",
+    "invoices": 3
+   },
+   {
+    "customer": "Garnet Auto Body",
+    "overdue": 17676.07,
+    "over60": 5275.21,
+    "oldestDays": 159,
+    "step": "Past-due notice",
+    "invoices": 4
+   },
+   {
+    "customer": "Indigo Hardware",
+    "overdue": 3382.82,
+    "over60": 3382.82,
+    "oldestDays": 209,
+    "step": "Final request",
+    "invoices": 1
+   },
+   {
+    "customer": "Falcon Brewing",
+    "overdue": 9194.54,
+    "over60": 2385.45,
+    "oldestDays": 212,
+    "step": "Final request",
+    "invoices": 3
+   },
+   {
+    "customer": "Timber Mechanical",
+    "overdue": 1940.2,
+    "over60": 1940.2,
+    "oldestDays": 98,
+    "step": "Past-due notice",
+    "invoices": 1
+   },
+   {
+    "customer": "Beacon Restaurants",
+    "overdue": 19752.11,
+    "over60": 1741.79,
+    "oldestDays": 114,
+    "step": "Past-due notice",
+    "invoices": 4
+   },
+   {
+    "customer": "Iron Schools",
+    "overdue": 18462.31,
+    "over60": 0.0,
+    "oldestDays": 57,
+    "step": "Second request and a call",
+    "invoices": 3
+   },
+   {
+    "customer": "Copper Hotel",
+    "overdue": 17628.37,
+    "over60": 0.0,
+    "oldestDays": 29,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Juniper Landscaping",
+    "overdue": 14904.35,
+    "over60": 0.0,
+    "oldestDays": 26,
+    "step": "Friendly reminder",
+    "invoices": 3
+   },
+   {
+    "customer": "Pioneer Roofing",
+    "overdue": 12052.07,
+    "over60": 0.0,
+    "oldestDays": 44,
+    "step": "Second request and a call",
+    "invoices": 2
+   },
+   {
+    "customer": "Birch Landscaping",
+    "overdue": 11220.6,
+    "over60": 0.0,
+    "oldestDays": 26,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Linden Contracting",
+    "overdue": 10900.51,
+    "over60": 0.0,
+    "oldestDays": 55,
+    "step": "Second request and a call",
+    "invoices": 2
+   },
+   {
+    "customer": "Harbor Builders",
+    "overdue": 9707.41,
+    "over60": 0.0,
+    "oldestDays": 45,
+    "step": "Second request and a call",
+    "invoices": 2
+   },
+   {
+    "customer": "Timber Landscaping",
+    "overdue": 7622.48,
+    "over60": 0.0,
+    "oldestDays": 11,
+    "step": "Friendly reminder",
+    "invoices": 2
+   },
+   {
+    "customer": "Juniper Logistics",
+    "overdue": 1298.21,
+    "over60": 0.0,
+    "oldestDays": 13,
+    "step": "Friendly reminder",
+    "invoices": 1
+   },
+   {
+    "customer": "Indigo Storage",
+    "overdue": 1250.0,
+    "over60": 0.0,
+    "oldestDays": 48,
+    "step": "Second request and a call",
+    "invoices": 1
+   }
+  ],
+  "concentration": [],
+  "journalEntries": 0,
+  "mispostings": [
+   {
+    "customer": "Keystone Apartments",
+    "maybeFor": "Indigo Storage",
+    "invoice": "9150"
+   }
+  ]
  }
 }

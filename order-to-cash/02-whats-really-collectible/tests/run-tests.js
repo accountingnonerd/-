@@ -48,7 +48,11 @@ function compare(key, rep) {
   }
   check("credits matched exactly", pairs(key.matches, (m) => `${m.customer}: ${m.credit} -> ${m.invoice} ${m.amount.toFixed(2)}`), pairs(rep.matches, (m) => `${m.customer}: ${m.credit} -> ${m.invoice} ${Number(m.amount).toFixed(2)}`));
   check("credits applied to oldest invoices", pairs(key.applyOldest, (m) => `${m.customer}: ${m.credit} ${m.amount.toFixed(2)}`), pairs(rep.applyOldest, (m) => `${m.customer}: ${m.credit} ${Number(m.amount).toFixed(2)}`));
-  check("customers in credit", pairs(key.creditBalances, (m) => `${m.customer} ${m.amount.toFixed(2)}`), pairs(rep.creditBalances, (m) => `${m.customer} ${Number(m.amount).toFixed(2)}`));
+  check("customers in credit", pairs(key.creditBalances, (m) => `${m.customer} ${m.amount.toFixed(2)} twice:${m.paidTwice} otherJobs:${m.otherJobs}`),
+    pairs(rep.creditBalances, (m) => `${m.customer} ${Number(m.amount).toFixed(2)} twice:${m.paidTwice} otherJobs:${m.otherJobs}`));
+  check("payments maybe posted to the wrong customer", pairs(key.mispostings, (m) => `${m.customer} -> ${m.maybeFor} #${m.invoice}`), pairs(rep.mispostings, (m) => `${m.customer} -> ${m.maybeFor} #${m.invoice}`));
+  check("owed by customers", key.owed, rep.owed, near(key.owed, rep.owed));
+  check("owed to customers in credit", key.inCredit, rep.inCredit, near(key.inCredit, rep.inCredit));
   check("duplicate invoices", pairs(key.duplicates, (m) => `${m.customer}: ${m.a}/${m.b}`), pairs(rep.duplicates, (m) => `${m.customer}: ${m.a}/${m.b}`));
   check("small balances", key.small.join(","), (rep.small || []).join(","));
   check("over a year", key.old.join(","), (rep.old || []).join(","));
@@ -66,6 +70,7 @@ function compare(key, rep) {
   });
   if (key.typedAR !== undefined) check("difference from the balance sheet", key.difference, rep.difference, near(key.difference, rep.difference));
   if (key.allowance !== undefined) check("allowance", key.allowance, rep.allowance, near(key.allowance, rep.allowance));
+  if (key.allowanceAdjustment !== undefined) check("allowance adjustment", key.allowanceAdjustment, rep.allowanceAdjustment, near(key.allowanceAdjustment, rep.allowanceAdjustment));
   if (key.duplicates_removed !== undefined) check("duplicate lines removed", key.duplicates_removed, rep.duplicates_removed);
   return out;
 }
@@ -88,6 +93,13 @@ function compare(key, rep) {
     try {
       await page.setInputFiles("input#file", path.join(HERE, "cases", key.file));
       await page.waitForFunction(() => window.__report !== undefined && window.__report !== null, null, { timeout: 20000 });
+      if (key.typeAsOf) {
+        const first = await page.evaluate(() => window.__report.status);
+        if (first !== "NEEDS_DATE") errors.push("expected the page to ask for the as-of date, status was " + first);
+        await page.fill("input#asof", key.typeAsOf);
+        await page.click("button#set-asof");
+        await page.waitForFunction(() => window.__report && window.__report.status !== "NEEDS_DATE", null, { timeout: 10000 });
+      }
       if (key.typedAR !== undefined) {
         await page.fill("input#ar", key.typedAR.toFixed(2));
         await page.click("button#compare");
@@ -95,6 +107,7 @@ function compare(key, rep) {
       }
       if (key.rates) {
         for (const b of BUCKETS) await page.fill("input#rate-" + b, String(key.rates[b]));
+        if (key.existingAllowance !== undefined) await page.fill("input#existing-allowance", key.existingAllowance.toFixed(2));
         await page.click("button#apply-rates");
         await page.waitForFunction(() => window.__report && window.__report.allowance !== undefined && window.__report.allowance !== null, null, { timeout: 10000 });
       }
@@ -106,7 +119,7 @@ function compare(key, rep) {
     } catch (e) { errors.push(String(e).split("\n")[0]); }
     const ms = Date.now() - t0;
     const checks = compare(key, rep);
-    const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "SUMMARY_ONLY", "DUPLICATE_ROWS", "TOTAL_MISMATCH", "DIFFERS_FROM_BALANCE_SHEET", "UNREAD_ROWS"].includes(c));
+    const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "SUMMARY_ONLY", "DUPLICATE_ROWS", "TOTAL_MISMATCH", "DIFFERS_FROM_BALANCE_SHEET", "UNREAD_ROWS", "UNKNOWN_TYPE"].includes(c));
     checks.push({ what: wantStop ? "shows the stop message" : "shows no stop message", expected: wantStop, got: !!shown.stop, ok: wantStop === !!shown.stop });
     if (errors.length) checks.push({ what: "runs without errors", expected: "no errors", got: errors.join(" | "), ok: false });
     results.push({ id, key, checks, ms, pass: checks.every((c) => c.ok) });

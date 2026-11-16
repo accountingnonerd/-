@@ -7,25 +7,27 @@ unapplied payments, credit memos, journal entries) for three invented businesses
 key is worked out from the model with the rules below, never by reading the files back.
 Money is held in integer cents.
 
-The rules the key follows:
+The rules the key follows (version 2, after the accounting review and the cold-user check):
   days past due = as-of date - due date (0 or less is current); buckets: current, 1-30, 31-60,
     61-90, 91-180, 181-365, over 365.
-  Clean-up, customer by customer:
+  Clean-up, job by job ("Customer:Job" is its own job; jobs roll up to the customer for chasing):
     1. each credit (payment, credit memo, negative journal entry), oldest first, is matched to an
-       open invoice of exactly the same amount (the oldest such invoice);
-    2. if the customer's open items add up to zero or less, the customer is owed a refund or must
-       confirm: listed as a credit balance, and not chased;
-    3. otherwise each remaining credit is applied to the customer's oldest invoices.
-  Duplicates: two open invoices of one customer with the same amount (at least $1), dated within
-    7 days of each other, with different numbers.
-  Small balances: an invoice whose remaining balance is above zero and below $10.00.
-  Over a year: an invoice more than 365 days past due with a remaining balance.
-  Write-off proposed: small balances plus over-a-year invoices, after the clean-up.
-  Worklist: customers with an overdue remaining balance, ranked by the amount over 60 days past due,
-    then by the overdue amount, then by name; the step follows the oldest overdue invoice.
-  Allowance: the accountant's rates by bucket, applied to remaining balances not proposed for
-    write-off.
+       open invoice (or refund check) of exactly the same amount, the oldest such;
+    2. what remains of each credit is applied to the job's oldest open invoices;
+    3. whatever credit is still left is owed to the customer: a credit balance, never chased.
+  Duplicates, per job: two open invoices with the same number, or of the same amount (at least $1)
+    dated less than 7 days apart; not when the job has three or more invoices of that amount
+    (recurring billing). The later copy is not chased.
+  Small balances: a part-paid invoice with less than $10.00 left, more than 60 days past due.
+  Over a year: an invoice more than 365 days past due with a balance left.
+  Write-off proposed: small balances plus over-a-year invoices.
+  Chased: open invoices past due, not proposed for write-off, not the later copy of a duplicate,
+    not journal entries. Worklist per customer, ranked by the amount over 60 days past due, then by
+    the overdue amount, then by name; the step follows the oldest chased invoice.
+  Allowance: the accountant's rates by bucket, on balances left after the clean-up and write-offs;
+    with the allowance already on the books, the adjustment = required - (existing - write-offs).
   Concentration: a customer whose remaining balance is 20% or more of all remaining balances.
+  Reconciliation: report total = owed by customers - owed to customers in credit.
 
 Run:  python3 make_cases.py      writes cases/* and answer-key.json
 """
@@ -92,80 +94,98 @@ def inv(customer, d, amt, num, terms=30, open_=None):
     return dict(customer=customer, type="Invoice", date=d, due=d + timedelta(days=terms), num=num, amount=amt, open=amt if open_ is None else open_, terms=terms)
 
 # ------------------------------------------------------------------ the answer key, from the model
-def key_for(items, rates=None, typed=None):
-    """What the tool should report, from the model, by the rules in the docstring."""
+def key_for(items, rates=None, typed=None, existing=None, asof_known=True):
+    """What the tool should report, from the model, by the rules in the docstring (version 2, after review)."""
     rem = {id(i): i["open"] for i in items}
-    custs = sorted(set(i["customer"] for i in items))
-    matches, credit_bal, apply_oldest = [], [], []
-    for c in custs:
-        mine = [i for i in items if i["customer"] == c]
+    parent = lambda i: i["customer"].split(":")[0].strip()
+    jobs = sorted(set(i["customer"] for i in items))
+    parents = sorted(set(parent(i) for i in items))
+    target = lambda i: i["open"] > 0 and i["type"] in ("Invoice", "Refund")     # a credit can be applied to these
+    matches, apply_oldest, credit_bal = [], [], []
+    for j in jobs:
+        mine = [i for i in items if i["customer"] == j]
         credits = sorted([i for i in mine if i["open"] < 0], key=lambda i: (i["date"], i["num"]))
-        invs = sorted([i for i in mine if i["open"] > 0], key=lambda i: (i["date"], i["num"]))
-        for cr in credits:
-            hit = [v for v in invs if rem[id(v)] == -rem[id(cr)] and rem[id(v)] == v["open"]]
+        tg = sorted([i for i in mine if target(i)], key=lambda i: (i["date"], i["num"]))
+        for cr in credits:                                  # 1. exact amount, oldest invoice first
+            hit = [v for v in tg if rem[id(v)] == -rem[id(cr)] and rem[id(v)] == v["open"]]
             if hit:
                 v = hit[0]
-                matches.append({"customer": c, "credit": cr["num"] or cr["type"], "creditType": cr["type"], "invoice": v["num"], "amount": v["open"] / 100})
+                matches.append({"customer": j, "credit": cr["num"] or cr["type"], "creditType": cr["type"], "invoice": v["num"], "amount": v["open"] / 100})
                 rem[id(v)] = 0; rem[id(cr)] = 0
-        net = sum(rem[id(i)] for i in mine)
-        left = [cr for cr in credits if rem[id(cr)] < 0]
-        if net <= 0 and (left or net < 0):
-            if net < 0: credit_bal.append({"customer": c, "amount": -net / 100})
-            for i in mine: rem[id(i)] = 0
-            continue
-        for cr in left:
-            amt = -rem[id(cr)]
-            apply_oldest.append({"customer": c, "credit": cr["num"] or cr["type"], "amount": amt / 100})
-            for v in invs:
+        for cr in credits:                                  # 2. the rest to the oldest invoices of the same job
+            if rem[id(cr)] == 0: continue
+            amt, used = -rem[id(cr)], []
+            for v in tg:
                 if amt == 0: break
                 take = min(amt, rem[id(v)])
-                rem[id(v)] -= take; amt -= take
-            rem[id(cr)] = 0
+                if take: rem[id(v)] -= take; amt -= take; used.append(v["num"])
+            if used: apply_oldest.append({"customer": j, "credit": cr["num"] or cr["type"], "amount": (-rem[id(cr)] - amt) / 100})
+            rem[id(cr)] = -amt
+        left = -sum(rem[id(cr)] for cr in credits)          # 3. what is still left is owed to the customer
+        if left: credit_bal.append({"customer": j, "amount": left / 100})
     pos = [i for i in items if rem[id(i)] > 0]
-    small = [i for i in pos if rem[id(i)] < 1000 and i["type"] == "Invoice"]
-    old = [i for i in pos if days(i) > 365 and i["type"] == "Invoice" and i not in small]
-    wo = small + old
-    # duplicates among open invoices as reported
-    dups = []
-    for c in custs:
-        iv = sorted([i for i in items if i["customer"] == c and i["type"] == "Invoice" and i["open"] > 0], key=lambda i: (i["date"], i["num"]))
+    # a credit balance that equals another customer's untouched open invoice may have been posted to the wrong customer;
+    # a job's credit balance may belong to the same customer's other jobs
+    misp = []
+    for cb in credit_bal:
+        amt = round(cb["amount"] * 100)
+        hits = [i for i in pos if parent(i) != cb["customer"].split(":")[0].strip() and i["type"] == "Invoice" and rem[id(i)] == amt and i["open"] == amt]
+        if len(hits) == 1: misp.append({"customer": cb["customer"], "maybeFor": hits[0]["customer"], "invoice": hits[0]["num"]})
+        twice = [m for m in matches if m["customer"] == cb["customer"] and round(m["amount"] * 100) == amt]
+        cb["paidTwice"] = twice[0]["invoice"] if twice else None
+        cb["otherJobs"] = any(parent(i) == cb["customer"].split(":")[0].strip() and i["customer"] != cb["customer"] for i in pos)
+    # duplicates: per job, open invoices of the same amount within 6 days, or the same number twice; not recurring billing
+    dups, second = [], set()
+    for j in jobs:
+        iv = sorted([i for i in items if i["customer"] == j and i["type"] == "Invoice" and i["open"] > 0], key=lambda i: (i["date"], i["num"]))
         for a in range(len(iv)):
             for b in range(a + 1, len(iv)):
                 x, y = iv[a], iv[b]
-                if x["amount"] == y["amount"] and x["amount"] >= 100 and abs((y["date"] - x["date"]).days) <= 7 and x["num"] != y["num"]:
-                    dups.append({"customer": c, "a": x["num"], "b": y["num"], "amount": x["amount"] / 100})
+                same_num = x["num"] == y["num"]
+                recurring = sum(1 for z in iv if z["amount"] == x["amount"]) >= 3
+                if (same_num or (x["amount"] == y["amount"] and x["amount"] >= 100 and abs((y["date"] - x["date"]).days) < 7)) and not recurring:
+                    dups.append({"customer": j, "a": x["num"], "b": y["num"], "amount": x["amount"] / 100}); second.add(id(y))
+    small = [i for i in pos if i["type"] == "Invoice" and rem[id(i)] < 1000 and i["open"] < i["amount"] and days(i) > 60]
+    old = [i for i in pos if i["type"] == "Invoice" and days(i) > 365 and i not in small]
+    wo = small + old
+    chased = [i for i in pos if i["type"] == "Invoice" and days(i) > 0 and i not in wo and id(i) not in second]
     rep_buckets = {b: 0 for b in BUCKETS}
     for i in items: rep_buckets[bucket(days(i))] += i["open"]
     clean = {b: 0 for b in BUCKETS}
     for i in pos: clean[bucket(days(i))] += rem[id(i)]
-    # worklist
     work = []
-    for c in custs:
-        mine = [i for i in pos if i["customer"] == c and days(i) > 0]
+    for c in parents:
+        mine = [i for i in chased if parent(i) == c]
         if not mine: continue
-        over60 = sum(rem[id(i)] for i in mine if days(i) > 60)
-        overdue = sum(rem[id(i)] for i in mine)
         oldest = max(days(i) for i in mine)
-        step = ("Friendly reminder" if oldest <= 30 else "Second reminder and a call" if oldest <= 60 else "Call; hold new orders" if oldest <= 90 else
-                "Final notice" if oldest <= 180 else "Collection agency or payment plan" if oldest <= 365 else "Consider writing off")
-        work.append({"customer": c, "overdue": overdue / 100, "over60": over60 / 100, "oldestDays": oldest, "step": step, "invoices": len(mine)})
+        step = ("Friendly reminder" if oldest <= 30 else "Second request and a call" if oldest <= 60 else "Call about the account" if oldest <= 90 else
+                "Past-due notice" if oldest <= 180 else "Final request")
+        work.append({"customer": c, "overdue": sum(rem[id(i)] for i in mine) / 100, "over60": sum(rem[id(i)] for i in mine if days(i) > 60) / 100,
+                     "oldestDays": oldest, "step": step, "invoices": len(mine)})
     work.sort(key=lambda w: (-w["over60"], -w["overdue"], w["customer"]))
     total = sum(i["open"] for i in items)
-    all_rem = sum(rem[id(i)] for i in pos)
+    owed = sum(rem[id(i)] for i in pos)
     conc = []
-    for c in custs:
-        cr_ = sum(rem[id(i)] for i in pos if i["customer"] == c)
-        if all_rem and cr_ * 100 >= 20 * all_rem: conc.append({"customer": c, "share": round(cr_ * 100 / all_rem, 1)})
-    k = {"asOf": ASOF.isoformat(), "rows": len(items), "total": total / 100, "customers": len(custs),
+    for c in parents:
+        cr_ = sum(rem[id(i)] for i in pos if parent(i) == c)
+        if owed and cr_ * 100 >= 20 * owed: conc.append({"customer": c, "share": round(cr_ * 1000 / owed) / 10})
+    k = {"asOf": ASOF.isoformat() if asof_known else None, "rows": len(items), "total": total / 100, "customers": len(parents),
+         "owed": owed / 100, "inCredit": sum(int(round(x["amount"] * 100)) for x in credit_bal) / 100,
          "buckets": {b: v / 100 for b, v in rep_buckets.items()}, "bucketsClean": {b: v / 100 for b, v in clean.items()},
          "matches": matches, "creditBalances": credit_bal, "applyOldest": apply_oldest, "duplicates": dups,
          "small": sorted(i["num"] for i in small), "old": sorted(i["num"] for i in old),
          "writeOff": sum(rem[id(i)] for i in wo) / 100, "worklist": work, "concentration": conc,
-         "journalEntries": sum(1 for i in items if i["type"] == "Journal Entry")}
+         "journalEntries": sum(1 for i in items if i["type"] == "Journal Entry"), "mispostings": misp}
+    assert total == owed - sum(int(round(x["amount"] * 100)) for x in credit_bal), "the clean-up must reconcile to the report"
     if rates is not None:
-        k["rates"] = rates
         half_up = lambda x: int(x + 0.5)
-        k["allowance"] = sum(half_up(sum(rem[id(i)] for i in pos if bucket(days(i)) == b and i not in wo) * rates[b] / 100) for b in BUCKETS) / 100
+        k["rates"] = rates
+        need = sum(half_up(sum(rem[id(i)] for i in pos if bucket(days(i)) == b and i not in wo and i["type"] != "Refund") * rates[b] / 100) for b in BUCKETS)
+        k["allowance"] = need / 100
+        if existing is not None:
+            wo_amt = sum(rem[id(i)] for i in wo)
+            k["existingAllowance"] = existing / 100
+            k["allowanceAdjustment"] = (need - (existing - wo_amt)) / 100     # Dr bad debt expense, Cr allowance (negative: a release)
     if typed is not None:
         k["typedAR"] = typed / 100; k["difference"] = (typed - total) / 100
     return k
@@ -177,9 +197,9 @@ def qsec(it):
     return b if b in ("current", "d1_30", "d31_60", "d61_90") else "91+"
 def ds(d): return d.strftime("%m/%d/%Y")
 
-def write_qbo(path, company, items, csv_out=False, paren=False, total_override=None, dup_rows=0):
+def write_qbo(path, company, items, csv_out=False, paren=False, total_override=None, dup_rows=0, no_date=False):
     """QuickBooks Online: Reports > A/R Aging Detail > Export to Excel. Grouped by aging section."""
-    rows = [[company], ["A/R Aging Detail"], ["As of October 31, 2026"], [], ["", "Date", "Transaction Type", "Num", "Customer", "Due Date", "Amount", "Open Balance"]]
+    rows = [[company], ["A/R Aging Detail"], [] if no_date else ["As of October 31, 2026"], [], ["", "Date", "Transaction Type", "Num", "Customer", "Due Date", "Amount", "Open Balance"]]
     grand = 0
     for key, label in QBO_SECTIONS:
         sec = sorted([i for i in items if qsec(i) == key], key=lambda i: (i["date"], i["num"]))
@@ -219,7 +239,7 @@ def write_desktop(path, items):
         st = 0
         for i in sec:
             d = days(i)
-            ws.append(["", i["type"], datetime(i["date"].year, i["date"].month, i["date"].day), i["num"], "", i["customer"],
+            ws.append(["", "Check" if i["type"] == "Refund" else i["type"], datetime(i["date"].year, i["date"].month, i["date"].day), i["num"], "", i["customer"],
                        f"Net {i['terms']}" if i["type"] == "Invoice" else "", datetime(i["due"].year, i["due"].month, i["due"].day), "",
                        d if d > 0 else None, i["open"] / 100])
             st += i["open"]
@@ -295,8 +315,10 @@ case("03", "Planted: unapplied payments, a credit memo, a customer who paid twic
 N4, I4 = book(4)
 dsrc = [i for i in I4 if i["type"] == "Invoice" and 10 < days(i) < 50][0]
 I4.append(inv(dsrc["customer"], dsrc["date"] + timedelta(days=2), dsrc["amount"], str(int(dsrc["num"]) + 5000), dsrc["terms"]))
+for w_ in range(4):   # a customer billed the same $450.00 twice a week: recurring billing, not duplicates
+    I4.append(inv("Willow Property Management", ASOF - timedelta(days=40 - 3 * w_), 45000, f"52{w_}0"))
 write_qbo(P("04-planted-duplicate-invoice.xlsx"), "Lantern Signs & Graphics", I4)
-case("04", "Planted: the same invoice entered twice", "planted", "04-planted-duplicate-invoice.xlsx", "COMPUTED", ["DUPLICATE_INVOICES"], key_for(I4), "qbo")
+case("04", "Planted: the same invoice entered twice; a twice-weekly flat bill that is not a duplicate", "planted", "04-planted-duplicate-invoice.xlsx", "COMPUTED", ["DUPLICATE_INVOICES"], key_for(I4), "qbo")
 
 # ---- 05 planted: A/R on the balance sheet does not agree with the aging
 k5 = key_for(I1, typed=sum(i["open"] for i in I1) + 315000)
@@ -314,27 +336,32 @@ case("06", "Xero: a credit note and an overpayment", "ugly", "06-xero-bellwether
 
 # ---- 07 QuickBooks Desktop: no as-of date in the cells, days from the Aging column, real Excel dates
 N7, I7 = book(7)
+I7.append(credit(N7[3], "Credit Memo", D(2026, 9, 10), 30000, "CM-31"))
+I7.append(dict(customer=N7[3], type="Refund", date=D(2026, 9, 24), due=D(2026, 9, 24), num="5531", amount=30000, open=30000, terms=0))
 write_desktop(P("07-desktop-hollis-tate-ar-aging.xlsx"), I7)
 k7 = key_for(I7); k7["asOf"] = None
-case("07", "QuickBooks Desktop: no as-of date, days from the Aging column", "ugly", "07-desktop-hollis-tate-ar-aging.xlsx", "COMPUTED", ["DATE_UNKNOWN"], k7, "desktop")
+case("07", "QuickBooks Desktop: no as-of date, days from the Aging column; a credit memo refunded by check", "ugly", "07-desktop-hollis-tate-ar-aging.xlsx", "COMPUTED", ["DATE_UNKNOWN", "UNAPPLIED_CREDITS"], k7, "desktop")
 
 # ---- 08 invoices over a year old, and small leftover balances
 N8, I8 = book(8)
 I8.append(inv(N8[2], D(2025, 6, 12), 412500, "7701"))
 I8.append(inv(N8[5], D(2025, 3, 2), 98000, "7702", open_=98000))
 for k_, c in enumerate([N8[1], N8[4], N8[9]]):
-    I8.append(inv(c, ASOF - timedelta(days=50 + k_ * 9), 230000 + k_ * 1000, f"78{k_}0", open_=[350, 75, 912][k_]))
+    I8.append(inv(c, ASOF - timedelta(days=100 + k_ * 9), 230000 + k_ * 1000, f"78{k_}0", open_=[350, 75, 912][k_]))
+I8.append(inv(N8[7], ASOF - timedelta(days=10), 240000, "7830", open_=640))   # a part-paid invoice not yet 60 days late: chased, not written off
 write_qbo(P("08-old-and-small-balances.xlsx"), "Copperline Plumbing Supply", I8)
-case("08", "Invoices over a year old, and small leftover balances", "ugly", "08-old-and-small-balances.xlsx", "COMPUTED", ["OVER_A_YEAR", "SMALL_BALANCES"], key_for(I8), "qbo")
+rates8 = {"current": 1, "d1_30": 2, "d31_60": 5, "d61_90": 10, "d91_180": 25, "d181_365": 50, "over365": 100}
+case("08", "Invoices over a year old, small leftover balances; allowance rates and the allowance on the books", "ugly", "08-old-and-small-balances.xlsx", "COMPUTED",
+     ["OVER_A_YEAR", "SMALL_BALANCES"], key_for(I8, rates=rates8, existing=1500000), "qbo")
 
 # ---- 09 the QuickBooks Online report saved as CSV: dollar signs, parentheses, sub-customers
 N9, I9 = book(9, n_customers=20)
 for i in I9[::4]: i["customer"] = i["customer"] + ":Job " + str(int(i["num"]) % 7 + 1)
 I9.append(credit(I9[3]["customer"].split(":")[0] + ":Job 2", "Credit Memo", ASOF - timedelta(days=20), 12000, "CM-9"))
 write_qbo(P("09-qbo-csv-sub-customers.csv"), "Meadowbrook Catering Co.", I9, csv_out=True, paren=True)
-# sub-customers ("Customer:Job") are reviewed as their parent customer
-for i in I9: i["customer"] = i["customer"].split(":")[0]
-case("09", "QuickBooks Online as CSV: dollar signs, parentheses, jobs under customers", "ugly", "09-qbo-csv-sub-customers.csv", "COMPUTED", ["UNAPPLIED_CREDITS"], key_for(I9), "qbo")
+k9 = key_for(I9)
+case("09", "QuickBooks Online as CSV: dollar signs, parentheses, jobs under customers", "ugly", "09-qbo-csv-sub-customers.csv", "COMPUTED",
+     (["UNAPPLIED_CREDITS"] if k9["matches"] or k9["applyOldest"] else []) + (["CREDIT_BALANCES"] if k9["creditBalances"] else []), k9, "qbo")
 
 # ---- 10 the wrong report: A/P aging detail
 with open(P("10-ap-aging-detail.csv"), "w", newline="") as f:
@@ -372,6 +399,33 @@ k14 = key_for(I14, rates=rates14)
 assert len(k14["concentration"]) == 1, k14["concentration"]
 case("14", "Allowance rates typed in; a journal entry in A/R; one customer holds a large share", "ugly", "14-allowance-rates-journal-entry.xlsx", "COMPUTED",
      ["JOURNAL_ENTRIES", "CONCENTRATION"], k14, "qbo")
+
+# ---- 15 two real payments of the same amount on the same day, with no number: identical lines, both kept
+N15, I15 = book(15, n_customers=20)
+I15.append(inv("Hawthorn Fitness", D(2026, 8, 20), 50000, "8801")); I15.append(inv("Hawthorn Fitness", D(2026, 9, 12), 50000, "8802"))
+I15.append(credit("Hawthorn Fitness", "Payment", D(2026, 10, 20), 50000, "")); I15.append(credit("Hawthorn Fitness", "Payment", D(2026, 10, 20), 50000, ""))
+write_qbo(P("15-two-identical-payments.xlsx"), "Orchard Valley Farms", I15)
+case("15", "Two real payments of $500 on the same day, no number: identical lines, both kept", "ugly", "15-two-identical-payments.xlsx", "COMPUTED",
+     ["IDENTICAL_LINES", "UNAPPLIED_CREDITS"], key_for(I15), "qbo")
+
+# ---- 16 the report exported without its as-of line: the page must ask for the date
+N16, I16 = book(16, n_customers=22)
+write_qbo(P("16-no-as-of-date.xlsx"), "Prairie Glass Works", I16, no_date=True)
+case("16", "No as-of date in the file: the page asks for it, then reviews", "ugly", "16-no-as-of-date.xlsx", "COMPUTED", [],
+     {**key_for(I16), "typeAsOf": "10/31/2026"}, "qbo")
+
+# ---- 17 planted: a check that pays two invoices in full, and a payment posted to the wrong customer
+N17, I17 = book(17, n_customers=22)
+I17.append(inv("Zenith Builders", D(2026, 8, 1), 50000, "9101")); I17.append(inv("Zenith Builders", D(2026, 8, 25), 30000, "9102"))
+I17.append(credit("Zenith Builders", "Payment", D(2026, 10, 2), 80000, ""))
+I17.append(inv("Indigo Storage", D(2026, 8, 14), 125000, "9150"))
+I17.append(credit("Keystone Apartments", "Payment", D(2026, 9, 30), 125000, ""))
+write_qbo(P("17-planted-netting-and-misposting.xlsx"), "Falcon Commercial Cleaning", I17)
+k17 = key_for(I17)
+case("17", "Planted: one check for two invoices; a payment posted to the wrong customer", "planted", "17-planted-netting-and-misposting.xlsx", "COMPUTED",
+     ["UNAPPLIED_CREDITS", "CREDIT_BALANCES"] + (["CONCENTRATION"] if k17["concentration"] else []),
+     k17, "qbo")
+assert k17["mispostings"] == [{"customer": "Keystone Apartments", "maybeFor": "Indigo Storage", "invoice": "9150"}], k17["mispostings"]
 
 with open(os.path.join(HERE, "answer-key.json"), "w") as f:
     json.dump(KEY, f, indent=1, default=str)
