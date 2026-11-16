@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's Really Collectible?</title>
+<!-- One Painful Problem, Order-to-Cash episode 02. Version 1.0.0. One file. Open it in any browser. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><!--XLSX: build.py replaces this line with the library itself-->
+<style>
+:root{
+  --paper:#ffffff; --desk:#eef1f0; --ink:#14201c; --soft:#4d5a55; --rule:#c9d1ce;
+  --ledger:#15614a; --ledger-tint:#e4f0eb;
+  --stop:#a3211b; --stop-tint:#fbe9e7; --care:#8a5a00; --care-tint:#fdf3d9;
+  --sans:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:var(--desk);color:var(--ink);font-family:var(--sans);font-size:19px;line-height:1.5}
+.sheet{max-width:1100px;margin:0 auto;background:var(--paper);min-height:100vh;padding:36px max(20px,4vw) 60px}
+h1{font-size:2.5rem;line-height:1.15;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:1.4rem;margin:40px 0 4px;padding-top:14px;border-top:3px solid var(--ink)}
+h2 small{font-weight:400;color:var(--soft);font-size:1rem}
+h3{font-size:1.1rem;margin:22px 0 6px}
+p{margin:8px 0}
+.lead{font-size:1.3rem;color:var(--soft);max-width:40em;margin-bottom:22px}
+.pre{margin:0 0 16px;font-size:1.05rem}
+.pre input,.typed input,.rates input{font:inherit;padding:6px 8px;border:2px solid var(--ink);border-radius:6px}
+.pre input{width:10em;margin-left:8px}
+#drop{display:block;border:4px dashed var(--ledger);background:var(--ledger-tint);border-radius:10px;padding:48px 24px;text-align:center;cursor:pointer;position:relative}
+#drop.over{background:#cfe6dc;border-style:solid}
+#drop strong{display:block;font-size:1.8rem;color:var(--ledger)}
+#drop span{display:block;font-size:1.1rem;margin-top:6px}
+#file{position:absolute;width:1px;height:1px;opacity:0}
+#drop:focus-within{outline:4px solid var(--ink);outline-offset:3px}
+.how{margin-top:16px;color:var(--soft)}
+.promise{margin-top:26px;padding:16px 20px;border-left:6px solid var(--ledger);background:#f6f8f7}
+.made{margin-top:22px;color:var(--soft);font-size:.9rem}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--ledger);text-decoration:underline;cursor:pointer}
+.bar{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin-bottom:26px}
+.bar .hint{color:var(--soft);font-size:.95rem;flex-basis:100%}
+.main-btn{font:inherit;font-size:1.35rem;font-weight:700;background:var(--ledger);color:#fff;border:0;border-radius:8px;padding:16px 30px;cursor:pointer}
+.sec-btn{font:inherit;font-size:1.05rem;font-weight:700;background:#fff;color:var(--ledger);border:2px solid var(--ledger);border-radius:8px;padding:8px 18px;cursor:pointer}
+.main-btn:focus-visible,.sec-btn:focus-visible,.linkish:focus-visible,input:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.stopbox{background:var(--stop-tint);border:3px solid var(--stop);border-radius:8px;padding:18px 22px;margin:18px 0;font-size:1.15rem}
+.stopbox b{color:var(--stop)}
+.wp-head{display:grid;grid-template-columns:1fr 300px;gap:8px 34px;align-items:start}
+.meta{color:var(--soft);font-size:1rem}
+.verdict{font-size:1.35rem;font-weight:700;margin:6px 0 12px;padding:14px 18px;background:var(--ledger-tint);border-left:8px solid var(--ledger)}
+.verdict.bad{background:var(--stop-tint);border-color:var(--stop)}
+.verdict .sub{display:block;font-weight:400;font-size:1.1rem;margin-top:6px}
+.sign{display:grid;grid-template-columns:1fr 110px;gap:8px;font-size:.95rem;color:var(--soft)}
+.sign label{display:block}
+.sign input{display:block;width:100%;font:inherit;font-size:1.05rem;color:var(--ink);border:0;border-bottom:2px solid var(--ink);background:#f6f8f7;padding:4px 6px;border-radius:0}
+.typed{background:#f6f8f7;border:2px solid var(--rule);border-radius:8px;padding:14px 16px;margin:12px 0}
+.typed label{font-weight:700}
+.typed input{width:11em;margin:0 10px}
+ul.first{list-style:none;padding:0;margin:10px 0}
+ul.first li{padding:12px 16px 12px 18px;margin:8px 0;border-left:8px solid var(--care);background:var(--care-tint)}
+ul.first li.stop{border-color:var(--stop);background:var(--stop-tint)}
+ul.first li.info{border-color:var(--rule);background:#f6f8f7}
+ul.first li .tag{font-weight:700}
+.ok{padding:12px 18px;border-left:8px solid var(--ledger);background:var(--ledger-tint)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:1rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
+th{font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);border-bottom:2px solid var(--ink)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.num{white-space:nowrap}
+tr.sum td{border-top:2px solid var(--ink);font-weight:700}
+.tie-ok{color:var(--ledger);font-weight:700}.tie-bad{color:var(--stop);font-weight:700}
+.note{color:var(--soft);font-size:.95rem}
+.rates{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:8px 0}
+.rates label{font-size:.85rem;color:var(--soft)}
+.rates input{width:100%;margin-top:2px}
+details.cust{border-bottom:1px solid var(--rule);padding:6px 0}
+details.cust summary{cursor:pointer;font-weight:700}
+.letter{white-space:pre-wrap;background:#f6f8f7;border-left:4px solid var(--ledger);padding:10px 14px;font-size:.95rem;margin:8px 0}
+details.big>summary{cursor:pointer;font-size:1.1rem;padding:10px 0;color:var(--ledger)}
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--soft);font-size:.95rem}
+[hidden]{display:none!important}
+@media (max-width:760px){
+  body{font-size:17px}h1{font-size:1.9rem}.wp-head{grid-template-columns:1fr}.rates{grid-template-columns:repeat(2,1fr)}
+  #drop strong{font-size:1.4rem}
+}
+@media print{
+  body{background:#fff;font-size:9pt;line-height:1.35}
+  th,td{padding:3px 6px}
+  .sheet{max-width:none;padding:0;min-height:0}
+  .no-print{display:none!important}
+  h1{font-size:20pt}
+  h2{margin-top:14pt;break-after:avoid;font-size:13pt}
+  tr,ul.first li,.stopbox{break-inside:avoid}
+  thead{display:table-header-group}
+  .scroll{overflow:visible}
+  details.big:not([open]){display:none}
+  details.big>summary{display:none}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- ============ START SCREEN ============ -->
+<section id="start">
+  <h1>What's really collectible?</h1>
+  <p class="lead">Give this page the client's A/R aging detail. It gives back a receivables review: what to clean up in the ledger, who to chase first and with what words, and the allowance and write-offs to support at the close.</p>
+  <p class="pre"><label>Accounts receivable on the balance sheet, same date (optional): <input id="ar-start" inputmode="decimal" autocomplete="off" placeholder="0.00"></label></p>
+  <label id="drop" for="file">
+    <strong>Drop the A/R aging detail here</strong>
+    <span>or click here to choose it. Excel or CSV, from QuickBooks Online, QuickBooks Desktop or Xero.</span>
+    <input type="file" id="file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+  </label>
+  <div id="problem" class="stopbox" hidden role="alert"></div>
+  <p class="how"><b>Which report?</b> QuickBooks Online: Reports, A/R Aging Detail, the month-end date, Export to Excel. QuickBooks Desktop: Reports, Customers &amp; Receivables, A/R Aging Detail, Excel. Xero: Reports, Aged Receivables Detail, Export to Excel. The detail, not the summary: the page needs each invoice and each payment.</p>
+  <p class="how"><b>What it adds.</b> The aging lists what is open. This page reads every line: it matches payments and credits that were never applied, spots invoices entered twice, ranks customers by money and age, drafts the reminders, and supports the allowance.</p>
+  <p class="how">No file handy? <button class="linkish" id="sample" type="button">See it work on a made-up sample.</button></p>
+  <div class="promise">
+    <p><b>Where your data goes: nowhere.</b> This page reads the file on this computer. Nothing is uploaded, stored or sent.</p>
+    <p><b>You stay in charge.</b> Applying credits, writing off, the allowance rates and every letter are yours to decide and send.</p>
+  </div>
+  <p class="made">Version 1.0.0.</p>
+</section>
+
+<!-- ============ REPORT ============ -->
+<section id="report" hidden>
+  <div class="bar no-print">
+    <button class="main-btn" id="print" type="button">Print or save as PDF</button>
+    <button class="linkish" id="again" type="button">Start over with another file</button>
+    <span class="hint">To keep a PDF, choose "Save as PDF" as the printer. What you type on the lines will print.</span>
+  </div>
+  <div id="out"></div>
+</section>
+
+</div>
+<script>
+"use strict";
+/* =====================================================================================
+   PART 1 - READING THE AGING. All money in whole cents.
+   ===================================================================================== */
+var MONTHS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12,january:1,february:2,march:3,april:4,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
+var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+var BUCKETS = ["current", "d1_30", "d31_60", "d61_90", "d91_180", "d181_365", "over365"];
+var BUCKET_LABEL = { current: "Current", d1_30: "1–30", d31_60: "31–60", d61_90: "61–90", d91_180: "91–180", d181_365: "181–365", over365: "Over 365" };
+function txt(v){ return v == null ? "" : String(v).replace(/^﻿/, "").trim(); }
+function parseAmount(v){
+  if (typeof v === "number") return isFinite(v) ? Math.round(v * 100) : NaN;
+  var s = txt(v); if (!s || /^[-–—]$/.test(s)) return null;
+  var neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1).trim(); }
+  if (/-$/.test(s)) { neg = !neg; s = s.slice(0, -1); }
+  s = s.replace(/[$,\s]/g, "");
+  if (/^-/.test(s)) { neg = !neg; s = s.slice(1); }
+  if (/^\(.*\)$/.test(s)) { neg = !neg; s = s.slice(1, -1); }
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  var p = s.split("."), c = parseInt(p[0] || "0", 10) * 100 + (p[1] ? Math.round(parseFloat("0." + p[1]) * 100) : 0);
+  return neg ? -c : c;
+}
+function amt(v){ var c = parseAmount(v); return c == null || isNaN(c) ? 0 : c; }
+// a date -> a day number (days since 1970-01-01, UTC); accepts MM/DD/YYYY, YYYY-MM-DD, "15 Oct 2026", "October 31, 2026", Excel day numbers
+function dayNum(y, m, d){ return Math.round(Date.UTC(y, m - 1, d) / 86400000); }
+function parseDay(v){
+  var k;
+  if (typeof v === "number" && v > 20000 && v < 80000) return Math.round(v) - 25569;
+  var s = txt(v); if (!s) return null;
+  if ((k = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return dayNum(+k[1], +k[2], +k[3]);
+  if ((k = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})$/))) return dayNum(+k[3] < 100 ? 2000 + +k[3] : +k[3], +k[1], +k[2]);
+  if ((k = s.match(/^(\d{1,2})[\s-]([A-Za-z]{3,9})[\s-](\d{4})$/)) && MONTHS[k[2].toLowerCase()]) return dayNum(+k[3], MONTHS[k[2].toLowerCase()], +k[1]);
+  if ((k = s.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})$/)) && MONTHS[k[1].toLowerCase()]) return dayNum(+k[3], MONTHS[k[1].toLowerCase()], +k[2]);
+  return null;
+}
+function findAsOf(lines){
+  for (var i = 0; i < lines.length; i++) {
+    var k, l = lines[i];
+    if ((k = l.match(/\bas (?:of|at)\s+([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/i)) && MONTHS[k[1].toLowerCase()]) return dayNum(+k[3], MONTHS[k[1].toLowerCase()], +k[2]);
+    if ((k = l.match(/\bas (?:of|at)\s+(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})/i)) && MONTHS[k[2].toLowerCase()]) return dayNum(+k[3], MONTHS[k[2].toLowerCase()], +k[1]);
+    if ((k = l.match(/\bas (?:of|at)\s+(\d{1,2})\/(\d{1,2})\/(\d{4})/i))) return dayNum(+k[3], +k[1], +k[2]);
+  }
+  return null;
+}
+function isoOf(n){ return new Date(n * 86400000).toISOString().slice(0, 10); }
+function longDay(n){ var d = new Date(n * 86400000); return MONTH_NAMES[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
+function shortDay(n){ var d = new Date(n * 86400000); return (d.getUTCMonth() + 1) + "/" + d.getUTCDate() + "/" + d.getUTCFullYear(); }
+
+function readAging(rows){
+  var hr = -1, head = null, layout = null;
+  for (var r = 0; r < Math.min(rows.length, 20) && hr < 0; r++) {
+    var h = (rows[r] || []).map(function(v){ return txt(v).toLowerCase(); });
+    var has = function(x){ return h.indexOf(x) >= 0; };
+    if (has("transaction type") && has("num") && has("open balance")) { hr = r; head = h; layout = "qbo"; }
+    else if (has("type") && has("num") && has("open balance") && (has("name") || has("customer"))) { hr = r; head = h; layout = "desktop"; }
+    else if (has("invoice number") && has("due date") && has("total")) { hr = r; head = h; layout = "xero"; }
+    else if (h.some(function(x){ return /^(current|1 - 30|1-30|31 - 60|older|91 and over|> 90)$/.test(x); }) && has("total") && !has("num") && !has("invoice number")) { hr = r; head = h; layout = "summary"; }
+  }
+  var titles = [];
+  for (r = 0; r < (hr < 0 ? Math.min(rows.length, 12) : hr); r++) titles.push((rows[r] || []).map(txt).filter(Boolean).join(" "));
+  var titleText = titles.join(" | ");
+  if (/a\/p aging|accounts payable|aged payables|payables/i.test(titleText) || (head && (head.indexOf("vendor") >= 0 || head.indexOf("supplier") >= 0)))
+    return { notAR: "NOT_RECOGNIZED", message: "This is an accounts payable aging: what the client owes. I need the accounts receivable aging: what customers owe the client." };
+  if (layout === "summary" || (/aging summary|aged receivables summary/i.test(titleText) && !layout))
+    return { notAR: "SUMMARY_ONLY", message: "This is the A/R aging summary: totals by customer, with no invoices in it. I need the A/R aging detail, which lists each invoice and payment. Export that instead." };
+  if (!layout) return { notAR: "NOT_RECOGNIZED", message: "This is not an A/R aging detail I know. I read the A/R Aging Detail from QuickBooks Online and QuickBooks Desktop, and Xero's Aged Receivables Detail." };
+  var c = {}; head.forEach(function(x, i){ if (x && c[x] === undefined) c[x] = i; });
+  var g = function(row, name){ return c[name] === undefined ? null : row[c[name]]; };
+  var asOf = findAsOf(titles);
+  var items = [], unread = [], dupes = 0, seen = {}, total = null, contact = "", footer = [];
+  for (r = hr + 1; r < rows.length; r++) {
+    var row = rows[r] || [], cells = row.map(txt);
+    if (!cells.some(Boolean)) continue;
+    var first = cells[0];
+    if (total !== null) { footer.push(cells.filter(Boolean).join(" ")); continue; }
+    if (/^total$/i.test(first)) { total = amt(row[layout === "xero" ? c["total"] : c["open balance"]]); continue; }
+    if (/^total\b/i.test(first)) continue;
+    var dateCell = layout === "xero" ? g(row, "invoice date") : g(row, "date");
+    var d = parseDay(dateCell);
+    if (d == null) {
+      if (layout === "xero" && first && cells.slice(1).every(function(x){ return !x; })) contact = first;   // a contact heading
+      else if (cells.slice(1).some(Boolean) && txt(dateCell)) unread.push({ row: r + 1, label: first || txt(dateCell) });
+      continue;   // a section heading such as "Current" or "1 - 30 days past due"
+    }
+    var sig = cells.join("\u0001") + (layout === "xero" ? "\u0001" + contact : "");
+    if (seen[sig]) { dupes++; continue; } seen[sig] = 1;
+    var it = { row: r + 1, date: d };
+    if (layout === "xero") {
+      it.customer = contact; it.num = txt(g(row, "invoice number")); it.due = parseDay(g(row, "due date"));
+      it.open = amt(g(row, "total")); it.amount = it.open;
+      var ref = txt(g(row, "reference")).toLowerCase();
+      it.type = /credit note/.test(ref) ? "Credit Memo" : /overpayment|prepayment|payment/.test(ref) ? "Payment" : /journal/.test(ref) ? "Journal Entry" : it.open < 0 ? "Credit Memo" : "Invoice";
+    } else {
+      it.customer = txt(layout === "qbo" ? (g(row, "customer") || g(row, "name")) : (g(row, "name") || g(row, "customer")));
+      it.num = txt(g(row, "num")); it.due = parseDay(g(row, "due date"));
+      it.open = amt(g(row, "open balance")); it.amount = c["amount"] !== undefined ? amt(g(row, "amount")) : it.open;
+      var t = txt(g(row, "transaction type") || g(row, "type")).toLowerCase();
+      it.type = /credit/.test(t) ? "Credit Memo" : /payment|deposit/.test(t) ? "Payment" : /journal/.test(t) ? "Journal Entry" : /invoice|statement charge|charge/.test(t) ? "Invoice" : (it.open < 0 ? "Credit Memo" : "Invoice");
+      if (c["aging"] !== undefined) it.aging = txt(g(row, "aging")) ? Math.round(+txt(g(row, "aging"))) : 0;
+    }
+    it.parent = it.customer.split(":")[0].trim();
+    if (it.due == null) it.due = it.date;
+    items.push(it);
+  }
+  return { layout: layout, asOf: asOf, items: items, unread: unread, duplicates: dupes, total: total, titles: titles, company: titles.filter(function(l){ return l && !/aging|aged|as (of|at)|ageing|basis/i.test(l); })[0] || "" };
+}
+
+/* =====================================================================================
+   PART 2 - THE REVIEW
+   ===================================================================================== */
+function money(c){ var s = Math.abs(c), d = Math.floor(s / 100), r = String(s % 100).padStart(2, "0"); return (c < 0 ? "-" : "") + "$" + d.toLocaleString("en-US") + "." + r; }
+function dollars(c){ return Math.round(c) / 100; }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function bucketOf(d){ return d <= 0 ? "current" : d <= 30 ? "d1_30" : d <= 60 ? "d31_60" : d <= 90 ? "d61_90" : d <= 180 ? "d91_180" : d <= 365 ? "d181_365" : "over365"; }
+function stepFor(d){ return d <= 30 ? "Friendly reminder" : d <= 60 ? "Second reminder and a call" : d <= 90 ? "Call; hold new orders" : d <= 180 ? "Final notice" : d <= 365 ? "Collection agency or payment plan" : "Consider writing off"; }
+function byDateNum(a, b){ return a.date - b.date || (a.num < b.num ? -1 : a.num > b.num ? 1 : 0); }
+
+function review(rows, fileName){
+  var rep = { version: "1.0.0", file: fileName, status: null, exceptions: [] };
+  function ex(code, level, message, extra){ var e = { code: code, level: level, message: message }; if (extra) for (var k in extra) e[k] = extra[k]; rep.exceptions.push(e); }
+  var A = readAging(rows);
+  if (A.notAR) { rep.status = "NOT_RECOGNIZED"; ex(A.notAR, "stop", A.message); return rep; }
+  var items = A.items;
+  rep.layout = { qbo: "QuickBooks Online A/R Aging Detail", desktop: "QuickBooks Desktop A/R Aging Detail", xero: "Xero Aged Receivables Detail" }[A.layout];
+  rep.company = A.company; rep.asOf = A.asOf != null ? isoOf(A.asOf) : null;
+  items.forEach(function(it){ it.days = A.asOf != null ? A.asOf - it.due : (it.aging != null ? it.aging : 0); it.rem = it.open; });
+  var sum = function(list, f){ return list.reduce(function(s, x){ return s + f(x); }, 0); };
+  var total = sum(items, function(i){ return i.open; });
+  rep.rows = items.length; rep.total = dollars(total);
+  rep.reportTotal = A.total != null ? dollars(A.total) : null;
+  var custs = []; items.forEach(function(i){ if (custs.indexOf(i.parent) < 0) custs.push(i.parent); }); custs.sort();
+  rep.customers = custs.length;
+  rep.buckets = {}; BUCKETS.forEach(function(b){ rep.buckets[b] = dollars(sum(items.filter(function(i){ return bucketOf(i.days) === b; }), function(i){ return i.open; })); });
+
+  // ---- clean-up, customer by customer
+  var matches = [], creditBal = [], applyOldest = [];
+  custs.forEach(function(c){
+    var mine = items.filter(function(i){ return i.parent === c; });
+    var credits = mine.filter(function(i){ return i.open < 0; }).sort(byDateNum), invs = mine.filter(function(i){ return i.open > 0; }).sort(byDateNum);
+    credits.forEach(function(cr){
+      var hit = invs.filter(function(v){ return v.rem === -cr.rem && v.rem === v.open; })[0];
+      if (!hit) return;
+      matches.push({ customer: c, credit: cr.num || cr.type, creditType: cr.type, creditDate: isoOf(cr.date), invoice: hit.num, invoiceDate: isoOf(hit.date), amount: dollars(hit.open) });
+      hit.rem = 0; cr.rem = 0;
+    });
+    var net = sum(mine, function(i){ return i.rem; }), left = credits.filter(function(cr){ return cr.rem < 0; });
+    if (net <= 0 && (left.length || net < 0)) {
+      if (net < 0) creditBal.push({ customer: c, amount: dollars(-net) });
+      mine.forEach(function(i){ i.rem = 0; });
+      return;
+    }
+    left.forEach(function(cr){
+      var a = -cr.rem, applied = [];
+      invs.forEach(function(v){ if (!a || !v.rem) return; var t = Math.min(a, v.rem); v.rem -= t; a -= t; applied.push(v.num); });
+      applyOldest.push({ customer: c, credit: cr.num || cr.type, creditType: cr.type, amount: dollars(-cr.rem), invoices: applied });
+      cr.rem = 0;
+    });
+  });
+  var pos = items.filter(function(i){ return i.rem > 0; });
+  var small = pos.filter(function(i){ return i.type === "Invoice" && i.rem < 1000; });
+  var old = pos.filter(function(i){ return i.type === "Invoice" && i.days > 365 && small.indexOf(i) < 0; });
+  var wo = small.concat(old);
+  var dups = [];
+  custs.forEach(function(c){
+    var iv = items.filter(function(i){ return i.parent === c && i.type === "Invoice" && i.open > 0; }).sort(byDateNum);
+    for (var a = 0; a < iv.length; a++) for (var b = a + 1; b < iv.length; b++) {
+      var x = iv[a], y = iv[b];
+      if (x.amount === y.amount && x.amount >= 100 && Math.abs(y.date - x.date) <= 7 && x.num !== y.num) dups.push({ customer: c, a: x.num, b: y.num, amount: dollars(x.amount) });
+    }
+  });
+  rep.matches = matches; rep.creditBalances = creditBal; rep.applyOldest = applyOldest; rep.duplicates = dups;
+  rep.small = small.map(function(i){ return i.num; }).sort(); rep.old = old.map(function(i){ return i.num; }).sort();
+  rep.writeOff = dollars(sum(wo, function(i){ return i.rem; }));
+  rep.bucketsClean = {}; BUCKETS.forEach(function(b){ rep.bucketsClean[b] = dollars(sum(pos.filter(function(i){ return bucketOf(i.days) === b; }), function(i){ return i.rem; })); });
+  // ---- who to chase
+  var work = [];
+  custs.forEach(function(c){
+    var mine = pos.filter(function(i){ return i.parent === c && i.days > 0; });
+    if (!mine.length) return;
+    var oldest = Math.max.apply(null, mine.map(function(i){ return i.days; }));
+    work.push({ customer: c, overdue: dollars(sum(mine, function(i){ return i.rem; })), over60: dollars(sum(mine.filter(function(i){ return i.days > 60; }), function(i){ return i.rem; })),
+      oldestDays: oldest, step: stepFor(oldest), invoices: mine.length, _items: mine.slice().sort(byDateNum) });
+  });
+  work.sort(function(a, b){ return b.over60 - a.over60 || b.overdue - a.overdue || (a.customer < b.customer ? -1 : 1); });
+  rep.worklist = work;
+  var allRem = sum(pos, function(i){ return i.rem; });
+  rep.concentration = [];
+  custs.forEach(function(c){ var cr = sum(pos.filter(function(i){ return i.parent === c; }), function(i){ return i.rem; }); if (allRem && cr * 100 >= 20 * allRem) rep.concentration.push({ customer: c, share: Math.round(cr * 1000 / allRem) / 10 }); });
+  var jes = items.filter(function(i){ return i.type === "Journal Entry"; });
+  rep.journalEntries = jes.length;
+  rep._pos = pos; rep._wo = wo; rep._total = total; rep._items = items;
+
+  // ---- what to look at first
+  if (A.unread.length) ex("UNREAD_ROWS", "stop", "I could not read the date on " + plural(A.unread.length, "line") + " (" + A.unread.slice(0, 5).map(function(u){ return "row " + u.row; }).join(", ") + "). They are left out.");
+  if (A.duplicates) { rep.duplicates_removed = A.duplicates; ex("DUPLICATE_ROWS", "stop", plural(A.duplicates, "line") + " appear twice, exactly the same. It looks like part of the report was pasted in twice. I counted each line once."); }
+  if (A.total != null && A.total !== total) ex("TOTAL_MISMATCH", "stop", "The report's own total line, " + money(A.total) + ", does not agree with its lines, " + money(total) + " (" + money(Math.abs(A.total - total)) + " " + (A.total > total ? "more" : "less") + "). A line is missing, or the total was typed over. Export the report again.");
+  if (A.asOf == null) ex("DATE_UNKNOWN", "care", "The file does not say what date the aging is as of (QuickBooks Desktop puts it in the page header, not the cells). Days past due are taken from its Aging column. Make sure it is the month-end date you meant.");
+  if (matches.length || applyOldest.length) ex("UNAPPLIED_CREDITS", "care", plural(matches.length + applyOldest.length, "payment or credit", "payments and credits") + " were never applied to an invoice. " +
+    (matches.length ? plural(matches.length, "matches an open invoice", "match open invoices") + " exactly. " : "") + "Apply them in the ledger before anyone chases a customer for an invoice that is already paid. The list is under “Clean first”.");
+  if (creditBal.length) ex("CREDIT_BALANCES", "care", plural(creditBal.length, "customer is", "customers are") + " owed money by the client (" + creditBal.map(function(x){ return x.customer + " " + money(Math.round(x.amount * 100)); }).join("; ") + "). Refund, or confirm with the customer that the credit should stay. Do not chase them.");
+  if (dups.length) ex("DUPLICATE_INVOICES", "care", plural(dups.length, "pair") + " of invoices look entered twice: same customer, same amount, within a week (" + dups.map(function(x){ return x.customer + " #" + x.a + " and #" + x.b + ", " + money(Math.round(x.amount * 100)); }).join("; ") + "). If so, void one: it overstates sales and receivables.");
+  if (old.length) ex("OVER_A_YEAR", "care", plural(old.length, "invoice") + " are more than a year past due (" + money(sum(old, function(i){ return i.rem; })) + "). Unless the customer is paying, they are write-off candidates. They are in the proposed write-off below.");
+  if (small.length) ex("SMALL_BALANCES", "info", plural(small.length, "invoice") + " have less than $10 left open (" + money(sum(small, function(i){ return i.rem; })) + "): short payments, bank fees or rounding. Write them off rather than chase them.");
+  if (jes.length) ex("JOURNAL_ENTRIES", "care", plural(jes.length, "journal entry", "journal entries") + " sit in receivables (" + jes.map(function(i){ return (i.num || "no number") + ", " + i.parent + ", " + money(i.open); }).join("; ") + "). A journal entry is not an invoice a customer can pay; find out what it was and reclassify or apply it.");
+  if (rep.concentration.length) ex("CONCENTRATION", "info", rep.concentration.map(function(x){ return x.customer + " holds " + x.share + "%"; }).join("; ") + " of what customers owe. Worth a sentence in the file, and a word with the client about credit limits.");
+  rep.status = "COMPUTED";
+  return rep;
+}
+
+function compareAR(rep, typed){
+  rep.exceptions = rep.exceptions.filter(function(e){ return e.code !== "DIFFERS_FROM_BALANCE_SHEET"; });
+  delete rep.typedAR; delete rep.difference;
+  if (typed == null || isNaN(typed)) { rep.status = "COMPUTED"; return rep; }
+  rep.typedAR = dollars(typed); var d = typed - rep._total; rep.difference = dollars(d);
+  if (!d) { rep.status = "TIES"; return rep; }
+  rep.status = "DIFFERS";
+  rep.exceptions.unshift({ code: "DIFFERS_FROM_BALANCE_SHEET", level: "stop", message: "Accounts receivable on the balance sheet, " + money(typed) + ", is " + money(Math.abs(d)) + (d > 0 ? " more" : " less") +
+    " than the aging, " + money(rep._total) + ". Usually a journal entry posted straight to A/R without a customer, a second A/R account, or the two reports run for different dates or bases. Find it before relying on the review." });
+  return rep;
+}
+function allowance(rep, rates){
+  var a = 0, by = {};
+  BUCKETS.forEach(function(b){
+    var base = rep._pos.filter(function(i){ return bucketOf(i.days) === b && rep._wo.indexOf(i) < 0; }).reduce(function(s, i){ return s + i.rem; }, 0);
+    var x = Math.round(base * (rates[b] || 0) / 100); by[b] = { base: dollars(base), rate: rates[b] || 0, amount: dollars(x) }; a += x;
+  });
+  rep.rates = rates; rep.allowance = dollars(a); rep.allowanceByBucket = by; return rep;
+}
+
+/* =====================================================================================
+   PART 3 - THE SCREEN
+   ===================================================================================== */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+var current = null, keep = {}, rates = {};
+
+function letter(w, rep){
+  var intro = { "Friendly reminder": "A friendly reminder that the following invoices are now past due:",
+    "Second reminder and a call": "We wrote recently about the invoices below, which remain unpaid. We will call this week to make sure nothing is holding them up:",
+    "Call; hold new orders": "The invoices below are now more than 60 days past due. Until they are settled we will need to hold new orders. Please let us know when we can expect payment:",
+    "Final notice": "This is a final notice for the invoices below, now more than 90 days past due. Please pay within 10 days, or contact us to agree a payment plan:",
+    "Collection agency or payment plan": "The invoices below are long overdue. Unless we agree a payment plan within 10 days, we will refer the account for collection:",
+    "Consider writing off": "The invoices below are more than a year overdue. Please contact us about them." }[w.step];
+  var lines = w._items.map(function(i){ return "  Invoice " + i.num + ", dated " + shortDay(i.date) + ": " + money(i.rem) + " (" + i.days + " days past due)"; }).join("\n");
+  return "Dear " + w.customer + ",\n\n" + intro + "\n\n" + lines + "\n  Total: " + money(Math.round(w.overdue * 100)) + "\n\nIf you have already paid, thank you, and please send the payment details so we can apply it.\n\nKind regards,\n" + (rep.company || "[Your client's name]");
+}
+
+function render(rep){
+  var o = [];
+  var stops = rep.exceptions.filter(function(e){ return e.level === "stop"; });
+  var cleanCount = rep.matches.length + rep.applyOldest.length + rep.creditBalances.length + rep.duplicates.length + rep.journalEntries;
+  var overdue = rep.worklist.reduce(function(s, w){ return s + Math.round(w.overdue * 100); }, 0);
+  var head = rep.status === "DIFFERS" ? { cls: "bad", h: "The aging does not agree with the balance sheet: " + money(Math.abs(Math.round(rep.difference * 100))) + " apart.", s: "Find the difference before relying on the review below." } :
+    { cls: stops.length ? "bad" : "", h: (rep.company ? rep.company + ": " : "") + money(rep._total) + " owed by " + plural(rep.customers, "customer") + "; " + money(overdue) + " overdue after clean-up.",
+      s: (cleanCount ? plural(cleanCount, "thing", "things") + " to clean up in the ledger before anyone chases a customer. " : "Nothing to clean up first. ") + (rep.status === "TIES" ? "The aging agrees with the balance sheet." : "") };
+  o.push('<div class="wp-head"><div><h1>What’s really collectible?</h1><p class="meta">' + esc(rep.layout) + (rep.asOf ? " · as of " + longDay(Math.round(Date.parse(rep.asOf) / 86400000)) : " · date not shown in the file") + '<br>File: ' + esc(rep.file) + '</p></div>');
+  o.push('<div class="sign">' + [["client", "Client"], ["preparedBy", "Prepared by"], ["preparedOn", "Date"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Date"]].map(function(p){ return '<label>' + p[1] + '<input id="' + p[0] + '" autocomplete="off" value="' + esc(keep[p[0]] || (p[0] === "client" ? rep.company : "")) + '"></label>'; }).join("") + '</div></div>');
+  o.push('<div class="verdict ' + head.cls + '" id="verdict">' + esc(head.h) + '<span class="sub">' + esc(head.s) + '</span></div>');
+  o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
+  o.push('<div class="typed"><label for="ar">A/R on the balance sheet, same date</label><input id="ar" inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + (rep.typedAR != null ? rep.typedAR.toFixed(2) : "") + '"><button class="sec-btn" id="compare" type="button">Check it ties</button>' +
+    (rep.typedAR != null ? ' <span class="' + (rep.status === "TIES" ? "tie-ok" : "tie-bad") + '">' + (rep.status === "TIES" ? "Ties exactly." : "Differs by " + money(Math.abs(Math.round(rep.difference * 100))) + ".") + '</span>' : "") + '</div>');
+
+  // aging
+  o.push('<div class="scroll"><table id="aging"><thead><tr><th>Days past due</th>' + BUCKETS.map(function(b){ return '<th class="num">' + BUCKET_LABEL[b] + '</th>'; }).join("") + '<th class="num">Total</th></tr></thead><tbody>');
+  [["As the report shows", rep.buckets], ["After the clean-up below", rep.bucketsClean]].forEach(function(p){
+    var t = BUCKETS.reduce(function(s, b){ return s + Math.round(p[1][b] * 100); }, 0);
+    o.push('<tr><td>' + p[0] + '</td>' + BUCKETS.map(function(b){ return '<td class="num">' + money(Math.round(p[1][b] * 100)) + '</td>'; }).join("") + '<td class="num"><b>' + money(t) + '</b></td></tr>');
+  });
+  o.push('</tbody></table></div><p class="note">After the clean-up, credits are applied and customers in credit are set aside, so the total is what customers really owe.</p>');
+
+  var order = { stop: 0, care: 1, info: 2 }, exs = rep.exceptions.filter(function(e){ return e.level !== "stop"; }).sort(function(a, b){ return order[a.level] - order[b.level]; });
+  o.push('<h2>Check these first</h2>');
+  if (!exs.length) o.push(stops.length ? '<p class="note">Only what is in the red box above.</p>' : '<p class="ok">Nothing to check: every payment is applied, no duplicates, no customer in credit.</p>');
+  else o.push('<ul class="first">' + exs.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + ({ care: "Decide. ", info: "For your file. " }[e.level]) + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>');
+
+  // 1. clean first
+  o.push('<h2>1. Clean first <small>in the ledger, before anyone calls a customer</small></h2>');
+  if (!cleanCount) o.push('<p class="ok">Nothing to clean.</p>');
+  if (rep.matches.length) {
+    o.push('<h3>Apply these credits to the invoice they match exactly</h3><div class="scroll"><table id="matches"><thead><tr><th>Customer</th><th>Credit</th><th>Apply to invoice</th><th class="num">Amount</th></tr></thead><tbody>');
+    rep.matches.forEach(function(m){ o.push('<tr><td>' + esc(m.customer) + '</td><td>' + esc(m.creditType + (m.credit !== m.creditType ? " " + m.credit : "") + ", " + m.creditDate) + '</td><td>#' + esc(m.invoice) + ', ' + esc(m.invoiceDate) + '</td><td class="num">' + money(Math.round(m.amount * 100)) + '</td></tr>'); });
+    o.push('</tbody></table></div>');
+  }
+  if (rep.applyOldest.length) {
+    o.push('<h3>Apply these credits to the oldest invoices (no exact match)</h3><div class="scroll"><table id="apply-oldest"><thead><tr><th>Customer</th><th>Credit</th><th>Applies to</th><th class="num">Amount</th></tr></thead><tbody>');
+    rep.applyOldest.forEach(function(m){ o.push('<tr><td>' + esc(m.customer) + '</td><td>' + esc(m.creditType + (m.credit !== m.creditType ? " " + m.credit : "")) + '</td><td>' + esc(m.invoices.map(function(n){ return "#" + n; }).join(", ")) + '</td><td class="num">' + money(Math.round(m.amount * 100)) + '</td></tr>'); });
+    o.push('</tbody></table></div><p class="note">Confirm with the customer which invoice a partial payment was for, if the remittance does not say.</p>');
+  }
+  if (rep.creditBalances.length) o.push('<h3>Customers the client owes</h3><p>' + esc(rep.creditBalances.map(function(x){ return x.customer + ": " + money(Math.round(x.amount * 100)); }).join("; ")) + '. Refund, or confirm the credit with the customer.</p>');
+  if (rep.duplicates.length) o.push('<h3>Invoices that look entered twice</h3><p>' + esc(rep.duplicates.map(function(x){ return x.customer + ": #" + x.a + " and #" + x.b + ", " + money(Math.round(x.amount * 100)) + " each"; }).join("; ")) + '. Check with the client; void the copy.</p>');
+
+  // 2. who to chase
+  o.push('<h2>2. Who to chase <small>largest amounts over 60 days first</small></h2>');
+  if (!rep.worklist.length) o.push('<p class="ok">No customer is overdue.</p>');
+  else {
+    o.push('<div class="scroll"><table id="worklist"><thead><tr><th>#</th><th>Customer</th><th class="num">Overdue</th><th class="num">Over 60 days</th><th class="num">Oldest</th><th>Next step</th></tr></thead><tbody>');
+    rep.worklist.forEach(function(w, i){ o.push('<tr><td>' + (i + 1) + '</td><td>' + esc(w.customer) + '</td><td class="num">' + money(Math.round(w.overdue * 100)) + '</td><td class="num">' + money(Math.round(w.over60 * 100)) + '</td><td class="num">' + w.oldestDays + ' days</td><td>' + esc(w.step) + '</td></tr>'); });
+    o.push('</tbody></table></div><h3>Draft reminders <small class="note">open a customer to read and copy its letter</small></h3>');
+    rep.worklist.forEach(function(w){ o.push('<details class="cust"><summary>' + esc(w.customer) + ' – ' + esc(w.step) + '</summary><div class="letter">' + esc(letter(w, rep)) + '</div></details>'); });
+  }
+
+  // 3. allowance and write-offs
+  o.push('<h2>3. Allowance and write-offs <small>at the close</small></h2>');
+  o.push('<p>Type the client’s loss rates by age, from its own history of what went unpaid. The page does not guess them. Under ASU 2025-05, from years beginning after December 15, 2025, a private company may assume current conditions continue, and may leave out balances collected before the statements are issued.</p>');
+  o.push('<div class="rates">' + BUCKETS.map(function(b){ return '<label>' + BUCKET_LABEL[b] + ' %<input id="rate-' + b + '" inputmode="decimal" value="' + (rates[b] != null ? rates[b] : "") + '"></label>'; }).join("") + '</div><button class="sec-btn" id="apply-rates" type="button">Work out the allowance</button>');
+  if (rep.allowance != null) {
+    o.push('<div class="scroll"><table id="allowance"><thead><tr><th>Days past due</th><th class="num">Owed, after clean-up and write-offs</th><th class="num">Rate</th><th class="num">Allowance</th></tr></thead><tbody>');
+    BUCKETS.forEach(function(b){ var x = rep.allowanceByBucket[b]; o.push('<tr><td>' + BUCKET_LABEL[b] + '</td><td class="num">' + money(Math.round(x.base * 100)) + '</td><td class="num">' + x.rate + '%</td><td class="num">' + money(Math.round(x.amount * 100)) + '</td></tr>'); });
+    o.push('<tr class="sum"><td>Allowance for doubtful accounts</td><td></td><td></td><td class="num">' + money(Math.round(rep.allowance * 100)) + '</td></tr></tbody></table></div>');
+  }
+  if (rep.writeOff) {
+    o.push('<h3>Proposed write-offs: ' + money(Math.round(rep.writeOff * 100)) + '</h3><div class="scroll"><table id="writeoff"><thead><tr><th>Customer</th><th>Invoice</th><th class="num">Days past due</th><th class="num">Left open</th><th>Why</th></tr></thead><tbody>');
+    rep._wo.forEach(function(i){ o.push('<tr><td>' + esc(i.parent) + '</td><td>#' + esc(i.num) + '</td><td class="num">' + i.days + '</td><td class="num">' + money(i.rem) + '</td><td>' + (i.rem < 1000 ? "small balance left open" : "more than a year past due") + '</td></tr>'); });
+    o.push('</tbody></table></div><p>Entry: Dr Bad debt expense (or the allowance, if one was set up for these), Cr Accounts receivable, ' + money(Math.round(rep.writeOff * 100)) + '; in the ledger, a credit memo or write-off against each invoice so the aging clears.</p>');
+    o.push('<p class="note">Tax: a business bad debt is deductible only if the amount was included in income, so on the accrual method; a cash-method client has nothing to deduct. The allowance itself is not deductible; it is a book-tax difference.</p>');
+  }
+  o.push('<h2>What I read</h2><p class="note">' + esc(rep.layout) + '. ' + plural(rep.rows, "open item") + (rep.duplicates_removed ? " (after removing " + rep.duplicates_removed + " duplicate lines)" : "") + ', ' + plural(rep.customers, "customer") + ' (jobs counted under their customer). Total ' + money(rep._total) + (rep.reportTotal != null ? "; the report’s own total line says " + money(Math.round(rep.reportTotal * 100)) : "") + '.</p>');
+  o.push('<p class="foot">Made by “What’s Really Collectible?” version 1.0.0, on this computer. The file was read here and not sent anywhere. Arithmetic is done in whole cents. This is a workpaper for review: the accountant remains responsible for every entry, write-off and letter.</p>');
+  return o.join("");
+}
+
+function publish(rep){
+  current = rep;
+  ["client", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
+  $("out").innerHTML = render(rep);
+  $("start").hidden = true; $("report").hidden = false;
+  window.__report = JSON.parse(JSON.stringify(rep, function(k, v){ return k.charAt(0) === "_" ? undefined : v; }));
+  var go = function(){ var c = parseAmount($("ar").value); var y = window.scrollY; publish(compareAR(current, c == null || isNaN(c) ? null : c)); window.scrollTo(0, y); };
+  $("compare").addEventListener("click", go);
+  $("ar").addEventListener("keydown", function(e){ if (e.key === "Enter") go(); });
+  $("apply-rates").addEventListener("click", function(){
+    BUCKETS.forEach(function(b){ var v = parseFloat(($("rate-" + b).value || "").replace("%", "")); rates[b] = isNaN(v) ? 0 : v; });
+    var y = window.scrollY; publish(allowance(current, rates)); window.scrollTo(0, y);
+  });
+}
+function showProblem(msg){ var p = $("problem"); p.textContent = msg; p.hidden = false; }
+function handle(f){
+  if (/\.pdf$/i.test(f.name)) return showProblem("“" + f.name + "” is a PDF. Export the A/R aging detail to Excel or CSV and drop that.");
+  if (!/\.(xlsx|xlsm|xls|csv|txt)$/i.test(f.name)) return showProblem("“" + f.name + "” is not an Excel or CSV file.");
+  window.__report = undefined; $("problem").hidden = true; rates = {};
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var text = /\.(csv|txt)$/i.test(f.name);
+      var wb = text ? XLSX.read(new TextDecoder("utf-8").decode(reader.result), { type: "string", raw: true }) : XLSX.read(new Uint8Array(reader.result), { type: "array" });
+      var best = null;
+      wb.SheetNames.forEach(function(sn){ var rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: null, blankrows: true }); if (!best || rows.length > best.length) best = rows; });
+      var rep = review(best || [], f.name);
+      if (rep.status === "NOT_RECOGNIZED") { window.__report = JSON.parse(JSON.stringify(rep)); return showProblem(rep.exceptions[0].message); }
+      var pre = parseAmount($("ar-start").value);
+      if (pre != null && !isNaN(pre)) compareAR(rep, pre);
+      publish(rep);
+    } catch (e) { window.__report = { status: "ERROR", message: String(e) }; showProblem("Something in this file stopped me. Nothing was produced. (" + e + ")"); }
+  };
+  reader.readAsArrayBuffer(f);
+}
+$("file").addEventListener("change", function(){ if (this.files && this.files[0]) handle(this.files[0]); this.value = ""; });
+["dragenter", "dragover"].forEach(function(ev){ document.addEventListener(ev, function(e){ e.preventDefault(); $("drop").classList.add("over"); }); });
+["dragleave", "drop"].forEach(function(ev){ document.addEventListener(ev, function(e){ e.preventDefault(); $("drop").classList.remove("over"); }); });
+document.addEventListener("drop", function(e){ var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) handle(f); });
+$("print").addEventListener("click", function(){ window.print(); });
+$("again").addEventListener("click", function(){ $("report").hidden = true; $("start").hidden = false; $("problem").hidden = true; window.scrollTo(0, 0); });
+
+// a made-up sample: a small supplier's A/R aging detail, QuickBooks Online layout
+$("sample").addEventListener("click", function(){
+  var rows = [["Sample Supply Co."], ["A/R Aging Detail"], ["As of October 31, 2026"], [], ["", "Date", "Transaction Type", "Num", "Customer", "Due Date", "Amount", "Open Balance"]];
+  var data = [["09/02/2026", "Invoice", "1001", "Alder Builders", "10/02/2026", 4200, 4200], ["10/01/2026", "Invoice", "1004", "Alder Builders", "10/31/2026", 1850, 1850],
+    ["10/14/2026", "Payment", "", "Alder Builders", "10/14/2026", -4200, -4200], ["06/20/2026", "Invoice", "0971", "Birch Dental Group", "07/20/2026", 2600, 2600],
+    ["08/10/2026", "Invoice", "0990", "Birch Dental Group", "09/09/2026", 980, 980], ["10/20/2026", "Invoice", "1009", "Cedar Apartments", "11/19/2026", 3100, 3100],
+    ["10/22/2026", "Invoice", "1012", "Cedar Apartments", "11/21/2026", 3100, 3100], ["03/15/2025", "Invoice", "0702", "Delta Fitness", "04/14/2025", 640, 640],
+    ["09/18/2026", "Invoice", "0999", "Ember Hotel", "10/18/2026", 1500, 6.5]];
+  data.forEach(function(d){ rows.push([""].concat(d)); });
+  rows.push(["TOTAL", "", "", "", "", "", "", data.reduce(function(s, d){ return s + d[6]; }, 0)]);
+  rates = {};
+  publish(review(rows, "made-up sample"));
+});
+</script>
+</body>
+</html>
