@@ -312,12 +312,14 @@ line(A["tools"], D(9, 2), "Bill", "8840", "Greenfield Tools", "Threading dies se
 for m in (2, 5, 8, 11):                                                                            # quarterly maintenance contract, routine
     line(A["rm"], D(m, 1), "Bill", f"PM-{m}", "Keystone Mechanical", "Quarterly maintenance contract", 285_000)
 line(A["rm"], D(10, 9), "Bill", "8890", "Apex Plumbing", "Water heater repair", 248_000)              # under the threshold
+line(A["rm"], D(11, 16), "Bill", "8921", "Ridge Roofing", "Replace shop roof section", 250_000)           # exactly the threshold: a candidate
 depreciate(A, 1_402_100, monthly=False)
 write_qbo(P("03-planted-purchases-in-expense.xlsx"), "Granite Facility Services", A)
 case("03", "Planted: an HVAC unit, laptops and a machine expensed; a quarterly service contract that is routine", "planted", "03-planted-purchases-in-expense.xlsx", "COMPUTED", key_for(A), "qbo")
 
 # ---- 04 planted: a truck sold, the proceeds credited to the Vehicles account, accumulated depreciation untouched
 A = book(4, "Lantern Signs & Graphics")
+line(A["veh"], D(7, 1), "Check", "5101", "Prairie Trailer Sales", "Utility trailer", 1_800_000)           # same amount as the sale, another name: not a reversal
 line(A["veh"], D(7, 15), "Deposit", "", "Carver Auto Sales", "Sold 2019 F-150", -1_800_000)
 line(A["veh"], D(7, 20), "Check", "5120", "Carver Ford", "2026 F-250", 5_412_500)
 depreciate(A, 1_515_000)
@@ -347,6 +349,7 @@ A["ad"]["name"] = "Less Accumulated Depreciation on Office Equipment"; A["dep"][
 A["sup"]["name"] = "Office Expenses"; A["tools"]["name"] = "General Expenses"
 line(A["veh"], D(3, 30), "Bill", "INV-0412", "Summit Office Systems", "Server and switches", 1_064_000)
 line(A["rm"], D(10, 2), "Bill", "INV-7781", "Riverside Electric", "New LED lighting, warehouse", 655_000)
+line(A["rm"], D(11, 20), "Bill", "INV-7790", "Riverside Electric", "New LED lighting, office", 318_000)    # two big bills from one vendor: not routine
 depreciate(A, 1_150_000)
 write_xero(P("07-xero-account-transactions.xlsx"), "Indigo Storage", A)
 case("07", "Xero Account Transactions: default account names; lighting expensed as a repair", "ugly", "07-xero-account-transactions.xlsx", "COMPUTED", key_for(A), "xero")
@@ -440,6 +443,17 @@ depreciate(A, 1_320_000)
 write_qbo(P("16-fiscal-year.xlsx"), "Meadow Dental Group", A, period_text="July 1, 2025 - June 30, 2026")
 case("16", "QuickBooks Online, a fiscal year ending June 30 (still twelve months)", "ugly", "16-fiscal-year.xlsx", "COMPUTED",
      key_for(A, period=("2025-07-01", "2026-06-30")), "qbo")
+
+# ---- 17 a sale booked properly: cost and accumulated depreciation removed, gain recorded
+A = book(17, "Summit Landscaping")
+A["gain"] = acct("Gain on Sale of Assets", 0, 80100, 260)
+line(A["veh"], D(9, 10), "Journal Entry", "AJE-9", "", "Sale of 2017 dump truck: remove cost", -3_250_000)
+line(A["ad"], D(9, 10), "Journal Entry", "AJE-9", "", "Sale of 2017 dump truck: remove depreciation", 2_910_000)
+line(A["gain"], D(9, 10), "Journal Entry", "AJE-9", "", "Sale of 2017 dump truck: gain", -860_000)
+line(A["veh"], D(9, 22), "Check", "7004", "Carver Ford", "2026 dump truck", 6_890_000)
+depreciate(A, 1_710_000)
+write_qbo(P("17-sale-booked-properly.xlsx"), "Summit Landscaping", A)
+case("17", "A sale booked properly: cost and accumulated depreciation removed, gain recorded", "clean", "17-sale-booked-properly.xlsx", "COMPUTED", key_for(A), "qbo")
 
 json.dump(KEY, open(os.path.join(HERE, "answer-key.json"), "w"), indent=1, default=str)
 print(len(KEY), "cases written")

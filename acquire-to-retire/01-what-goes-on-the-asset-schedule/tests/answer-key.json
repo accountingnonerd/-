@@ -228,6 +228,14 @@
     "lines": 1
    },
    {
+    "account": "Repairs and Maintenance",
+    "date": "2026-11-16",
+    "num": "8921",
+    "name": "Ridge Roofing",
+    "amount": 2500.0,
+    "lines": 1
+   },
+   {
     "account": "Office Supplies & Software",
     "date": "2026-08-21",
     "num": "3391",
@@ -257,7 +265,7 @@
   "costEnding": 110575.5,
   "adEnding": 73055.12,
   "additionsTotal": 0,
-  "candidatesTotal": 18440.97,
+  "candidatesTotal": 20940.97,
   "depreciationBooked": 14021.0,
   "threshold": 2500.0,
   "exceptions": [
@@ -298,9 +306,9 @@
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 54125.0,
+    "additions": 72125.0,
     "disposals": -18000.0,
-    "ending": 98575.0
+    "ending": 116575.0
    }
   ],
   "adRollforward": [
@@ -313,6 +321,14 @@
    }
   ],
   "additions": [
+   {
+    "account": "Vehicles",
+    "date": "2026-07-01",
+    "num": "5101",
+    "name": "Prairie Trailer Sales",
+    "amount": 18000.0,
+    "journal": false
+   },
    {
     "account": "Vehicles",
     "date": "2026-07-20",
@@ -336,9 +352,9 @@
   "routine": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
-  "costEnding": 146700.5,
+  "costEnding": 164700.5,
   "adEnding": 74184.12,
-  "additionsTotal": 54125.0,
+  "additionsTotal": 72125.0,
   "candidatesTotal": 0,
   "depreciationBooked": 15150.0,
   "threshold": 2500.0,
@@ -576,6 +592,14 @@
     "name": "Riverside Electric",
     "amount": 6550.0,
     "lines": 1
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-11-20",
+    "num": "INV-7790",
+    "name": "Riverside Electric",
+    "amount": 3180.0,
+    "lines": 1
    }
   ],
   "routine": [],
@@ -584,7 +608,7 @@
   "costEnding": 121215.5,
   "adEnding": 70534.12,
   "additionsTotal": 10640.0,
-  "candidatesTotal": 6550.0,
+  "candidatesTotal": 9730.0,
   "depreciationBooked": 11500.0,
   "threshold": 2500.0,
   "exceptions": [
@@ -1170,5 +1194,87 @@
   "depreciationBooked": 13200.0,
   "threshold": 2500.0,
   "exceptions": []
+ },
+ "17": {
+  "title": "A sale booked properly: cost and accumulated depreciation removed, gain recorded",
+  "kind": "clean",
+  "file": "17-sale-booked-properly.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other",
+   "Gain on Sale of Assets": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 68900.0,
+    "disposals": -32500.0,
+    "ending": 98850.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -17100.0,
+    "debits": 29100.0,
+    "ending": -47034.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Vehicles",
+    "date": "2026-09-22",
+    "num": "7004",
+    "name": "Carver Ford",
+    "amount": 68900.0,
+    "journal": false
+   }
+  ],
+  "disposals": [
+   {
+    "account": "Vehicles",
+    "date": "2026-09-10",
+    "num": "AJE-9",
+    "name": "",
+    "amount": 32500.0
+   }
+  ],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 146975.5,
+  "adEnding": 47034.12,
+  "additionsTotal": 68900.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 17100.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "DISPOSALS"
+  ]
  }
 }
