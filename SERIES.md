@@ -11,7 +11,7 @@ Series 1 takes the most painful step of each process; later series take the next
 | Agent 2 | Hire-to-Retire | Do the 941s match the W-3? | published 2026-11-12 |
 | Agent 3 | Record-to-Report | Did last year change? | published 2026-11-13 |
 | Agent 4 | Order-to-Cash | What's really collectible? (receivables and collections) | published 2026-11-16 (Does the 1099-K tie? built and parked) |
-| Agent 5 | Acquire-to-Retire | What goes on the asset schedule? (fixed assets, year end) | built, awaiting approval to publish |
+| Agent 5 | Acquire-to-Retire | What goes on the asset schedule? (fixed assets, year end) | published 2026-11-25 (regular post with the article as a PDF; the LinkedIn article and newsletter kit is kept for later) |
 
 The folders in this repository are organized by process, so later series' agents for the
 same process sit beside Series 1's.

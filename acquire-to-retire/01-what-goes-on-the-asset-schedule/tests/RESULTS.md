@@ -2,7 +2,7 @@
 
 Version 1.0.0, run with `node run-tests.js` against `agent/what-goes-on-the-asset-schedule.html`.
 
-**22 of 22 cases passed; 758 of 758 individual checks.**
+**22 of 22 cases passed; 760 of 760 individual checks.**
 
 The acceptance test has 22 cases: general ledger reports for 2026 in the layouts of QuickBooks Online
 (flat and with nested sub-accounts), QuickBooks Desktop and Xero, from a model of accounts and lines
@@ -26,28 +26,28 @@ docstring of `make_cases.py`; the key is worked out from the model, never by rea
 
 | Case | What it is | Type | Expected verdict | Checks passed | Run time (ms) | Result |
 |---|---|---|---|---|---|---|
-| 01 | QuickBooks Online, a clean year: purchases recorded as assets, depreciation booked | clean | COMPUTED | 34/34 | 121 | PASS |
-| 02 | QuickBooks Online, last year's schedule and this year's depreciation typed in: both agree | clean | COMPUTED | 40/40 | 259 | PASS |
-| 03 | Planted: an HVAC unit, laptops and a machine expensed; a quarterly service contract that is routine | planted | COMPUTED | 36/36 | 113 | PASS |
-| 04 | Planted: a truck sold with the proceeds credited to Vehicles; accumulated depreciation untouched | planted | COMPUTED | 36/36 | 149 | PASS |
-| 05 | Planted: no depreciation booked; the tax software's figure typed in | planted | COMPUTED | 37/37 | 177 | PASS |
-| 06 | Planted: opening cost and accumulated depreciation differ from last year's schedule | planted | COMPUTED | 41/41 | 176 | PASS |
-| 07 | Xero Account Transactions: default account names; lighting expensed as a repair | ugly | COMPUTED | 35/35 | 120 | PASS |
-| 08 | QuickBooks Desktop General Ledger: account numbers, Debit and Credit, no period | ugly | COMPUTED | 37/37 | 145 | PASS |
-| 09 | QuickBooks Online as CSV: dollar signs, parentheses; a returned part credited to the asset | ugly | COMPUTED | 36/36 | 87 | PASS |
-| 10 | A bill entered twice and reversed; an addition by journal entry; the reclassed repair is not proposed again | ugly | COMPUTED | 37/37 | 111 | PASS |
-| 11 | The wrong report: a trial balance | ugly | NOT_RECOGNIZED | 4/4 | 64 | PASS |
-| 12 | The wrong report: an A/R aging | ugly | NOT_RECOGNIZED | 4/4 | 66 | PASS |
-| 13 | Planted: a line missing from the export, so Furniture and Equipment does not add up | planted | COMPUTED | 36/36 | 107 | PASS |
-| 14 | The client has audited statements: a $5,000 threshold typed in | ugly | COMPUTED | 35/35 | 170 | PASS |
-| 15 | An asset account named 'Shop Assets': the page asks, the accountant marks it as a fixed asset | ugly | COMPUTED | 33/33 | 126 | PASS |
-| 16 | QuickBooks Online, a fiscal year ending June 30 (still twelve months) | ugly | COMPUTED | 35/35 | 115 | PASS |
-| 17 | A sale booked properly: cost and accumulated depreciation removed, gain recorded | clean | COMPUTED | 36/36 | 116 | PASS |
-| 18 | QuickBooks Online fixed asset tracking: 'Original cost' and 'Depreciation' sub-accounts, nested, with parent totals | ugly | COMPUTED | 35/35 | 115 | PASS |
-| 19 | Accounts named after assets that are not assets (a truck loan, a note payable, a gain); amortization; a down payment in auto expense | planted | COMPUTED | 41/41 | 105 | PASS |
-| 20 | A truck bought net of a trade-in, loan payments posted to Vehicles, land and a building bought in November | planted | COMPUTED | 41/41 | 105 | PASS |
-| 21 | Purchases already reclassed, a part refund, a bill split over two accounts, a transfer between asset accounts, a return; three tools that are not routine | planted | COMPUTED | 42/42 | 110 | PASS |
-| 22 | The readers' sample: Ridgeline Landscaping, with the reader's decisions, last year's schedule, this year's depreciation and the sold truck's figures typed | planted | COMPUTED | 47/47 | 949 | PASS |
+| 01 | QuickBooks Online, a clean year: purchases recorded as assets, depreciation booked | clean | COMPUTED | 34/34 | 137 | PASS |
+| 02 | QuickBooks Online, last year's schedule and this year's depreciation typed in: both agree | clean | COMPUTED | 40/40 | 224 | PASS |
+| 03 | Planted: an HVAC unit, laptops and a machine expensed; a quarterly service contract that is routine | planted | COMPUTED | 36/36 | 101 | PASS |
+| 04 | Planted: a truck sold with the proceeds credited to Vehicles; accumulated depreciation untouched | planted | COMPUTED | 36/36 | 114 | PASS |
+| 05 | Planted: no depreciation booked; the tax software's figure typed in | planted | COMPUTED | 37/37 | 161 | PASS |
+| 06 | Planted: opening cost and accumulated depreciation differ from last year's schedule | planted | COMPUTED | 41/41 | 181 | PASS |
+| 07 | Xero Account Transactions: default account names; lighting expensed as a repair | ugly | COMPUTED | 35/35 | 101 | PASS |
+| 08 | QuickBooks Desktop General Ledger: account numbers, Debit and Credit, no period | ugly | COMPUTED | 37/37 | 111 | PASS |
+| 09 | QuickBooks Online as CSV: dollar signs, parentheses; a returned part credited to the asset | ugly | COMPUTED | 36/36 | 86 | PASS |
+| 10 | A bill entered twice and reversed; an addition by journal entry; the reclassed repair is not proposed again | ugly | COMPUTED | 37/37 | 120 | PASS |
+| 11 | The wrong report: a trial balance | ugly | NOT_RECOGNIZED | 4/4 | 63 | PASS |
+| 12 | The wrong report: an A/R aging | ugly | NOT_RECOGNIZED | 4/4 | 69 | PASS |
+| 13 | Planted: a line missing from the export, so Furniture and Equipment does not add up | planted | COMPUTED | 36/36 | 115 | PASS |
+| 14 | The client has audited statements: a $5,000 threshold typed in | ugly | COMPUTED | 35/35 | 209 | PASS |
+| 15 | An asset account named 'Shop Assets': the page asks, the accountant marks it as a fixed asset | ugly | COMPUTED | 33/33 | 129 | PASS |
+| 16 | QuickBooks Online, a fiscal year ending June 30 (still twelve months) | ugly | COMPUTED | 35/35 | 137 | PASS |
+| 17 | A sale booked properly: cost and accumulated depreciation removed, gain recorded | clean | COMPUTED | 36/36 | 113 | PASS |
+| 18 | QuickBooks Online fixed asset tracking: 'Original cost' and 'Depreciation' sub-accounts, nested, with parent totals | ugly | COMPUTED | 35/35 | 120 | PASS |
+| 19 | Accounts named after assets that are not assets (a truck loan, a note payable, a gain); amortization; a down payment in auto expense | planted | COMPUTED | 41/41 | 118 | PASS |
+| 20 | A truck bought net of a trade-in, loan payments posted to Vehicles, land and a building bought in November | planted | COMPUTED | 43/43 | 114 | PASS |
+| 21 | Purchases already reclassed, a part refund, a bill split over two accounts, a transfer between asset accounts, a return; three tools that are not routine | planted | COMPUTED | 42/42 | 111 | PASS |
+| 22 | The readers' sample: Ridgeline Landscaping, with the reader's decisions, last year's schedule, this year's depreciation and the sold truck's figures typed | planted | COMPUTED | 47/47 | 948 | PASS |
 
 ## What went wrong along the way
 

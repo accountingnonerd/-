@@ -13,7 +13,7 @@ Purchase  ->  Capitalize or expense  ->  Asset schedule  ->  Depreciation  ->  S
 
 | No. | Tool | Step | What it adds to what she already has | Version | Date |
 |---|---|---|---|---|---|
-| 01 | [What goes on the asset schedule?](01-what-goes-on-the-asset-schedule/) | Year end | Reads the client's general ledger for the year and finds what the depreciation schedule needs: purchases recorded as assets, purchases buried in repairs and supplies, assets sold or written off, and whether the books still agree with last year's schedule and this year's depreciation. | 1.0.0 | awaiting approval |
+| 01 | [What goes on the asset schedule?](01-what-goes-on-the-asset-schedule/) | Year end | Reads the client's general ledger for the year and finds what the depreciation schedule needs: purchases recorded as assets, purchases buried in repairs and supplies, assets sold or written off, and whether the books still agree with last year's schedule and this year's depreciation. | 1.0.0 | 2026-11-25 |
 
 ## Stage 1: how episode 01 was chosen (2026-11-18)
 

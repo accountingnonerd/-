@@ -1,0 +1,28 @@
+Series 1 · Agent 5 | The year-end fixed asset review, done from the general ledger
+
+A $6,900 door in Repairs. A $5,600 sprayer in Small Tools. $16,000 from a sold truck credited straight to Vehicles.
+
+Last year's depreciation schedule knew about none of them. All three were sitting in the client's general ledger.
+
+Agent 5 of One Painful Problem is a free tool that reads the ledger from QuickBooks Online, QuickBooks Desktop or Xero and gives you:
+
+→ Purchases recorded as assets, with trade-ins, land and loan payments flagged
+→ Every bill over $2,500 in repairs, supplies and tools, left for you to decide: capitalize or expense
+→ Sales and write-offs, with the gain or loss worked out
+→ A check against last year's schedule and this year's depreciation
+→ A workpaper you can file: journal entries, the balances after them, and the questions for the client
+
+It decides nothing for you. It does the reading.
+
+New this time: you can rebuild it yourself. One prompt pasted into an AI assistant, about 15 minutes, no coding. A sample client and the numbers you should see are included, so you can check that your copy works.
+
+Before release: 22 test files, 760 checks. A skeptical-CPA review found 9 wrong answers in the first version. All are fixed.
+
+The prompt, the sample and the ready-made tool:
+https://github.com/accountingnonerd/-/tree/main/acquire-to-retire/01-what-goes-on-the-asset-schedule
+
+That completes Series 1: five agents, one for each accounting process. Follow me for Series 2.
+
+Rebuilt it? Tell me in the comments what your AI assistant got right the first time.
+
+#Accounting #CPA #Tax

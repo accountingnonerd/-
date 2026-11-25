@@ -66,3 +66,4 @@ reposts and followers gained are read from LinkedIn's post analytics and recorde
 | S1 A2, The payroll letter | 2026-11-12 | text + 13-page PDF | | | | | baseline |
 | S1 A3, The year that won't stay closed | 2026-11-13 | text + 14-page PDF | | | | | baseline |
 | S1 A4, $20,858 of "overdue" wasn't owed | 2026-11-16 (Mon, 1:36 pm ET, published at once; [post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7528164032999194625)) | text + 12-slide carousel; link in first comment | | | | | first post under this plan |
+| S1 A5, The year-end fixed asset review | 2026-11-25 (Wed, 3:56 pm ET, the day before Thanksgiving; [post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7531460719725228032)) | text + 10-page article PDF; link in the post body (link test) | | | | | first post with a rebuild prompt |

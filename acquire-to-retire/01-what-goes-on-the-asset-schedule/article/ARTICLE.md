@@ -1,5 +1,5 @@
 <!--
-DRAFT FOR APPROVAL. Not published.
+Published 2026-11-25 as a regular LinkedIn post (LINKEDIN-POST.txt) with this article as a 10-page PDF (build_pdf.js); the LinkedIn article and newsletter paste kit (LINKEDIN-PASTE.html) is kept for later.
 One Painful Problem, Series 1, Agent 5 (Acquire-to-Retire). For a LinkedIn article, published as a
 newsletter edition. LinkedIn's editor has no tables: lists are used instead. Images are in images/.
 SEO title (max 60): Year-end fixed asset review from the general ledger
@@ -56,7 +56,7 @@ The screen takes you through four steps. A bar at the top shows where you are, a
 
 **4. Print the workpaper.** Built from your choices. Anything still undecided is listed at the top in red, and left out until you decide it.
 
-Before release, a separate AI review played a skeptical CPA. It found nine ways the first version gave wrong answers. It counted loan payments as purchases. It proposed reclassing a forklift that had already been reclassed. It treated a properly booked sale as unrecorded. It pre-ticked purchases as capital. All are fixed, and each is now one of the 22 test files the tool must pass, 758 checks in all. Two more reviews played a first-time user, working from the screen alone. After the first, the tool was rebuilt around its four steps. After the second, it got a workpaper you can file: journal entries, the balances after them, and a reason for each decision.
+Before release, a separate AI review played a skeptical CPA. It found nine ways the first version gave wrong answers. It counted loan payments as purchases. It proposed reclassing a forklift that had already been reclassed. It treated a properly booked sale as unrecorded. It pre-ticked purchases as capital. All are fixed, and each is now one of the 22 test files the tool must pass, 760 checks in all. Two more reviews played a first-time user, working from the screen alone. After the first, the tool was rebuilt around its four steps. After the second, it got a workpaper you can file: journal entries, the balances after them, and a reason for each decision.
 
 ## Build it yourself
 
