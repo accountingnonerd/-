@@ -155,7 +155,7 @@ table.example{font-size:.9rem}
 .decide input{width:18px;height:18px;margin:0}
 .decide label.on{border-color:var(--ledger);background:var(--ledger-tint);font-weight:700}
 .undecided{color:var(--care);font-weight:700}
-.money-in{width:9em;font:inherit;padding:4px 6px;border:2px solid var(--ink);border-radius:6px}
+.money-in{width:7.5em;font:inherit;padding:4px 6px;border:2px solid var(--ink);border-radius:6px}
 .bad-input{color:var(--stop);font-weight:700;font-size:.9rem;display:block}
 .parts{display:block;color:var(--soft);font-size:.9rem}
 .print-only{display:none}
@@ -675,7 +675,7 @@ function render(rep){
   if (!rep.disposals.length && !rep.possibleSales.length) o.push('<p class="ok">Nothing was credited to a fixed asset account, and no sale shows elsewhere.</p>');
   if (proceeds.length) {
     o.push('<p><b>Money received for an asset was posted straight to the asset account.</b> Ask the client which asset it was. From the depreciation schedule, type that asset’s original cost and its accumulated depreciation at the end of last year; then its depreciation for this year up to the date it went (from the tax software’s report for this year; leave it empty if there is none). The page works out the gain or loss and the entry as you type. If the figure you type in 3d comes from the tax software, it already includes this asset’s depreciation for the part of the year it was owned.</p>');
-    o.push('<div class="scroll"><table id="disposals" class="cards"><thead><tr><th>Date</th><th>Account</th><th>Description</th><th class="num">Received</th><th>Its original cost</th><th>Its depreciation at the end of last year</th><th>Its depreciation this year, to the sale</th><th class="num">Gain or loss</th></tr></thead><tbody>');
+    o.push('<div class="scroll"><table id="disposals" class="cards"><thead><tr><th>Date</th><th>Account</th><th>Description</th><th class="num">Received</th><th>Its cost</th><th>Its depreciation, end of last year</th><th>Its depreciation this year, to the sale</th><th class="num">Gain or loss</th></tr></thead><tbody>');
     proceeds.forEach(function(d){ var v = (state.disp || {})[d.id] || {};
       o.push('<tr>' + td("Date", dateOf(d.date)) + td("Account", esc(d.account)) + td("Description", esc(itemName(d))) + td("Received", c$(d.amount), "num") +
         td("Its original cost", '<input class="money-in disp" data-id="' + d.id + '" data-f="cost" inputmode="decimal" value="' + inputVal(v.cost) + '" aria-label="Original cost of ' + esc(itemName(d)) + '">' + badMsg(d.id + "cost")) +
