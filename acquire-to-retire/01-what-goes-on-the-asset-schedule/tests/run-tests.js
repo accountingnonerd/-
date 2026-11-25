@@ -42,17 +42,22 @@ function compare(key, rep) {
   check("period", key.period ? key.period.from + " to " + key.period.to : "none", rep.period ? rep.period.from + " to " + rep.period.to : "none");
   for (const [name, role] of Object.entries(key.accounts)) check("account role: " + name, role, rep.accounts && rep.accounts[name]);
   check("accounts read", Object.keys(key.accounts).length, rep.accounts ? Object.keys(rep.accounts).length : 0);
-  check("cost roll-forward", pairs(key.rollforward, (r) => `${r.account}: ${m2(r.opening)} + ${m2(r.additions)} ${m2(r.disposals)} = ${m2(r.ending)}`),
-    pairs(rep.rollforward, (r) => `${r.account}: ${m2(r.opening)} + ${m2(r.additions)} ${m2(r.disposals)} = ${m2(r.ending)}`));
+  check("cost roll-forward", pairs(key.rollforward, (r) => `${r.account}: ${m2(r.opening)} + ${m2(r.debits)} ${m2(r.credits)} = ${m2(r.ending)}`),
+    pairs(rep.rollforward, (r) => `${r.account}: ${m2(r.opening)} + ${m2(r.debits)} ${m2(r.credits)} = ${m2(r.ending)}`));
   check("accumulated depreciation roll-forward", pairs(key.adRollforward, (r) => `${r.account}: ${m2(r.opening)} ${m2(r.credits)} + ${m2(r.debits)} = ${m2(r.ending)}`),
     pairs(rep.adRollforward, (r) => `${r.account}: ${m2(r.opening)} ${m2(r.credits)} + ${m2(r.debits)} = ${m2(r.ending)}`));
-  check("additions", pairs(key.additions, (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} je:${x.journal}`), pairs(rep.additions, (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} je:${x.journal}`));
-  check("disposals", pairs(key.disposals, (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)}`), pairs(rep.disposals, (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)}`));
+  const ad = (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} je:${x.journal} trade:${x.tradeIn} land:${x.land}`;
+  check("additions", pairs(key.additions, ad), pairs(rep.additions, ad));
+  const dk = (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} ${x.kind}`;
+  check("credits to asset accounts and what they are", pairs(key.disposals, dk), pairs(rep.disposals, dk));
+  check("transfers", pairs(key.transfers, (x) => `${x.from}>${x.to} ${x.date} ${m2(x.amount)}`), pairs(rep.transfers, (x) => `${x.from}>${x.to} ${x.date} ${m2(x.amount)}`));
+  check("likely loan payments", pairs(key.payments, (x) => `${x.account} ${x.name} ${x.count} ${m2(x.amount)}`), pairs(rep.payments, (x) => `${x.account} ${x.name} ${x.count} ${m2(x.amount)}`));
+  check("possible sales in other accounts", pairs(key.possibleSales, (x) => `${x.account} ${x.date} ${m2(x.amount)}`), pairs(rep.possibleSales, (x) => `${x.account} ${x.date} ${m2(x.amount)}`));
   check("reversals", pairs(key.reversals, (x) => `${x.account} ${x.name} ${m2(x.amount)}`), pairs(rep.reversals, (x) => `${x.account} ${x.name} ${m2(x.amount)}`));
-  check("purchases in expense accounts", pairs(key.candidates, (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} lines:${x.lines}`),
-    pairs(rep.candidates, (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} lines:${x.lines}`));
-  check("routine charges", pairs(key.routine, (x) => `${x.account} ${x.name} ${x.count} ${m2(x.amount)}`), pairs(rep.routine, (x) => `${x.account} ${x.name} ${x.count} ${m2(x.amount)}`));
-  for (const f of ["costOpening", "adOpening", "costEnding", "adEnding", "additionsTotal", "candidatesTotal", "depreciationBooked", "threshold"])
+  const ck = (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} lines:${x.lines} repeats:${x.routine}`;
+  check("bills in expense accounts", pairs(key.candidates, ck), pairs(rep.candidates, ck));
+  check("nothing decided for the accountant", true, (rep.candidates || []).every((c) => c.decision === "undecided"));
+  for (const f of ["costOpening", "adOpening", "costEnding", "adEnding", "additionsTotal", "scheduleAdditions", "candidatesTotal", "depreciationBooked", "threshold"])
     check(f, key[f], rep[f], near(key[f], rep[f]));
   for (const f of ["taxDepreciation", "depreciationAdjustment", "scheduleCost", "scheduleAD", "openingDiffCost", "openingDiffAD"])
     if (key[f] !== undefined) check(f, key[f], rep[f], near(key[f], rep[f]));

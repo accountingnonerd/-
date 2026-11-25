@@ -25,15 +25,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 6840.0,
-    "disposals": 0.0,
+    "debits": 6840.0,
+    "credits": 0.0,
     "ending": 54965.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 46750.0,
-    "disposals": 0.0,
+    "debits": 46750.0,
+    "credits": 0.0,
     "ending": 109200.0
    }
   ],
@@ -53,7 +53,9 @@
     "num": "2207",
     "name": "Summit Office Systems",
     "amount": 6840.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    },
    {
     "account": "Vehicles",
@@ -61,18 +63,23 @@
     "num": "4418",
     "name": "Carver Ford",
     "amount": 46750.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 164165.5,
   "adEnding": 72898.12,
   "additionsTotal": 53590.0,
+  "scheduleAdditions": 53590.0,
   "candidatesTotal": 0,
   "depreciationBooked": 13864.0,
   "threshold": 2500.0,
@@ -104,15 +111,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 6840.0,
-    "disposals": 0.0,
+    "debits": 6840.0,
+    "credits": 0.0,
     "ending": 54965.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 46750.0,
-    "disposals": 0.0,
+    "debits": 46750.0,
+    "credits": 0.0,
     "ending": 109200.0
    }
   ],
@@ -132,7 +139,9 @@
     "num": "2207",
     "name": "Summit Office Systems",
     "amount": 6840.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    },
    {
     "account": "Vehicles",
@@ -140,18 +149,23 @@
     "num": "4418",
     "name": "Carver Ford",
     "amount": 46750.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 164165.5,
   "adEnding": 72898.12,
   "additionsTotal": 53590.0,
+  "scheduleAdditions": 53590.0,
   "candidatesTotal": 0,
   "depreciationBooked": 13864.0,
   "threshold": 2500.0,
@@ -194,15 +208,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 48125.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -218,22 +232,44 @@
   "additions": [],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-02-01",
+    "num": "PM-2",
+    "name": "Keystone Mechanical",
+    "amount": 2850.0,
+    "lines": 1,
+    "routine": true
+   },
    {
     "account": "Repairs and Maintenance",
     "date": "2026-04-14",
     "num": "8812",
     "name": "Coastal HVAC Contractors",
     "amount": 11480.0,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    },
    {
     "account": "Repairs and Maintenance",
-    "date": "2026-11-16",
-    "num": "8921",
-    "name": "Ridge Roofing",
-    "amount": 2500.0,
-    "lines": 1
+    "date": "2026-05-01",
+    "num": "PM-5",
+    "name": "Keystone Mechanical",
+    "amount": 2850.0,
+    "lines": 1,
+    "routine": true
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-08-01",
+    "num": "PM-8",
+    "name": "Keystone Mechanical",
+    "amount": 2850.0,
+    "lines": 1,
+    "routine": true
    },
    {
     "account": "Office Supplies & Software",
@@ -241,7 +277,8 @@
     "num": "3391",
     "name": "Summit Office Systems",
     "amount": 4125.97,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    },
    {
     "account": "Small Tools and Equipment",
@@ -249,23 +286,27 @@
     "num": "8840",
     "name": "Greenfield Tools",
     "amount": 2835.0,
-    "lines": 2
-   }
-  ],
-  "routine": [
+    "lines": 2,
+    "routine": false
+   },
    {
     "account": "Repairs and Maintenance",
+    "date": "2026-11-01",
+    "num": "PM-11",
     "name": "Keystone Mechanical",
-    "count": 4,
-    "amount": 11400.0
+    "amount": 2850.0,
+    "lines": 1,
+    "routine": true
    }
   ],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 110575.5,
   "adEnding": 73055.12,
   "additionsTotal": 0,
-  "candidatesTotal": 20940.97,
+  "scheduleAdditions": 0,
+  "candidatesTotal": 29840.97,
   "depreciationBooked": 14021.0,
   "threshold": 2500.0,
   "exceptions": [
@@ -299,15 +340,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 48125.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 72125.0,
-    "disposals": -18000.0,
+    "debits": 72125.0,
+    "credits": -18000.0,
     "ending": 116575.0
    }
   ],
@@ -327,7 +368,9 @@
     "num": "5101",
     "name": "Prairie Trailer Sales",
     "amount": 18000.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    },
    {
     "account": "Vehicles",
@@ -335,7 +378,9 @@
     "num": "5120",
     "name": "Carver Ford",
     "amount": 54125.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [
@@ -344,17 +389,21 @@
     "date": "2026-07-15",
     "num": "",
     "name": "Carver Auto Sales",
-    "amount": 18000.0
+    "amount": 18000.0,
+    "kind": "proceeds"
    }
   ],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 164700.5,
   "adEnding": 74184.12,
   "additionsTotal": 72125.0,
+  "scheduleAdditions": 72125.0,
   "candidatesTotal": 0,
   "depreciationBooked": 15150.0,
   "threshold": 2500.0,
@@ -388,15 +437,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 9250.0,
-    "disposals": 0.0,
+    "debits": 9250.0,
+    "credits": 0.0,
     "ending": 57375.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -416,18 +465,23 @@
     "num": "1180",
     "name": "Riverside Electric",
     "amount": 9250.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 119825.5,
   "adEnding": 59034.12,
   "additionsTotal": 9250.0,
+  "scheduleAdditions": 9250.0,
   "candidatesTotal": 0,
   "depreciationBooked": 0.0,
   "threshold": 2500.0,
@@ -467,15 +521,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 48125.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 12900.0,
-    "disposals": 0.0,
+    "debits": 12900.0,
+    "credits": 0.0,
     "ending": 75350.0
    }
   ],
@@ -495,18 +549,23 @@
     "num": "6610",
     "name": "Prairie Trailer Sales",
     "amount": 12900.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 123475.5,
   "adEnding": 71474.12,
   "additionsTotal": 12900.0,
+  "scheduleAdditions": 12900.0,
   "candidatesTotal": 0,
   "depreciationBooked": 12440.0,
   "threshold": 2500.0,
@@ -551,15 +610,15 @@
    {
     "account": "Office Equipment",
     "opening": 48125.5,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 48125.5
    },
    {
     "account": "Computer Equipment",
     "opening": 62450.0,
-    "additions": 10640.0,
-    "disposals": 0.0,
+    "debits": 10640.0,
+    "credits": 0.0,
     "ending": 73090.0
    }
   ],
@@ -579,11 +638,15 @@
     "num": "INV-0412",
     "name": "Summit Office Systems",
     "amount": 10640.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [
    {
     "account": "Repairs and Maintenance",
@@ -591,7 +654,8 @@
     "num": "INV-7781",
     "name": "Riverside Electric",
     "amount": 6550.0,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    },
    {
     "account": "Repairs and Maintenance",
@@ -599,15 +663,17 @@
     "num": "INV-7790",
     "name": "Riverside Electric",
     "amount": 3180.0,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    }
   ],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 121215.5,
   "adEnding": 70534.12,
   "additionsTotal": 10640.0,
+  "scheduleAdditions": 10640.0,
   "candidatesTotal": 9730.0,
   "depreciationBooked": 11500.0,
   "threshold": 2500.0,
@@ -638,15 +704,15 @@
    {
     "account": "Kitchen Equipment",
     "opening": 48125.5,
-    "additions": 39150.0,
-    "disposals": 0.0,
+    "debits": 39150.0,
+    "credits": 0.0,
     "ending": 87275.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -666,7 +732,9 @@
     "num": "B-201",
     "name": "Harbor Supply Co",
     "amount": 22400.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    },
    {
     "account": "Kitchen Equipment",
@@ -674,11 +742,15 @@
     "num": "B-288",
     "name": "Harbor Supply Co",
     "amount": 16750.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [
    {
     "account": "Repairs and Maintenance",
@@ -686,20 +758,23 @@
     "num": "B-240",
     "name": "Apex Plumbing",
     "amount": 3865.0,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    }
   ],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 149725.5,
   "adEnding": 78242.12,
   "additionsTotal": 39150.0,
+  "scheduleAdditions": 39150.0,
   "candidatesTotal": 3865.0,
   "depreciationBooked": 19208.0,
   "threshold": 2500.0,
   "exceptions": [
    "CAPITALIZE_CANDIDATES",
+   "MID_QUARTER",
    "PERIOD_UNKNOWN"
   ]
  },
@@ -729,15 +804,15 @@
    {
     "account": "Shop Equipment",
     "opening": 48125.5,
-    "additions": 38500.0,
-    "disposals": -825.0,
+    "debits": 38500.0,
+    "credits": -825.0,
     "ending": 85800.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -757,7 +832,9 @@
     "num": "770",
     "name": "Greenfield Tools",
     "amount": 38500.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [
@@ -766,10 +843,13 @@
     "date": "2026-09-09",
     "num": "",
     "name": "Greenfield Tools",
-    "amount": 825.0
+    "amount": 825.0,
+    "kind": "return"
    }
   ],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [
    {
     "account": "Office Supplies & Software",
@@ -777,22 +857,23 @@
     "num": "812",
     "name": "Summit Office Systems",
     "amount": 2999.0,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    }
   ],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 148250.5,
   "adEnding": 79914.12,
   "additionsTotal": 38500.0,
+  "scheduleAdditions": 38500.0,
   "candidatesTotal": 2999.0,
   "depreciationBooked": 20880.0,
   "threshold": 2500.0,
   "exceptions": [
-   "AD_NOT_REMOVED",
    "CAPITALIZE_CANDIDATES",
-   "DISPOSALS"
+   "RETURNS"
   ]
  },
  "10": {
@@ -821,15 +902,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 32900.0,
-    "disposals": 0.0,
+    "debits": 47100.0,
+    "credits": -14200.0,
     "ending": 81025.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -849,7 +930,9 @@
     "num": "3001",
     "name": "Harbor Supply Co",
     "amount": 14200.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    },
    {
     "account": "Furniture and Equipment",
@@ -857,7 +940,9 @@
     "num": "AJE-4",
     "name": "",
     "amount": 18700.0,
-    "journal": true
+    "journal": true,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
@@ -868,18 +953,22 @@
     "name": "Harbor Supply Co"
    }
   ],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 143475.5,
   "adEnding": 73584.12,
   "additionsTotal": 32900.0,
+  "scheduleAdditions": 32900.0,
   "candidatesTotal": 0,
   "depreciationBooked": 14550.0,
   "threshold": 2500.0,
   "exceptions": [
    "JOURNAL_ENTRY_ADDITIONS",
+   "MID_QUARTER",
    "REVERSALS"
   ]
  },
@@ -929,15 +1018,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 21960.0,
-    "disposals": 0.0,
+    "debits": 21960.0,
+    "credits": 0.0,
     "ending": 70085.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -957,18 +1046,23 @@
     "num": "4410",
     "name": "Harbor Supply Co",
     "amount": 21960.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 132535.5,
   "adEnding": 75134.12,
   "additionsTotal": 21960.0,
+  "scheduleAdditions": 21960.0,
   "candidatesTotal": 0,
   "depreciationBooked": 16100.0,
   "threshold": 2500.0,
@@ -1005,15 +1099,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 48125.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -1029,6 +1123,8 @@
   "additions": [],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [
    {
     "account": "Repairs and Maintenance",
@@ -1036,15 +1132,17 @@
     "num": "8812",
     "name": "Coastal HVAC Contractors",
     "amount": 11480.0,
-    "lines": 1
+    "lines": 1,
+    "routine": false
    }
   ],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 110575.5,
   "adEnding": 73055.12,
   "additionsTotal": 0,
+  "scheduleAdditions": 0,
   "candidatesTotal": 11480.0,
   "depreciationBooked": 14021.0,
   "threshold": 5000.0,
@@ -1080,8 +1178,8 @@
    {
     "account": "Shop Assets",
     "opening": 48125.5,
-    "additions": 7140.0,
-    "disposals": 0.0,
+    "debits": 7140.0,
+    "credits": 0.0,
     "ending": 55265.5
    }
   ],
@@ -1101,18 +1199,23 @@
     "num": "9901",
     "name": "Harbor Supply Co",
     "amount": 7140.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 48125.5,
   "adOpening": 59034.12,
   "costEnding": 55265.5,
   "adEnding": 65434.12,
   "additionsTotal": 7140.0,
+  "scheduleAdditions": 7140.0,
   "candidatesTotal": 0,
   "depreciationBooked": 6400.0,
   "threshold": 2500.0,
@@ -1150,15 +1253,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 24750.0,
-    "disposals": 0.0,
+    "debits": 24750.0,
+    "credits": 0.0,
     "ending": 72875.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 62450.0
    }
   ],
@@ -1178,22 +1281,29 @@
     "num": "551",
     "name": "Summit Office Systems",
     "amount": 24750.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 135325.5,
   "adEnding": 72234.12,
   "additionsTotal": 24750.0,
+  "scheduleAdditions": 24750.0,
   "candidatesTotal": 0,
   "depreciationBooked": 13200.0,
   "threshold": 2500.0,
-  "exceptions": []
+  "exceptions": [
+   "MID_QUARTER"
+  ]
  },
  "17": {
   "title": "A sale booked properly: cost and accumulated depreciation removed, gain recorded",
@@ -1222,15 +1332,15 @@
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "additions": 0.0,
-    "disposals": 0.0,
+    "debits": 0.0,
+    "credits": 0.0,
     "ending": 48125.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "additions": 68900.0,
-    "disposals": -32500.0,
+    "debits": 68900.0,
+    "credits": -32500.0,
     "ending": 98850.0
    }
   ],
@@ -1250,7 +1360,9 @@
     "num": "7004",
     "name": "Carver Ford",
     "amount": 68900.0,
-    "journal": false
+    "journal": false,
+    "tradeIn": false,
+    "land": false
    }
   ],
   "disposals": [
@@ -1259,22 +1371,468 @@
     "date": "2026-09-10",
     "num": "AJE-9",
     "name": "",
-    "amount": 32500.0
+    "amount": 32500.0,
+    "kind": "recorded"
    }
   ],
   "reversals": [],
+  "transfers": [],
+  "payments": [],
   "candidates": [],
-  "routine": [],
+  "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
   "costEnding": 146975.5,
   "adEnding": 47034.12,
   "additionsTotal": 68900.0,
+  "scheduleAdditions": 68900.0,
   "candidatesTotal": 0,
   "depreciationBooked": 17100.0,
   "threshold": 2500.0,
   "exceptions": [
-   "DISPOSALS"
+   "DISPOSALS_RECORDED"
+  ]
+ },
+ "18": {
+  "title": "QuickBooks Online fixed asset tracking: 'Original cost' and 'Depreciation' sub-accounts, nested, with parent totals",
+  "kind": "ugly",
+  "file": "18-fixed-asset-tracking-subaccounts.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Fixed Assets:Truck:Original cost": "fa",
+   "Fixed Assets:Truck:Depreciation": "ad",
+   "Fixed Assets:Equipment:Original cost": "fa",
+   "Fixed Assets:Equipment:Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Fixed Assets:Truck:Original cost",
+    "opening": 42000.0,
+    "debits": 6800.0,
+    "credits": 0.0,
+    "ending": 48800.0
+   },
+   {
+    "account": "Fixed Assets:Equipment:Original cost",
+    "opening": 26500.0,
+    "debits": 0.0,
+    "credits": 0.0,
+    "ending": 26500.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Fixed Assets:Truck:Depreciation",
+    "opening": -18000.0,
+    "credits": -8400.0,
+    "debits": 0.0,
+    "ending": -26400.0
+   },
+   {
+    "account": "Fixed Assets:Equipment:Depreciation",
+    "opening": -11200.0,
+    "credits": -3500.0,
+    "debits": 0.0,
+    "ending": -14700.0
+   }
+  ],
+  "additions": [
+   {
+    "account": "Fixed Assets:Truck:Original cost",
+    "date": "2026-04-08",
+    "num": "6120",
+    "name": "Summit Upfitters",
+    "amount": 6800.0,
+    "journal": false,
+    "tradeIn": false,
+    "land": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "transfers": [],
+  "payments": [],
+  "candidates": [],
+  "possibleSales": [],
+  "costOpening": 68500.0,
+  "adOpening": 29200.0,
+  "costEnding": 75300.0,
+  "adEnding": 41100.0,
+  "additionsTotal": 6800.0,
+  "scheduleAdditions": 6800.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 11900.0,
+  "threshold": 2500.0,
+  "exceptions": []
+ },
+ "19": {
+  "title": "Accounts named after assets that are not assets (a truck loan, a note payable, a gain); amortization; a down payment in auto expense",
+  "kind": "planted",
+  "file": "19-loans-gains-and-amortization.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation and Amortization": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other",
+   "Truck Loan": "other",
+   "Equipment Note Payable": "other",
+   "Gain on Sale of Equipment": "other",
+   "Auto and Truck Expense": "review"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "debits": 0.0,
+    "credits": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "debits": 0.0,
+    "credits": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -15200.0,
+    "debits": 0.0,
+    "ending": -74234.12
+   }
+  ],
+  "additions": [],
+  "disposals": [],
+  "reversals": [],
+  "transfers": [],
+  "payments": [],
+  "candidates": [
+   {
+    "account": "Auto and Truck Expense",
+    "date": "2026-02-01",
+    "num": "2211",
+    "name": "Carver Ram",
+    "amount": 12000.0,
+    "lines": 1,
+    "routine": false
+   }
+  ],
+  "possibleSales": [
+   {
+    "account": "Gain on Sale of Equipment",
+    "date": "2026-08-03",
+    "amount": 3500.0
+   }
+  ],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 110575.5,
+  "adEnding": 74234.12,
+  "additionsTotal": 0,
+  "scheduleAdditions": 0,
+  "candidatesTotal": 12000.0,
+  "depreciationBooked": 15200.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "AMORTIZATION",
+   "CAPITALIZE_CANDIDATES",
+   "POSSIBLE_SALES"
+  ]
+ },
+ "20": {
+  "title": "A truck bought net of a trade-in, loan payments posted to Vehicles, land and a building bought in November",
+  "kind": "planted",
+  "file": "20-trade-in-payments-land.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other",
+   "Land": "fa",
+   "Buildings": "fa"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "debits": 0.0,
+    "credits": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "debits": 38474.4,
+    "credits": 0.0,
+    "ending": 100924.4
+   },
+   {
+    "account": "Land",
+    "opening": 0.0,
+    "debits": 65000.0,
+    "credits": 0.0,
+    "ending": 65000.0
+   },
+   {
+    "account": "Buildings",
+    "opening": 0.0,
+    "debits": 240000.0,
+    "credits": 0.0,
+    "ending": 240000.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -16100.0,
+    "debits": 0.0,
+    "ending": -75134.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Vehicles",
+    "date": "2026-03-18",
+    "num": "8101",
+    "name": "Carver Ram",
+    "amount": 33000.0,
+    "journal": false,
+    "tradeIn": true,
+    "land": false
+   },
+   {
+    "account": "Land",
+    "date": "2026-11-30",
+    "num": "CL-1",
+    "name": "",
+    "amount": 65000.0,
+    "journal": true,
+    "tradeIn": false,
+    "land": true
+   },
+   {
+    "account": "Buildings",
+    "date": "2026-11-30",
+    "num": "CL-1",
+    "name": "",
+    "amount": 240000.0,
+    "journal": true,
+    "tradeIn": false,
+    "land": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "transfers": [],
+  "payments": [
+   {
+    "account": "Vehicles",
+    "name": "Ally Financial",
+    "count": 6,
+    "amount": 912.4
+   }
+  ],
+  "candidates": [],
+  "possibleSales": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 454049.9,
+  "adEnding": 75134.12,
+  "additionsTotal": 338000.0,
+  "scheduleAdditions": 273000.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 16100.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "JOURNAL_ENTRY_ADDITIONS",
+   "LAND",
+   "LIKELY_LOAN_PAYMENTS",
+   "MID_QUARTER",
+   "TRADE_IN"
+  ]
+ },
+ "21": {
+  "title": "Purchases already reclassed, a part refund, a bill split over two accounts, a transfer between asset accounts, a return; three tools that are not routine",
+  "kind": "planted",
+  "file": "21-reclass-refund-split-transfer.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "debits": 16300.0,
+    "credits": -15300.0,
+    "ending": 49125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "debits": 15000.0,
+    "credits": 0.0,
+    "ending": 77450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -14800.0,
+    "debits": 0.0,
+    "ending": -73834.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-03-31",
+    "num": "AJE-2",
+    "name": "",
+    "amount": 12200.0,
+    "journal": true,
+    "tradeIn": false,
+    "land": false
+   },
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-09-02",
+    "num": "4520",
+    "name": "Harbor Supply Co",
+    "amount": 4100.0,
+    "journal": false,
+    "tradeIn": false,
+    "land": false
+   }
+  ],
+  "disposals": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-09-20",
+    "num": "4520-C",
+    "name": "Harbor Supply Co",
+    "amount": 300.0,
+    "kind": "return"
+   }
+  ],
+  "reversals": [],
+  "transfers": [
+   {
+    "from": "Furniture and Equipment",
+    "to": "Vehicles",
+    "date": "2026-08-01",
+    "amount": 15000.0
+   }
+  ],
+  "payments": [],
+  "candidates": [
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-04-04",
+    "num": "G-11",
+    "name": "Greenfield Tools",
+    "amount": 4800.0,
+    "lines": 1,
+    "routine": false
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-06-12",
+    "num": "77",
+    "name": "Metro Glass",
+    "amount": 3400.0,
+    "lines": 2,
+    "routine": false
+   },
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-07-09",
+    "num": "G-19",
+    "name": "Greenfield Tools",
+    "amount": 3900.0,
+    "lines": 1,
+    "routine": false
+   },
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-09-21",
+    "num": "G-27",
+    "name": "Greenfield Tools",
+    "amount": 2900.0,
+    "lines": 1,
+    "routine": false
+   }
+  ],
+  "possibleSales": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 126575.5,
+  "adEnding": 73834.12,
+  "additionsTotal": 16300.0,
+  "scheduleAdditions": 16300.0,
+  "candidatesTotal": 15000.0,
+  "depreciationBooked": 14800.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "CAPITALIZE_CANDIDATES",
+   "JOURNAL_ENTRY_ADDITIONS",
+   "RETURNS",
+   "TRANSFERS"
   ]
  }
 }
