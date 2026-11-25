@@ -1588,7 +1588,9 @@
    "Utilities": "other",
    "Advertising & Marketing": "other",
    "Land": "fa",
-   "Buildings": "fa"
+   "Buildings": "fa",
+   "Leasehold Improvements": "fa",
+   "Equipment Lease": "other"
   },
   "rollforward": [
    {
@@ -1618,6 +1620,13 @@
     "debits": 240000.0,
     "credits": 0.0,
     "ending": 240000.0
+   },
+   {
+    "account": "Leasehold Improvements",
+    "opening": 18400.0,
+    "debits": 0.0,
+    "credits": 0.0,
+    "ending": 18400.0
    }
   ],
   "adRollforward": [
@@ -1674,9 +1683,9 @@
   ],
   "candidates": [],
   "possibleSales": [],
-  "costOpening": 110575.5,
+  "costOpening": 128975.5,
   "adOpening": 59034.12,
-  "costEnding": 454049.9,
+  "costEnding": 472449.9,
   "adEnding": 75134.12,
   "additionsTotal": 338000.0,
   "scheduleAdditions": 273000.0,

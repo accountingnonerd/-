@@ -356,9 +356,9 @@ function readLedger(rows){
    ===================================================================================== */
 var ROLE_LABEL = { fa: "Fixed asset (cost)", ad: "Accumulated depreciation", dep: "Depreciation expense", review: "Expense: check for purchases", other: "Other: the page ignores it" };
 var FA_W = /equipment|furniture|fixtures?\b|vehicles?\b|trucks?\b|trailers?\b|machinery|computers?\b|leasehold improvements?|improvements\b|buildings?\b|\bland\b|fixed assets?|property and equipment/;
-var NOT_FA = /expenses?\b|rental|\brent\b|repairs?\b|maintenance|small|supplies|lease|fuel|insurance|registration|software|internet|minor|\bloans?\b|\bnotes?\b|payable|interest|\bgain|\bloss|\bsale|income|revenue|inventory|payments?\b/;
+var NOT_FA = /expenses?\b|rental|\brent\b|repairs?\b|maintenance|small|supplies|\blease(?!hold)|fuel|insurance|registration|software|internet|minor|\bloans?\b|\bnotes?\b|payable|interest|\bgain|\bloss|\bsale|income|revenue|inventory|payments?\b/;
 var RV_W = /repairs?\b|maintenance|supplies|tools|computer|software|equipment|furniture|improvements?\b|\bauto\b|vehicles?\b|trucks?\b/;
-var NOT_RV = /rental|\brent\b|lease|fuel|insurance|\bloans?\b|payable|interest|\bgain|income|revenue/;
+var NOT_RV = /rental|\brent\b|\blease(?!hold)|fuel|insurance|\bloans?\b|payable|interest|\bgain|income|revenue/;
 function baseRole(s){
   s = s.toLowerCase();
   if (/accumulated amortization|accum\.? amort/.test(s)) return "other";

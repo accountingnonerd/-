@@ -18,11 +18,11 @@ The rules the key follows (version 2, after the CPA review and the first-time-us
     fixed asset (cost): equipment, furniture, fixture(s), vehicle(s), truck(s), trailer(s),
       machinery, computer(s), leasehold improvement(s), improvements, building(s), "land" as a word,
       "fixed asset(s)", "property and equipment"; and none of: expense(s), rental, rent, repair(s),
-      maintenance, small, supplies, lease, fuel, insurance, registration, software, internet, minor,
+      maintenance, small, supplies, the word lease (not leasehold), fuel, insurance, registration, software, internet, minor,
       loan(s), note(s), payable, interest, gain, loss, sale, income, revenue, inventory, payment(s);
     review for capitalization: repair(s), maintenance, supplies, tools, computer, software,
       equipment, furniture, improvement(s), auto, vehicle(s), truck(s); and none of: rental, rent,
-      lease, fuel, insurance, loan(s), payable, interest, gain, income, revenue;
+      the word lease (not leasehold), fuel, insurance, loan(s), payable, interest, gain, income, revenue;
     anything else: other. The accountant can change any role on screen.
   Fixed asset lines, in this order:
     1. transfers: a credit in one fixed asset account and a debit of the same amount in another,
@@ -133,9 +133,9 @@ def clean_part(s):
 def norm_name(s): return ":".join(clean_part(p) for p in s.split(":"))
 
 FA_W = re.compile(r"equipment|furniture|fixtures?\b|vehicles?\b|trucks?\b|trailers?\b|machinery|computers?\b|leasehold improvements?|improvements\b|buildings?\b|\bland\b|fixed assets?|property and equipment")
-NOT_FA = re.compile(r"expenses?\b|rental|\brent\b|repairs?\b|maintenance|small|supplies|lease|fuel|insurance|registration|software|internet|minor|\bloans?\b|\bnotes?\b|payable|interest|\bgain|\bloss|\bsale|income|revenue|inventory|payments?\b")
+NOT_FA = re.compile(r"expenses?\b|rental|\brent\b|repairs?\b|maintenance|small|supplies|\blease(?!hold)|fuel|insurance|registration|software|internet|minor|\bloans?\b|\bnotes?\b|payable|interest|\bgain|\bloss|\bsale|income|revenue|inventory|payments?\b")
 RV_W = re.compile(r"repairs?\b|maintenance|supplies|tools|computer|software|equipment|furniture|improvements?\b|\bauto\b|vehicles?\b|trucks?\b")
-NOT_RV = re.compile(r"rental|\brent\b|lease|fuel|insurance|\bloans?\b|payable|interest|\bgain|income|revenue")
+NOT_RV = re.compile(r"rental|\brent\b|\blease(?!hold)|fuel|insurance|\bloans?\b|payable|interest|\bgain|income|revenue")
 def base_role(s):
     s = s.lower()
     if re.search(r"accumulated amortization|accum\.? amort", s): return "other"
@@ -621,6 +621,9 @@ case("19", "Accounts named after assets that are not assets (a truck loan, a not
 A = book(20, "Prairie Grain Supply")
 A["land"] = acct("Land", 0, 15500, 730)
 A["bldg"] = acct("Buildings", 0, 15600, 731)
+A["lhi"] = acct("Leasehold Improvements", 1_840_000, 15700, 732)            # "lease" inside "leasehold" does not stop it being an asset
+A["elease"] = acct("Equipment Lease", 0, 64600, 466)                         # a lease payment account is not an asset
+for m in range(1, 13): line(A["elease"], D(m, 5), "Bill", f"EL{m}", "Prairie Equipment Finance", "Skid steer lease", 98_000)
 line(A["veh"], D(3, 18), "Check", "8101", "Carver Ram", "2026 Ram 3500, net of trade-in ($22,000 allowance for 2019 F-150)", 3_300_000)
 for m in range(4, 10): line(A["veh"], D(m, 18), "Check", f"P{m}", "Ally Financial", "Truck payment", 91_240)
 line(A["land"], D(11, 30), "Journal Entry", "CL-1", "", "Purchase of 410 Mill Road: land", 6_500_000)
