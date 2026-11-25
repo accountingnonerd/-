@@ -46,7 +46,7 @@ also says what you should see.
 The whole tool comes from one prompt, [`PROMPT.txt`](PROMPT.txt). You can paste it into an AI
 assistant and get your own copy, then check it against the sample.
 
-**What you need:** a computer with a browser, and an AI chat assistant that can write a long piece
+**What you need:** a computer with a browser and an internet connection (the page you build loads its spreadsheet reader from cdnjs.cloudflare.com each time it opens; the ready-made tool in `agent/` works offline), and an AI chat assistant that can write a long piece
 of code in one reply, such as Claude at claude.ai. The reply is long, so a free plan may hit its
 limit partway; a paid plan is safer. About 15 minutes, most of it waiting. The prompt was checked by
 having fresh Claude sessions rebuild the tool from it and run it against the tests and the sample.
@@ -56,11 +56,12 @@ having fresh Claude sessions rebuild the tool from it and run it against the tes
    line breaks.
 2. Start a new chat in your AI assistant, paste the prompt, and send it.
 3. Wait for the reply: one long block of code, around 1,000 lines. If the assistant offers the file
-   as a download, download it. If the reply stops partway, write: "Please send the complete file
+   as a download, or shows it in a side panel with a download or copy button, use that. If the reply stops partway, write: "Please send the complete file
    again in one code block."
-4. If there is no download: copy the whole code block into a plain-text editor (Notepad on Windows;
-   on a Mac, TextEdit after choosing Format, Make Plain Text) and save it as
-   `what-goes-on-the-asset-schedule.html`.
+4. If there is no download: copy the whole code block into a plain-text editor and save it as
+   `what-goes-on-the-asset-schedule.html`. On Windows, use Notepad, and set "Save as type" to "All
+   files", or it saves as .html.txt. On a Mac, use TextEdit: choose Format, then Make Plain Text, and
+   when it asks, choose "Use .html".
 5. Double-click the file. It opens in your browser with the title "What goes on the asset
    schedule?" and a box to drop a file.
 6. Download the two files in [`sample/`](sample/) and drop the ledger in. Follow the steps on the
@@ -68,6 +69,10 @@ having fresh Claude sessions rebuild the tool from it and run it against the tes
 
 **If it does not work:**
 - *A blank page or half a page:* the code was cut off. Ask for the complete file again.
+- *Nothing happens when you drop the file:* the page could not load its spreadsheet reader. Check
+  the internet connection or the firewall, or use the ready-made file in `agent/`.
+- *A box forgets what you typed when you move to the next one:* tell the assistant exactly that, and
+  ask it to keep what you type in every box and work the figures out only when you press the button.
 - *Different numbers from the sample:* tell the assistant what you expected, quoting the line from
   `sample/README.md`, and ask it to fix the file so it follows the prompt exactly.
 - *Still stuck:* use the ready-made file in `agent/`. It is the same tool, tested.

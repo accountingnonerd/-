@@ -41,7 +41,7 @@ Vehicles. It was the 2017 Ford F-250. Type three figures:
 
 The page shows a **gain of $13,375.00**.
 
-**Step 3d. Does it agree?** Type 210,900.00, 97,350.00 and 24,610.00. Both opening balances agree.
+**Step 3d. Does it agree?** Type the Total rows of the two schedules, 210,900.00 and 97,350.00, and this year's total, 24,610.00, then press Compare. Both opening balances agree.
 Depreciation booked, $16,800.00, is $7,810.00 lower than $24,610.00.
 
 **Step 4. The workpaper.** The line at the top now reads "Ridgeline Landscaping LLC: $88,550.00 to add

@@ -123,4 +123,39 @@ figures box by box the way a person does.
 
 ## Rebuild from the prompt
 
-See `rebuild-check/` and the section below once the checks have run.
+**Developer check (`rebuild-check/rebuild-1/`).** A fresh AI session got only `PROMPT.txt` and was
+allowed to read `run-tests.js`. It could not see the tool, the case builder or the answer key.
+
+Its first run is not a clean measure: the prompt and the tests changed while it worked. Its first
+build came from the older prompt and was run against the newer test, passing 21 of 22 cases. Rebuilt
+to the current prompt, it passed **22 of 22 cases, 758 of 758 checks**.
+
+It also listed the places where the prompt was silent and it had to guess. One of them was a real
+bug, in the tool too: "Leasehold Improvements" was read as not an asset because it contains "lease".
+That is fixed, and case 20 now tests it. The prompt now says what the tool does for each of the
+others:
+- the not-recognized message;
+- the date format in the report;
+- "Total" in any case;
+- which columns count as an amount;
+- the order sets of bills are tried in for a reclass;
+- that moving between boxes must not redraw the page.
+
+**Reader check (`rebuild-check/reader-test/`).** A fresh AI session played a staff accountant who is
+not technical, and the assistant that accountant pastes the prompt into. Its only sources were the
+article as a reader sees it and the public repository, fetched logged out.
+
+- **The prompt.** The copy in the article and the master on GitHub were identical, byte for byte.
+- **Following the steps.** It followed steps 1 to 6. The page it built, from the prompt alone,
+  showed every number the article and the sample's README give: $76,050.00 and $26,980.00, a gain
+  of $13,375.00, $88,550.00 to add, the four entries, and $257,450.00 and $82,585.00 after them.
+- **The one fix it needed.** Its first file lost a figure typed in step 3d when moving to the next
+  box. One request to the assistant fixed it. The prompt now says plainly that those boxes are read
+  only when Compare is pressed.
+- **Its other hesitations, all now covered in the article and the README:**
+  - the page needs internet for its spreadsheet reader;
+  - Notepad saves .html.txt unless "All files" is chosen;
+  - TextEdit asks before it saves as .html;
+  - the assistant may show the file in a side panel;
+  - the repository's odd name ("-");
+  - which button to press in step 2, and which figures to type in step 3d.
