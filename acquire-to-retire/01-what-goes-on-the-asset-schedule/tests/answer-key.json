@@ -1,0 +1,1174 @@
+{
+ "01": {
+  "title": "QuickBooks Online, a clean year: purchases recorded as assets, depreciation booked",
+  "kind": "clean",
+  "file": "01-northgate-general-ledger.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 6840.0,
+    "disposals": 0.0,
+    "ending": 54965.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 46750.0,
+    "disposals": 0.0,
+    "ending": 109200.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -13864.0,
+    "debits": 0.0,
+    "ending": -72898.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-03-12",
+    "num": "2207",
+    "name": "Summit Office Systems",
+    "amount": 6840.0,
+    "journal": false
+   },
+   {
+    "account": "Vehicles",
+    "date": "2026-06-03",
+    "num": "4418",
+    "name": "Carver Ford",
+    "amount": 46750.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 164165.5,
+  "adEnding": 72898.12,
+  "additionsTotal": 53590.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 13864.0,
+  "threshold": 2500.0,
+  "exceptions": []
+ },
+ "02": {
+  "title": "QuickBooks Online, last year's schedule and this year's depreciation typed in: both agree",
+  "kind": "clean",
+  "file": "01-northgate-general-ledger.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 6840.0,
+    "disposals": 0.0,
+    "ending": 54965.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 46750.0,
+    "disposals": 0.0,
+    "ending": 109200.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -13864.0,
+    "debits": 0.0,
+    "ending": -72898.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-03-12",
+    "num": "2207",
+    "name": "Summit Office Systems",
+    "amount": 6840.0,
+    "journal": false
+   },
+   {
+    "account": "Vehicles",
+    "date": "2026-06-03",
+    "num": "4418",
+    "name": "Carver Ford",
+    "amount": 46750.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 164165.5,
+  "adEnding": 72898.12,
+  "additionsTotal": 53590.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 13864.0,
+  "threshold": 2500.0,
+  "taxDepreciation": 13864.0,
+  "depreciationAdjustment": 0.0,
+  "scheduleCost": 110575.5,
+  "scheduleAD": 59034.12,
+  "openingDiffCost": 0.0,
+  "openingDiffAD": 0.0,
+  "exceptions": [],
+  "typed": {
+   "scheduleCost": 110575.5,
+   "scheduleAD": 59034.12,
+   "taxDepreciation": 13864.0
+  }
+ },
+ "03": {
+  "title": "Planted: an HVAC unit, laptops and a machine expensed; a quarterly service contract that is routine",
+  "kind": "planted",
+  "file": "03-planted-purchases-in-expense.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -14021.0,
+    "debits": 0.0,
+    "ending": -73055.12
+   }
+  ],
+  "additions": [],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-04-14",
+    "num": "8812",
+    "name": "Coastal HVAC Contractors",
+    "amount": 11480.0,
+    "lines": 1
+   },
+   {
+    "account": "Office Supplies & Software",
+    "date": "2026-08-21",
+    "num": "3391",
+    "name": "Summit Office Systems",
+    "amount": 4125.97,
+    "lines": 1
+   },
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-09-02",
+    "num": "8840",
+    "name": "Greenfield Tools",
+    "amount": 2835.0,
+    "lines": 2
+   }
+  ],
+  "routine": [
+   {
+    "account": "Repairs and Maintenance",
+    "name": "Keystone Mechanical",
+    "count": 4,
+    "amount": 11400.0
+   }
+  ],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 110575.5,
+  "adEnding": 73055.12,
+  "additionsTotal": 0,
+  "candidatesTotal": 18440.97,
+  "depreciationBooked": 14021.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "CAPITALIZE_CANDIDATES",
+   "ROUTINE_CHARGES"
+  ]
+ },
+ "04": {
+  "title": "Planted: a truck sold with the proceeds credited to Vehicles; accumulated depreciation untouched",
+  "kind": "planted",
+  "file": "04-planted-truck-sold.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 54125.0,
+    "disposals": -18000.0,
+    "ending": 98575.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -15150.0,
+    "debits": 0.0,
+    "ending": -74184.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Vehicles",
+    "date": "2026-07-20",
+    "num": "5120",
+    "name": "Carver Ford",
+    "amount": 54125.0,
+    "journal": false
+   }
+  ],
+  "disposals": [
+   {
+    "account": "Vehicles",
+    "date": "2026-07-15",
+    "num": "",
+    "name": "Carver Auto Sales",
+    "amount": 18000.0
+   }
+  ],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 146700.5,
+  "adEnding": 74184.12,
+  "additionsTotal": 54125.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 15150.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "AD_NOT_REMOVED",
+   "DISPOSALS"
+  ]
+ },
+ "05": {
+  "title": "Planted: no depreciation booked; the tax software's figure typed in",
+  "kind": "planted",
+  "file": "05-planted-no-depreciation.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 9250.0,
+    "disposals": 0.0,
+    "ending": 57375.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": 0.0,
+    "debits": 0.0,
+    "ending": -59034.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-02-09",
+    "num": "1180",
+    "name": "Riverside Electric",
+    "amount": 9250.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 119825.5,
+  "adEnding": 59034.12,
+  "additionsTotal": 9250.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 0.0,
+  "threshold": 2500.0,
+  "taxDepreciation": 16112.5,
+  "depreciationAdjustment": 16112.5,
+  "exceptions": [
+   "DEPRECIATION_DIFFERS",
+   "NO_DEPRECIATION_BOOKED"
+  ],
+  "typed": {
+   "taxDepreciation": 16112.5
+  }
+ },
+ "06": {
+  "title": "Planted: opening cost and accumulated depreciation differ from last year's schedule",
+  "kind": "planted",
+  "file": "06-planted-opening-differs.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 12900.0,
+    "disposals": 0.0,
+    "ending": 75350.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -12440.0,
+    "debits": 0.0,
+    "ending": -71474.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Vehicles",
+    "date": "2026-05-01",
+    "num": "6610",
+    "name": "Prairie Trailer Sales",
+    "amount": 12900.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 123475.5,
+  "adEnding": 71474.12,
+  "additionsTotal": 12900.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 12440.0,
+  "threshold": 2500.0,
+  "taxDepreciation": 12440.0,
+  "depreciationAdjustment": 0.0,
+  "scheduleCost": 114095.5,
+  "scheduleAD": 60216.12,
+  "openingDiffCost": -3520.0,
+  "openingDiffAD": -1182.0,
+  "exceptions": [
+   "OPENING_DIFFERS"
+  ],
+  "typed": {
+   "scheduleCost": 114095.5,
+   "scheduleAD": 60216.12,
+   "taxDepreciation": 12440.0
+  }
+ },
+ "07": {
+  "title": "Xero Account Transactions: default account names; lighting expensed as a repair",
+  "kind": "ugly",
+  "file": "07-xero-account-transactions.xlsx",
+  "status": "COMPUTED",
+  "layout": "xero",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Office Equipment": "fa",
+   "Computer Equipment": "fa",
+   "Less Accumulated Depreciation on Office Equipment": "ad",
+   "Depreciation": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Expenses": "other",
+   "General Expenses": "other",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Office Equipment",
+    "opening": 48125.5,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Computer Equipment",
+    "opening": 62450.0,
+    "additions": 10640.0,
+    "disposals": 0.0,
+    "ending": 73090.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Less Accumulated Depreciation on Office Equipment",
+    "opening": -59034.12,
+    "credits": -11500.0,
+    "debits": 0.0,
+    "ending": -70534.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Computer Equipment",
+    "date": "2026-03-30",
+    "num": "INV-0412",
+    "name": "Summit Office Systems",
+    "amount": 10640.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-10-02",
+    "num": "INV-7781",
+    "name": "Riverside Electric",
+    "amount": 6550.0,
+    "lines": 1
+   }
+  ],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 121215.5,
+  "adEnding": 70534.12,
+  "additionsTotal": 10640.0,
+  "candidatesTotal": 6550.0,
+  "depreciationBooked": 11500.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "CAPITALIZE_CANDIDATES"
+  ]
+ },
+ "08": {
+  "title": "QuickBooks Desktop General Ledger: account numbers, Debit and Credit, no period",
+  "kind": "ugly",
+  "file": "08-quickbooks-desktop-gl.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbd",
+  "period": null,
+  "accounts": {
+   "Kitchen Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Kitchen Equipment",
+    "opening": 48125.5,
+    "additions": 39150.0,
+    "disposals": 0.0,
+    "ending": 87275.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -19208.0,
+    "debits": 0.0,
+    "ending": -78242.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Kitchen Equipment",
+    "date": "2026-01-20",
+    "num": "B-201",
+    "name": "Harbor Supply Co",
+    "amount": 22400.0,
+    "journal": false
+   },
+   {
+    "account": "Kitchen Equipment",
+    "date": "2026-11-05",
+    "num": "B-288",
+    "name": "Harbor Supply Co",
+    "amount": 16750.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-06-18",
+    "num": "B-240",
+    "name": "Apex Plumbing",
+    "amount": 3865.0,
+    "lines": 1
+   }
+  ],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 149725.5,
+  "adEnding": 78242.12,
+  "additionsTotal": 39150.0,
+  "candidatesTotal": 3865.0,
+  "depreciationBooked": 19208.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "CAPITALIZE_CANDIDATES",
+   "PERIOD_UNKNOWN"
+  ]
+ },
+ "09": {
+  "title": "QuickBooks Online as CSV: dollar signs, parentheses; a returned part credited to the asset",
+  "kind": "ugly",
+  "file": "09-quickbooks-online-csv.csv",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Shop Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Shop Equipment",
+    "opening": 48125.5,
+    "additions": 38500.0,
+    "disposals": -825.0,
+    "ending": 85800.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -20880.0,
+    "debits": 0.0,
+    "ending": -79914.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Shop Equipment",
+    "date": "2026-04-02",
+    "num": "770",
+    "name": "Greenfield Tools",
+    "amount": 38500.0,
+    "journal": false
+   }
+  ],
+  "disposals": [
+   {
+    "account": "Shop Equipment",
+    "date": "2026-09-09",
+    "num": "",
+    "name": "Greenfield Tools",
+    "amount": 825.0
+   }
+  ],
+  "reversals": [],
+  "candidates": [
+   {
+    "account": "Office Supplies & Software",
+    "date": "2026-12-15",
+    "num": "812",
+    "name": "Summit Office Systems",
+    "amount": 2999.0,
+    "lines": 1
+   }
+  ],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 148250.5,
+  "adEnding": 79914.12,
+  "additionsTotal": 38500.0,
+  "candidatesTotal": 2999.0,
+  "depreciationBooked": 20880.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "AD_NOT_REMOVED",
+   "CAPITALIZE_CANDIDATES",
+   "DISPOSALS"
+  ]
+ },
+ "10": {
+  "title": "A bill entered twice and reversed; an addition by journal entry; the reclassed repair is not proposed again",
+  "kind": "ugly",
+  "file": "10-reversal-and-journal-entry.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 32900.0,
+    "disposals": 0.0,
+    "ending": 81025.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -14550.0,
+    "debits": 0.0,
+    "ending": -73584.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-03-05",
+    "num": "3001",
+    "name": "Harbor Supply Co",
+    "amount": 14200.0,
+    "journal": false
+   },
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-12-31",
+    "num": "AJE-4",
+    "name": "",
+    "amount": 18700.0,
+    "journal": true
+   }
+  ],
+  "disposals": [],
+  "reversals": [
+   {
+    "account": "Furniture and Equipment",
+    "amount": 14200.0,
+    "name": "Harbor Supply Co"
+   }
+  ],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 143475.5,
+  "adEnding": 73584.12,
+  "additionsTotal": 32900.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 14550.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "JOURNAL_ENTRY_ADDITIONS",
+   "REVERSALS"
+  ]
+ },
+ "11": {
+  "title": "The wrong report: a trial balance",
+  "kind": "ugly",
+  "file": "11-trial-balance.xlsx",
+  "status": "NOT_RECOGNIZED",
+  "exceptions": [
+   "NOT_RECOGNIZED"
+  ],
+  "layout": null
+ },
+ "12": {
+  "title": "The wrong report: an A/R aging",
+  "kind": "ugly",
+  "file": "12-ar-aging.xlsx",
+  "status": "NOT_RECOGNIZED",
+  "exceptions": [
+   "NOT_RECOGNIZED"
+  ],
+  "layout": null
+ },
+ "13": {
+  "title": "Planted: a line missing from the export, so Furniture and Equipment does not add up",
+  "kind": "planted",
+  "file": "13-planted-line-missing.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 21960.0,
+    "disposals": 0.0,
+    "ending": 70085.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -16100.0,
+    "debits": 0.0,
+    "ending": -75134.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-02-14",
+    "num": "4410",
+    "name": "Harbor Supply Co",
+    "amount": 21960.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 132535.5,
+  "adEnding": 75134.12,
+  "additionsTotal": 21960.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 16100.0,
+  "threshold": 2500.0,
+  "exceptions": [
+   "FILE_DOES_NOT_ADD_UP"
+  ],
+  "notAddUp": [
+   "Furniture and Equipment"
+  ]
+ },
+ "14": {
+  "title": "The client has audited statements: a $5,000 threshold typed in",
+  "kind": "ugly",
+  "file": "14-threshold-5000.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 48125.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -14021.0,
+    "debits": 0.0,
+    "ending": -73055.12
+   }
+  ],
+  "additions": [],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-04-14",
+    "num": "8812",
+    "name": "Coastal HVAC Contractors",
+    "amount": 11480.0,
+    "lines": 1
+   }
+  ],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 110575.5,
+  "adEnding": 73055.12,
+  "additionsTotal": 0,
+  "candidatesTotal": 11480.0,
+  "depreciationBooked": 14021.0,
+  "threshold": 5000.0,
+  "exceptions": [
+   "CAPITALIZE_CANDIDATES"
+  ],
+  "typed": {
+   "threshold": 5000.0
+  }
+ },
+ "15": {
+  "title": "An asset account named 'Shop Assets': the page asks, the accountant marks it as a fixed asset",
+  "kind": "ugly",
+  "file": "15-unrecognized-asset-account.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Shop Assets": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Shop Assets",
+    "opening": 48125.5,
+    "additions": 7140.0,
+    "disposals": 0.0,
+    "ending": 55265.5
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -6400.0,
+    "debits": 0.0,
+    "ending": -65434.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Shop Assets",
+    "date": "2026-06-06",
+    "num": "9901",
+    "name": "Harbor Supply Co",
+    "amount": 7140.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 48125.5,
+  "adOpening": 59034.12,
+  "costEnding": 55265.5,
+  "adEnding": 65434.12,
+  "additionsTotal": 7140.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 6400.0,
+  "threshold": 2500.0,
+  "exceptions": [],
+  "setRoles": {
+   "Shop Assets": "fa"
+  },
+  "firstExceptions": [
+   "NO_FIXED_ASSET_ACCOUNTS"
+  ]
+ },
+ "16": {
+  "title": "QuickBooks Online, a fiscal year ending June 30 (still twelve months)",
+  "kind": "ugly",
+  "file": "16-fiscal-year.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2025-07-01",
+   "to": "2026-06-30"
+  },
+  "accounts": {
+   "Furniture and Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Equipment Rental": "other",
+   "Utilities": "other",
+   "Advertising & Marketing": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Furniture and Equipment",
+    "opening": 48125.5,
+    "additions": 24750.0,
+    "disposals": 0.0,
+    "ending": 72875.5
+   },
+   {
+    "account": "Vehicles",
+    "opening": 62450.0,
+    "additions": 0.0,
+    "disposals": 0.0,
+    "ending": 62450.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -59034.12,
+    "credits": -13200.0,
+    "debits": 0.0,
+    "ending": -72234.12
+   }
+  ],
+  "additions": [
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-04-11",
+    "num": "551",
+    "name": "Summit Office Systems",
+    "amount": 24750.0,
+    "journal": false
+   }
+  ],
+  "disposals": [],
+  "reversals": [],
+  "candidates": [],
+  "routine": [],
+  "costOpening": 110575.5,
+  "adOpening": 59034.12,
+  "costEnding": 135325.5,
+  "adEnding": 72234.12,
+  "additionsTotal": 24750.0,
+  "candidatesTotal": 0,
+  "depreciationBooked": 13200.0,
+  "threshold": 2500.0,
+  "exceptions": []
+ }
+}

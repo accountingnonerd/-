@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Goes on the Asset Schedule?</title>
+<!-- One Painful Problem, Acquire-to-Retire episode 01. Version 1.0.0. One file. Open it in any browser. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><!--XLSX: build.py replaces this line with the library itself-->
+<style>
+:root{
+  --paper:#ffffff; --desk:#eef1f0; --ink:#14201c; --soft:#4d5a55; --rule:#c9d1ce;
+  --ledger:#15614a; --ledger-tint:#e4f0eb;
+  --stop:#a3211b; --stop-tint:#fbe9e7; --care:#8a5a00; --care-tint:#fdf3d9;
+  --sans:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:var(--desk);color:var(--ink);font-family:var(--sans);font-size:19px;line-height:1.5}
+.sheet{max-width:1100px;margin:0 auto;background:var(--paper);min-height:100vh;padding:36px max(20px,4vw) 60px}
+h1{font-size:2.5rem;line-height:1.15;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:1.4rem;margin:40px 0 4px;padding-top:14px;border-top:3px solid var(--ink)}
+h2 small{font-weight:400;color:var(--soft);font-size:1rem}
+h3{font-size:1.1rem;margin:22px 0 6px}
+p{margin:8px 0}
+.lead{font-size:1.3rem;color:var(--soft);max-width:40em;margin-bottom:22px}
+.pre{margin:0 0 16px;font-size:1.05rem}
+.pre input,.typed input,.rates input{font:inherit;padding:6px 8px;border:2px solid var(--ink);border-radius:6px}
+.pre input{width:10em;margin-left:8px}
+#drop{display:block;border:4px dashed var(--ledger);background:var(--ledger-tint);border-radius:10px;padding:48px 24px;text-align:center;cursor:pointer;position:relative}
+#drop.over{background:#cfe6dc;border-style:solid}
+#drop strong{display:block;font-size:1.8rem;color:var(--ledger)}
+#drop span{display:block;font-size:1.1rem;margin-top:6px}
+#file{position:absolute;width:1px;height:1px;opacity:0}
+#drop:focus-within{outline:4px solid var(--ink);outline-offset:3px}
+.how{margin-top:16px;color:var(--soft)}
+.promise{margin-top:26px;padding:16px 20px;border-left:6px solid var(--ledger);background:#f6f8f7}
+.made{margin-top:22px;color:var(--soft);font-size:.9rem}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--ledger);text-decoration:underline;cursor:pointer}
+.bar{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin-bottom:26px}
+.bar .hint{color:var(--soft);font-size:.95rem;flex-basis:100%}
+.main-btn{font:inherit;font-size:1.35rem;font-weight:700;background:var(--ledger);color:#fff;border:0;border-radius:8px;padding:16px 30px;cursor:pointer}
+.sec-btn{font:inherit;font-size:1.05rem;font-weight:700;background:#fff;color:var(--ledger);border:2px solid var(--ledger);border-radius:8px;padding:8px 18px;cursor:pointer}
+.main-btn:focus-visible,.sec-btn:focus-visible,.linkish:focus-visible,input:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.stopbox{background:var(--stop-tint);border:3px solid var(--stop);border-radius:8px;padding:18px 22px;margin:18px 0;font-size:1.15rem}
+.stopbox b{color:var(--stop)}
+.wp-head{display:grid;grid-template-columns:1fr 300px;gap:8px 34px;align-items:start}
+.meta{color:var(--soft);font-size:1rem}
+.verdict{font-size:1.35rem;font-weight:700;margin:6px 0 12px;padding:14px 18px;background:var(--ledger-tint);border-left:8px solid var(--ledger)}
+.verdict.bad{background:var(--stop-tint);border-color:var(--stop)}
+.verdict .sub{display:block;font-weight:400;font-size:1.1rem;margin-top:6px}
+.sign{display:grid;grid-template-columns:1fr 110px;gap:8px;font-size:.95rem;color:var(--soft)}
+.sign label{display:block}
+.sign input{display:block;width:100%;font:inherit;font-size:1.05rem;color:var(--ink);border:0;border-bottom:2px solid var(--ink);background:#f6f8f7;padding:4px 6px;border-radius:0}
+.typed{background:#f6f8f7;border:2px solid var(--rule);border-radius:8px;padding:14px 16px;margin:12px 0}
+.typed label{font-weight:700}
+.typed input{width:11em;margin:0 10px}
+ul.first{list-style:none;padding:0;margin:10px 0}
+ul.first li{padding:12px 16px 12px 18px;margin:8px 0;border-left:8px solid var(--care);background:var(--care-tint)}
+ul.first li.stop{border-color:var(--stop);background:var(--stop-tint)}
+ul.first li.info{border-color:var(--rule);background:#f6f8f7}
+ul.first li .tag{font-weight:700}
+.ok{padding:12px 18px;border-left:8px solid var(--ledger);background:var(--ledger-tint)}
+.scroll{overflow-x:auto}
+.scroll table{min-width:640px}
+table{border-collapse:collapse;width:100%;font-size:1rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
+th{font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);border-bottom:2px solid var(--ink)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.num{white-space:nowrap}
+tr.sum td{border-top:2px solid var(--ink);font-weight:700}
+.tie-ok{color:var(--ledger);font-weight:700}.tie-bad{color:var(--stop);font-weight:700}
+.note{color:var(--soft);font-size:.95rem}
+.rates{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:8px 0}
+.rates label{font-size:.85rem;color:var(--soft)}
+.rates input{width:100%;margin-top:2px}
+details.cust{border-bottom:1px solid var(--rule);padding:6px 0}
+details.cust summary{cursor:pointer;font-weight:700}
+.letter{white-space:pre-wrap;background:#f6f8f7;border-left:4px solid var(--ledger);padding:10px 14px;font-size:.95rem;margin:8px 0}
+details.big>summary{cursor:pointer;font-size:1.1rem;padding:10px 0;color:var(--ledger)}
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--soft);font-size:.95rem}
+[hidden]{display:none!important}
+@media (max-width:760px){
+  body{font-size:17px}h1{font-size:1.9rem}.wp-head{grid-template-columns:1fr}.rates{grid-template-columns:repeat(2,1fr)}
+  #drop strong{font-size:1.4rem}
+}
+@media print{
+  body{background:#fff;font-size:9pt;line-height:1.35}
+  th,td{padding:3px 6px}
+  .sheet{max-width:none;padding:0;min-height:0}
+  .no-print{display:none!important}
+  h1{font-size:20pt}
+  h2{margin-top:14pt;break-after:avoid;font-size:13pt}
+  tr,ul.first li,.stopbox{break-inside:avoid}
+  thead{display:table-header-group}
+  .scroll{overflow:visible}
+  details.big:not([open]){display:none}
+  details.big>summary{display:none}
+}
+
+.steps{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:0 0 22px}
+.steps li{flex:1 1 180px;padding:10px 14px;border-radius:8px;background:#f1f4f3;color:var(--soft);font-weight:600;font-size:1rem;border:2px solid transparent}
+.steps li b{display:inline-block;width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border-radius:50%;background:#d6dedb;color:var(--ink);margin-right:6px}
+.steps li.now{background:var(--ledger-tint);color:var(--ink);border-color:var(--ledger)}
+.steps li.now b,.steps li.done b{background:var(--ledger);color:#fff}
+.steps li.done{color:var(--ink)}
+.where{font-weight:700;color:var(--ledger);margin:0 0 6px}
+.purpose{background:#f6f8f7;border-left:6px solid var(--rule);padding:10px 14px}
+.stepno{display:inline-block;background:var(--ledger);color:#fff;border-radius:6px;padding:0 10px;margin-right:8px;font-size:1rem;vertical-align:3px}
+.tag.auto,.tag.you{display:inline-block;font-size:.8rem;font-weight:700;letter-spacing:.03em;border-radius:20px;padding:2px 10px;vertical-align:4px;margin-left:6px}
+.tag.auto{background:#e7ecf6;color:#2c4a8a}.tag.you{background:var(--care-tint);color:var(--care)}
+.pill{display:inline-block;font-size:.8rem;background:#eef1f0;border-radius:12px;padding:1px 8px;color:var(--soft)}
+ul.spec li,ol.next li{margin:6px 0}
+select.role{font:inherit;font-size:.95rem;padding:4px 6px;border:2px solid var(--ink);border-radius:6px;max-width:100%}
+tr.r-other td{color:var(--soft)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid3 label{display:block;font-weight:700;font-size:.95rem}
+.grid3 input{display:block;width:100%;margin:6px 0 0}
+input.cap{width:22px;height:22px}
+.next-hint{font-weight:600}
+table.example{font-size:.9rem}
+@media (max-width:760px){.grid3{grid-template-columns:1fr}.steps li{flex-basis:45%}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<ol class="steps no-print" id="steps" aria-label="The four steps">
+  <li data-step="1"><b>1</b> Give the ledger</li>
+  <li data-step="2"><b>2</b> Check the accounts</li>
+  <li data-step="3"><b>3</b> Decide what was found</li>
+  <li data-step="4"><b>4</b> Print the workpaper</li>
+</ol>
+
+<!-- ============ STEP 1: START SCREEN ============ -->
+<section id="start">
+  <p class="where">Step 1 of 4: give the page the client's general ledger for the year.</p>
+  <h1>What goes on the asset schedule?</h1>
+  <p class="lead">At year end, this page reads the client's general ledger and lists what the depreciation schedule needs: equipment and vehicles bought this year, purchases hidden in repairs and supplies, assets sold or written off, and whether the books still agree with last year's schedule and this year's depreciation.</p>
+  <label id="drop" for="file">
+    <strong>Drop the general ledger here</strong>
+    <span>or click here to choose the file. Excel or CSV.</span>
+    <input type="file" id="file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+  </label>
+  <div id="problem" class="stopbox" hidden role="alert"></div>
+  <p class="how">No file yet? <button class="linkish" id="sample" type="button">Try it on a made-up sample ledger.</button></p>
+
+  <h2>What file to ask for</h2>
+  <p>One report: the <b>general ledger for the whole year</b>, every account, exported to Excel or CSV. Whoever keeps the books can export it in two minutes:</p>
+  <ul class="spec">
+    <li><b>QuickBooks Online:</b> Reports, General Ledger, set the dates to the client's full year (for example 01/01/2026 to 12/31/2026), Run report, then Export, Export to Excel.</li>
+    <li><b>QuickBooks Desktop:</b> Reports, Accountant &amp; Taxes, General Ledger, the same dates, then Excel, Create New Worksheet.</li>
+    <li><b>Xero:</b> Reports, Account Transactions, the same dates, all accounts, Update, then Export, Excel.</li>
+  </ul>
+  <p>What it must look like: one row per transaction, grouped under each account's name, with a <b>Date</b> column, either an <b>Amount</b> column or <b>Debit</b> and <b>Credit</b> columns, and a <b>Balance</b> column. Each account starts with its beginning (opening) balance and ends with a total line. Do not delete or sort rows: the page checks that every account adds up.</p>
+  <details class="big"><summary>See what the first rows look like</summary>
+    <div class="scroll"><table class="example"><thead><tr><th></th><th>Date</th><th>Transaction Type</th><th>Num</th><th>Name</th><th>Memo/Description</th><th class="num">Amount</th><th class="num">Balance</th></tr></thead>
+    <tbody><tr><td colspan="8"><b>Furniture and Equipment</b></td></tr>
+    <tr><td></td><td>Beginning Balance</td><td></td><td></td><td></td><td></td><td></td><td class="num">48,125.50</td></tr>
+    <tr><td></td><td>03/12/2026</td><td>Bill</td><td>2207</td><td>Summit Office Systems</td><td>Conference room furniture</td><td class="num">6,840.00</td><td class="num">54,965.50</td></tr>
+    <tr><td>Total for Furniture and Equipment</td><td></td><td></td><td></td><td></td><td></td><td class="num">6,840.00</td><td></td></tr></tbody></table></div>
+  </details>
+
+  <h2>What happens next</h2>
+  <ol class="next">
+    <li><b>Check the accounts</b> (you): the page sorts the accounts by name into fixed assets, accumulated depreciation, depreciation expense, and expense accounts where purchases hide. You correct any it got wrong.</li>
+    <li><b>Decide what was found</b> (you): the page lists this year's purchases, possible purchases in expense accounts, and sales or write-offs. You tick what to capitalize and type the figures from last year's schedule and the tax software.</li>
+    <li><b>Print the workpaper</b>: the list for the depreciation schedule, the adjusting entries and the questions for the client.</li>
+  </ol>
+  <div class="promise">
+    <p><b>Where your data goes: nowhere.</b> This page reads the file on this computer. Nothing is uploaded, stored or sent.</p>
+    <p><b>The page finds; you decide.</b> Whether to capitalize, how to depreciate and what to post are your judgment. The page does the reading and the arithmetic.</p>
+  </div>
+  <p class="made">Version 1.0.0.</p>
+</section>
+
+<!-- ============ STEPS 2 TO 4: THE WORKPAPER ============ -->
+<section id="report" hidden>
+  <div id="out"></div>
+</section>
+
+</div>
+<script>
+"use strict";
+/* =====================================================================================
+   PART 1 - READING THE GENERAL LEDGER. All money in whole cents, debit positive.
+   ===================================================================================== */
+var MONTHS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12,january:1,february:2,march:3,april:4,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
+var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function txt(v){ return v == null ? "" : String(v).replace(/^﻿/, "").trim(); }
+function parseAmount(v){
+  if (typeof v === "number") return isFinite(v) ? Math.round(v * 100) : NaN;
+  var s = txt(v); if (!s || /^[-–—]$/.test(s)) return null;
+  var neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1).trim(); }
+  if (/-$/.test(s)) { neg = !neg; s = s.slice(0, -1); }
+  s = s.replace(/[$,\s]/g, "");
+  if (/^-/.test(s)) { neg = !neg; s = s.slice(1); }
+  if (/^\(.*\)$/.test(s)) { neg = !neg; s = s.slice(1, -1); }
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  var p = s.split("."), c = parseInt(p[0] || "0", 10) * 100 + (p[1] ? Math.round(parseFloat("0." + p[1]) * 100) : 0);
+  return neg ? -c : c;
+}
+function amt(v){ var c = parseAmount(v); return c == null || isNaN(c) ? 0 : c; }
+function hasAmt(v){ var c = parseAmount(v); return c != null && !isNaN(c); }
+function dayNum(y, m, d){ return Math.round(Date.UTC(y, m - 1, d) / 86400000); }
+function parseDay(v){
+  var k;
+  if (typeof v === "number" && v > 20000 && v < 80000) return Math.round(v) - 25569;
+  var s = txt(v); if (!s) return null;
+  if ((k = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) return dayNum(+k[1], +k[2], +k[3]);
+  if ((k = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})$/))) return dayNum(+k[3] < 100 ? 2000 + +k[3] : +k[3], +k[1], +k[2]);
+  if ((k = s.match(/^(\d{1,2})[\s-]([A-Za-z]{3,9})[\s-](\d{4})$/)) && MONTHS[k[2].toLowerCase()]) return dayNum(+k[3], MONTHS[k[2].toLowerCase()], +k[1]);
+  if ((k = s.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})$/)) && MONTHS[k[1].toLowerCase()]) return dayNum(+k[3], MONTHS[k[1].toLowerCase()], +k[2]);
+  return null;
+}
+function isoOf(n){ return new Date(n * 86400000).toISOString().slice(0, 10); }
+function longDay(n){ var d = new Date(n * 86400000); return MONTH_NAMES[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
+function shortDay(n){ var d = new Date(n * 86400000); return (d.getUTCMonth() + 1) + "/" + d.getUTCDate() + "/" + d.getUTCFullYear(); }
+function lastDay(y, m){ return dayNum(y, m + 1, 1) - 1; }
+function findPeriod(text){
+  var k, M = function(s){ return MONTHS[String(s).toLowerCase()]; };
+  if ((k = text.match(/\b([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s*(\d{4})?\s*(?:-|–|to|through)\s*([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/i)) && M(k[1]) && M(k[4])) {
+    var y2 = +k[6], y1 = k[3] ? +k[3] : (M(k[1]) > M(k[4]) ? y2 - 1 : y2);
+    return { from: dayNum(y1, M(k[1]), +k[2]), to: dayNum(y2, M(k[4]), +k[5]) };
+  }
+  if ((k = text.match(/\b(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})\s*(?:-|–|to|through)\s*(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})/i)) && M(k[2]) && M(k[5]))
+    return { from: dayNum(+k[3], M(k[2]), +k[1]), to: dayNum(+k[6], M(k[5]), +k[4]) };
+  if ((k = text.match(/\b([A-Za-z]{3,9})\s*(?:-|–|to|through)\s*([A-Za-z]{3,9})\s+(\d{4})/i)) && M(k[1]) && M(k[2])) {
+    var yb = +k[3], ya = M(k[1]) > M(k[2]) ? yb - 1 : yb;
+    return { from: dayNum(ya, M(k[1]), 1), to: lastDay(yb, M(k[2])) };
+  }
+  return null;
+}
+// "15000 · Furniture and Equipment" and "Office Equipment (710)" -> the account's name
+function cleanName(s){ return txt(s).replace(/\s*\([0-9A-Za-z.\-]{1,10}\)\s*$/, "").replace(/^\s*\d[\d.\-]*\s*(·|-|–)?\s*/, "").trim(); }
+
+function readLedger(rows){
+  var hr = -1, h = null;
+  for (var r = 0; r < Math.min(rows.length, 20) && hr < 0; r++) {
+    var x = (rows[r] || []).map(function(v){ return txt(v).toLowerCase(); });
+    var has = function(t){ return x.indexOf(t) >= 0; };
+    if (has("date") && (has("amount") || (has("debit") && has("credit"))) && (has("balance") || has("running balance"))) { hr = r; h = x; }
+  }
+  var titles = [];
+  for (r = 0; r < (hr < 0 ? Math.min(rows.length, 12) : hr); r++) titles.push((rows[r] || []).map(txt).filter(Boolean).join(" "));
+  var tt = titles.join(" | ");
+  if (hr < 0) {
+    var what = /trial balance/i.test(tt) ? "a trial balance" : /profit (and|&) loss|income statement/i.test(tt) ? "a profit and loss" : /balance sheet/i.test(tt) ? "a balance sheet" :
+      /aging|aged/i.test(tt) ? "an aging report" : null;
+    return { notGL: (what ? "This is " + what + ", not a general ledger. " : "This is not a general ledger I can read. ") +
+      "I need the general ledger for the year: every transaction, grouped by account, with a Date column, an Amount column (or Debit and Credit), and a Balance column." };
+  }
+  var col = function(){ for (var i = 0; i < arguments.length; i++) { var j = h.indexOf(arguments[i]); if (j >= 0) return j; } return -1; };
+  var C = { date: col("date"), type: col("transaction type", "type", "source"), num: col("num", "reference", "ref", "no."), name: col("name", "contact"),
+    memo: col("memo/description", "memo", "description"), amount: col("amount"), debit: col("debit"), credit: col("credit"), balance: col("balance", "running balance") };
+  var layout = h.indexOf("running balance") >= 0 ? "xero" : C.amount >= 0 ? "qbo" : "qbd";
+  var g = function(row, k){ return C[k] < 0 ? null : row[C[k]]; };
+  var accounts = [], cur = null, unread = [];
+  for (r = hr + 1; r < rows.length; r++) {
+    var row = rows[r] || [], cells = row.map(txt);
+    if (!cells.some(Boolean)) continue;
+    var first = cells.filter(Boolean)[0];
+    if (cells.some(function(c){ return /^(beginning|opening) balance$/i.test(c); })) { if (cur) cur.opening = amt(g(row, "balance")); continue; }
+    if (cells.some(function(c){ return /^closing balance$/i.test(c); })) { if (cur) cur.closing = amt(g(row, "balance")); continue; }
+    if (/^total\b/i.test(first)) {
+      if (/^total$/i.test(first) || !cur) continue;
+      cur.total = C.amount >= 0 ? amt(g(row, "amount")) : amt(g(row, "debit")) - amt(g(row, "credit"));
+      if (hasAmt(g(row, "balance"))) cur.totalBalance = amt(g(row, "balance"));
+      continue;
+    }
+    var d = parseDay(g(row, "date"));
+    var money = C.amount >= 0 ? hasAmt(g(row, "amount")) : (hasAmt(g(row, "debit")) || hasAmt(g(row, "credit")));
+    if (d != null) {
+      if (!cur) { unread.push(r + 1); continue; }
+      var a = C.amount >= 0 ? amt(g(row, "amount")) : amt(g(row, "debit")) - amt(g(row, "credit"));
+      cur.lines.push({ row: r + 1, date: d, type: txt(g(row, "type")), num: txt(g(row, "num")), name: txt(g(row, "name")), memo: txt(g(row, "memo")), amount: a });
+      if (hasAmt(g(row, "balance"))) cur.lastBalance = amt(g(row, "balance"));
+      continue;
+    }
+    if (money) { unread.push(r + 1); continue; }
+    cur = { label: first, name: cleanName(first), opening: hasAmt(g(row, "balance")) ? amt(g(row, "balance")) : 0, lines: [], total: null, totalBalance: null, closing: null, lastBalance: null };
+    accounts.push(cur);
+  }
+  accounts = accounts.filter(function(a){ return a.lines.length || a.opening; });
+  var period = findPeriod(tt);
+  return { layout: layout, accounts: accounts, unread: unread, period: period, titles: titles,
+    company: titles.filter(function(l){ return l && !/general ledger|account transactions|transaction detail|basis|period|\b\d{4}\b/i.test(l); })[0] || "" };
+}
+
+/* =====================================================================================
+   PART 2 - THE REVIEW
+   ===================================================================================== */
+var ROLE_LABEL = { fa: "Fixed asset (cost)", ad: "Accumulated depreciation", dep: "Depreciation expense", review: "Expense: check for purchases", other: "Other: not reviewed" };
+function roleOf(name){
+  var s = cleanName(name).toLowerCase();
+  if (/accumulated depreciation|accum\.? depr/.test(s)) return "ad";
+  if (/depreciation/.test(s)) return "dep";
+  if (/equipment|furniture|fixtures?\b|vehicles?\b|trucks?\b|trailers?\b|machinery|computers?\b|leasehold improvements?|improvements\b|buildings?\b|\bland\b|fixed assets?|property and equipment/.test(s) &&
+      !/expenses?\b|rental|\brent\b|repairs?\b|maintenance|small|supplies|lease|fuel|insurance|registration|software|internet|minor/.test(s)) return "fa";
+  if (/repairs?\b|maintenance|supplies|tools|computer|software|equipment|furniture|improvements?\b/.test(s) && !/rental|\brent\b|lease|fuel|insurance/.test(s)) return "review";
+  return "other";
+}
+function money(c){ var s = Math.abs(c), d = Math.floor(s / 100), r = String(s % 100).padStart(2, "0"); return (c < 0 ? "-" : "") + "$" + d.toLocaleString("en-US") + "." + r; }
+function dollars(c){ return Math.round(c) / 100; }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function sum(list, f){ return list.reduce(function(s, x){ return s + f(x); }, 0); }
+function lc(s){ return String(s || "").toLowerCase(); }
+
+function review(rows, fileName, opts){
+  opts = opts || {};
+  var rep = { version: "1.0.0", file: fileName, status: null, exceptions: [] };
+  function ex(code, level, message){ rep.exceptions.push({ code: code, level: level, message: message }); }
+  var L = readLedger(rows);
+  if (L.notGL || !L.accounts.length) { rep.status = "NOT_RECOGNIZED"; ex("NOT_RECOGNIZED", "stop", L.notGL || "I found no accounts in this file. I need the general ledger for the year, grouped by account."); return rep; }
+  rep.layout = { qbo: "QuickBooks Online General Ledger", qbd: "QuickBooks Desktop General Ledger", xero: "Xero Account Transactions" }[L.layout];
+  rep.layoutKey = L.layout; rep.company = L.company;
+  rep.period = L.period ? { from: isoOf(L.period.from), to: isoOf(L.period.to) } : null;
+  var threshold = opts.threshold != null ? opts.threshold : 250000;
+  rep.threshold = dollars(threshold);
+  var roles = opts.roles || {};
+  rep.accounts = {}; rep.rows = 0;
+  L.accounts.forEach(function(a){ a.role = roles[a.name] || roleOf(a.name); rep.accounts[a.name] = a.role; a.ending = a.opening + sum(a.lines, function(x){ return x.amount; }); rep.rows += a.lines.length; });
+  rep._accounts = L.accounts;
+  var by = function(role){ return L.accounts.filter(function(a){ return a.role === role; }); };
+
+  // the file adds up
+  rep.notAddUp = L.accounts.filter(function(a){
+    var s = sum(a.lines, function(x){ return x.amount; });
+    return (a.total != null && a.total !== s) || (a.totalBalance != null && a.totalBalance !== a.ending) || (a.closing != null && a.closing !== a.ending) || (a.lastBalance != null && a.lastBalance !== a.ending);
+  }).map(function(a){ return a.name; });
+
+  // fixed asset accounts: reversals, additions, disposals, roll-forward
+  var additions = [], disposals = [], reversals = [], roll = [];
+  by("fa").forEach(function(a){
+    var ls = a.lines.slice().sort(function(p, q){ return p.date - q.date || p.row - q.row; });
+    var paired = [];
+    ls.forEach(function(c){
+      if (c.amount >= 0) return;
+      var d = ls.filter(function(x){ return paired.indexOf(x) < 0 && x.amount === -c.amount && lc(x.name) === lc(c.name) && Math.abs(x.date - c.date) <= 31; })[0];
+      if (d) { paired.push(c, d); reversals.push({ account: a.name, amount: dollars(d.amount), name: d.name, dates: [isoOf(d.date), isoOf(c.date)] }); }
+    });
+    var add = ls.filter(function(x){ return paired.indexOf(x) < 0 && x.amount > 0; }), dis = ls.filter(function(x){ return paired.indexOf(x) < 0 && x.amount < 0; });
+    add.forEach(function(x){ additions.push({ account: a.name, date: isoOf(x.date), num: x.num, name: x.name, memo: x.memo, amount: dollars(x.amount), journal: /journal/i.test(x.type), _d: x.date }); });
+    dis.forEach(function(x){ disposals.push({ account: a.name, date: isoOf(x.date), num: x.num, name: x.name, memo: x.memo, amount: dollars(-x.amount), _d: x.date }); });
+    roll.push({ account: a.name, opening: dollars(a.opening), additions: dollars(sum(add, function(x){ return x.amount; })), disposals: dollars(sum(dis, function(x){ return x.amount; })), ending: dollars(a.ending) });
+  });
+  var adroll = by("ad").map(function(a){
+    return { account: a.name, opening: dollars(a.opening), credits: dollars(sum(a.lines.filter(function(x){ return x.amount < 0; }), function(x){ return x.amount; })),
+      debits: dollars(sum(a.lines.filter(function(x){ return x.amount > 0; }), function(x){ return x.amount; })), ending: dollars(a.ending) };
+  });
+
+  // expense accounts: purchases at or above the threshold
+  var candidates = [], routine = [];
+  by("review").forEach(function(a){
+    var groups = {}, order = [];
+    a.lines.forEach(function(x){ var k = x.date + "|" + x.type + "|" + x.num + "|" + x.name; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(x); });
+    var big = {};
+    order.forEach(function(k){ var g = groups[k], t = sum(g, function(x){ return x.amount; }); if (g[0].name && t >= threshold) big[lc(g[0].name)] = (big[lc(g[0].name)] || []).concat([t]); });
+    var seen = {};
+    order.sort(function(p, q){ var gp = groups[p][0], gq = groups[q][0]; return gp.date - gq.date || (gp.num < gq.num ? -1 : gp.num > gq.num ? 1 : 0); });
+    order.forEach(function(k){
+      var g = groups[k], t = sum(g, function(x){ return x.amount; }), x0 = g[0];
+      if (t < threshold) return;
+      if (a.lines.some(function(x){ return x.amount === -t; })) return;     // already reclassified or refunded
+      if (x0.name && big[lc(x0.name)].length >= 3) {
+        if (!seen[lc(x0.name)]) { seen[lc(x0.name)] = 1; routine.push({ account: a.name, name: x0.name, count: big[lc(x0.name)].length, amount: dollars(sum(big[lc(x0.name)], function(v){ return v; })) }); }
+        return;
+      }
+      candidates.push({ account: a.name, date: isoOf(x0.date), num: x0.num, name: x0.name, memo: g.map(function(y){ return y.memo; }).filter(Boolean).join("; "), amount: dollars(t), lines: g.length, _d: x0.date, id: a.name + "|" + k });
+    });
+  });
+  var keepOff = opts.uncheck || {};
+  candidates.forEach(function(c){ c.capitalize = !keepOff[c.id]; });
+
+  var booked = sum(by("dep"), function(a){ return a.ending - a.opening; });
+  var costOpen = sum(by("fa"), function(a){ return a.opening; }), adOpen = -sum(by("ad"), function(a){ return a.opening; });
+  rep.rollforward = roll; rep.adRollforward = adroll; rep.additions = additions; rep.disposals = disposals; rep.reversals = reversals;
+  rep.candidates = candidates; rep.routine = routine;
+  rep.costOpening = dollars(costOpen); rep.adOpening = dollars(adOpen);
+  rep.costEnding = dollars(sum(by("fa"), function(a){ return a.ending; })); rep.adEnding = dollars(-sum(by("ad"), function(a){ return a.ending; }));
+  rep.additionsTotal = dollars(sum(additions, function(x){ return Math.round(x.amount * 100); }));
+  rep.candidatesTotal = dollars(sum(candidates, function(x){ return Math.round(x.amount * 100); }));
+  rep.capitalizeTotal = dollars(sum(candidates.filter(function(c){ return c.capitalize; }), function(x){ return Math.round(x.amount * 100); }));
+  rep.depreciationBooked = dollars(booked);
+  if (opts.taxDep != null) { rep.taxDepreciation = dollars(opts.taxDep); rep.depreciationAdjustment = dollars(opts.taxDep - booked); }
+  if (opts.schedCost != null || opts.schedAD != null) {
+    var sc = opts.schedCost != null ? opts.schedCost : costOpen, sa = opts.schedAD != null ? opts.schedAD : adOpen;
+    rep.scheduleCost = dollars(sc); rep.scheduleAD = dollars(sa); rep.openingDiffCost = dollars(costOpen - sc); rep.openingDiffAD = dollars(adOpen - sa);
+  }
+
+  // ---- what to look at first
+  if (L.unread.length) ex("UNREAD_ROWS", "stop", "I could not read " + plural(L.unread.length, "line") + " (" + L.unread.slice(0, 5).map(function(n){ return "row " + n; }).join(", ") + "): they have an amount but no date I can read, or come before any account name. They are left out.");
+  if (rep.notAddUp.length) ex("FILE_DOES_NOT_ADD_UP", "stop", "These accounts do not add up: " + rep.notAddUp.join(", ") + ". Their opening balance plus the lines in the file does not equal the report's own total or ending balance, so a line is missing or was changed. Export the general ledger again and do not edit it.");
+  if (!by("fa").length) ex("NO_FIXED_ASSET_ACCOUNTS", "care", "I did not recognize any account as a fixed asset by its name. If the client has one (for example “Shop Assets”), choose “Fixed asset (cost)” next to it in step 2.");
+  if (candidates.length) ex("CAPITALIZE_CANDIDATES", "care", plural(candidates.length, "purchase") + " of " + money(threshold) + " or more " + (candidates.length === 1 ? "was" : "were") + " expensed (" + money(Math.round(rep.candidatesTotal * 100)) + "). Each may be equipment or an improvement that belongs on the schedule. Decide in step 3.");
+  if (routine.length) ex("ROUTINE_CHARGES", "info", routine.map(function(x){ return x.name + " (" + plural(x.count, "charge") + " of " + money(threshold) + " or more in " + x.account + ")"; }).join("; ") + ": repeated charges like these are usually a service contract or routine maintenance, so they are listed but not proposed.");
+  if (disposals.length) ex("DISPOSALS", "care", plural(disposals.length, "credit") + " to fixed asset accounts (" + money(Math.round(sum(disposals, function(x){ return x.amount; }) * 100)) + "): a sale, a trade-in, a return or a write-off. Find out which. If it was a sale, the proceeds were credited to the asset, so no gain or loss was recorded.");
+  if (disposals.length && !by("ad").some(function(a){ return a.lines.some(function(x){ return x.amount > 0; }); })) ex("AD_NOT_REMOVED", "care", "Nothing was taken out of accumulated depreciation this year, so the depreciation on anything sold or written off is still on the books. The entry is in step 3.");
+  if (reversals.length) ex("REVERSALS", "info", plural(reversals.length, "purchase was", "purchases were") + " entered and reversed in the same account (" + reversals.map(function(x){ return x.account + ", " + x.name + " " + money(Math.round(x.amount * 100)); }).join("; ") + "). They are left out of the additions.");
+  if (additions.some(function(x){ return x.journal; })) ex("JOURNAL_ENTRY_ADDITIONS", "info", "Some additions are journal entries, not bills or checks. Check each is a purchase (or a reclass from an expense account), not a correction of something else.");
+  if (booked === 0 && (costOpen > 0 || additions.length)) ex("NO_DEPRECIATION_BOOKED", "care", "No depreciation was booked this year. Take this year's depreciation from the tax software (or your schedule) and type it in step 3 to get the entry.");
+  if (rep.depreciationAdjustment != null && rep.depreciationAdjustment !== 0) ex("DEPRECIATION_DIFFERS", "care", "Depreciation booked, " + money(booked) + ", differs from the figure you typed, " + money(opts.taxDep) + ", by " + money(Math.abs(opts.taxDep - booked)) + ". The entry is in step 3.");
+  if (rep.openingDiffCost || rep.openingDiffAD) ex("OPENING_DIFFERS", "care", "The ledger's opening balances do not agree with last year's schedule: cost differs by " + money(Math.round(rep.openingDiffCost * 100)) + " and accumulated depreciation by " + money(Math.round(rep.openingDiffAD * 100)) + ". Last year's entries may not have been posted, or the books were changed after the return was filed.");
+  if (L.period) { var f = L.period.from, t = L.period.to, df = new Date(f * 86400000);
+    if (dayNum(df.getUTCFullYear() + 1, df.getUTCMonth() + 1, df.getUTCDate()) - 1 !== t) ex("PERIOD_NOT_A_YEAR", "care", "The report covers " + shortDay(f) + " to " + shortDay(t) + ", not a full year. Run it for the client's whole year."); }
+  else ex("PERIOD_UNKNOWN", "info", "The file does not say its dates (QuickBooks Desktop puts them in the page header). Its lines run from " + shortDay(Math.min.apply(null, [].concat.apply([], L.accounts.map(function(a){ return a.lines.map(function(x){ return x.date; }); })))) + " to " + shortDay(Math.max.apply(null, [].concat.apply([], L.accounts.map(function(a){ return a.lines.map(function(x){ return x.date; }); })))) + ".");
+  rep.status = "COMPUTED";
+  return rep;
+}
+
+/* =====================================================================================
+   PART 3 - THE SCREEN
+   ===================================================================================== */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function c$(d){ return money(Math.round(d * 100)); }
+var lastRows = null, lastName = "", state = {}, keep = {};
+function dateOf(iso){ return shortDay(Math.round(Date.parse(iso) / 86400000)); }
+function tag(kind){ return kind === "auto" ? '<span class="tag auto">Automatic</span>' : '<span class="tag you">You decide</span>'; }
+function inputVal(v){ return v == null ? "" : (v / 100).toFixed(2); }
+
+function render(rep){
+  var o = [];
+  var stops = rep.exceptions.filter(function(e){ return e.level === "stop"; });
+  var notes = rep.exceptions.filter(function(e){ return e.level !== "stop"; }).sort(function(a, b){ return (a.level === "care" ? 0 : 1) - (b.level === "care" ? 0 : 1); });
+  var ticked = rep.candidates.filter(function(c){ return c.capitalize; });
+  var toAdd = Math.round(rep.additionsTotal * 100) + Math.round(rep.capitalizeTotal * 100);
+  o.push('<div class="wp-head"><div><p class="where no-print">Steps 2 to 4 of 4: check, decide, print. Work down the page.</p><h1>What goes on the asset schedule?</h1><p class="meta">' + esc(rep.layout) +
+    (rep.period ? " · " + dateOf(rep.period.from) + " to " + dateOf(rep.period.to) : " · dates not in the file") + '<br>File: ' + esc(rep.file) + '</p></div>');
+  o.push('<div class="sign">' + [["client", "Client"], ["preparedBy", "Prepared by"], ["preparedOn", "Prepared on"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Reviewed on"]].map(function(p){ return '<label>' + p[1] + '<input id="' + p[0] + '" autocomplete="off" value="' + esc(keep[p[0]] || (p[0] === "client" ? rep.company : "")) + '"></label>'; }).join("") + '</div></div>');
+  o.push('<div class="verdict' + (stops.length ? " bad" : "") + '" id="verdict">' + esc((rep.company ? rep.company + ": " : "") + money(toAdd) + " to add to the depreciation schedule" +
+    (rep.disposals.length ? ", " + plural(rep.disposals.length, "item") + " to take off" : "") + ".") +
+    '<span class="sub">' + esc(plural(rep.additions.length, "purchase") + " recorded as assets (" + c$(rep.additionsTotal) + ")" +
+    (rep.candidates.length ? "; " + plural(ticked.length, "purchase") + " from expense accounts ticked to capitalize (" + c$(rep.capitalizeTotal) + ")" : "") +
+    ". Depreciation booked this year: " + c$(rep.depreciationBooked) + ".") + '</span></div>');
+  o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
+  o.push('<h2>Check these first</h2>');
+  o.push(notes.length ? '<ul class="first">' + notes.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + (e.level === "care" ? "Decide. " : "For your file. ") + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>' :
+    '<p class="ok">Nothing unusual: no purchases in expense accounts, no sales or write-offs, depreciation booked.</p>');
+
+  // STEP 2
+  o.push('<h2 id="step-2"><span class="stepno">Step 2</span> Check the accounts ' + tag("you") + '</h2>');
+  o.push('<p class="purpose"><b>What this is for:</b> the page decided what each account is from its name. Everything below depends on it. <b>What to do:</b> read the right-hand column; if an account is wrong, choose the right kind and the page works it all out again.</p>');
+  o.push('<div class="scroll"><table id="accounts"><thead><tr><th>Account</th><th class="num">Opening</th><th class="num">Ending</th><th class="num">Lines</th><th>What it is</th></tr></thead><tbody>');
+  var order = { fa: 0, ad: 1, dep: 2, review: 3, other: 4 };
+  rep._accounts.slice().sort(function(a, b){ return order[a.role] - order[b.role]; }).forEach(function(a){
+    o.push('<tr class="r-' + a.role + '"><td>' + esc(a.name) + '</td><td class="num">' + money(a.opening) + '</td><td class="num">' + money(a.ending) + '</td><td class="num">' + a.lines.length + '</td><td><select class="role" data-account="' + esc(a.name) + '" aria-label="What ' + esc(a.name) + ' is">' +
+      Object.keys(ROLE_LABEL).map(function(k){ return '<option value="' + k + '"' + (a.role === k ? " selected" : "") + '>' + ROLE_LABEL[k] + '</option>'; }).join("") + '</select></td></tr>');
+  });
+  o.push('</tbody></table></div><p class="next-hint no-print">Accounts right? Go on to <a href="#step-3">step 3</a>.</p>');
+
+  // STEP 3
+  o.push('<h2 id="step-3"><span class="stepno">Step 3</span> Decide what was found</h2>');
+  o.push('<p class="purpose"><b>What this is for:</b> everything the depreciation schedule and the year-end entries need, in four parts. The page found it; you decide what is right.</p>');
+  // 3a
+  o.push('<h3>3a. Bought this year and recorded as assets ' + tag("auto") + '</h3>');
+  if (!rep.additions.length) o.push('<p class="ok">No purchases were recorded in fixed asset accounts this year.</p>');
+  else {
+    o.push('<div class="scroll"><table id="additions"><thead><tr><th>Date</th><th>Account</th><th>From</th><th>Description</th><th class="num">Cost</th></tr></thead><tbody>');
+    rep.additions.forEach(function(x){ o.push('<tr><td>' + dateOf(x.date) + '</td><td>' + esc(x.account) + '</td><td>' + esc(x.name || "(no name)") + (x.journal ? ' <span class="pill">journal entry</span>' : "") + '</td><td>' + esc(x.memo) + (x.num ? ' (#' + esc(x.num) + ')' : "") + '</td><td class="num">' + c$(x.amount) + '</td></tr>'); });
+    o.push('<tr class="sum"><td colspan="4">Total</td><td class="num">' + c$(rep.additionsTotal) + '</td></tr></tbody></table></div>');
+  }
+  if (rep.reversals.length) o.push('<p class="note">Left out, entered and reversed: ' + esc(rep.reversals.map(function(x){ return x.account + ", " + x.name + " " + c$(x.amount) + " (" + dateOf(x.dates[0]) + " and " + dateOf(x.dates[1]) + ")"; }).join("; ")) + '.</p>');
+  // 3b
+  o.push('<h3>3b. Purchases found in expense accounts ' + tag("you") + '</h3>');
+  o.push('<p>Each bill of at least the threshold in repairs, supplies, tools, computer and similar accounts. <b>Tick the ones to capitalize</b>; untick a repair that only keeps something running. The de minimis safe harbor lets a business expense items of $2,500 or less per invoice or item ($5,000 if it has audited financial statements), if it does the same in its books and elects it on the return.</p>');
+  o.push('<p class="typed"><label for="threshold">Threshold</label><input id="threshold" inputmode="decimal" value="' + (state.threshold != null ? inputVal(state.threshold) : "2500.00") + '"> <button class="sec-btn" id="update-threshold" type="button">Apply</button></p>');
+  if (!rep.candidates.length) o.push('<p class="ok">No single bill of ' + c$(rep.threshold) + ' or more in those accounts.</p>');
+  else {
+    o.push('<div class="scroll"><table id="candidates"><thead><tr><th>Capitalize?</th><th>Date</th><th>Expensed to</th><th>From</th><th>Description</th><th class="num">Amount</th></tr></thead><tbody>');
+    rep.candidates.forEach(function(x){ o.push('<tr><td><input type="checkbox" class="cap" data-id="' + esc(x.id) + '"' + (x.capitalize ? " checked" : "") + ' aria-label="Capitalize ' + esc(x.name) + ' ' + c$(x.amount) + '"></td><td>' + dateOf(x.date) + '</td><td>' + esc(x.account) + '</td><td>' + esc(x.name || "(no name)") + '</td><td>' + esc(x.memo) + (x.lines > 1 ? ' <span class="pill">' + x.lines + ' lines on one bill: check each item</span>' : "") + '</td><td class="num">' + c$(x.amount) + '</td></tr>'); });
+    o.push('<tr class="sum"><td colspan="5">Ticked to capitalize</td><td class="num">' + c$(rep.capitalizeTotal) + '</td></tr></tbody></table></div>');
+  }
+  if (rep.routine.length) o.push('<p class="note">Not proposed, repeated charges (usually a service contract): ' + esc(rep.routine.map(function(x){ return x.name + ", " + plural(x.count, "charge") + ", " + c$(x.amount) + " in " + x.account; }).join("; ")) + '.</p>');
+  // 3c
+  o.push('<h3>3c. Sold, traded in, returned or written off ' + tag("you") + '</h3>');
+  if (!rep.disposals.length) o.push('<p class="ok">Nothing was credited to a fixed asset account this year.</p>');
+  else {
+    o.push('<div class="scroll"><table id="disposals"><thead><tr><th>Date</th><th>Account</th><th>From or to</th><th>Description</th><th class="num">Credited</th></tr></thead><tbody>');
+    rep.disposals.forEach(function(x){ o.push('<tr><td>' + dateOf(x.date) + '</td><td>' + esc(x.account) + '</td><td>' + esc(x.name || "(no name)") + '</td><td>' + esc(x.memo) + '</td><td class="num">' + c$(x.amount) + '</td></tr>'); });
+    o.push('</tbody></table></div><p>For each, ask the client what happened. For a sale or a write-off: take the asset off the schedule; remove its original cost and its accumulated depreciation from the books; record the proceeds and the gain or loss. The amount credited here is the proceeds or a refund, not the asset’s cost, so the asset’s own cost and depreciation come from the schedule.</p>');
+  }
+  // 3d
+  o.push('<h3>3d. Does it agree? ' + tag("you") + '</h3>');
+  o.push('<p>Type the figures from <b>last year’s depreciation schedule</b> (the totals at the end of last year) and from <b>this year’s depreciation</b> in the tax software or your schedule, then press the button. Leave a box empty to skip it.</p>');
+  o.push('<div class="typed grid3"><label for="sched-cost">Last year’s schedule: total cost<input id="sched-cost" inputmode="decimal" value="' + inputVal(state.schedCost) + '"></label>' +
+    '<label for="sched-ad">Last year’s schedule: accumulated depreciation<input id="sched-ad" inputmode="decimal" value="' + inputVal(state.schedAD) + '"></label>' +
+    '<label for="tax-dep">This year’s depreciation<input id="tax-dep" inputmode="decimal" value="' + inputVal(state.taxDep) + '"></label></div>' +
+    '<p><button class="sec-btn" id="update" type="button">Compare</button></p>');
+  o.push('<div class="scroll"><table id="rollforward"><thead><tr><th>Cost</th><th class="num">Opening</th><th class="num">Bought</th><th class="num">Credited (sold, returned)</th><th class="num">Ending, per books</th></tr></thead><tbody>');
+  rep.rollforward.forEach(function(x){ o.push('<tr><td>' + esc(x.account) + '</td><td class="num">' + c$(x.opening) + '</td><td class="num">' + c$(x.additions) + '</td><td class="num">' + c$(x.disposals) + '</td><td class="num">' + c$(x.ending) + '</td></tr>'); });
+  o.push('<tr class="sum"><td>Total cost</td><td class="num">' + c$(rep.costOpening) + '</td><td class="num">' + c$(rep.additionsTotal) + '</td><td class="num">' + c$(sum(rep.rollforward, function(x){ return x.disposals; })) + '</td><td class="num">' + c$(rep.costEnding) + '</td></tr></tbody></table></div>');
+  if (rep.adRollforward.length) {
+    o.push('<div class="scroll"><table id="ad-rollforward"><thead><tr><th>Accumulated depreciation</th><th class="num">Opening</th><th class="num">Added (depreciation)</th><th class="num">Removed</th><th class="num">Ending, per books</th></tr></thead><tbody>');
+    rep.adRollforward.forEach(function(x){ o.push('<tr><td>' + esc(x.account) + '</td><td class="num">' + c$(-x.opening) + '</td><td class="num">' + c$(-x.credits) + '</td><td class="num">' + c$(x.debits) + '</td><td class="num">' + c$(-x.ending) + '</td></tr>'); });
+    o.push('</tbody></table></div>');
+  }
+  var checks = [];
+  if (rep.scheduleCost != null) checks.push(["Opening cost vs last year’s schedule", rep.costOpening, rep.scheduleCost, rep.openingDiffCost]);
+  if (rep.scheduleAD != null) checks.push(["Opening accumulated depreciation vs last year’s schedule", rep.adOpening, rep.scheduleAD, rep.openingDiffAD]);
+  if (rep.taxDepreciation != null) checks.push(["Depreciation booked vs this year’s depreciation", rep.depreciationBooked, rep.taxDepreciation, -rep.depreciationAdjustment]);
+  if (checks.length) {
+    o.push('<div class="scroll"><table id="checks"><thead><tr><th>Check</th><th class="num">Books</th><th class="num">You typed</th><th class="num">Difference</th></tr></thead><tbody>');
+    checks.forEach(function(c){ o.push('<tr><td>' + c[0] + '</td><td class="num">' + c$(c[1]) + '</td><td class="num">' + c$(c[2]) + '</td><td class="num ' + (c[3] ? "tie-bad" : "tie-ok") + '">' + (c[3] ? c$(c[3]) : "agrees") + '</td></tr>'); });
+    o.push('</tbody></table></div>');
+  } else o.push('<p class="note">Type the figures above to check the books against last year’s schedule and this year’s depreciation.</p>');
+
+  // STEP 4
+  o.push('<h2 id="step-4"><span class="stepno">Step 4</span> The workpaper ' + tag("auto") + '</h2>');
+  o.push('<p class="purpose"><b>What this is for:</b> what to enter in the depreciation schedule, the entries to propose to the client, and the questions to ask. It follows your choices above. <b>What to do:</b> print it or save it as a PDF for the file.</p>');
+  o.push('<p class="no-print"><button class="main-btn" id="print" type="button">Print or save as PDF</button> <button class="linkish" id="again" type="button">Start over with another file</button></p>');
+  var sched = rep.additions.map(function(x){ return { date: x.date, what: (x.memo || x.name || x.account), from: x.name, cost: x.amount, src: x.account }; })
+    .concat(ticked.map(function(x){ return { date: x.date, what: (x.memo || x.name || x.account), from: x.name, cost: x.amount, src: x.account + " (to reclassify)" }; }))
+    .sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  o.push('<h3>Add to the depreciation schedule</h3>');
+  if (!sched.length) o.push('<p class="ok">Nothing to add.</p>');
+  else {
+    o.push('<div class="scroll"><table id="schedule"><thead><tr><th>Placed in service (confirm)</th><th>Asset</th><th>From</th><th>In the books as</th><th class="num">Cost</th></tr></thead><tbody>');
+    sched.forEach(function(x){ o.push('<tr><td>' + dateOf(x.date) + '</td><td>' + esc(x.what) + '</td><td>' + esc(x.from) + '</td><td>' + esc(x.src) + '</td><td class="num">' + c$(x.cost) + '</td></tr>'); });
+    o.push('<tr class="sum"><td colspan="4">Total to add</td><td class="num">' + money(toAdd) + '</td></tr></tbody></table></div>');
+    o.push('<p class="note">The date shown is the bill date. The schedule needs the date each asset was placed in service, which can be later: confirm it with the client. Choose the method, life and any bonus or section 179 deduction in the tax software.</p>');
+  }
+  if (rep.disposals.length) { o.push('<h3>Take off the schedule (after asking the client)</h3><ul>' + rep.disposals.map(function(x){ return '<li>' + esc(dateOf(x.date) + ", " + x.account + ": " + (x.memo || x.name) + ", " + c$(x.amount) + " credited") + '</li>'; }).join("") + '</ul>'); }
+  o.push('<h3>Proposed entries</h3>');
+  var ents = [];
+  var byAcc = {};
+  ticked.forEach(function(x){ byAcc[x.account] = (byAcc[x.account] || 0) + Math.round(x.amount * 100); });
+  Object.keys(byAcc).forEach(function(k){ ents.push("Dr Fixed assets (the right asset account), Cr " + k + ", " + money(byAcc[k]) + ": purchases to capitalize."); });
+  if (rep.depreciationAdjustment) { var adj = Math.round(rep.depreciationAdjustment * 100);
+    ents.push(adj > 0 ? "Dr Depreciation expense, Cr Accumulated depreciation, " + money(adj) + ": bring this year’s depreciation to " + c$(rep.taxDepreciation) + "." :
+      "Dr Accumulated depreciation, Cr Depreciation expense, " + money(-adj) + ": bring this year’s depreciation down to " + c$(rep.taxDepreciation) + "."); }
+  rep.disposals.forEach(function(x){ ents.push("For " + (x.memo || x.name) + " (" + dateOf(x.date) + "): Dr Accumulated depreciation (its depreciation to date, from the schedule), Dr " + x.account + " " + c$(x.amount) + " (reverse the credit), Cr " + x.account + " (its original cost), and the difference to Gain or loss on sale of assets."); });
+  if (rep.openingDiffCost || rep.openingDiffAD) ents.push("Opening balances: find what changed since last year’s return before posting anything to make them agree (see Did last year change?).");
+  o.push(ents.length ? '<ol id="entries">' + ents.map(function(e){ return "<li>" + esc(e) + "</li>"; }).join("") + '</ol>' : '<p class="ok">No entries to propose.</p>');
+  var qs = [];
+  ticked.forEach(function(x){ qs.push("What was " + (x.memo || "the " + c$(x.amount) + " bill") + " from " + (x.name || "this vendor") + " on " + dateOf(x.date) + "? New equipment or an improvement, or a repair? When was it put into use?"); });
+  rep.disposals.forEach(function(x){ qs.push("What happened to " + (x.memo || "the asset") + " on " + dateOf(x.date) + "? Sold, traded in, returned or scrapped? Which asset was it, and for how much?"); });
+  rep.additions.forEach(function(x){ qs.push("When was " + (x.memo || "the " + x.account + " purchase") + " (" + c$(x.amount) + ") put into use?"); });
+  if (qs.length) o.push('<h3>Questions for the client</h3><ol id="questions">' + qs.map(function(q){ return "<li>" + esc(q) + "</li>"; }).join("") + '</ol>');
+  o.push('<h3>What I read</h3><p class="note">' + esc(rep.layout) + ". " + plural(rep._accounts.length, "account") + ", " + plural(rep.rows, "line") + "." + (rep.notAddUp.length ? "" : " Every account adds up to the report’s own totals.") + '</p>');
+  o.push('<p class="foot">Made by “What goes on the asset schedule?” version 1.0.0, on this computer. The file was read here and not sent anywhere. Arithmetic is done in whole cents. This is a workpaper for review: the page finds; you decide what to capitalize, how to depreciate and what to post.</p>');
+  return o.join("");
+}
+
+function opts(){ return { threshold: state.threshold, schedCost: state.schedCost, schedAD: state.schedAD, taxDep: state.taxDep, roles: state.roles, uncheck: state.uncheck }; }
+function readMoney(id){ var c = parseAmount($(id) ? $(id).value : ""); return c == null || isNaN(c) ? null : c; }
+function setStep(n){ Array.prototype.forEach.call(document.querySelectorAll("#steps li"), function(li){ var s = +li.getAttribute("data-step"); li.className = s < n ? "done" : s === n ? "now" : ""; if (s === n) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current"); }); }
+function publish(rep){
+  ["client", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
+  $("out").innerHTML = render(rep);
+  $("start").hidden = true; $("report").hidden = false; setStep(2);
+  window.__report = JSON.parse(JSON.stringify(rep, function(k, v){ return k.charAt(0) === "_" ? undefined : v; }));
+  var again = function(f){ return function(){ var s = window.scrollY; f(); publish(review(lastRows, lastName, opts())); window.scrollTo(0, s); }; };
+  $("update").addEventListener("click", again(function(){ state.schedCost = readMoney("sched-cost"); state.schedAD = readMoney("sched-ad"); state.taxDep = readMoney("tax-dep"); }));
+  $("update-threshold").addEventListener("click", again(function(){ var t = readMoney("threshold"); state.threshold = t == null ? null : t; }));
+  Array.prototype.forEach.call(document.querySelectorAll("select.role"), function(s){ s.addEventListener("change", again(function(){ state.roles = state.roles || {}; state.roles[s.getAttribute("data-account")] = s.value; })); });
+  Array.prototype.forEach.call(document.querySelectorAll("input.cap"), function(x){ x.addEventListener("change", again(function(){ state.uncheck = state.uncheck || {}; state.uncheck[x.getAttribute("data-id")] = !x.checked; })); });
+  $("print").addEventListener("click", function(){ setStep(4); window.print(); });
+  $("again").addEventListener("click", function(){ $("report").hidden = true; $("start").hidden = false; $("problem").hidden = true; setStep(1); window.scrollTo(0, 0); });
+  if (!observer) { observer = true; window.addEventListener("scroll", function(){ if ($("report").hidden) return; var n = 2; ["step-3", "step-4"].forEach(function(id, i){ var el = $(id); if (el && el.getBoundingClientRect().top < window.innerHeight * 0.4) n = i + 3; }); setStep(n); }); }
+}
+var observer = false;
+function showProblem(msg){ var p = $("problem"); p.textContent = msg; p.hidden = false; }
+function start(rows, name){
+  lastRows = rows; lastName = name; state = {};
+  var rep = review(rows, name, opts());
+  if (rep.status === "NOT_RECOGNIZED") { window.__report = JSON.parse(JSON.stringify(rep)); return showProblem(rep.exceptions[0].message); }
+  publish(rep);
+}
+function handle(f){
+  if (/\.pdf$/i.test(f.name)) return showProblem("“" + f.name + "” is a PDF. Export the general ledger to Excel or CSV and drop that.");
+  if (!/\.(xlsx|xlsm|xls|csv|txt)$/i.test(f.name)) return showProblem("“" + f.name + "” is not an Excel or CSV file.");
+  window.__report = undefined; $("problem").hidden = true;
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var text = /\.(csv|txt)$/i.test(f.name);
+      var wb = text ? XLSX.read(new TextDecoder("utf-8").decode(reader.result), { type: "string", raw: true }) : XLSX.read(new Uint8Array(reader.result), { type: "array" });
+      var best = null;
+      wb.SheetNames.forEach(function(sn){ var rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: null, blankrows: true }); if (!best || rows.length > best.length) best = rows; });
+      start(best || [], f.name);
+    } catch (e) { window.__report = { status: "ERROR", message: String(e) }; showProblem("Something in this file stopped me. Nothing was produced. (" + e + ")"); }
+  };
+  reader.readAsArrayBuffer(f);
+}
+$("file").addEventListener("change", function(){ if (this.files && this.files[0]) handle(this.files[0]); this.value = ""; });
+["dragenter", "dragover"].forEach(function(ev){ document.addEventListener(ev, function(e){ e.preventDefault(); $("drop").classList.add("over"); }); });
+["dragleave", "drop"].forEach(function(ev){ document.addEventListener(ev, function(e){ e.preventDefault(); $("drop").classList.remove("over"); }); });
+document.addEventListener("drop", function(e){ var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) handle(f); });
+setStep(1);
+
+// a made-up sample: a small contractor's general ledger, QuickBooks Online layout
+$("sample").addEventListener("click", function(){
+  var rows = [["Sample Contracting LLC"], ["General Ledger"], ["January 1 - December 31, 2026"], [], ["", "Date", "Transaction Type", "Num", "Name", "Memo/Description", "Split", "Amount", "Balance"]];
+  function account(name, opening, lines){
+    rows.push([name]); rows.push(["", "Beginning Balance", "", "", "", "", "", "", opening]);
+    var b = opening, t = 0;
+    lines.forEach(function(l){ b = Math.round((b + l[5]) * 100) / 100; t = Math.round((t + l[5]) * 100) / 100; rows.push(["", l[0], l[1], l[2], l[3], l[4], "-Split-", l[5], b]); });
+    rows.push(["Total for " + name, "", "", "", "", "", "", t, ""]);
+  }
+  account("Equipment", 42000, [["03/04/2026", "Bill", "311", "Prairie Equipment", "Mini excavator", 38500]]);
+  account("Vehicles", 61000, [["08/19/2026", "Deposit", "", "Carver Auto Sales", "Sold 2018 pickup", -9500]]);
+  account("Accumulated Depreciation", -51200, [["12/31/2026", "Journal Entry", "DEP-26", "", "Depreciation 2026", -14800]]);
+  account("Depreciation Expense", 0, [["12/31/2026", "Journal Entry", "DEP-26", "", "Depreciation 2026", 14800]]);
+  account("Repairs and Maintenance", 0, [["05/12/2026", "Bill", "340", "Apex Plumbing", "Shop water heater repair", 640], ["09/30/2026", "Bill", "377", "Ridge Roofing", "New roof on equipment shed", 7900]]);
+  account("Small Tools and Equipment", 0, [["02/10/2026", "Expense", "302", "Greenfield Tools", "Drill set", 389]]);
+  account("Utilities", 0, [["01/15/2026", "Bill", "300", "Metro Utilities", "January", 412]]);
+  rows.push([], ["Accrual Basis Wednesday, January 20, 2027 09:12 AM GMT-05:00"]);
+  start(rows, "made-up sample");
+});
+</script>
+</body>
+</html>
