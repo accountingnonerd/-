@@ -135,6 +135,11 @@ table.example{font-size:.9rem}
 .bad-input{color:var(--stop);font-weight:700;font-size:.9rem;display:block}
 .parts{display:block;color:var(--soft);font-size:.9rem}
 .print-only{display:none}
+[id^="step-"]{scroll-margin-top:120px}
+label.small{display:block;font-size:.85rem;color:var(--soft);margin-top:6px}
+label.small select{font:inherit;font-size:.9rem;max-width:14em;margin-left:4px}
+#entries tr.memo td{border-bottom:2px solid var(--rule);color:var(--soft);font-size:.9rem;padding-top:0}
+#entries tr.first-line td{border-top:0}
 .sign{grid-template-columns:1fr 1fr}.sign label:first-child{grid-column:1 / -1}
 @media (max-width:760px){table.cards td[aria-hidden]{display:none}}
 @media (max-width:760px){
@@ -145,12 +150,17 @@ table.example{font-size:.9rem}
   table.cards td{border:0;padding:3px 0;text-align:left!important}
   table.cards td[data-label]::before{content:attr(data-label) ": ";font-weight:700;color:var(--soft);font-size:.85rem}
   table.cards tr.sum{border-color:var(--ink)}
-  .steps li{flex-basis:46%}.steps li .st{display:none}
+  .steps{gap:4px}.steps li{flex:1 1 20%}.steps li .st{display:none}
+  .steps li:not(.now) .s,.steps li:not(.now) a{font-size:0;text-align:center}.steps li:not(.now) b{font-size:15px;margin:0}
+  .steps li.now{flex:3 1 40%}.steps li .s,.steps li a{padding:6px 8px;font-size:.9rem}
 }
 @media print{
   #steps,#step-2,#step-2-body,#step-3,#step-3-body,.no-print{display:none!important}
   .print-only{display:block}
-  .sign input{border:0;background:none}
+  .sign input{border:0;background:none;outline:none}
+  .tag,.stepno{display:none!important}
+  h2,h3{break-after:avoid}
+  *:focus{outline:none!important}
 }
 </style>
 </head>
@@ -183,6 +193,7 @@ table.example{font-size:.9rem}
     <li><b>QuickBooks Online:</b> Reports, General Ledger. Set the dates to the client's full year (for example 01/01/2026 to 12/31/2026), Accounting method Accrual, Run report, then Export, Export to Excel.</li>
     <li><b>QuickBooks Desktop:</b> Reports, Accountant &amp; Taxes, General Ledger, the same dates, Accrual, then Excel, Create New Worksheet.</li>
     <li><b>Xero:</b> Reports, Account Transactions, the same dates, all accounts, Accrual, Update, then Export, Excel.</li>
+    <li><b>Other bookkeeping software:</b> the report that lists every transaction by account (often called General Ledger, Account Transactions or Transaction Detail by Account), with the columns shown below.</li>
   </ul>
   <p><b>Check before you send it:</b></p>
   <ul class="spec">
@@ -494,8 +505,15 @@ function review(rows, fileName, opts){
   rep.undecided = candidates.filter(function(c){ return c.decision === "undecided"; }).length;
   rep.depreciationBooked = dollars(booked);
   var dispIn = opts.disp || {};
-  disposals.forEach(function(d){ var v = dispIn[d.id]; if (d.kind === "proceeds" && v && v.cost != null && v.ad != null) { d.cost = dollars(v.cost); d.adToDate = dollars(v.ad); d.gain = dollars(cents(d.amount) - (v.cost - v.ad)); } });
+  disposals.forEach(function(d){ var v = dispIn[d.id]; if (d.kind === "proceeds" && v && v.cost != null && v.ad != null) { var adTo = v.ad + (v.ady || 0);
+    d.cost = dollars(v.cost); d.adPrior = dollars(v.ad); d.adThisYear = dollars(v.ady || 0); d.adToDate = dollars(adTo); d.gain = dollars(cents(d.amount) - (v.cost - adTo)); } });
+  var faNames = by("fa").map(function(a){ return a.name; }), tg = opts.target || {}, rs = opts.reason || {};
+  candidates.forEach(function(c){ c.target = tg[c.id] || faNames[0] || "Fixed assets"; c.reason = rs[c.id] || ""; });
+  var settled = disposals.filter(function(d){ return d.kind === "proceeds" && d.gain != null; });
+  rep.costAfter = dollars(sum(by("fa"), function(a){ return a.ending; }) + cents(rep.capitalizeTotal) + sum(settled, function(d){ return cents(d.amount) - cents(d.cost); }));
+  rep.adAfter = dollars(-sum(by("ad"), function(a){ return a.ending; }) + (opts.taxDep != null ? opts.taxDep - booked : 0) - sum(settled, function(d){ return cents(d.adToDate); }));
   if (opts.taxDep != null) { rep.taxDepreciation = dollars(opts.taxDep); rep.depreciationAdjustment = dollars(opts.taxDep - booked); }
+  rep.faAccounts = faNames;
   if (opts.schedCost != null || opts.schedAD != null) {
     var sc = opts.schedCost != null ? opts.schedCost : costOpen, sa = opts.schedAD != null ? opts.schedAD : adOpen;
     rep.scheduleCost = dollars(sc); rep.scheduleAD = dollars(sa); rep.openingDiffCost = dollars(costOpen - sc); rep.openingDiffAD = dollars(adOpen - sa);
@@ -509,7 +527,8 @@ function review(rows, fileName, opts){
   if (by("fa").some(function(a){ return a.opening < 0 || a.ending < 0; })) ex("FA_CREDIT_BALANCE", "care", "A fixed asset account has a credit balance (" + by("fa").filter(function(a){ return a.opening < 0 || a.ending < 0; }).map(function(a){ return a.name; }).join(", ") + "). It may be a loan or a contra account read as an asset: check its kind in step 2.");
   if (candidates.length) ex("CAPITALIZE_CANDIDATES", "care", plural(candidates.length, "bill") + " over " + money(threshold) + " " + (candidates.length === 1 ? "was" : "were") + " expensed (" + money(cents(rep.candidatesTotal)) + "). Each may be equipment or an improvement. Decide each one in step 3b.");
   if (candidates.some(function(c){ return c.routine; })) ex("ROUTINE_CHARGES", "info", "Some of those bills repeat (" + candidates.filter(function(c){ return c.routine; }).map(function(c){ return c.name; }).filter(function(v, i, s){ return s.indexOf(v) === i; }).join(", ") + "): repeated charges like these are usually a service contract or routine maintenance. They are marked “repeats” in step 3b.");
-  if (kinds.indexOf("proceeds") >= 0) ex("DISPOSALS", "care", plural(kinds.filter(function(k){ return k === "proceeds"; }).length, "credit") + " to fixed asset accounts look like money received for an asset (a sale, a trade-in or an insurance payout) posted straight to the asset, so no gain or loss was recorded. In step 3c, type each asset’s cost and depreciation to date from the schedule.");
+  var np = kinds.filter(function(k){ return k === "proceeds"; }).length;
+  if (np) ex("DISPOSALS", "care", plural(np, "credit") + " to fixed asset accounts " + (np === 1 ? "looks" : "look") + " like money received for an asset (a sale, a trade-in or an insurance payout) posted straight to the asset, so no gain or loss was recorded. In step 3c, type each asset\u2019s cost and depreciation from the schedule.");
   if (kinds.indexOf("proceeds") >= 0 && !by("ad").some(function(a){ return a.lines.some(function(x){ return x.amount > 0; }); })) ex("AD_NOT_REMOVED", "care", "Nothing was taken out of accumulated depreciation this year, so the depreciation on anything sold is still on the books. The entry is worked out in step 3c and listed in step 4.");
   if (kinds.indexOf("recorded") >= 0) ex("DISPOSALS_RECORDED", "info", "A sale or write-off was booked with an entry that also removes accumulated depreciation or records a gain or loss. Check its amounts against the schedule (step 3c) and take the asset off the schedule.");
   if (kinds.indexOf("return") >= 0) ex("RETURNS", "info", "Credits from vendors to fixed asset accounts (returns or refunds) reduce the cost of what was bought. They are listed in step 3c, not treated as sales.");
@@ -559,12 +578,18 @@ function render(rep){
   var capped = rep.candidates.filter(function(c){ return c.decision === "cap"; });
   var proceeds = rep.disposals.filter(function(d){ return d.kind === "proceeds"; });
   var toAdd = cents(rep.scheduleAdditions) + cents(rep.capitalizeTotal);
-  o.push('<div class="wp-head"><div><p class="where no-print" id="where">Steps 2 to 4: check the accounts, decide what was found, then print. Work down the page.</p><h1>What goes on the asset schedule?</h1><p class="meta">' + esc(rep.layout) +
+  o.push('<div class="wp-head"><div><p class="where no-print" id="where">Steps 2 to 4: check the accounts, decide what was found, then print. Work down the page.</p><h1><span class="no-print">What goes on the asset schedule?</span><span class="print-only">Fixed asset review' + (rep.period ? ", year ended " + dateOf(rep.period.to) : "") + '</span></h1><p class="meta">' + esc(rep.layout) +
     (rep.period ? " · " + dateOf(rep.period.from) + " to " + dateOf(rep.period.to) : " · dates not in the file") + '<br>File: ' + esc(rep.file) + '</p></div>');
-  o.push('<div class="sign">' + [["client", "Client"], ["preparedBy", "Prepared by"], ["preparedOn", "Prepared on (date)"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Reviewed on (date)"]].map(function(p){
+  o.push('<div class="sign">' + [["client", "Client"], ["wpRef", "Workpaper ref."], ["preparedBy", "Prepared by"], ["preparedOn", "Prepared on (date)"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Reviewed on (date)"]].map(function(p){
     var v = keep[p[0]] != null ? keep[p[0]] : p[0] === "client" ? rep.company : p[0] === "preparedOn" ? todayStr() : "";
     return '<label>' + p[1] + '<input id="' + p[0] + '" autocomplete="off" value="' + esc(v) + '"></label>'; }).join("") + '</div></div>');
-  o.push('<div class="verdict' + (stops.length ? " bad" : "") + '" id="verdict">' + esc((rep.company ? rep.company + ": " : "") + c$(rep.scheduleAdditions) + " recorded as assets this year" +
+  var finished = !rep.undecided && !proceeds.some(function(d){ return d.gain == null; });
+  if (finished && (rep.candidates.length || proceeds.length)) o.push('<div class="verdict' + (stops.length ? " bad" : "") + '" id="verdict">' + esc((rep.company ? rep.company + ": " : "") + money(toAdd) + " to add to the depreciation schedule" +
+    (proceeds.length ? "; " + plural(proceeds.length, "asset") + " to take off" : "") + ".") +
+    '<span class="sub">' + esc("Recorded as assets: " + c$(rep.scheduleAdditions) + (rep.candidates.length ? ". From expense accounts: capitalized " + c$(rep.capitalizeTotal) + ", kept as expense " + money(cents(rep.candidatesTotal) - cents(rep.capitalizeTotal)) : "") +
+    (proceeds.length ? ". " + proceeds.map(function(d){ return itemName(d) + ": " + (d.gain >= 0 ? "gain " + c$(d.gain) : "loss " + c$(-d.gain)); }).join("; ") : "") +
+    ". Depreciation booked this year: " + c$(rep.depreciationBooked) + (rep.depreciationAdjustment ? ", to adjust by " + money(cents(rep.depreciationAdjustment)) : "") + ".") + '</span></div>');
+  else o.push('<div class="verdict' + (stops.length ? " bad" : "") + '" id="verdict">' + esc((rep.company ? rep.company + ": " : "") + c$(rep.scheduleAdditions) + " recorded as assets this year" +
     (rep.candidates.length ? "; " + c$(rep.candidatesTotal) + " more found in expense accounts for you to decide" : "") +
     (proceeds.length ? "; " + plural(proceeds.length, "sale or write-off", "sales or write-offs") + " to settle" : "") + ".") +
     '<span class="sub">' + esc((rep.candidates.length ? "Decided " + (rep.candidates.length - rep.undecided) + " of " + rep.candidates.length + " bills. " : "") +
@@ -589,7 +614,8 @@ function render(rep){
   o.push('<h2 id="step-3"><span class="stepno">Step 3</span> Decide what was found</h2><div id="step-3-body">');
   o.push('<p class="purpose"><b>What this is for:</b> everything the depreciation schedule and the year-end entries need, in four parts. The page found it; you decide. <b>What to do:</b> work through 3a to 3d. Step 4 updates as you go.</p>');
   // 3a
-  o.push('<h3>3a. Bought this year and recorded as assets ' + tag("check") + '</h3><p class="note">Found automatically in the fixed asset accounts. Check the flags.</p>');
+  var flagged = rep.additions.filter(function(x){ return x.journal || x.tradeIn || x.land; }).length;
+  o.push('<h3>3a. Bought this year and recorded as assets ' + tag("check") + '</h3><p class="note">Found automatically in the fixed asset accounts.' + (flagged ? " " + plural(flagged, "line has a note", "lines have notes") + " to check." : " Check that each is a purchase.") + '</p>');
   if (!rep.additions.length) o.push('<p class="ok">No purchases were recorded in fixed asset accounts this year.</p>');
   else {
     o.push('<div class="scroll"><table id="additions" class="cards"><thead><tr><th>Date</th><th>Account</th><th>From</th><th>Description</th><th class="num">Cost</th></tr></thead><tbody>');
@@ -614,7 +640,9 @@ function render(rep){
       var parts = x.lines > 1 ? '<span class="parts">' + plural(x.lines, "line") + " on one bill: " + x.parts.map(function(p){ return p.account + " " + c$(p.amount); }).join(", ") + (x.parts.length === 1 ? " (" + x.lineAmounts.map(c$).join(" + ") + ")" : "") + '. Check each item against the limit.</span>' : "";
       o.push('<tr>' + td("Date", dateOf(x.date)) + td("Expensed to", esc(x.accounts.join(", "))) + td("From", esc(x.name || "(no name)")) + td("Description", esc(x.memo) + (x.routine ? ' <span class="pill">repeats: likely a service contract</span>' : "") + parts) + td("Amount", c$(x.amount), "num") +
         td("Your decision", '<span class="decide" role="radiogroup" aria-label="Decision for ' + esc(x.name) + ' ' + c$(x.amount) + '">' +
-          [["cap", "Capitalize"], ["exp", "Keep as expense"]].map(function(c){ return '<label class="' + (x.decision === c[0] ? "on" : "") + '"><input type="radio" class="dec" name="dec-' + x.id + '" data-id="' + x.id + '" value="' + c[0] + '"' + (x.decision === c[0] ? " checked" : "") + '>' + c[1] + '</label>'; }).join("") + '</span>') + '</tr>');
+          [["cap", "Capitalize"], ["exp", "Keep as expense"]].map(function(c){ return '<label class="' + (x.decision === c[0] ? "on" : "") + '"><input type="radio" class="dec" name="dec-' + x.id + '" data-id="' + x.id + '" value="' + c[0] + '"' + (x.decision === c[0] ? " checked" : "") + '>' + c[1] + '</label>'; }).join("") + '</span>' +
+          (x.decision === "cap" && rep.faAccounts.length ? '<label class="small">to <select class="target" data-id="' + x.id + '">' + rep.faAccounts.map(function(a){ return '<option' + (a === x.target ? " selected" : "") + '>' + esc(a) + '</option>'; }).join("") + '</select></label>' : "") +
+          (x.decision !== "undecided" ? '<label class="small">why <select class="reason" data-id="' + x.id + '">' + ["", "New equipment", "Improvement or restoration", "Repair or maintenance", "De minimis: items $2,500 or less", "Service contract or subscription", "Other (see notes)"].map(function(v){ return '<option' + (v === x.reason ? " selected" : "") + ' value="' + esc(v) + '">' + (v || "(choose)") + '</option>'; }).join("") + '</select></label>' : "")) + '</tr>');
     });
     o.push('</tbody></table></div>');
   }
@@ -622,13 +650,14 @@ function render(rep){
   o.push('<h3>3c. Sold, traded in, returned or written off ' + tag("you") + '</h3>');
   if (!rep.disposals.length && !rep.possibleSales.length) o.push('<p class="ok">Nothing was credited to a fixed asset account, and no sale shows elsewhere.</p>');
   if (proceeds.length) {
-    o.push('<p><b>Money received for an asset was posted straight to the asset account.</b> Ask the client which asset it was. From the depreciation schedule, type that asset’s original cost and its depreciation up to the date it went; the page works out the gain or loss and the entry.</p>');
-    o.push('<div class="scroll"><table id="disposals" class="cards"><thead><tr><th>Date</th><th>Account</th><th>Description</th><th class="num">Received</th><th>Its original cost</th><th>Its depreciation to date</th><th class="num">Gain or loss</th></tr></thead><tbody>');
+    o.push('<p><b>Money received for an asset was posted straight to the asset account.</b> Ask the client which asset it was. From the depreciation schedule, type that asset’s original cost and its accumulated depreciation at the end of last year; then its depreciation for this year up to the date it went (from the tax software’s report for this year; leave it empty if there is none). The page works out the gain or loss and the entry as you type. If the figure you type in 3d comes from the tax software, it already includes this asset’s depreciation for the part of the year it was owned.</p>');
+    o.push('<div class="scroll"><table id="disposals" class="cards"><thead><tr><th>Date</th><th>Account</th><th>Description</th><th class="num">Received</th><th>Its original cost</th><th>Its depreciation at the end of last year</th><th>Its depreciation this year, to the sale</th><th class="num">Gain or loss</th></tr></thead><tbody>');
     proceeds.forEach(function(d){ var v = (state.disp || {})[d.id] || {};
       o.push('<tr>' + td("Date", dateOf(d.date)) + td("Account", esc(d.account)) + td("Description", esc(itemName(d))) + td("Received", c$(d.amount), "num") +
         td("Its original cost", '<input class="money-in disp" data-id="' + d.id + '" data-f="cost" inputmode="decimal" value="' + inputVal(v.cost) + '" aria-label="Original cost of ' + esc(itemName(d)) + '">' + badMsg(d.id + "cost")) +
-        td("Its depreciation to date", '<input class="money-in disp" data-id="' + d.id + '" data-f="ad" inputmode="decimal" value="' + inputVal(v.ad) + '" aria-label="Depreciation to date of ' + esc(itemName(d)) + '">' + badMsg(d.id + "ad")) +
-        td("Gain or loss", d.gain == null ? '<span class="undecided">type both</span>' : (d.gain >= 0 ? "gain " + c$(d.gain) : "loss " + c$(-d.gain)), "num") + '</tr>'); });
+        td("Its depreciation at the end of last year", '<input class="money-in disp" data-id="' + d.id + '" data-f="ad" inputmode="decimal" value="' + inputVal(v.ad) + '" aria-label="Depreciation at the end of last year of ' + esc(itemName(d)) + '">' + badMsg(d.id + "ad")) +
+        td("Its depreciation this year, to the sale", '<input class="money-in disp" data-id="' + d.id + '" data-f="ady" inputmode="decimal" value="' + inputVal(v.ady) + '" aria-label="Depreciation this year to the sale of ' + esc(itemName(d)) + '">' + badMsg(d.id + "ady")) +
+        td("Gain or loss", d.gain == null ? '<span class="undecided">type the cost and last year\u2019s depreciation</span>' : (d.gain >= 0 ? "gain " + c$(d.gain) : "loss " + c$(-d.gain)), "num") + '</tr>'); });
     o.push('</tbody></table></div><p class="no-print"><button class="sec-btn" id="update-disp" type="button">Work out the gain or loss</button></p>');
   }
   rep.disposals.filter(function(d){ return d.kind === "recorded"; }).forEach(function(d){ o.push('<p class="note"><b>Booked as a sale or write-off</b> on ' + dateOf(d.date) + ' (' + esc(d.num) + '): ' + esc(d.account) + ' credited ' + c$(d.amount) + ' (' + esc(itemName(d)) + '). Check the cost and depreciation removed against the schedule, and take it off the schedule.</p>'); });
@@ -677,17 +706,29 @@ function render(rep){
   var rets = rep.disposals.filter(function(d){ return d.kind === "return"; });
   if (rets.length) o.push('<p class="note">Reduce the cost on the schedule for returns: ' + esc(rets.map(function(d){ return itemName(d) + " " + c$(d.amount) + " (" + d.account + ")"; }).join("; ")) + '.</p>');
   o.push('<h3>Proposed entries</h3>');
-  var ents = [], byAcc = {};
-  capped.forEach(function(x){ x.parts.forEach(function(p){ byAcc[p.account] = (byAcc[p.account] || 0) + cents(p.amount); }); });
-  Object.keys(byAcc).forEach(function(k){ ents.push("Dr the fixed asset account the item belongs in, Cr " + k + ", " + money(byAcc[k]) + ": bills to capitalize (step 3b)."); });
-  proceeds.filter(function(d){ return d.gain != null; }).forEach(function(d){ var g = cents(d.gain);
-    ents.push(itemName(d) + " (" + dateOf(d.date) + "): Dr Accumulated depreciation " + c$(d.adToDate) + "; Dr " + d.account + " " + c$(d.amount) + " (undo the credit of the money received); Cr " + d.account + " " + c$(d.cost) + " (its original cost); " + (g >= 0 ? "Cr Gain on sale of assets " + money(g) : "Dr Loss on sale of assets " + money(-g)) + "."); });
+  var J = [], other = [];
+  var byPair = {}, pairs = [];
+  capped.forEach(function(x){ x.parts.forEach(function(p){ var k = x.target + "|" + p.account; if (!byPair[k]) { byPair[k] = { dr: x.target, cr: p.account, amt: 0, items: [] }; pairs.push(k); } byPair[k].amt += cents(p.amount); byPair[k].items.push(itemName(x)); }); });
+  pairs.forEach(function(k){ var e = byPair[k]; J.push({ note: "Capitalize: " + e.items.join("; ") + " (step 3b)", lines: [[e.dr, e.amt, 0], [e.cr, 0, e.amt]] }); });
+  proceeds.filter(function(d){ return d.gain != null; }).forEach(function(d){ var g = cents(d.gain), ln = [];
+    if (d.adThisYear && !rep.taxDepreciation) other.push("Book " + itemName(d) + "\u2019s depreciation for this year, " + c$(d.adThisYear) + ", if it is not in the depreciation booked.");
+    ln.push(["Accumulated depreciation", cents(d.adToDate), 0]); ln.push([d.account, cents(d.amount), 0]); ln.push([d.account, 0, cents(d.cost)]);
+    ln.push(g >= 0 ? ["Gain on sale of assets", 0, g] : ["Loss on sale of assets", -g, 0]);
+    J.push({ note: "Sale on " + dateOf(d.date) + " (\u201c" + itemName(d) + "\u201d): remove its cost and depreciation, undo the " + c$(d.amount) + " credited to " + d.account + ", record the " + (g >= 0 ? "gain" : "loss") + " (step 3c)", lines: ln }); });
   if (rep.depreciationAdjustment) { var adj = cents(rep.depreciationAdjustment);
-    ents.push(adj > 0 ? "Dr Depreciation expense, Cr Accumulated depreciation, " + money(adj) + ": bring this year’s depreciation up to " + c$(rep.taxDepreciation) + "." :
-      "Dr Accumulated depreciation, Cr Depreciation expense, " + money(-adj) + ": bring this year’s depreciation down to " + c$(rep.taxDepreciation) + "."); }
-  if (rep.payments.length) ents.push("Likely loan payments in an asset account: record the asset at its full price, set up the loan as a liability, and move the payments to the loan (principal) and interest expense.");
-  if (rep.openingDiffCost || rep.openingDiffAD) ents.push("Opening balances: find out what changed since last year’s return before posting anything to make them agree.");
-  o.push(ents.length ? '<ol id="entries">' + ents.map(function(e){ return "<li>" + esc(e) + "</li>"; }).join("") + '</ol>' : '<p class="ok">No entries to propose.</p>');
+    J.push({ note: "Bring this year\u2019s depreciation from " + c$(rep.depreciationBooked) + " to " + c$(rep.taxDepreciation) + " (step 3d)", lines: adj > 0 ? [["Depreciation expense", adj, 0], ["Accumulated depreciation", 0, adj]] : [["Accumulated depreciation", -adj, 0], ["Depreciation expense", 0, -adj]] }); }
+  if (rep.payments.length) other.push("Likely loan payments in an asset account: record the asset at its full price, set up the loan as a liability, and move the payments to the loan (principal) and interest expense.");
+  if (rep.openingDiffCost || rep.openingDiffAD) other.push("Opening balances: find out what changed since last year\u2019s return before posting anything to make them agree.");
+  if (J.length) {
+    o.push('<div class="scroll"><table id="entries" class="cards"><thead><tr><th>Entry</th><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead><tbody>');
+    J.forEach(function(e, i){
+      e.lines.forEach(function(l, j){ o.push('<tr' + (j === 0 ? ' class="first-line"' : "") + '>' + td("Entry", j === 0 ? "<b>AJE " + (i + 1) + "</b>" : "") + td("Account", esc(l[0])) + td("Debit", l[1] ? money(l[1]) : "", "num") + td("Credit", l[2] ? money(l[2]) : "", "num") + '</tr>'); });
+      o.push('<tr class="memo">' + td("", "") + td("Explanation", '<i>' + esc(e.note) + '</i>') + td("", "") + td("", "") + '</tr>');
+    });
+    o.push('</tbody></table></div>');
+  }
+  if (other.length) o.push('<ul id="other-entries">' + other.map(function(e){ return "<li>" + esc(e) + "</li>"; }).join("") + '</ul>');
+  if (!J.length && !other.length) o.push('<p class="ok" id="entries">No entries to propose.</p>');
   var qs = [];
   capped.forEach(function(x){ qs.push("The " + c$(x.amount) + " bill from " + (x.name || "this vendor") + " on " + dateOf(x.date) + " (\u201c" + itemName(x) + "\u201d): when was it put into use?"); });
   rep.candidates.filter(function(x){ return x.decision === "undecided"; }).forEach(function(x){ qs.push("What was the " + c$(x.amount) + " bill from " + (x.name || "this vendor") + " on " + dateOf(x.date) + " (" + (x.memo || x.account) + ")? New equipment, an improvement, or a repair?"); });
@@ -698,6 +739,7 @@ function render(rep){
   o.push('<h3>Roll-forward, per books</h3><div class="scroll"><table id="rollforward" class="cards"><thead><tr><th>Cost</th><th class="num">Opening</th><th class="num">Debits</th><th class="num">Credits</th><th class="num">Ending</th></tr></thead><tbody>');
   rep.rollforward.forEach(function(x){ o.push('<tr>' + td("Cost", esc(x.account)) + td("Opening", c$(x.opening), "num") + td("Debits", c$(x.debits), "num") + td("Credits", c$(-x.credits), "num") + td("Ending", c$(x.ending), "num") + '</tr>'); });
   o.push('<tr class="sum">' + td("", "Total cost") + td("Opening", c$(rep.costOpening), "num") + td("Debits", c$(sum(rep.rollforward, function(x){ return x.debits; })), "num") + td("Credits", c$(-sum(rep.rollforward, function(x){ return x.credits; })), "num") + td("Ending", c$(rep.costEnding), "num") + '</tr></tbody></table></div>');
+  if (J.length) o.push('<p id="after"><b>After the proposed entries:</b> cost ' + c$(rep.costAfter) + '; accumulated depreciation ' + c$(rep.adAfter) + '. These should agree with the depreciation schedule\u2019s totals at the end of this year, once its additions and disposals are entered.</p>');
   if (rep.adRollforward.length) {
     o.push('<div class="scroll"><table id="ad-rollforward" class="cards"><thead><tr><th>Accumulated depreciation</th><th class="num">Opening</th><th class="num">Added</th><th class="num">Removed</th><th class="num">Ending</th></tr></thead><tbody>');
     rep.adRollforward.forEach(function(x){ o.push('<tr>' + td("Accumulated depreciation", esc(x.account)) + td("Opening", c$(-x.opening), "num") + td("Added", c$(-x.credits), "num") + td("Removed", c$(x.debits), "num") + td("Ending", c$(-x.ending), "num") + '</tr>'); });
@@ -711,9 +753,18 @@ function render(rep){
   return o.join("");
 }
 
-function opts(){ return { threshold: state.threshold, schedCost: state.schedCost, schedAD: state.schedAD, taxDep: state.taxDep, roles: state.roles, decide: state.decide, disp: state.disp }; }
+function opts(){ return { threshold: state.threshold, schedCost: state.schedCost, schedAD: state.schedAD, taxDep: state.taxDep, roles: state.roles, decide: state.decide, disp: state.disp, target: state.target, reason: state.reason }; }
 function readMoney(id, el){ var v = (el || $(id) || {}).value || ""; if (!v.trim()) { delete bad[id]; return null; } var c = parseAmount(v); if (c == null || isNaN(c)) { bad[id] = 1; return undefined; } delete bad[id]; return c; }
 function keepIf(v, old){ return v === undefined ? old : v; }
+function saveDisp(quiet){
+  state.disp = state.disp || {};
+  Array.prototype.forEach.call(document.querySelectorAll("input.disp"), function(x){
+    var id = x.getAttribute("data-id"), f = x.getAttribute("data-f"), v = readMoney(id + f, x);
+    state.disp[id] = state.disp[id] || {};
+    if (v !== undefined) state.disp[id][f] = v;
+    if (quiet) delete bad[id + f];
+  });
+}
 function setStep(n){
   Array.prototype.forEach.call(document.querySelectorAll("#steps li"), function(li){
     var s = +li.getAttribute("data-step"), done = (s === 1 && n > 1) || (s === 2 && state.accountsOk) || (s === 3 && current && !current.undecided && !current.disposals.some(function(d){ return d.kind === "proceeds" && d.gain == null; }) && state.accountsOk);
@@ -737,7 +788,7 @@ function goStart(){
   $("report").hidden = true; $("start").hidden = false; $("problem").hidden = true; current = null; stepLinks(false); setStep(1); window.scrollTo(0, 0);
 }
 function publish(rep){
-  ["client", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
+  ["client", "wpRef", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
   current = rep;
   $("out").innerHTML = render(rep);
   if ($("start").hidden === false) { $("start").hidden = true; $("report").hidden = false; stepLinks(true); }
@@ -746,11 +797,22 @@ function publish(rep){
   $("update").addEventListener("click", again(function(){ state.schedCost = keepIf(readMoney("sched-cost"), state.schedCost); state.schedAD = keepIf(readMoney("sched-ad"), state.schedAD); state.taxDep = keepIf(readMoney("tax-dep"), state.taxDep); }));
   $("update-threshold").addEventListener("click", again(function(){ var t = readMoney("threshold"); if (t !== undefined) state.threshold = t; }));
   $("accounts-ok").addEventListener("click", function(){ state.accountsOk = true; this.textContent = "✓ Accounts checked: go to step 3"; setStep(3); $("step-3").scrollIntoView(); });
-  if ($("update-disp")) $("update-disp").addEventListener("click", again(function(){ state.disp = state.disp || {};
-    Array.prototype.forEach.call(document.querySelectorAll("input.disp"), function(x){ var id = x.getAttribute("data-id"), f = x.getAttribute("data-f"), v = readMoney(id + f, x); state.disp[id] = state.disp[id] || {}; if (v !== undefined) state.disp[id][f] = v; }); }));
+  if ($("update-disp")) $("update-disp").addEventListener("click", again(saveDisp));
   Array.prototype.forEach.call(document.querySelectorAll("select.role"), function(s){ s.addEventListener("change", again(function(){ state.roles = state.roles || {}; state.roles[s.getAttribute("data-account")] = s.value; })); });
+  Array.prototype.forEach.call(document.querySelectorAll("select.target"), function(x){ x.addEventListener("change", again(function(){ state.target = state.target || {}; state.target[x.getAttribute("data-id")] = x.value; })); });
+  Array.prototype.forEach.call(document.querySelectorAll("select.reason"), function(x){ x.addEventListener("change", again(function(){ state.reason = state.reason || {}; state.reason[x.getAttribute("data-id")] = x.value; })); });
+  Array.prototype.forEach.call(document.querySelectorAll("input.disp"), function(x){
+    x.addEventListener("input", function(){ saveDisp(true); });
+    x.addEventListener("focusout", function(){   // work it out when she leaves the sale's boxes, not while she moves between them
+      setTimeout(function(){
+        var a = document.activeElement;
+        if (a && a.classList && a.classList.contains("disp")) return;
+        saveDisp(); var y = window.scrollY; publish(review(lastRows, lastName, opts())); window.scrollTo(0, y); onScroll();
+      }, 0);
+    });
+  });
   Array.prototype.forEach.call(document.querySelectorAll("input.dec"), function(x){ x.addEventListener("change", again(function(){ state.decide = state.decide || {}; state.decide[x.getAttribute("data-id")] = x.value; })); });
-  $("print").addEventListener("click", function(){ setStep(4); window.print(); });
+  $("print").addEventListener("click", function(){ if ($("open-items") && !confirm("This workpaper is not finished: " + $("open-items").textContent.replace(/^Not finished:\s*/, "") + " Print anyway?")) return; setStep(4); window.print(); });
   $("again").addEventListener("click", goStart);
   onScroll();
 }
@@ -758,7 +820,10 @@ function onScroll(){
   if (!current || $("report").hidden) return;
   var n = 2; ["step-3", "step-4"].forEach(function(id, i){ var el = $(id); if (el && el.getBoundingClientRect().top < window.innerHeight * 0.45) n = i + 3; });
   setStep(n);
-  var w = $("where"); if (w) w.textContent = { 2: "You are on step 2 of 4: check the accounts, then press the button at the end of the list.", 3: "You are on step 3 of 4: decide each item in 3a to 3d. Step 4 updates as you go.", 4: "You are on step 4 of 4: print the workpaper or save it as a PDF." }[n];
+  var left = [];
+  if (!state.accountsOk) left.push("step 2 (press \u201cThe accounts are right\u201d)");
+  if (current.undecided || current.disposals.some(function(d){ return d.kind === "proceeds" && d.gain == null; })) left.push("step 3 (" + [current.undecided ? plural(current.undecided, "bill") + " to decide" : "", current.disposals.some(function(d){ return d.kind === "proceeds" && d.gain == null; }) ? "a sale\u2019s figures to type" : ""].filter(Boolean).join(", ") + ")");
+  var w = $("where"); if (w) w.textContent = "You are looking at step " + n + " of 4. " + (left.length ? "Still to do: " + left.join("; ") + "." : "Everything is decided: print the workpaper in step 4.");
 }
 window.addEventListener("scroll", onScroll);
 function showProblem(msg){ var p = $("problem"); p.textContent = msg; p.hidden = false; }

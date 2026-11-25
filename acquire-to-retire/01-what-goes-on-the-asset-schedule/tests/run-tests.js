@@ -122,12 +122,13 @@ function compare(key, rep) {
           c.done = true;
         }
       }
-      if (key.disp) {                      // the sold asset's cost and depreciation to date, in step 3c
-        const fields = await page.locator("input.disp").all();
-        for (let i = 0; i < key.disp.length; i++) { await fields[2 * i].fill(key.disp[i][0].toFixed(2)); await fields[2 * i + 1].fill(key.disp[i][1].toFixed(2)); }
-        const before = await page.evaluate(() => JSON.stringify(window.__report));
+      if (key.disp) {                      // the sold asset's cost, its depreciation at the end of last year and this year to the sale, in step 3c
+        for (let i = 0; i < key.disp.length; i++) for (let j = 0; j < 3; j++)
+          if (key.disp[i][j] != null) await page.locator("input.disp").nth(3 * i + j).fill(key.disp[i][j].toFixed(2));
         await page.click("button#update-disp");
-        await wait(before);
+        const want = key.disp.map((d) => Math.round((d[1] + (d[2] || 0)) * 100) / 100);
+        await page.waitForFunction((w) => { const ps = (window.__report.disposals || []).filter((d) => d.kind === "proceeds");
+          return ps.length === w.length && ps.every((d, i) => d.adToDate !== undefined && Math.abs(d.adToDate - w[i]) < 0.005); }, want, { timeout: 10000 });
       }
       rep = await page.evaluate(() => JSON.parse(JSON.stringify(window.__report)));
       shown = await page.evaluate(() => {

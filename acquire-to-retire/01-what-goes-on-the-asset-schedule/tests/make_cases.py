@@ -684,7 +684,7 @@ write_qbo(P("22-sample-ridgeline-landscaping.xlsx"), "Ridgeline Landscaping LLC"
 k22 = key_for(A, sched=(21_090_000, 9_735_000), tax_dep=2_461_000)
 k22["decide"] = [["Coastal Door Co", 6900.00, "cap"], ["Greenfield Tools", 5600.00, "cap"], ["Summit Office Systems", 3480.00, "exp"]] + [["Clearwater Irrigation", 2750.00, "exp"]] * 4
 k22["capitalizeTotal"] = 12_500.00
-k22["disp"] = [[42_000.00, 36_750.00]]; k22["gains"] = [10_750.00]
+k22["disp"] = [[42_000.00, 36_750.00, 2_625.00]]; k22["gains"] = [13_375.00]
 case("22", "The readers' sample: Ridgeline Landscaping, with the reader's decisions, last year's schedule, this year's depreciation and the sold truck's figures typed", "planted",
      "22-sample-ridgeline-landscaping.xlsx", "COMPUTED", k22, "qbo", {"typed": {"scheduleCost": 210_900.00, "scheduleAD": 97_350.00, "taxDepreciation": 24_610.00}})
 import shutil
@@ -699,6 +699,16 @@ with open(os.path.join(SAMPLE, "ridgeline-depreciation-schedule-2025.csv"), "w",
     for a_ in sched: w.writerow([a_[0], a_[1], a_[2], f"{a_[3] / 100:.2f}", f"{a_[4] / 100:.2f}"])
     w.writerow(["Total", "", "", f"{sum(a_[3] for a_ in sched) / 100:.2f}", f"{sum(a_[4] for a_ in sched) / 100:.2f}"])
     assert sum(a_[3] for a_ in sched) == 21_090_000 and sum(a_[4] for a_ in sched) == 9_735_000, (sum(a_[3] for a_ in sched), sum(a_[4] for a_ in sched))
+with open(os.path.join(SAMPLE, "ridgeline-depreciation-2026-from-tax-software.csv"), "w", newline="") as f:
+    w = csv.writer(f)          # this year's depreciation report, before the bills found in expense accounts are added
+    w.writerow(["Asset", "Placed in service", "Disposed", "Cost", "Depreciation 2026"])
+    dep26 = [("2017 Ford F-250", "04/10/2017", "06/03/2026", 42_000_00, 2_625_00), ("2021 Ford F-350", "03/02/2021", "", 58_500_00, 5_850_00),
+             ("2023 Enclosed trailer", "06/15/2023", "", 24_000_00, 2_400_00), ("2019 Skid steer", "05/01/2019", "", 51_200_00, 5_120_00),
+             ("2022 Aerator and seeder", "04/04/2022", "", 21_900_00, 2_190_00), ("2024 Stand-on mowers (2)", "03/18/2024", "", 13_300_00, 1_330_00),
+             ("Zero-turn mower, 72 in.", "03/09/2026", "", 14_800_00, 1_850_00), ("2026 F-350 with dump body", "05/20/2026", "", 61_250_00, 3_245_00)]
+    for a_ in dep26: w.writerow([a_[0], a_[1], a_[2], f"{a_[3] / 100:.2f}", f"{a_[4] / 100:.2f}"])
+    w.writerow(["Total", "", "", "", f"{sum(a_[4] for a_ in dep26) / 100:.2f}"])
+    assert sum(a_[4] for a_ in dep26) == 2_461_000
 
 json.dump(KEY, open(os.path.join(HERE, "answer-key.json"), "w"), indent=1, default=str)
 print(len(KEY), "cases written")
