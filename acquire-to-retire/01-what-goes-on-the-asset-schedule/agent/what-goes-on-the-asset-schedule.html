@@ -159,6 +159,8 @@ table.example{font-size:.9rem}
 .bad-input{color:var(--stop);font-weight:700;font-size:.9rem;display:block}
 .parts{display:block;color:var(--soft);font-size:.9rem}
 .print-only{display:none}
+.sign{grid-template-columns:1fr 1fr}.sign label:first-child{grid-column:1 / -1}
+@media (max-width:760px){table.cards td[aria-hidden]{display:none}}
 @media (max-width:760px){
   table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
   table.cards{min-width:0!important}
@@ -328,12 +330,10 @@ function readLedger(rows){
     if (cells.some(function(c){ return /^closing balance$/i.test(c); })) { if (last) last.closing = amt(g(row, "balance")); continue; }
     if (/^total\b/i.test(first)) {
       if (/^total$/i.test(first) || !stack.length) continue;
-      var label = cleanName(first.replace(/^total\s+(for\s+)?/i, "")), at = stack.length - 1;
-      for (var i = stack.length - 1; i >= 0; i--) if (stack[i].label === label) { at = i; break; }
-      var acc = stack[at];
+      var acc = stack.pop();         // a total line closes the account opened last
       acc.total = C.amount >= 0 ? amt(g(row, "amount")) : amt(g(row, "debit")) - amt(g(row, "credit"));
       if (hasAmt(g(row, "balance"))) acc.totalBalance = amt(g(row, "balance"));
-      stack.length = at; last = acc;
+      last = acc;
       continue;
     }
     var d = parseDay(g(row, "date"));
@@ -386,7 +386,6 @@ function roleOf(name){
   var parts = cleanName(name).split(":");
   if (parts.length === 1) return baseRole(parts[0]);
   var lastP = parts[parts.length - 1].toLowerCase(), rp = roleOf(parts.slice(0, -1).join(":"));
-  if (/^((original )?cost|cost basis)$/.test(lastP)) return rp;
   if (/depreciation/.test(lastP) && rp === "fa") return "ad";
   var r = baseRole(lastP);
   return r === "other" && rp === "fa" ? "fa" : r;
@@ -573,7 +572,7 @@ function dateOf(iso){ return shortDay(Math.round(Date.parse(iso) / 86400000)); }
 function tag(kind){ return { auto: '<span class="tag auto">Automatic</span>', you: '<span class="tag you">You decide</span>', check: '<span class="tag you">You check</span>', built: '<span class="tag auto">Built from your choices</span>' }[kind]; }
 function inputVal(v){ return v == null ? "" : (v / 100).toFixed(2); }
 function badMsg(id){ return bad[id] ? '<span class="bad-input" role="alert">Not a number. Type digits, like 12,345.67.</span>' : ""; }
-function td(label, html, cls){ return '<td data-label="' + esc(label) + '"' + (cls ? ' class="' + cls + '"' : "") + '>' + html + '</td>'; }
+function td(label, html, cls){ return '<td' + (label ? ' data-label="' + esc(label) + '"' : "") + (cls ? ' class="' + cls + '"' : "") + (html === "" ? ' aria-hidden="true"' : "") + '>' + html + '</td>'; }
 function todayStr(){ var d = new Date(); return (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(); }
 function itemName(x){ return x.memo || x.name || x.account; }
 
@@ -714,11 +713,11 @@ function render(rep){
   if (rep.openingDiffCost || rep.openingDiffAD) ents.push("Opening balances: find out what changed since last year’s return before posting anything to make them agree.");
   o.push(ents.length ? '<ol id="entries">' + ents.map(function(e){ return "<li>" + esc(e) + "</li>"; }).join("") + '</ol>' : '<p class="ok">No entries to propose.</p>');
   var qs = [];
-  capped.forEach(function(x){ qs.push("What was " + itemName(x) + " from " + (x.name || "this vendor") + " (" + c$(x.amount) + ", " + dateOf(x.date) + ")? When was it put into use?"); });
+  capped.forEach(function(x){ qs.push("The " + c$(x.amount) + " bill from " + (x.name || "this vendor") + " on " + dateOf(x.date) + " (\u201c" + itemName(x) + "\u201d): when was it put into use?"); });
   rep.candidates.filter(function(x){ return x.decision === "undecided"; }).forEach(function(x){ qs.push("What was the " + c$(x.amount) + " bill from " + (x.name || "this vendor") + " on " + dateOf(x.date) + " (" + (x.memo || x.account) + ")? New equipment, an improvement, or a repair?"); });
-  rep.disposals.filter(function(d){ return d.kind !== "return"; }).forEach(function(d){ qs.push("What happened to " + itemName(d) + " on " + dateOf(d.date) + "? Which asset was it, and was it sold, traded in, scrapped or insured?"); });
+  rep.disposals.filter(function(d){ return d.kind !== "return"; }).forEach(function(d){ qs.push("On " + dateOf(d.date) + ", " + c$(d.amount) + " was credited to " + d.account + " (\u201c" + itemName(d) + "\u201d). Which asset was it, and was it sold, traded in, scrapped or paid for by insurance?"); });
   rep.possibleSales.forEach(function(x){ qs.push("Was an asset sold (“" + (x.memo || x.name) + "”, " + c$(x.amount) + ", " + dateOf(x.date) + ")? Which one?"); });
-  rep.additions.filter(function(x){ return !x.land; }).forEach(function(x){ qs.push("When was " + itemName(x) + " (" + c$(x.amount) + ") put into use? Is it new or used?" + (/vehicle|truck|van|car|ram|ford|pickup/i.test(x.account + " " + x.memo) ? " For a vehicle: its gross vehicle weight rating (over 6,000 lb?), and the business-use percentage." : "")); });
+  rep.additions.filter(function(x){ return !x.land; }).forEach(function(x){ qs.push("\u201c" + itemName(x) + "\u201d (" + c$(x.amount) + ", " + dateOf(x.date) + "): when was it put into use? Is it new or used?" + (/vehicle|truck|van|car|ram|ford|pickup/i.test(x.account + " " + x.memo) ? " For a vehicle: its gross vehicle weight rating (over 6,000 lb?), and the business-use percentage." : "")); });
   if (qs.length) o.push('<h3>Questions for the client</h3><ol id="questions">' + qs.map(function(q){ return "<li>" + esc(q) + "</li>"; }).join("") + '</ol>');
   o.push('<h3>Roll-forward, per books</h3><div class="scroll"><table id="rollforward" class="cards"><thead><tr><th>Cost</th><th class="num">Opening</th><th class="num">Debits</th><th class="num">Credits</th><th class="num">Ending</th></tr></thead><tbody>');
   rep.rollforward.forEach(function(x){ o.push('<tr>' + td("Cost", esc(x.account)) + td("Opening", c$(x.opening), "num") + td("Debits", c$(x.debits), "num") + td("Credits", c$(-x.credits), "num") + td("Ending", c$(x.ending), "num") + '</tr>'); });
@@ -741,7 +740,7 @@ function readMoney(id, el){ var v = (el || $(id) || {}).value || ""; if (!v.trim
 function keepIf(v, old){ return v === undefined ? old : v; }
 function setStep(n){
   Array.prototype.forEach.call(document.querySelectorAll("#steps li"), function(li){
-    var s = +li.getAttribute("data-step"), done = s < n || (s === 2 && state.accountsOk) || (s === 3 && current && !current.undecided && !current.disposals.some(function(d){ return d.kind === "proceeds" && d.gain == null; }) && state.accountsOk);
+    var s = +li.getAttribute("data-step"), done = (s === 1 && n > 1) || (s === 2 && state.accountsOk) || (s === 3 && current && !current.undecided && !current.disposals.some(function(d){ return d.kind === "proceeds" && d.gain == null; }) && state.accountsOk);
     li.className = s === n ? "now" : done ? "done" : "";
     var b = li.querySelector("b"); if (b) b.textContent = done && s !== n ? "✓" : s;
     if (s === n) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");

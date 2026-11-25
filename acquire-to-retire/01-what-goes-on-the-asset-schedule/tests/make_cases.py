@@ -9,9 +9,8 @@ Money is held in integer cents, debit positive.
 
 The rules the key follows (version 2, after the CPA review and the first-time-user review):
   Account roles, from the name (number prefixes like "15000 · " and codes like " (710)" removed,
-  lower case). A sub-account "Parent:Child" takes its role from the child, except: a child named
-  "Cost" or "Original cost" takes its parent's role; a child containing "depreciation" under a
-  fixed asset parent is accumulated depreciation; a child with no role under a fixed asset parent is
+  lower case). A sub-account "Parent:Child" takes its role from the child, except: a child
+  containing "depreciation" under a fixed asset parent is accumulated depreciation; a child with no role under a fixed asset parent is
   a fixed asset. For one name, first match wins:
     other: "accumulated amortization", or "amortization" without "depreciation";
     accumulated depreciation: "accumulated depreciation", "accum depr", "accum. depr";
@@ -151,7 +150,6 @@ def role_of(name):
     if len(parts) == 1: return base_role(parts[0])
     last, parent = parts[-1].lower(), ":".join(parts[:-1])
     rp = role_of(parent)
-    if re.fullmatch(r"(original )?cost|cost basis", last): return rp
     if "depreciation" in last and rp == "fa": return "ad"
     r_ = base_role(last)
     if r_ == "other" and rp == "fa": return "fa"
@@ -649,10 +647,58 @@ line(A["fe"], D(8, 1), "Journal Entry", "TR-1", "", "Move service truck to Vehic
 line(A["veh"], D(8, 1), "Journal Entry", "TR-1", "", "Move service truck to Vehicles", 1_500_000)
 line(A["fe"], D(9, 2), "Bill", "4520", "Harbor Supply Co", "Welding table", 410_000)
 line(A["fe"], D(9, 20), "Bill Credit", "4520-C", "Harbor Supply Co", "Returned clamps", -30_000)
+line(A["tools"], D(10, 6), "Bill", "N-301", "Northline Equipment", "Pressure washer, hot water", 300_000)   # two equal bills: still not routine
+line(A["tools"], D(11, 9), "Bill", "N-322", "Northline Equipment", "Pressure washer, cold water", 300_000)
+A["loss"] = acct("Loss on Disposal of Assets", 0, 80200, 261)
+line(A["veh"], D(11, 30), "Journal Entry", "AJE-7", "", "Scrap old utility trailer", -200_000)           # a write-off with a loss, no depreciation removed
+line(A["loss"], D(11, 30), "Journal Entry", "AJE-7", "", "Scrap old utility trailer", 200_000)
+line(A["fe"], D(11, 30), "Bill", "4600", "Harbor Supply Co", "Parts washer", 200_000)                     # same day and amount, another entry: not a transfer
+line(A["veh"], D(12, 4), "Check", "5610", "Valley Kubota", "Kubota RTV, less $8,000 allowance for old unit", 1_250_000)
 depreciate(A, 1_480_000)
 write_qbo(P("21-reclass-refund-split-transfer.xlsx"), "Yarrow Fabrication", A)
 case("21", "Purchases already reclassed, a part refund, a bill split over two accounts, a transfer between asset accounts, a return; three tools that are not routine", "planted",
      "21-reclass-refund-split-transfer.xlsx", "COMPUTED", key_for(A), "qbo")
+
+# ---- 22 the sample for readers: Ridgeline Landscaping (also in ../sample/), with the decisions a reader makes
+A = {}
+A["eq"] = acct("Equipment", 8_640_000); A["veh"] = acct("Vehicles", 12_450_000); A["ad"] = acct("Accumulated Depreciation", -9_735_000)
+A["dep"] = acct("Depreciation Expense", 0); A["rm"] = acct("Repairs and Maintenance", 0); A["sup"] = acct("Office Supplies & Software", 0)
+A["tools"] = acct("Small Tools and Equipment", 0); A["fuel"] = acct("Fuel", 0); A["util"] = acct("Utilities", 0); A["rentx"] = acct("Rent", 0)
+r = random.Random(22); n = 2000
+for m in range(1, 13):
+    n += 1; line(A["fuel"], D(m, 8), "Expense", str(n), "Metro Fuel Card", "Fuel", r.randint(90_000, 160_000))
+    n += 1; line(A["util"], D(m, 15), "Bill", str(n), "Metro Utilities", "Utilities", r.randint(21_000, 38_000))
+    n += 1; line(A["rentx"], D(m, 1), "Check", str(n), "Oakridge Properties", "Yard rent", 280_000)
+    n += 1; line(A["sup"], D(m, r.randint(3, 26)), "Expense", str(n), "Office Depot Business", "Office supplies", r.randint(4_000, 31_000))
+    if m % 2: n += 1; line(A["rm"], D(m, r.randint(3, 26)), "Bill", str(n), "Midline Hardware", "Mower blades and parts", r.randint(18_000, 95_000))
+    if m % 3 == 0: n += 1; line(A["tools"], D(m, r.randint(3, 26)), "Expense", str(n), "Greenfield Tools", "Hand tools", r.randint(6_000, 48_000))
+line(A["eq"], D(3, 9), "Bill", "3104", "Valley Kubota", "Zero-turn mower, 72 in.", 1_480_000)
+line(A["veh"], D(5, 20), "Check", "3187", "Carver Ford", "2026 F-350 with dump body", 6_125_000)
+line(A["veh"], D(6, 3), "Deposit", "", "Jones Turf Services", "Sold 2017 F-250", -1_600_000)
+line(A["rm"], D(8, 14), "Bill", "3290", "Coastal Door Co", "Replace shop overhead door", 690_000)
+line(A["sup"], D(2, 2), "Bill", "3021", "Summit Office Systems", "Laptops (2) and docking station", 348_000)
+line(A["tools"], D(4, 22), "Bill", "3140", "Greenfield Tools", "Trailer-mounted sprayer, 200 gal", 560_000)
+for m in (2, 5, 8, 11): line(A["rm"], D(m, 1), "Bill", f"IRR-{m}", "Clearwater Irrigation", "Quarterly irrigation maintenance contract", 275_000)
+depreciate(A, 1_680_000)
+write_qbo(P("22-sample-ridgeline-landscaping.xlsx"), "Ridgeline Landscaping LLC", A)
+k22 = key_for(A, sched=(21_090_000, 9_735_000), tax_dep=2_461_000)
+k22["decide"] = [["Coastal Door Co", 6900.00, "cap"], ["Greenfield Tools", 5600.00, "cap"], ["Summit Office Systems", 3480.00, "exp"]] + [["Clearwater Irrigation", 2750.00, "exp"]] * 4
+k22["capitalizeTotal"] = 12_500.00
+k22["disp"] = [[42_000.00, 36_750.00]]; k22["gains"] = [10_750.00]
+case("22", "The readers' sample: Ridgeline Landscaping, with the reader's decisions, last year's schedule, this year's depreciation and the sold truck's figures typed", "planted",
+     "22-sample-ridgeline-landscaping.xlsx", "COMPUTED", k22, "qbo", {"typed": {"scheduleCost": 210_900.00, "scheduleAD": 97_350.00, "taxDepreciation": 24_610.00}})
+import shutil
+SAMPLE = os.path.join(HERE, "..", "sample"); os.makedirs(SAMPLE, exist_ok=True)
+shutil.copy(P("22-sample-ridgeline-landscaping.xlsx"), os.path.join(SAMPLE, "ridgeline-general-ledger-2026.xlsx"))
+with open(os.path.join(SAMPLE, "ridgeline-depreciation-schedule-2025.csv"), "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["Asset", "Class", "Placed in service", "Cost", "Accumulated depreciation at 12/31/2025"])
+    sched = [("2017 Ford F-250", "Vehicles", "04/10/2017", 42_000_00, 36_750_00), ("2021 Ford F-350", "Vehicles", "03/02/2021", 58_500_00, 39_200_00),
+             ("2023 Enclosed trailer", "Vehicles", "06/15/2023", 24_000_00, 6_900_00), ("2019 Skid steer", "Equipment", "05/01/2019", 51_200_00, 9_600_00),
+             ("2022 Aerator and seeder", "Equipment", "04/04/2022", 21_900_00, 3_400_00), ("2024 Stand-on mowers (2)", "Equipment", "03/18/2024", 13_300_00, 1_500_00)]
+    for a_ in sched: w.writerow([a_[0], a_[1], a_[2], f"{a_[3] / 100:.2f}", f"{a_[4] / 100:.2f}"])
+    w.writerow(["Total", "", "", f"{sum(a_[3] for a_ in sched) / 100:.2f}", f"{sum(a_[4] for a_ in sched) / 100:.2f}"])
+    assert sum(a_[3] for a_ in sched) == 21_090_000 and sum(a_[4] for a_ in sched) == 9_735_000, (sum(a_[3] for a_ in sched), sum(a_[4] for a_ in sched))
 
 json.dump(KEY, open(os.path.join(HERE, "answer-key.json"), "w"), indent=1, default=str)
 print(len(KEY), "cases written")

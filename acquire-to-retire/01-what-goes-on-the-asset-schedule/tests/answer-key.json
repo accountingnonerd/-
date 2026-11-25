@@ -1711,22 +1711,23 @@
    "Small Tools and Equipment": "review",
    "Equipment Rental": "other",
    "Utilities": "other",
-   "Advertising & Marketing": "other"
+   "Advertising & Marketing": "other",
+   "Loss on Disposal of Assets": "other"
   },
   "rollforward": [
    {
     "account": "Furniture and Equipment",
     "opening": 48125.5,
-    "debits": 16300.0,
+    "debits": 18300.0,
     "credits": -15300.0,
-    "ending": 49125.5
+    "ending": 51125.5
    },
    {
     "account": "Vehicles",
     "opening": 62450.0,
-    "debits": 15000.0,
-    "credits": 0.0,
-    "ending": 77450.0
+    "debits": 27500.0,
+    "credits": -2000.0,
+    "ending": 87950.0
    }
   ],
   "adRollforward": [
@@ -1758,6 +1759,26 @@
     "journal": false,
     "tradeIn": false,
     "land": false
+   },
+   {
+    "account": "Furniture and Equipment",
+    "date": "2026-11-30",
+    "num": "4600",
+    "name": "Harbor Supply Co",
+    "amount": 2000.0,
+    "journal": false,
+    "tradeIn": false,
+    "land": false
+   },
+   {
+    "account": "Vehicles",
+    "date": "2026-12-04",
+    "num": "5610",
+    "name": "Valley Kubota",
+    "amount": 12500.0,
+    "journal": false,
+    "tradeIn": true,
+    "land": false
    }
   ],
   "disposals": [
@@ -1768,6 +1789,14 @@
     "name": "Harbor Supply Co",
     "amount": 300.0,
     "kind": "return"
+   },
+   {
+    "account": "Vehicles",
+    "date": "2026-11-30",
+    "num": "AJE-7",
+    "name": "",
+    "amount": 2000.0,
+    "kind": "recorded"
    }
   ],
   "reversals": [],
@@ -1816,23 +1845,267 @@
     "amount": 2900.0,
     "lines": 1,
     "routine": false
+   },
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-10-06",
+    "num": "N-301",
+    "name": "Northline Equipment",
+    "amount": 3000.0,
+    "lines": 1,
+    "routine": false
+   },
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-11-09",
+    "num": "N-322",
+    "name": "Northline Equipment",
+    "amount": 3000.0,
+    "lines": 1,
+    "routine": false
    }
   ],
   "possibleSales": [],
   "costOpening": 110575.5,
   "adOpening": 59034.12,
-  "costEnding": 126575.5,
+  "costEnding": 139075.5,
   "adEnding": 73834.12,
-  "additionsTotal": 16300.0,
-  "scheduleAdditions": 16300.0,
-  "candidatesTotal": 15000.0,
+  "additionsTotal": 30800.0,
+  "scheduleAdditions": 30800.0,
+  "candidatesTotal": 21000.0,
   "depreciationBooked": 14800.0,
   "threshold": 2500.0,
   "exceptions": [
    "CAPITALIZE_CANDIDATES",
+   "DISPOSALS_RECORDED",
    "JOURNAL_ENTRY_ADDITIONS",
+   "MID_QUARTER",
    "RETURNS",
+   "TRADE_IN",
    "TRANSFERS"
   ]
+ },
+ "22": {
+  "title": "The readers' sample: Ridgeline Landscaping, with the reader's decisions, last year's schedule, this year's depreciation and the sold truck's figures typed",
+  "kind": "planted",
+  "file": "22-sample-ridgeline-landscaping.xlsx",
+  "status": "COMPUTED",
+  "layout": "qbo",
+  "period": {
+   "from": "2026-01-01",
+   "to": "2026-12-31"
+  },
+  "accounts": {
+   "Equipment": "fa",
+   "Vehicles": "fa",
+   "Accumulated Depreciation": "ad",
+   "Depreciation Expense": "dep",
+   "Repairs and Maintenance": "review",
+   "Office Supplies & Software": "review",
+   "Small Tools and Equipment": "review",
+   "Fuel": "other",
+   "Utilities": "other",
+   "Rent": "other"
+  },
+  "rollforward": [
+   {
+    "account": "Equipment",
+    "opening": 86400.0,
+    "debits": 14800.0,
+    "credits": 0.0,
+    "ending": 101200.0
+   },
+   {
+    "account": "Vehicles",
+    "opening": 124500.0,
+    "debits": 61250.0,
+    "credits": -16000.0,
+    "ending": 169750.0
+   }
+  ],
+  "adRollforward": [
+   {
+    "account": "Accumulated Depreciation",
+    "opening": -97350.0,
+    "credits": -16800.0,
+    "debits": 0.0,
+    "ending": -114150.0
+   }
+  ],
+  "additions": [
+   {
+    "account": "Equipment",
+    "date": "2026-03-09",
+    "num": "3104",
+    "name": "Valley Kubota",
+    "amount": 14800.0,
+    "journal": false,
+    "tradeIn": false,
+    "land": false
+   },
+   {
+    "account": "Vehicles",
+    "date": "2026-05-20",
+    "num": "3187",
+    "name": "Carver Ford",
+    "amount": 61250.0,
+    "journal": false,
+    "tradeIn": false,
+    "land": false
+   }
+  ],
+  "disposals": [
+   {
+    "account": "Vehicles",
+    "date": "2026-06-03",
+    "num": "",
+    "name": "Jones Turf Services",
+    "amount": 16000.0,
+    "kind": "proceeds"
+   }
+  ],
+  "reversals": [],
+  "transfers": [],
+  "payments": [],
+  "candidates": [
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-02-01",
+    "num": "IRR-2",
+    "name": "Clearwater Irrigation",
+    "amount": 2750.0,
+    "lines": 1,
+    "routine": true
+   },
+   {
+    "account": "Office Supplies & Software",
+    "date": "2026-02-02",
+    "num": "3021",
+    "name": "Summit Office Systems",
+    "amount": 3480.0,
+    "lines": 1,
+    "routine": false
+   },
+   {
+    "account": "Small Tools and Equipment",
+    "date": "2026-04-22",
+    "num": "3140",
+    "name": "Greenfield Tools",
+    "amount": 5600.0,
+    "lines": 1,
+    "routine": false
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-05-01",
+    "num": "IRR-5",
+    "name": "Clearwater Irrigation",
+    "amount": 2750.0,
+    "lines": 1,
+    "routine": true
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-08-01",
+    "num": "IRR-8",
+    "name": "Clearwater Irrigation",
+    "amount": 2750.0,
+    "lines": 1,
+    "routine": true
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-08-14",
+    "num": "3290",
+    "name": "Coastal Door Co",
+    "amount": 6900.0,
+    "lines": 1,
+    "routine": false
+   },
+   {
+    "account": "Repairs and Maintenance",
+    "date": "2026-11-01",
+    "num": "IRR-11",
+    "name": "Clearwater Irrigation",
+    "amount": 2750.0,
+    "lines": 1,
+    "routine": true
+   }
+  ],
+  "possibleSales": [],
+  "costOpening": 210900.0,
+  "adOpening": 97350.0,
+  "costEnding": 270950.0,
+  "adEnding": 114150.0,
+  "additionsTotal": 76050.0,
+  "scheduleAdditions": 76050.0,
+  "candidatesTotal": 26980.0,
+  "depreciationBooked": 16800.0,
+  "threshold": 2500.0,
+  "taxDepreciation": 24610.0,
+  "depreciationAdjustment": 7810.0,
+  "scheduleCost": 210900.0,
+  "scheduleAD": 97350.0,
+  "openingDiffCost": 0.0,
+  "openingDiffAD": 0.0,
+  "exceptions": [
+   "AD_NOT_REMOVED",
+   "CAPITALIZE_CANDIDATES",
+   "DEPRECIATION_DIFFERS",
+   "DISPOSALS",
+   "ROUTINE_CHARGES"
+  ],
+  "decide": [
+   [
+    "Coastal Door Co",
+    6900.0,
+    "cap"
+   ],
+   [
+    "Greenfield Tools",
+    5600.0,
+    "cap"
+   ],
+   [
+    "Summit Office Systems",
+    3480.0,
+    "exp"
+   ],
+   [
+    "Clearwater Irrigation",
+    2750.0,
+    "exp"
+   ],
+   [
+    "Clearwater Irrigation",
+    2750.0,
+    "exp"
+   ],
+   [
+    "Clearwater Irrigation",
+    2750.0,
+    "exp"
+   ],
+   [
+    "Clearwater Irrigation",
+    2750.0,
+    "exp"
+   ]
+  ],
+  "capitalizeTotal": 12500.0,
+  "disp": [
+   [
+    42000.0,
+    36750.0
+   ]
+  ],
+  "gains": [
+   10750.0
+  ],
+  "typed": {
+   "scheduleCost": 210900.0,
+   "scheduleAD": 97350.0,
+   "taxDepreciation": 24610.0
+  }
  }
 }

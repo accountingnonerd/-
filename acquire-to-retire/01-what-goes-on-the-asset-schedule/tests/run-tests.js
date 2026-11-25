@@ -56,11 +56,15 @@ function compare(key, rep) {
   check("reversals", pairs(key.reversals, (x) => `${x.account} ${x.name} ${m2(x.amount)}`), pairs(rep.reversals, (x) => `${x.account} ${x.name} ${m2(x.amount)}`));
   const ck = (x) => `${x.account} ${x.date} ${x.name} ${m2(x.amount)} lines:${x.lines} repeats:${x.routine}`;
   check("bills in expense accounts", pairs(key.candidates, ck), pairs(rep.candidates, ck));
-  check("nothing decided for the accountant", true, (rep.candidates || []).every((c) => c.decision === "undecided"));
   for (const f of ["costOpening", "adOpening", "costEnding", "adEnding", "additionsTotal", "scheduleAdditions", "candidatesTotal", "depreciationBooked", "threshold"])
     check(f, key[f], rep[f], near(key[f], rep[f]));
   for (const f of ["taxDepreciation", "depreciationAdjustment", "scheduleCost", "scheduleAD", "openingDiffCost", "openingDiffAD"])
     if (key[f] !== undefined) check(f, key[f], rep[f], near(key[f], rep[f]));
+  if (key.decide) {
+    check("capitalized after the decisions", key.capitalizeTotal, rep.capitalizeTotal, near(key.capitalizeTotal, rep.capitalizeTotal));
+    check("bills left undecided", 0, rep.undecided);
+  } else check("nothing decided for the accountant", true, (rep.candidates || []).every((c) => c.decision === "undecided"));
+  if (key.gains) check("gain or loss on each sale", key.gains.map(m2).join(","), (rep.disposals || []).filter((d) => d.kind === "proceeds").map((d) => m2(d.gain)).join(","));
   if (key.notAddUp) check("accounts that do not add up", key.notAddUp.join(","), (rep.notAddUp || []).join(","));
   return out;
 }
@@ -105,6 +109,24 @@ function compare(key, rep) {
         if (key.typed.scheduleAD !== undefined) await page.fill("input#sched-ad", key.typed.scheduleAD.toFixed(2));
         if (key.typed.taxDepreciation !== undefined) await page.fill("input#tax-dep", key.typed.taxDepreciation.toFixed(2));
         await page.click("button#update");
+        await wait(before);
+      }
+      if (key.decide) {                    // the reader's decisions in step 3b: capitalize or keep as expense
+        const open = await page.evaluate(() => window.__report.candidates.map((c) => ({ id: c.id, name: c.name, amount: c.amount, done: false })));
+        for (const [name, amount, choice] of key.decide) {
+          const c = open.find((x) => !x.done && x.name === name && Math.abs(x.amount - amount) < 0.005);
+          if (!c) { errors.push("no bill to decide: " + name + " " + amount); continue; }
+          const before = await page.evaluate(() => JSON.stringify(window.__report));
+          await page.check(`input.dec[data-id="${c.id}"][value="${choice}"]`);
+          await wait(before);
+          c.done = true;
+        }
+      }
+      if (key.disp) {                      // the sold asset's cost and depreciation to date, in step 3c
+        const fields = await page.locator("input.disp").all();
+        for (let i = 0; i < key.disp.length; i++) { await fields[2 * i].fill(key.disp[i][0].toFixed(2)); await fields[2 * i + 1].fill(key.disp[i][1].toFixed(2)); }
+        const before = await page.evaluate(() => JSON.stringify(window.__report));
+        await page.click("button#update-disp");
         await wait(before);
       }
       rep = await page.evaluate(() => JSON.parse(JSON.stringify(window.__report)));
