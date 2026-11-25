@@ -1,0 +1,11 @@
+Series 1 · Agent 5 | The year-end fixed asset review, done from the general ledger
+
+A $6,900 door in Repairs. A $5,600 sprayer in Small Tools. $16,000 from a sold truck credited straight to Vehicles.
+
+The depreciation schedule knows about none of them. This free tool finds them in a client's general ledger, and you decide each one.
+
+The article has the one prompt that rebuilds it, a sample client to test it on, and the steps. No coding, no Excel skills.
+
+It is the first edition of the One Painful Problem newsletter. Subscribe and the next tool comes to you.
+
+#Accounting #CPA #Tax

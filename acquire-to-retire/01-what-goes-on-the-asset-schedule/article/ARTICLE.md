@@ -12,7 +12,7 @@ SEO description (140-160): Find what belongs on a client's depreciation schedule
 
 In January, the bookkeeper at Ridgeline Landscaping sends over the year's books with a note: "We bought a new truck and a mower this year. Everything else is the same."
 
-Last year's depreciation schedule has six assets on it. The new truck and the mower are in the Vehicles and Equipment accounts, where they belong. The rest of what the schedule needs is scattered through 200 lines of general ledger:
+Last year's depreciation schedule has six assets on it. The new truck and the mower are in the Vehicles and Equipment accounts, where they belong. The rest of what the schedule needs is scattered through a hundred lines of general ledger:
 - a $6,900 shop door replaced, posted to Repairs and Maintenance;
 - a $5,600 trailer sprayer, posted to Small Tools;
 - $16,000 from selling the old F-250, deposited and credited straight to Vehicles, so no gain was ever recorded and the truck's depreciation is still on the books;
