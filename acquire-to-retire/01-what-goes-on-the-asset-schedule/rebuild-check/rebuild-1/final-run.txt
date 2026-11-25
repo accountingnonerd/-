@@ -1,0 +1,26 @@
+Testing: /home/user/one-painful-problem/acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1/what-goes-on-the-asset-schedule.html
+
+PASS  01  QuickBooks Online, a clean year: purchases recorded as assets, depreciation booked  (34/34 checks, 125 ms)
+PASS  02  QuickBooks Online, last year's schedule and this year's depreciation typed in: both agree  (40/40 checks, 237 ms)
+PASS  03  Planted: an HVAC unit, laptops and a machine expensed; a quarterly service contract that is routine  (36/36 checks, 107 ms)
+PASS  04  Planted: a truck sold with the proceeds credited to Vehicles; accumulated depreciation untouched  (36/36 checks, 102 ms)
+PASS  05  Planted: no depreciation booked; the tax software's figure typed in  (37/37 checks, 166 ms)
+PASS  06  Planted: opening cost and accumulated depreciation differ from last year's schedule  (41/41 checks, 174 ms)
+PASS  07  Xero Account Transactions: default account names; lighting expensed as a repair  (35/35 checks, 144 ms)
+PASS  08  QuickBooks Desktop General Ledger: account numbers, Debit and Credit, no period  (37/37 checks, 99 ms)
+PASS  09  QuickBooks Online as CSV: dollar signs, parentheses; a returned part credited to the asset  (36/36 checks, 89 ms)
+PASS  10  A bill entered twice and reversed; an addition by journal entry; the reclassed repair is not proposed again  (37/37 checks, 106 ms)
+PASS  11  The wrong report: a trial balance  (4/4 checks, 80 ms)
+PASS  12  The wrong report: an A/R aging  (4/4 checks, 91 ms)
+PASS  13  Planted: a line missing from the export, so Furniture and Equipment does not add up  (36/36 checks, 106 ms)
+PASS  14  The client has audited statements: a $5,000 threshold typed in  (35/35 checks, 171 ms)
+PASS  15  An asset account named 'Shop Assets': the page asks, the accountant marks it as a fixed asset  (33/33 checks, 130 ms)
+PASS  16  QuickBooks Online, a fiscal year ending June 30 (still twelve months)  (35/35 checks, 102 ms)
+PASS  17  A sale booked properly: cost and accumulated depreciation removed, gain recorded  (36/36 checks, 104 ms)
+PASS  18  QuickBooks Online fixed asset tracking: 'Original cost' and 'Depreciation' sub-accounts, nested, with parent totals  (35/35 checks, 115 ms)
+PASS  19  Accounts named after assets that are not assets (a truck loan, a note payable, a gain); amortization; a down payment in auto expense  (41/41 checks, 105 ms)
+PASS  20  A truck bought net of a trade-in, loan payments posted to Vehicles, land and a building bought in November  (41/41 checks, 117 ms)
+PASS  21  Purchases already reclassed, a part refund, a bill split over two accounts, a transfer between asset accounts, a return; three tools that are not routine  (42/42 checks, 117 ms)
+PASS  22  The readers' sample: Ridgeline Landscaping, with the reader's decisions, last year's schedule, this year's depreciation and the sold truck's figures typed  (47/47 checks, 925 ms)
+
+22/22 cases passed, 758/758 checks.
