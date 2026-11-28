@@ -16,7 +16,7 @@ It decides nothing for you. Until you say what each odd pair is, it won't say "i
 
 You can rebuild it yourself: one prompt pasted into an AI assistant, about 15 minutes, no coding. A sample client and the numbers you should see are included.
 
-Before release: 27 test files, 833 checks. A skeptical-CPA review called the first version "not ready": it could tie by plugging the opening difference. That is fixed, along with everything else it found.
+Before release: 28 test files, 839 checks. A skeptical-CPA review called the first version "not ready": it could tie by plugging the opening difference. That is fixed, along with everything else it found.
 
 The prompt, the sample and the ready-made tool:
 https://github.com/accountingnonerd/-/tree/main/record-to-report/02-why-wont-the-bank-rec-tie

@@ -55,11 +55,11 @@ It also does the part that is easy to forget: which checks were already outstand
 
 ## What the reviews found
 
-Before release, a separate AI review played a skeptical CPA and ran 18 file pairs of its own. Its verdict on the first version: not ready. The worst problem was that the start of the bank file worked like a plug. Whatever old items added up to the difference were declared outstanding, so the rec tied by construction. In one of its files, an unrecorded $1,200 loan payment disappeared that way. It also found a customer's check number matched to the company's own check, and "fee" matched inside "coffee". All of these are fixed, and each is now a test file. The tool must pass 27 test files, 833 checks in all.
+Before release, a separate AI review played a skeptical CPA and ran 18 file pairs of its own. Its verdict on the first version: not ready. The worst problem was that the start of the bank file worked like a plug. Whatever old items added up to the difference were declared outstanding, so the rec tied by construction. In one of its files, an unrecorded $1,200 loan payment disappeared that way. It also found a customer's check number matched to the company's own check, and "fee" matched inside "coffee". All of these are fixed, and each is now a test file. The tool must pass 28 test files, 839 checks in all.
 
 A second review played a first-time user working from the screen alone. It found that the page could say "It ties" while an unexplained difference sat in the opening balances. Now it never says "ties" while anything is undecided or unexplained.
 
-REBUILD_RESULT
+The last check was the prompt itself. A fresh AI session, given only the prompt, rebuilt the tool and ran it through the same tests: 22 of 27 on the first try, all 27 after one round of fixes taken from the prompt. It listed every place the prompt was unclear, and those are now spelled out. It also found a real bug: a statement balance typed wrong stopped the page with no way back except starting over. That is fixed, and it is test file 28.
 
 ## Build it yourself
 
@@ -91,7 +91,7 @@ You don't need to download anything from me to have this tool. It comes from one
 - the master prompt;
 - the sample client and what you should see;
 - the ready-made tool;
-- the 27 test files and their results.
+- the 28 test files and their results.
 
 **The prompt.** Copy it from the master copy on GitHub if you can. LinkedIn can change quotes and line breaks.
 

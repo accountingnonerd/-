@@ -742,7 +742,9 @@ function render(rep){
     return false; };
   o.push('<h2>Check these first</h2>' + (notes.length ? '<ul class="first">' + notes.map(function(e){ var done = e.level === "care" && settled(e.code);
     return '<li class="' + (done ? "info done" : e.level) + '"><span class="tag">' + (done ? "Done. " : e.level === "care" ? "Decide. " : "For your file. ") + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>' : '<p class="ok">Nothing unusual.</p>'));
-  if (stops.length) return o.join("") + '<p class="no-print"><button class="linkish" id="again" type="button">Start over with other files</button></p>';
+  // balances she typed that disagree: keep step 2 on screen so she can correct them
+  var fixTyped = stops.length && rep.balancesFrom === "typed" && stops.every(function(e){ return e.code === "BALANCES_DISAGREE"; });
+  if (stops.length && !fixTyped) return o.join("") + '<p class="no-print"><button class="linkish" id="again" type="button">Start over with other files</button></p>';
 
   // STEP 2
   o.push('<h2 id="step-2"><span class="stepno">Step 2</span> Check what was read ' + tag("check") + '</h2><div id="step-2-body">');
@@ -763,6 +765,7 @@ function render(rep){
   o.push('<p class="no-print"><button class="sec-btn" id="update-balances" type="button">Use these</button> <span class="note">or press Enter in a box.</span></p>');
   o.push('<p class="no-print"><button class="sec-btn" id="read-ok" type="button">' + (state.readOk ? "✓ Checked: go to step 3" : "This is right: go to step 3") + '</button></p></div>');
 
+  if (fixTyped) return o.join("") + '</div><p class="no-print"><button class="linkish" id="again" type="button">Start over with other files</button></p>';
   // STEP 3
   o.push('<h2 id="step-3"><span class="stepno">Step 3</span> Decide what was found</h2><div id="step-3-body">');
   o.push('<p class="purpose"><b>What this is for:</b> what makes the books and the bank differ. The page found it; you say what it is. <b>What to do:</b> work through 3a to 3c. Step 4 updates as you go.</p>');
@@ -908,7 +911,7 @@ function publish(rep){
   Array.prototype.forEach.call(document.querySelectorAll("input.dec"), function(x){ x.addEventListener("change", again(function(){ state.decide = state.decide || {}; state.decide[x.getAttribute("data-id")] = x.value; })); });
   Array.prototype.forEach.call(document.querySelectorAll("input.tick"), function(x){ x.addEventListener("change", again(function(){ state.ticks = state.ticks || {}; state.ticks[x.getAttribute("data-id")] = x.checked; })); });
   Array.prototype.forEach.call(document.querySelectorAll("select.treat"), function(x){ x.addEventListener("change", again(function(){ state.classify = state.classify || {}; state.classify[x.getAttribute("data-id")] = x.value; })); });
-  $("print").addEventListener("click", function(){ if ($("open-items") && !confirm("This reconciliation has open items: " + $("open-items").textContent.replace(/^(Not finished|Still to decide):\s*/, "") + " Print anyway?")) return; setStep(4); window.print(); });
+  if ($("print")) $("print").addEventListener("click", function(){ if ($("open-items") && !confirm("This reconciliation has open items: " + $("open-items").textContent.replace(/^(Not finished|Still to decide):\s*/, "") + " Print anyway?")) return; setStep(4); window.print(); });
   onScroll();
 }
 function showProblem(msg, swap){ var p = $("problem"); p.innerHTML = esc(msg) + (swap ? ' <button class="sec-btn" id="swap" type="button">Swap the two files</button>' : ""); p.hidden = false;

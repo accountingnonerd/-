@@ -2223,5 +2223,20 @@
     "reverse"
    ]
   ]
+ },
+ "28": {
+  "title": "Statement balances typed wrong (beginning plus the lines is not the ending): the page stops and keeps the boxes to correct them",
+  "kind": "ugly",
+  "bankFile": "04-bank-no-headings.csv",
+  "booksFile": "04-books-desktop.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "BALANCES_DISAGREE"
+  ],
+  "typed": {
+   "bankBegin": 1000.0,
+   "bankEnd": 2000.0
+  }
  }
 }

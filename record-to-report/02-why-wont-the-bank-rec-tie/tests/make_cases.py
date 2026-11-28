@@ -574,5 +574,10 @@ case("27", "The sample again, with the stale check reversed to a liability: it l
      "../../sample/mapleton-checking-bank-download-q1-2026.csv", "../../sample/mapleton-general-ledger.xlsx", kk)
 json.dump({"before": SAMPLE_BEFORE, "after": k}, open(os.path.join(HERE, "sample-expected.json"), "w"), indent=1, default=str)
 
+# ---- 28 balances typed that do not fit the bank's lines: stop, and keep step 2 so they can be corrected
+KEY["28"] = {"title": "Statement balances typed wrong (beginning plus the lines is not the ending): the page stops and keeps the boxes to correct them", "kind": "ugly",
+             "bankFile": "04-bank-no-headings.csv", "booksFile": "04-books-desktop.xlsx", "status": "COMPUTED", "stopOnly": True, "exceptions": ["BALANCES_DISAGREE"],
+             "typed": {"bankBegin": 1000.00, "bankEnd": 2000.00}}
+
 json.dump(KEY, open(os.path.join(HERE, "answer-key.json"), "w"), indent=1, default=str)
 print(len(KEY), "cases;", {c: (v["exceptions"], v.get("difference")) for c, v in KEY.items()})

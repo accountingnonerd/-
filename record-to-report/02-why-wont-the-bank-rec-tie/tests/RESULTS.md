@@ -2,15 +2,15 @@
 
 Version 1.0.0, run with `node run-tests.js` against `agent/why-wont-the-bank-rec-tie.html`.
 
-**27 of 27 cases passed; 833 of 833 individual checks.**
+**28 of 28 cases passed; 839 of 839 individual checks.**
 
-The acceptance test has 27 cases, each a pair of files: a bank download and a ledger, for invented
+The acceptance test has 28 cases, each a pair of files: a bank download and a ledger, for invented
 businesses. The bank files come in five layouts: amount and balance columns; newest first with a
 check-number column; a summary block above the lines; no heading row; and withdrawals and deposits
 columns. The ledgers come from QuickBooks Online, QuickBooks Desktop and Xero, as Excel or CSV. Most
 are built from a model of a quarter's events (deposits, checks, online payments, fees, interest, and
 the bank's lag in clearing them). The rest are short pairs written by hand for one point each.
-1 case is clean, 11 have problems planted in them, and 15 are ugly. Each case checks:
+1 case is clean, 11 have problems planted in them, and 16 are ugly. Each case checks:
 - the status and every message;
 - the account, the dates, the balances, and how many lines matched;
 - every batch, split, near miss and entry made twice, with the decision made;
@@ -26,33 +26,34 @@ is worked out from the model with those rules in `make_cases.py`, never by readi
 
 | Case | What it is | Type | Checks passed | Run time (ms) | Result |
 |---|---|---|---|---|---|
-| 01 | A normal quarter: generic bank CSV, QuickBooks Online ledger; checks outstanding, a deposit in transit, fees and interest not in the books | clean | 36/36 | 157 | PASS |
-| 02 | The bank's download newest first, with a check-number column | ugly | 36/36 | 130 | PASS |
-| 03 | A summary block above the bank's lines; a Xero ledger with three accounts, the checking account chosen | ugly | 37/37 | 134 | PASS |
-| 04 | No heading row, no balance column (the accountant types the statement's beginning and ending balances); QuickBooks Desktop ledger | ugly | 36/36 | 198 | PASS |
-| 05 | Planted: two checks entered for the wrong amount, an online payment with its digits swapped, a customer payment entered twice | planted | 39/39 | 471 | PASS |
-| 06 | Planted: card sales recorded one by one that land as one deposit; a refund paid out entered as money in; withdrawals and deposits columns | planted | 39/39 | 179 | PASS |
-| 07 | Planted: two checks over six months old, two over 90 days (one at about 165 days), and a deposit recorded but never made | planted | 39/39 | 135 | PASS |
-| 08 | The books file starts on the bank file's first day: two checks written in December clear in January and are recognized as recorded before | ugly | 37/37 | 396 | PASS |
-| 09 | Planted: a line missing from the bank's download, so its running balance jumps | planted | 4/4 | 121 | PASS |
-| 10 | The wrong books file: a trial balance | ugly | 4/4 | 88 | PASS |
+| 01 | A normal quarter: generic bank CSV, QuickBooks Online ledger; checks outstanding, a deposit in transit, fees and interest not in the books | clean | 36/36 | 136 | PASS |
+| 02 | The bank's download newest first, with a check-number column | ugly | 36/36 | 122 | PASS |
+| 03 | A summary block above the bank's lines; a Xero ledger with three accounts, the checking account chosen | ugly | 37/37 | 111 | PASS |
+| 04 | No heading row, no balance column (the accountant types the statement's beginning and ending balances); QuickBooks Desktop ledger | ugly | 37/37 | 218 | PASS |
+| 05 | Planted: two checks entered for the wrong amount, an online payment with its digits swapped, a customer payment entered twice | planted | 39/39 | 446 | PASS |
+| 06 | Planted: card sales recorded one by one that land as one deposit; a refund paid out entered as money in; withdrawals and deposits columns | planted | 39/39 | 158 | PASS |
+| 07 | Planted: two checks over six months old, two over 90 days (one at about 165 days), and a deposit recorded but never made | planted | 39/39 | 132 | PASS |
+| 08 | The books file starts on the bank file's first day: two checks written in December clear in January and are recognized as recorded before | ugly | 37/37 | 379 | PASS |
+| 09 | Planted: a line missing from the bank's download, so its running balance jumps | planted | 4/4 | 109 | PASS |
+| 10 | The wrong books file: a trial balance | ugly | 4/4 | 90 | PASS |
 | 11 | The wrong bank file: the books' ledger dropped as the bank's download | ugly | 4/4 | 110 | PASS |
-| 12 | Planted: $100.00 that no transaction explains (the bank's beginning balance does not fit the books), so it does not tie | planted | 38/38 | 158 | PASS |
-| 13 | The ledger as CSV with dollar signs and parentheses; two bank accounts, the accountant chooses the second | ugly | 37/37 | 859 | PASS |
-| 14 | No balances anywhere: the page matches, lists, and asks for the statement's balances before it can prove the tie | ugly | 37/37 | 122 | PASS |
-| 15 | A credit card account: this version reconciles bank accounts only, and says so | ugly | 4/4 | 86 | PASS |
+| 12 | Planted: $100.00 that no transaction explains (the bank's beginning balance does not fit the books), so it does not tie | planted | 38/38 | 121 | PASS |
+| 13 | The ledger as CSV with dollar signs and parentheses; two bank accounts, the accountant chooses the second | ugly | 37/37 | 975 | PASS |
+| 14 | No balances anywhere: the page matches, lists, and asks for the statement's balances before it can prove the tie | ugly | 37/37 | 124 | PASS |
+| 15 | A credit card account: this version reconciles bank accounts only, and says so | ugly | 4/4 | 82 | PASS |
 | 16 | A customer's check number on a payment received; a coffee, a building maintenance bill and a returned check that only look like bank fees | planted | 36/36 | 111 | PASS |
-| 17 | Rent paid every month: January's is missing from the books, and December's (cleared in December) must not be taken for it | planted | 36/36 | 114 | PASS |
-| 18 | The same payment to the same vendor on 12/30 (cleared in December) and 1/2: not entered twice | ugly | 34/34 | 105 | PASS |
-| 19 | The bank paid check 6001 twice and paid check 6003, which the books voided; check 6002 for the same amount is still outstanding | planted | 36/36 | 252 | PASS |
-| 20 | The statement ends 3/31 though the last line is 3/27; a pending line; amounts with DR, CR, USD and a true minus sign | ugly | 36/36 | 115 | PASS |
-| 21 | A bank line whose amount cannot be read: the page stops rather than drop it | ugly | 4/4 | 90 | PASS |
-| 22 | Payroll posted to a sub-account, Checking:Payroll: the sub-account is part of the bank account | ugly | 35/35 | 105 | PASS |
-| 23 | One deposit in the books that the bank shows as two lines; a bank check for the same amount as a book check but a different number | ugly | 36/36 | 116 | PASS |
-| 24 | Two old checks of $100, one still outstanding: the page cannot tell which and asks; the accountant ticks December's | planted | 35/35 | 196 | PASS |
-| 25 | Same files as 08, but the accountant ticks only one of the two suggested lines: the other stays unexplained and it does not tie | ugly | 38/38 | 202 | PASS |
+| 17 | Rent paid every month: January's is missing from the books, and December's (cleared in December) must not be taken for it | planted | 36/36 | 96 | PASS |
+| 18 | The same payment to the same vendor on 12/30 (cleared in December) and 1/2: not entered twice | ugly | 34/34 | 112 | PASS |
+| 19 | The bank paid check 6001 twice and paid check 6003, which the books voided; check 6002 for the same amount is still outstanding | planted | 36/36 | 243 | PASS |
+| 20 | The statement ends 3/31 though the last line is 3/27; a pending line; amounts with DR, CR, USD and a true minus sign | ugly | 36/36 | 123 | PASS |
+| 21 | A bank line whose amount cannot be read: the page stops rather than drop it | ugly | 4/4 | 89 | PASS |
+| 22 | Payroll posted to a sub-account, Checking:Payroll: the sub-account is part of the bank account | ugly | 35/35 | 133 | PASS |
+| 23 | One deposit in the books that the bank shows as two lines; a bank check for the same amount as a book check but a different number | ugly | 36/36 | 113 | PASS |
+| 24 | Two old checks of $100, one still outstanding: the page cannot tell which and asks; the accountant ticks December's | planted | 35/35 | 188 | PASS |
+| 25 | Same files as 08, but the accountant ticks only one of the two suggested lines: the other stays unexplained and it does not tie | ugly | 38/38 | 200 | PASS |
 | 26 | The readers' sample: Mapleton Landscaping, with the reader's decisions (fix the check entered for the wrong amount, remove the deposit entered twice, keep the stale check outstanding) | planted | 40/40 | 345 | PASS |
-| 27 | The sample again, with the stale check reversed to a liability: it leaves the outstanding total and the books go up by the same $415.00 | planted | 40/40 | 395 | PASS |
+| 27 | The sample again, with the stale check reversed to a liability: it leaves the outstanding total and the books go up by the same $415.00 | planted | 40/40 | 371 | PASS |
+| 28 | Statement balances typed wrong (beginning plus the lines is not the ending): the page stops and keeps the boxes to correct them | ugly | 5/5 | 180 | PASS |
 
 ## What changed the tool
 
@@ -111,6 +112,13 @@ Running the sample through the page found two more things:
 - Reversing a stale check to a liability made the entry but left the check in the outstanding total,
   so the proof no longer matched the entries. Now the reversed check leaves the outstanding total and
   the books go up by the same amount (case 27).
+
+### The rebuild check
+A fresh AI session rebuilt the tool from `PROMPT.txt` alone and ran it against these tests: 22 of 27
+cases on the first run, 27 of 27 after one round of fixes taken from the prompt (see
+`../rebuild-check/rebuild-1/`). It listed the places where the prompt was unclear; the prompt now says
+them plainly. It also found that balances typed wrong stopped the page with no way to correct them
+but starting over. Now step 2 stays on screen (case 28).
 
 ### Broken copies the tests missed at first
 25 copies of the tool were made, each with one rule broken. Six got past the first tests:

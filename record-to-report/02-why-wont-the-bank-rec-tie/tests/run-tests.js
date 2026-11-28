@@ -77,11 +77,12 @@ function compare(key, rep) {
       }
       rep = await page.evaluate(() => JSON.parse(JSON.stringify(window.__report)));
       shown = await page.evaluate(() => { const vis = (el) => !!el && !el.hidden && el.offsetParent !== null && el.innerText.trim().length > 0;
-        return { stop: vis(document.getElementById("stop-banner")) || vis(document.getElementById("problem")) }; });
+        return { stop: vis(document.getElementById("stop-banner")) || vis(document.getElementById("problem")), boxes: !!document.getElementById("bank-begin") }; });
     } catch (e) { errors.push(String(e).split("\n")[0]); }
     const ms = Date.now() - t0, checks = compare(key, rep);
     const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "BANK_FILE_GAPS", "BOOKS_DO_NOT_ADD_UP", "UNREAD_ROWS", "BALANCES_DISAGREE", "CARD_NOT_SUPPORTED"].includes(c));
     checks.push({ what: wantStop ? "shows the stop message" : "shows no stop message", expected: wantStop, got: !!shown.stop, ok: wantStop === !!shown.stop });
+    if (key.typed) checks.push({ what: "keeps the balance boxes to correct them", expected: true, got: !!shown.boxes, ok: !!shown.boxes });
     if (errors.length) checks.push({ what: "runs without errors", expected: "no errors", got: errors.join(" | "), ok: false });
     results.push({ id, key, checks, ms, pass: checks.every((c) => c.ok) });
     await page.close();
