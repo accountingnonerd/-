@@ -26,7 +26,7 @@ Every tool in this repository:
 
 | Series 2 agent | Process | Folder no. | Tool | What it does | Date | Version |
 |---|---|---|---|---|---|---|
-| 1 | [Record-to-Report (close)](record-to-report/) | 02 | [Why won't the bank rec tie?](record-to-report/02-why-wont-the-bank-rec-tie/) | Matches the bank's download to the books' ledger for any span of months: checks by number, card batches, outstanding items and their age, bank items not in the books, the entries that look wrong (wrong amount, digits swapped, sign reversed, entered twice, paid twice), and the reconciliation that proves it, with the entries and the client questions. | not yet published | 1.0.0 |
+| 1 | [Record-to-Report (close)](record-to-report/) | 02 | [Why won't the bank rec tie?](record-to-report/02-why-wont-the-bank-rec-tie/) | Matches the bank's download to the books' ledger for any span of months: checks by number, card batches, outstanding items and their age, bank items not in the books, the entries that look wrong (wrong amount, digits swapped, sign reversed, entered twice, paid twice), and the reconciliation that proves it, with the entries and the client questions. | 2026-11-28 | 1.0.0 |
 
 ## Parked tools
 
@@ -42,6 +42,7 @@ Each release is recorded by its commit:
 
 | Episode | Version | Commit |
 |---|---|---|
+| Record-to-Report 02, Why won't the bank rec tie? | 1.0.0 | `aa6f9ec84f9f5f23f1baf0b83b329509e47c26aa` |
 | Record-to-Report 01, Did last year change? | 1.0.0 | `56f31c977a7c288989d9ac18d69bd822335be03a` |
 | Order-to-Cash 02, What's really collectible? | 1.0.0 | `79f2bc17f10628e1640a0d771d34e4f021f20b14` |
 | Acquire-to-Retire 01, What goes on the asset schedule? | 1.0.0 | `f15a03a1ccb7e9e298ba75486dd9c5e51a69b7dd` |

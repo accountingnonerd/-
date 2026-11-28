@@ -1,5 +1,5 @@
 <!--
-DRAFT FOR APPROVAL. Not published.
+Published 2026-11-28 as a regular LinkedIn post (https://www.linkedin.com/feed/update/urn:li:ugcPost:7532513131529674752) with this article as a 9-page PDF.
 One Painful Problem, Series 2, Agent 1 (Record-to-Report). Published as a regular LinkedIn post
 (LINKEDIN-POST.txt) with this article as a PDF (build_pdf.js). LinkedIn's editor has no tables: lists are used instead.
 SEO title (max 60): Why won't the bank rec tie? A free matching tool

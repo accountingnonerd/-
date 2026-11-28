@@ -27,7 +27,7 @@ whether the page or you acts.
 
 | Series 2 | Process | Agent | Status |
 |---|---|---|---|
-| Agent 1 | Record-to-Report | [Bank reconciliation](record-to-report/02-why-wont-the-bank-rec-tie/) | built and tested; post awaiting approval |
+| Agent 1 | Record-to-Report | [Bank reconciliation](record-to-report/02-why-wont-the-bank-rec-tie/) | published 2026-11-28 ([post](https://www.linkedin.com/feed/update/urn:li:ugcPost:7532513131529674752)) |
 | Agent 2 | Order-to-Cash and Procure-to-Pay | 13-week cash flow from the AR and AP agings | planned |
 | Agent 3 | Acquire-to-Retire (financing) | Loan schedule tied to the lender statement | planned |
 | Agent 4 | Hire-to-Retire | Payroll tied to the general ledger | to be chosen in Stage 1 |
