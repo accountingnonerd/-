@@ -5,6 +5,11 @@ Inputs: the bank's lines (date, description, check number or None, amount) with 
 and ending balances when known; the books' lines for the account (date, type, num, name, memo, amount)
 with the account's opening balance at the start of the books file.
 
+0. The account. If the books' file has several accounts, the bank account is the first whose name
+   contains "checking", else "operating", else "bank", else "savings", "money market" or "cash"
+   (never "undeposited", "petty" or "clearing"); the accountant can choose another.
+   A file that does not add up (the bank's running balance jumps, or a ledger account does not add up
+   to its own totals) stops the review: only that message is shown.
 1. Span. The bank span is the first to the last bank line date. Book lines dated after the span's
    last day are set aside ("after the statement").
 2. Matching, one bank line to one book line unless said otherwise, bank lines taken in date order
@@ -27,7 +32,7 @@ with the account's opening balance at the start of the books file.
       blank) as a matched book line dated at most 5 days apart.
 4. Before the bank lines. O = (books' balance on the day before the bank span starts) - (bank's
    beginning balance) is what was outstanding then. Of it, the book lines dated before the span that
-   were matched inside the span account for some. The rest, R = O - their sum, must be book lines
+   were matched (or paired as a near miss) inside the span account for some. The rest, R = O - their sum, must be book lines
    dated before the span that are still unmatched (still outstanding at the end). Electronic payments
    and deposits clear within days, so only checks (a number of 3 to 6 digits) and lines dated in the
    10 days before the span can still be open; every other unmatched old line cleared before the bank
@@ -141,7 +146,8 @@ def reconcile(bank, books, opening, bank_begin=None, bank_end=None):
     # 4. before the bank lines
     pre_bal = opening + sum(k["amount"] for k in bk if k["date"] < start)
     old_unmatched = sorted([k for k in bk if k["date"] < start and k["i"] not in used], key=lambda k: (k["date"], k["i"]))
-    old_matched = sum(k["amount"] for k in bk if k["date"] < start and k["i"] in matched_books)
+    paired = matched_books | {n["book"] for n in near}       # cleared inside the span (exactly, or with a near miss)
+    old_matched = sum(k["amount"] for k in bk if k["date"] < start and k["i"] in paired)
     cleared_before, from_before = [], []
     still_old = list(old_unmatched)
     start_explained = None

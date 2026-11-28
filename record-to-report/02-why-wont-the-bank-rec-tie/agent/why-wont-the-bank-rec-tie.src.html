@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Won't the Bank Rec Tie?</title>
+<!-- One Painful Problem, Record-to-Report episode 02. Version 1.0.0. One file. Open it in any browser. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><!--XLSX: build.py replaces this line with the library itself-->
+<style>
+:root{
+  --paper:#ffffff; --desk:#eef1f0; --ink:#14201c; --soft:#4d5a55; --rule:#c9d1ce;
+  --ledger:#15614a; --ledger-tint:#e4f0eb;
+  --stop:#a3211b; --stop-tint:#fbe9e7; --care:#8a5a00; --care-tint:#fdf3d9;
+  --sans:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;background:var(--desk);color:var(--ink);font-family:var(--sans);font-size:19px;line-height:1.5}
+.sheet{max-width:1100px;margin:0 auto;background:var(--paper);min-height:100vh;padding:36px max(20px,4vw) 60px}
+h1{font-size:2.5rem;line-height:1.15;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:1.4rem;margin:40px 0 4px;padding-top:14px;border-top:3px solid var(--ink)}
+h2 small{font-weight:400;color:var(--soft);font-size:1rem}
+h3{font-size:1.1rem;margin:22px 0 6px}
+p{margin:8px 0}
+.lead{font-size:1.3rem;color:var(--soft);max-width:40em;margin-bottom:22px}
+.pre{margin:0 0 16px;font-size:1.05rem}
+.pre input,.typed input,.rates input{font:inherit;padding:6px 8px;border:2px solid var(--ink);border-radius:6px}
+.pre input{width:10em;margin-left:8px}
+#drop{display:block;border:4px dashed var(--ledger);background:var(--ledger-tint);border-radius:10px;padding:48px 24px;text-align:center;cursor:pointer;position:relative}
+#drop.over{background:#cfe6dc;border-style:solid}
+#drop strong{display:block;font-size:1.8rem;color:var(--ledger)}
+#drop span{display:block;font-size:1.1rem;margin-top:6px}
+#file{position:absolute;width:1px;height:1px;opacity:0}
+#drop:focus-within{outline:4px solid var(--ink);outline-offset:3px}
+.how{margin-top:16px;color:var(--soft)}
+.promise{margin-top:26px;padding:16px 20px;border-left:6px solid var(--ledger);background:#f6f8f7}
+.made{margin-top:22px;color:var(--soft);font-size:.9rem}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--ledger);text-decoration:underline;cursor:pointer}
+.bar{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin-bottom:26px}
+.bar .hint{color:var(--soft);font-size:.95rem;flex-basis:100%}
+.main-btn{font:inherit;font-size:1.35rem;font-weight:700;background:var(--ledger);color:#fff;border:0;border-radius:8px;padding:16px 30px;cursor:pointer}
+.sec-btn{font:inherit;font-size:1.05rem;font-weight:700;background:#fff;color:var(--ledger);border:2px solid var(--ledger);border-radius:8px;padding:8px 18px;cursor:pointer}
+.main-btn:focus-visible,.sec-btn:focus-visible,.linkish:focus-visible,input:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
+.stopbox{background:var(--stop-tint);border:3px solid var(--stop);border-radius:8px;padding:18px 22px;margin:18px 0;font-size:1.15rem}
+.stopbox b{color:var(--stop)}
+.wp-head{display:grid;grid-template-columns:1fr 300px;gap:8px 34px;align-items:start}
+.meta{color:var(--soft);font-size:1rem}
+.verdict{font-size:1.35rem;font-weight:700;margin:6px 0 12px;padding:14px 18px;background:var(--ledger-tint);border-left:8px solid var(--ledger)}
+.verdict.bad{background:var(--stop-tint);border-color:var(--stop)}
+.verdict .sub{display:block;font-weight:400;font-size:1.1rem;margin-top:6px}
+.sign{display:grid;grid-template-columns:1fr 110px;gap:8px;font-size:.95rem;color:var(--soft)}
+.sign label{display:block}
+.sign input{display:block;width:100%;font:inherit;font-size:1.05rem;color:var(--ink);border:0;border-bottom:2px solid var(--ink);background:#f6f8f7;padding:4px 6px;border-radius:0}
+.typed{background:#f6f8f7;border:2px solid var(--rule);border-radius:8px;padding:14px 16px;margin:12px 0}
+.typed label{font-weight:700}
+.typed input{width:11em;margin:0 10px}
+ul.first{list-style:none;padding:0;margin:10px 0}
+ul.first li{padding:12px 16px 12px 18px;margin:8px 0;border-left:8px solid var(--care);background:var(--care-tint)}
+ul.first li.stop{border-color:var(--stop);background:var(--stop-tint)}
+ul.first li.info{border-color:var(--rule);background:#f6f8f7}
+ul.first li .tag{font-weight:700}
+.ok{padding:12px 18px;border-left:8px solid var(--ledger);background:var(--ledger-tint)}
+.scroll{overflow-x:auto}
+.scroll table{min-width:640px}
+table{border-collapse:collapse;width:100%;font-size:1rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule);overflow-wrap:break-word}
+th{font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);border-bottom:2px solid var(--ink)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.num{white-space:nowrap}
+tr.sum td{border-top:2px solid var(--ink);font-weight:700}
+.tie-ok{color:var(--ledger);font-weight:700}.tie-bad{color:var(--stop);font-weight:700}
+.note{color:var(--soft);font-size:.95rem}
+.rates{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:8px 0}
+.rates label{font-size:.85rem;color:var(--soft)}
+.rates input{width:100%;margin-top:2px}
+details.cust{border-bottom:1px solid var(--rule);padding:6px 0}
+details.cust summary{cursor:pointer;font-weight:700}
+.letter{white-space:pre-wrap;background:#f6f8f7;border-left:4px solid var(--ledger);padding:10px 14px;font-size:.95rem;margin:8px 0}
+details.big>summary{cursor:pointer;font-size:1.1rem;padding:10px 0;color:var(--ledger)}
+.foot{margin-top:44px;padding-top:16px;border-top:1px solid var(--rule);color:var(--soft);font-size:.95rem}
+[hidden]{display:none!important}
+@media (max-width:760px){
+  body{font-size:17px}h1{font-size:1.9rem}.wp-head{grid-template-columns:1fr}.rates{grid-template-columns:repeat(2,1fr)}
+  #drop strong{font-size:1.4rem}
+}
+@media print{
+  body{background:#fff;font-size:9pt;line-height:1.35}
+  th,td{padding:3px 6px}
+  .sheet{max-width:none;padding:0;min-height:0}
+  .no-print{display:none!important}
+  h1{font-size:20pt}
+  h2{margin-top:14pt;break-after:avoid;font-size:13pt}
+  tr,ul.first li,.stopbox{break-inside:avoid}
+  thead{display:table-header-group}
+  .scroll{overflow:visible}
+  details.big:not([open]){display:none}
+  details.big>summary{display:none}
+}
+
+.steps{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:0 0 22px}
+.steps li{flex:1 1 180px;padding:10px 14px;border-radius:8px;background:#f1f4f3;color:var(--soft);font-weight:600;font-size:1rem;border:2px solid transparent}
+.steps li b{display:inline-block;width:1.7em;height:1.7em;line-height:1.7em;text-align:center;border-radius:50%;background:#d6dedb;color:var(--ink);margin-right:6px}
+.steps li.now{background:var(--ledger-tint);color:var(--ink);border-color:var(--ledger)}
+.steps li.now b,.steps li.done b{background:var(--ledger);color:#fff}
+.steps li.done{color:var(--ink)}
+.where{font-weight:700;color:var(--ledger);margin:0 0 6px}
+.purpose{background:#f6f8f7;border-left:6px solid var(--rule);padding:10px 14px}
+.stepno{display:inline-block;background:var(--ledger);color:#fff;border-radius:6px;padding:0 10px;margin-right:8px;font-size:1rem;vertical-align:3px}
+.tag.auto,.tag.you{display:inline-block;font-size:.8rem;font-weight:700;letter-spacing:.03em;border-radius:20px;padding:2px 10px;vertical-align:4px;margin-left:6px}
+.tag.auto{background:#e7ecf6;color:#2c4a8a}.tag.you{background:var(--care-tint);color:var(--care)}
+.pill{display:inline-block;font-size:.8rem;background:#eef1f0;border-radius:12px;padding:1px 8px;color:var(--soft)}
+ul.spec li,ol.next li{margin:6px 0}
+select.role{font:inherit;font-size:.95rem;padding:4px 6px;border:2px solid var(--ink);border-radius:6px;max-width:100%}
+tr.r-other td{color:var(--soft)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid3 label{display:block;font-weight:700;font-size:.95rem}
+.grid3 input{display:block;width:100%;margin:6px 0 0}
+input.cap{width:22px;height:22px}
+.next-hint{font-weight:600}
+table.example{font-size:.9rem}
+@media (max-width:760px){.grid3{grid-template-columns:1fr}.steps li{flex-basis:45%}}
+</style>
+<style>
+.steps{position:sticky;top:0;z-index:5;background:#fff;padding:8px 0;margin:-8px 0 18px;border-bottom:1px solid var(--rule)}
+.steps li{padding:0;flex:1 1 170px}
+.steps li a,.steps li span.s{display:block;padding:8px 12px;color:inherit;text-decoration:none;border-radius:8px}
+.steps li a:hover{background:#e6ece9}
+.steps li .st{display:block;font-size:.8rem;font-weight:400;color:var(--soft);margin-left:2.4em}
+.decide{display:flex;gap:6px;flex-wrap:wrap}
+.decide label{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--rule);border-radius:20px;padding:3px 12px;cursor:pointer;font-size:.95rem;white-space:nowrap}
+.decide input{width:18px;height:18px;margin:0}
+.decide label.on{border-color:var(--ledger);background:var(--ledger-tint);font-weight:700}
+.undecided{color:var(--care);font-weight:700}
+.money-in{width:7.5em;font:inherit;padding:4px 6px;border:2px solid var(--ink);border-radius:6px}
+.bad-input{color:var(--stop);font-weight:700;font-size:.9rem;display:block}
+.parts{display:block;color:var(--soft);font-size:.9rem}
+.print-only{display:none}
+[id^="step-"]{scroll-margin-top:120px}
+label.small{display:block;font-size:.85rem;color:var(--soft);margin-top:6px}
+label.small select{font:inherit;font-size:.9rem;max-width:14em;margin-left:4px}
+#entries tr.memo td{border-bottom:2px solid var(--rule);color:var(--soft);font-size:.9rem;padding-top:0}
+#entries tr.first-line td{border-top:0}
+.sign{grid-template-columns:1fr 1fr}.sign label:first-child{grid-column:1 / -1}
+@media (max-width:760px){table.cards td[aria-hidden]{display:none}}
+@media (max-width:760px){
+  table.cards,table.cards tbody,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards{min-width:0!important}
+  table.cards thead{display:none}
+  table.cards tr{border:2px solid var(--rule);border-radius:10px;padding:8px 12px;margin:10px 0}
+  table.cards td{border:0;padding:3px 0;text-align:left!important}
+  table.cards td[data-label]::before{content:attr(data-label) ": ";font-weight:700;color:var(--soft);font-size:.85rem}
+  table.cards tr.sum{border-color:var(--ink)}
+  .steps{gap:4px}.steps li{flex:1 1 20%}.steps li .st{display:none}
+  .steps li:not(.now) .s,.steps li:not(.now) a{font-size:0;text-align:center}.steps li:not(.now) b{font-size:15px;margin:0}
+  .steps li.now{flex:3 1 40%}.steps li .s,.steps li a{padding:6px 8px;font-size:.9rem}
+}
+@media print{
+  #steps,#step-2,#step-2-body,#step-3,#step-3-body,.no-print{display:none!important}
+  .print-only{display:block}
+  .sign input{border:0;background:none;outline:none}
+  .tag,.stepno{display:none!important}
+  h2,h3{break-after:avoid}
+  *:focus{outline:none!important}
+}
+</style>
+<style>
+.drops{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.drop{display:block;border:4px dashed var(--ledger);background:var(--ledger-tint);border-radius:10px;padding:30px 20px;text-align:center;cursor:pointer;position:relative}
+.drop.over{background:#cfe6dc;border-style:solid}
+.drop strong{display:block;font-size:1.4rem;color:var(--ledger)}
+.drop span{display:block;font-size:1rem;margin-top:6px}
+.drop .got{display:block;margin-top:10px;font-weight:700;color:var(--ink)}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop:focus-within{outline:4px solid var(--ink);outline-offset:3px}
+.drop .n{display:inline-block;width:2em;height:2em;line-height:2em;border-radius:50%;background:var(--ledger);color:#fff;font-weight:700;margin-bottom:8px}
+table.proof td.num{min-width:9em}
+table.proof tr.big td{font-weight:700;border-top:2px solid var(--ink)}
+@media (max-width:760px){.drops{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<ol class="steps no-print" id="steps" aria-label="The four steps">
+  <li data-step="1"><span class="s"><b>1</b> Give the two files<span class="st">you</span></span></li>
+  <li data-step="2"><span class="s"><b>2</b> Check what was read<span class="st">you check</span></span></li>
+  <li data-step="3"><span class="s"><b>3</b> Decide what was found<span class="st">you decide</span></span></li>
+  <li data-step="4"><span class="s"><b>4</b> Print the reconciliation<span class="st">built from your choices</span></span></li>
+</ol>
+
+<!-- ============ STEP 1: START SCREEN ============ -->
+<section id="start">
+  <p class="where">Step 1 of 4: give the page the bank's download and the books' ledger for the same account.</p>
+  <h1>Why won't the bank rec tie?</h1>
+  <p class="lead">This page matches the bank's transactions to the books for one account, over one month or several. It lists what is still outstanding and how old it is, what the bank has that the books do not, the likely typos, reversed signs and duplicates, and the reconciliation that proves it.</p>
+  <div class="drops">
+    <label class="drop" for="bank-file"><span class="n">1</span><strong>The bank's download</strong><span>The transactions from the bank's website, for the months to reconcile. CSV or Excel.</span><span class="got" id="bank-got"></span><input type="file" id="bank-file" accept=".csv,.txt,.xlsx,.xls,.xlsm"></label>
+    <label class="drop" for="books-file"><span class="n">2</span><strong>The books' ledger</strong><span>The general ledger detail for the bank account, starting a few months earlier. CSV or Excel.</span><span class="got" id="books-got"></span><input type="file" id="books-file" accept=".csv,.txt,.xlsx,.xls,.xlsm"></label>
+  </div>
+  <div id="problem" class="stopbox" hidden role="alert"></div>
+  <p class="how">No files yet? <button class="linkish" id="sample" type="button">Try it on a made-up sample.</button></p>
+
+  <h2>What files to get</h2>
+  <p><b>1. From the bank:</b> on the bank's website, open the account, choose the dates (for example January 1 to March 31) and download the transactions as CSV or Excel. If the download has no balance column, keep the statement handy: you will type its beginning and ending balances.</p>
+  <p><b>2. From the books:</b> the ledger detail for the same bank account, from a few months <b>before</b> the bank's first date to the bank's last date or later. Starting earlier lets the page find checks written before the bank's dates that are still outstanding.</p>
+  <ul class="spec">
+    <li><b>QuickBooks Online:</b> Reports, General Ledger (or Transaction Detail by Account), the dates, filter to the bank account if you like, Run report, then Export, Export to Excel.</li>
+    <li><b>QuickBooks Desktop:</b> Reports, Accountant &amp; Taxes, General Ledger, the dates, then Excel.</li>
+    <li><b>Xero:</b> Reports, Account Transactions, the dates, the bank account, Update, then Export, Excel.</li>
+    <li><b>Other software:</b> the report that lists every transaction by account, with a Date, an Amount (or Debit and Credit) and a Balance column.</li>
+  </ul>
+  <p>Do not edit or sort either file: the page checks that each adds up.</p>
+
+  <h2>What happens next</h2>
+  <ol class="next" start="2">
+    <li><b>Check what was read</b> (you check): the dates, the balances and, if the ledger has several accounts, which one is the bank account.</li>
+    <li><b>Decide what was found</b> (you decide): book entries that look wrong, bank items missing from the books, and old checks.</li>
+    <li><b>Print the reconciliation</b> (built from your choices): the proof, the lists, the entries and the questions for the client.</li>
+  </ol>
+  <div class="promise">
+    <p><b>Where your data goes: nowhere.</b> This page reads the files on this computer. Nothing is uploaded, stored or sent.</p>
+    <p><b>The page finds; you decide.</b> It matches and explains; what to post is your call.</p>
+  </div>
+  <p class="made">Version 1.0.0.</p>
+</section>
+
+<section id="report" hidden>
+  <div id="out"></div>
+</section>
+</div>
+<script>
+/* =====================================================================================
+   PART 1 - READING THE GENERAL LEDGER. All money in whole cents, debit positive.
+   ===================================================================================== */
+var MONTHS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12,january:1,february:2,march:3,april:4,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
+var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function txt(v){ return v == null ? "" : String(v).replace(/^﻿/, "").trim(); }
+function parseAmount(v){
+  if (typeof v === "number") return isFinite(v) ? Math.round(v * 100) : NaN;
+  var s = txt(v); if (!s || /^[-–—]$/.test(s)) return null;
+  var neg = false;
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1).trim(); }
+  if (/-$/.test(s)) { neg = !neg; s = s.slice(0, -1); }
+  s = s.replace(/[$,\s]/g, "");
+  if (/^-/.test(s)) { neg = !neg; s = s.slice(1); }
+  if (/^\(.*\)$/.test(s)) { neg = !neg; s = s.slice(1, -1); }
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  var p = s.split("."), c = parseInt(p[0] || "0", 10) * 100 + (p[1] ? Math.round(parseFloat("0." + p[1]) * 100) : 0);
+  return neg ? -c : c;
+}
+function amt(v){ var c = parseAmount(v); return c == null || isNaN(c) ? 0 : c; }
+function hasAmt(v){ var c = parseAmount(v); return c != null && !isNaN(c); }
+function dayNum(y, m, d){ return Math.round(Date.UTC(y, m - 1, d) / 86400000); }
+function parseDay(v){
+  var k;
+  if (typeof v === "number" && v > 20000 && v < 80000) return Math.round(v) - 25569;
+  var s = txt(v); if (!s) return null;
+  if ((k = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) return dayNum(+k[1], +k[2], +k[3]);
+  if ((k = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})$/))) return dayNum(+k[3] < 100 ? 2000 + +k[3] : +k[3], +k[1], +k[2]);
+  if ((k = s.match(/^(\d{1,2})[\s-]([A-Za-z]{3,9})[\s-](\d{4})$/)) && MONTHS[k[2].toLowerCase()]) return dayNum(+k[3], MONTHS[k[2].toLowerCase()], +k[1]);
+  if ((k = s.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})$/)) && MONTHS[k[1].toLowerCase()]) return dayNum(+k[3], MONTHS[k[1].toLowerCase()], +k[2]);
+  return null;
+}
+function isoOf(n){ return new Date(n * 86400000).toISOString().slice(0, 10); }
+function longDay(n){ var d = new Date(n * 86400000); return MONTH_NAMES[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
+function shortDay(n){ var d = new Date(n * 86400000); return (d.getUTCMonth() + 1) + "/" + d.getUTCDate() + "/" + d.getUTCFullYear(); }
+function lastDay(y, m){ return dayNum(y, m + 1, 1) - 1; }
+function findPeriod(text){
+  var k, M = function(s){ return MONTHS[String(s).toLowerCase()]; };
+  if ((k = text.match(/\b([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s*(\d{4})?\s*(?:-|–|to|through)\s*([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/i)) && M(k[1]) && M(k[4])) {
+    var y2 = +k[6], y1 = k[3] ? +k[3] : (M(k[1]) > M(k[4]) ? y2 - 1 : y2);
+    return { from: dayNum(y1, M(k[1]), +k[2]), to: dayNum(y2, M(k[4]), +k[5]) };
+  }
+  if ((k = text.match(/\b(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})\s*(?:-|–|to|through)\s*(\d{1,2})\s+([A-Za-z]{3,9})\s+(\d{4})/i)) && M(k[2]) && M(k[5]))
+    return { from: dayNum(+k[3], M(k[2]), +k[1]), to: dayNum(+k[6], M(k[5]), +k[4]) };
+  if ((k = text.match(/\b([A-Za-z]{3,9})\s*(?:-|–|to|through)\s*([A-Za-z]{3,9})\s+(\d{4})/i)) && M(k[1]) && M(k[2])) {
+    var yb = +k[3], ya = M(k[1]) > M(k[2]) ? yb - 1 : yb;
+    return { from: dayNum(ya, M(k[1]), 1), to: lastDay(yb, M(k[2])) };
+  }
+  return null;
+}
+// "15000 · Furniture and Equipment" and "Office Equipment (710)" -> the account's name
+// "15000 · Furniture and Equipment" and "Office Equipment (710)" -> the account's name
+function cleanPart(s){ return txt(s).replace(/\s*\([0-9A-Za-z.\-]{1,10}\)\s*$/, "").replace(/^\s*\d[\d.\-]*\s*(·|-|–)?\s*/, "").trim(); }
+function cleanName(s){ return String(s).split(":").map(cleanPart).join(":"); }
+
+function readLedger(rows){
+  var hr = -1, h = null;
+  for (var r = 0; r < Math.min(rows.length, 20) && hr < 0; r++) {
+    var x = (rows[r] || []).map(function(v){ return txt(v).toLowerCase(); });
+    var has = function(t){ return x.indexOf(t) >= 0; };
+    if (has("date") && (has("amount") || (has("debit") && has("credit"))) && (has("balance") || has("running balance"))) { hr = r; h = x; }
+  }
+  var titles = [];
+  for (r = 0; r < (hr < 0 ? Math.min(rows.length, 12) : hr); r++) titles.push((rows[r] || []).map(txt).filter(Boolean).join(" "));
+  var tt = titles.join(" | ");
+  if (hr < 0) {
+    var what = /trial balance/i.test(tt) ? "a trial balance" : /profit (and|&) loss|income statement/i.test(tt) ? "a profit and loss" : /balance sheet/i.test(tt) ? "a balance sheet" :
+      /aging|aged/i.test(tt) ? "an aging report" : null;
+    return { notGL: (what ? "This is " + what + ", not a general ledger. " : "This is not a general ledger I can read. ") +
+      "I need the general ledger for the year: every transaction, grouped by account, with a Date column, an Amount column (or Debit and Credit), and a Balance column." };
+  }
+  var col = function(){ for (var i = 0; i < arguments.length; i++) { var j = h.indexOf(arguments[i]); if (j >= 0) return j; } return -1; };
+  var C = { date: col("date"), type: col("transaction type", "type", "source"), num: col("num", "reference", "ref", "no."), name: col("name", "contact"),
+    memo: col("memo/description", "memo", "description"), amount: col("amount"), debit: col("debit"), credit: col("credit"), balance: col("balance", "running balance") };
+  var layout = h.indexOf("running balance") >= 0 ? "xero" : C.amount >= 0 ? "qbo" : "qbd";
+  var g = function(row, k){ return C[k] < 0 ? null : row[C[k]]; };
+  var all = [], stack = [], last = null, unread = [];
+  var top = function(){ return stack[stack.length - 1] || null; };
+  for (r = hr + 1; r < rows.length; r++) {
+    var row = rows[r] || [], cells = row.map(txt);
+    if (!cells.some(Boolean)) continue;
+    var first = cells.filter(Boolean)[0];
+    if (cells.some(function(c){ return /^(beginning|opening) balance$/i.test(c); })) { if (top()) top().opening = amt(g(row, "balance")); continue; }
+    if (cells.some(function(c){ return /^closing balance$/i.test(c); })) { if (last) last.closing = amt(g(row, "balance")); continue; }
+    if (/^total\b/i.test(first)) {
+      if (/^total$/i.test(first) || !stack.length) continue;
+      var acc = stack.pop();         // a total line closes the account opened last
+      acc.total = C.amount >= 0 ? amt(g(row, "amount")) : amt(g(row, "debit")) - amt(g(row, "credit"));
+      if (hasAmt(g(row, "balance"))) acc.totalBalance = amt(g(row, "balance"));
+      last = acc;
+      continue;
+    }
+    var d = parseDay(g(row, "date"));
+    var money = C.amount >= 0 ? hasAmt(g(row, "amount")) : (hasAmt(g(row, "debit")) || hasAmt(g(row, "credit")));
+    if (d != null) {
+      if (!top()) { unread.push(r + 1); continue; }
+      var a = C.amount >= 0 ? amt(g(row, "amount")) : amt(g(row, "debit")) - amt(g(row, "credit"));
+      top().lines.push({ row: r + 1, date: d, type: txt(g(row, "type")), num: txt(g(row, "num")), name: txt(g(row, "name")), memo: txt(g(row, "memo")), amount: a });
+      if (hasAmt(g(row, "balance"))) top().lastBalance = amt(g(row, "balance"));
+      continue;
+    }
+    if (money) { unread.push(r + 1); continue; }
+    var parent = top();
+    var nw = { label: cleanName(first), parent: parent, opening: hasAmt(g(row, "balance")) ? amt(g(row, "balance")) : 0, lines: [], total: null, totalBalance: null, closing: null, lastBalance: null };
+    nw.name = parent ? parent.name + ":" + nw.label : nw.label;
+    all.push(nw); stack.push(nw); last = nw;
+  }
+  all.forEach(function(a){ a.ending = a.opening + a.lines.reduce(function(s, x){ return s + x.amount; }, 0); });
+  // does each account (with its sub-accounts) add up to the report's own totals?
+  var notAddUp = all.filter(function(a){
+    var sub = all.filter(function(b){ for (var p = b; p; p = p.parent) if (p === a) return true; return false; });
+    var s = sub.reduce(function(t, b){ return t + b.lines.reduce(function(u, x){ return u + x.amount; }, 0); }, 0);
+    var e = sub.reduce(function(t, b){ return t + b.ending; }, 0);
+    return (a.total != null && a.total !== s) || (a.totalBalance != null && a.totalBalance !== e) || (a.closing != null && a.closing !== a.ending) || (a.lastBalance != null && a.lastBalance !== a.ending);
+  }).map(function(a){ return a.name; });
+  var accounts = all.filter(function(a){ return a.lines.length || a.opening; });
+  return { layout: layout, accounts: accounts, unread: unread, notAddUp: notAddUp, period: findPeriod(tt), titles: titles,
+    company: titles.filter(function(l){ return l && !/general ledger|account transactions|transaction detail|basis|period|\b\d{4}\b/i.test(l); })[0] || "" };
+}
+
+
+/* =====================================================================================
+   PART 1b - READING THE BANK'S DOWNLOAD
+   ===================================================================================== */
+var DATE_H = ["date", "posting date", "post date", "posted date", "transaction date", "effective date"];
+var DEBIT_H = ["debit", "debits", "withdrawal", "withdrawals", "withdrawal amount", "payments", "money out", "debit amount"];
+var CREDIT_H = ["credit", "credits", "deposit", "deposits", "deposit amount", "money in", "credit amount"];
+var DESC_H = ["description", "transaction", "transaction description", "memo", "payee", "name", "details"];
+var CHECK_H = ["check or slip #", "check number", "check no.", "check no", "check #", "chk #", "check", "serial number"];
+var BAL_H = ["balance", "running bal.", "running balance", "ledger balance", "available balance"];
+var LEDGER_WORDS = ["num", "split", "transaction type", "memo/description", "contact", "source"];
+function readBank(rows){
+  var hr = -1, h = null, firstIdx = function(list){ for (var i = 0; i < list.length; i++) { var j = h.indexOf(list[i]); if (j >= 0) return j; } return -1; };
+  for (var r = 0; r < Math.min(rows.length, 15) && hr < 0; r++) {
+    var x = (rows[r] || []).map(function(v){ return txt(v).toLowerCase(); }), hasAny = function(l){ return l.some(function(t){ return x.indexOf(t) >= 0; }); };
+    if (hasAny(DATE_H) && (x.indexOf("amount") >= 0 || (hasAny(DEBIT_H) && hasAny(CREDIT_H)))) { hr = r; h = x; }
+  }
+  var titles = []; for (r = 0; r < (hr < 0 ? Math.min(rows.length, 12) : hr); r++) titles.push((rows[r] || []).map(txt).filter(Boolean).join(" "));
+  var tt = titles.join(" | ");
+  var notBank = "This is not a bank download I can read. I need the transactions downloaded from the bank's website: a date, a description and an amount (or withdrawals and deposits) on each line.";
+  if (/general ledger|account transactions|transaction detail|trial balance|profit (and|&) loss|balance sheet/i.test(tt) || (h && LEDGER_WORDS.some(function(t){ return h.indexOf(t) >= 0; })))
+    return { notBank: "This looks like the books' ledger, not the bank's download. Drop it in the second box, and the bank's own download in the first." };
+  var C, lines = [], summary = {}, layout;
+  rows.slice(0, hr < 0 ? 12 : hr).forEach(function(row){     // a summary block above the lines
+    var t = (row || []).map(txt), s = t.join(" "), am = t.map(parseAmount).filter(function(v){ return v != null && !isNaN(v); });
+    if (/beginning balance/i.test(s) && am.length) summary.begin = am[am.length - 1];
+    if (/ending balance/i.test(s) && am.length) summary.end = am[am.length - 1];
+  });
+  if (hr >= 0) {
+    C = { date: firstIdx(DATE_H), desc: firstIdx(DESC_H), check: firstIdx(CHECK_H), amount: h.indexOf("amount"), debit: firstIdx(DEBIT_H), credit: firstIdx(CREDIT_H), balance: firstIdx(BAL_H) };
+    if (C.desc === C.date) C.desc = -1;
+    if (h[C.desc] === "details" && h.indexOf("description") >= 0) C.desc = h.indexOf("description");
+    layout = C.amount >= 0 ? "amount" : "debit-credit";
+  } else {
+    var r0 = (rows[0] || []);
+    if (rows.length && parseDay(r0[0]) != null && parseAmount(r0[1]) != null && !isNaN(parseAmount(r0[1]))) { C = { date: 0, amount: 1, check: 3, desc: -1, debit: -1, credit: -1, balance: -1, headerless: true }; layout = "no headings"; }
+    else return { notBank: notBank };
+  }
+  var start = hr + 1;
+  for (r = start; r < rows.length; r++) {
+    var row = rows[r] || [], cells = row.map(txt);
+    if (!cells.some(Boolean)) continue;
+    var d = parseDay(row[C.date]);
+    if (d == null) continue;
+    var a = null;
+    if (C.amount >= 0) { var v = parseAmount(row[C.amount]); if (v != null && !isNaN(v)) a = v; }
+    else { var dv = parseAmount(row[C.debit]), cv = parseAmount(row[C.credit]);
+      if (dv != null && !isNaN(dv) && dv !== 0) a = -Math.abs(dv); else if (cv != null && !isNaN(cv) && cv !== 0) a = Math.abs(cv); }
+    var desc = C.headerless ? (cells.slice(2).filter(function(c, i){ return c && c !== "*" && !(i === 1 && /^\d+$/.test(c)); }).pop() || "") : (C.desc >= 0 ? cells[C.desc] : "");
+    var bal = C.balance >= 0 && parseAmount(row[C.balance]) != null && !isNaN(parseAmount(row[C.balance])) ? parseAmount(row[C.balance]) : null;
+    if (a == null) { if (/beginning balance/i.test(desc) && bal != null) summary.beginRow = bal; continue; }
+    var chk = C.check >= 0 ? txt(row[C.check]) : "";
+    lines.push({ row: r + 1, date: d, desc: desc, check: /^\d{1,8}$/.test(chk) ? chk : "", amount: a, bal: bal });
+  }
+  if (!lines.length) return { notBank: notBank };
+  var desc_ = lines.length > 1 && lines[0].date > lines[lines.length - 1].date;
+  if (desc_) { lines.reverse(); layout += ", newest first"; }
+  var begin = summary.begin != null ? summary.begin : summary.beginRow != null ? summary.beginRow : null, end = summary.end != null ? summary.end : null, gaps = [];
+  if (lines[0].bal != null) {
+    if (begin == null) begin = lines[0].bal - lines[0].amount;
+    var run = begin;
+    lines.forEach(function(l){ run += l.amount; if (l.bal != null && l.bal !== run && !gaps.length) { gaps.push(l.row); run = l.bal; } });
+    if (end == null) end = lines[lines.length - 1].bal;
+  }
+  if (begin != null && end != null && !gaps.length && begin + lines.reduce(function(s, l){ return s + l.amount; }, 0) !== end) gaps.push("total");
+  return { layout: layout, lines: lines, begin: begin, end: end, gaps: gaps };
+}
+
+/* =====================================================================================
+   PART 2 - THE RECONCILIATION (the rules)
+   ===================================================================================== */
+function money(c){ var s = Math.abs(c), d = Math.floor(s / 100), r = String(s % 100).padStart(2, "0"); return (c < 0 ? "-" : "") + "$" + d.toLocaleString("en-US") + "." + r; }
+function dollars(c){ return Math.round(c) / 100; }
+function cents(d){ return Math.round(d * 100); }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function sum(list, f){ return list.reduce(function(s, x){ return s + f(x); }, 0); }
+function lc(s){ return String(s || "").toLowerCase(); }
+function normNum(s){ s = String(s || "").trim(); return /^\d+$/.test(s) ? s.replace(/^0+/, "") : s; }
+function checkNo(b){ if (b.check) return normNum(b.check); var m = /\b(?:check|chk|ck)\s*#?\s*(\d{3,6})\b/i.exec(b.desc || ""); return m ? normNum(m[1]) : null; }
+function digitsPerm(a, b){ return String(Math.abs(a)).split("").sort().join("") === String(Math.abs(b)).split("").sort().join(""); }
+function firstSet(items, target, minn, maxn){       // binary-counter order: set k holds item i when bit i of k is 1
+  var n = Math.min(items.length, 20);
+  for (var k = 1; k < (1 << n); k++) {
+    var c = 0, t = 0;
+    for (var i = 0; i < n; i++) if ((k >> i) & 1) { c++; t += items[i].amount; }
+    if (c < (minn || 1) || (maxn && c > maxn)) continue;
+    if (t === target) { var out = []; for (i = 0; i < n; i++) if ((k >> i) & 1) out.push(items[i]); return out; }
+  }
+  return null;
+}
+function bankKind(b){ var d = lc(b.desc); if (b.amount < 0 && /fee|service charge|maintenance|overdraft|nsf/.test(d)) return "fee"; if (b.amount > 0 && /interest/.test(d)) return "interest"; return "other"; }
+function bankAccountGuess(accounts){     // checking first, then operating, then bank, then savings, money market or cash
+  var ok = accounts.filter(function(a){ return !/undeposited|petty|clearing/i.test(a.name); });
+  var pats = [/checking/i, /operating/i, /bank/i, /savings|money market|cash/i];
+  for (var i = 0; i < pats.length; i++) { var hit = ok.filter(function(a){ return pats[i].test(a.name); })[0]; if (hit) return hit.name; }
+  return accounts[0].name;
+}
+
+function reconcile(bankRows, booksRows, files, opts){
+  opts = opts || {};
+  var rep = { version: "1.0.0", files: files, status: null, exceptions: [] };
+  function ex(code, level, message){ rep.exceptions.push({ code: code, level: level, message: message }); }
+  var B = readBank(bankRows);
+  if (B.notBank) { rep.status = "NOT_RECOGNIZED"; ex("NOT_RECOGNIZED", "stop", B.notBank); return rep; }
+  var L = readLedger(booksRows);
+  if (L.notGL || !L.accounts.length) { rep.status = "NOT_RECOGNIZED"; ex("NOT_RECOGNIZED", "stop", L.notGL ? L.notGL.replace("I need the general ledger for the year", "I need the books' ledger for the bank account") : "I found no accounts in the books' file."); return rep; }
+  rep.bankLayout = B.layout; rep.booksLayout = { qbo: "QuickBooks Online", qbd: "QuickBooks Desktop", xero: "Xero" }[L.layout]; rep.company = L.company;
+  rep.accounts = L.accounts.map(function(a){ return a.name; });
+  rep.account = opts.account && rep.accounts.indexOf(opts.account) >= 0 ? opts.account : bankAccountGuess(L.accounts);
+  var acct = L.accounts.filter(function(a){ return a.name === rep.account; })[0];
+  var bank = B.lines.map(function(b, i){ return { i: i, row: b.row, date: b.date, desc: b.desc, check: b.check, amount: b.amount }; });
+  var books = acct.lines.map(function(k, i){ return { i: i, row: k.row, date: k.date, type: k.type, num: k.num, name: k.name, memo: k.memo, amount: k.amount }; });
+  var start = Math.min.apply(null, bank.map(function(b){ return b.date; })), end = Math.max.apply(null, bank.map(function(b){ return b.date; }));
+  rep.bankStart = isoOf(start); rep.bankEnd = isoOf(end); rep.bankLines = bank.length;
+  var bankBegin = opts.bankBegin != null ? opts.bankBegin : B.begin, bankEnd = opts.bankEnd != null ? opts.bankEnd : B.end;
+  if (bankEnd == null && bankBegin != null) bankEnd = bankBegin + sum(bank, function(b){ return b.amount; });
+  rep.bankBegin = bankBegin == null ? null : dollars(bankBegin); rep.bankEnding = bankEnd == null ? null : dollars(bankEnd);
+  rep.bankBeginFrom = opts.bankBegin != null ? "typed" : B.begin != null ? "file" : null;
+  var after = books.filter(function(k){ return k.date > end; }), bk = books.filter(function(k){ return k.date <= end; });
+  var used = {}, match = {}, near = [], nb = {};
+  var order = bank.slice().sort(function(a, b){ return a.date - b.date || a.i - b.i; });
+  // a. checks by number
+  order.forEach(function(b){
+    if (b.amount >= 0) return; var n = checkNo(b); if (!n) return;
+    var same = bk.filter(function(k){ return !used[k.i] && normNum(k.num) === n; });
+    var hit = same.filter(function(k){ return k.amount === b.amount; })[0];
+    if (hit) { used[hit.i] = 1; match[b.i] = [hit.i]; }
+    else if (same.length) { used[same[0].i] = 1; near.push({ kind: "check amount differs", bank: b.i, book: same[0].i }); nb[b.i] = 1; }
+  });
+  // b. same amount
+  var dd = function(k, b){ return Math.round(k.date - b.date); };
+  order.forEach(function(b){
+    if (match[b.i] || nb[b.i]) return;
+    var c = bk.filter(function(k){ return !used[k.i] && k.amount === b.amount && dd(k, b) >= -60 && dd(k, b) <= 5; });
+    if (c.length) { c.sort(function(x, y){ return Math.abs(dd(x, b)) - Math.abs(dd(y, b)) || x.i - y.i; }); used[c[0].i] = 1; match[b.i] = [c[0].i]; }
+  });
+  // c. batches
+  order.forEach(function(b){
+    if (match[b.i] || nb[b.i] || b.amount <= 0) return;
+    var c = bk.filter(function(k){ return !used[k.i] && k.amount > 0 && dd(k, b) >= -5 && dd(k, b) <= 1; });
+    c.sort(function(x, y){ return Math.abs(dd(x, b)) - Math.abs(dd(y, b)) || x.i - y.i; }); c = c.slice(0, 12).sort(function(x, y){ return x.date - y.date || x.i - y.i; });
+    var s = firstSet(c, b.amount, 2, 6);
+    if (s) { s.forEach(function(k){ used[k.i] = 1; }); match[b.i] = s.map(function(k){ return k.i; }); }
+  });
+  // 3. near misses
+  order.forEach(function(b){
+    if (match[b.i] || nb[b.i]) return;
+    var c = bk.filter(function(k){ return !used[k.i] && Math.abs(dd(k, b)) <= 10 && k.amount !== b.amount && (k.amount > 0) === (b.amount > 0) && ((k.amount - b.amount) % 9 + 9) % 9 === 0 && digitsPerm(k.amount, b.amount); });
+    if (c.length) { c.sort(function(x, y){ return Math.abs(dd(x, b)) - Math.abs(dd(y, b)) || x.i - y.i; }); used[c[0].i] = 1; nb[b.i] = 1; near.push({ kind: "transposed", bank: b.i, book: c[0].i }); return; }
+    c = bk.filter(function(k){ return !used[k.i] && k.amount === -b.amount && Math.abs(dd(k, b)) <= 10; });
+    if (c.length) { c.sort(function(x, y){ return Math.abs(dd(x, b)) - Math.abs(dd(y, b)) || x.i - y.i; }); used[c[0].i] = 1; nb[b.i] = 1; near.push({ kind: "sign", bank: b.i, book: c[0].i }); }
+  });
+  var matchedBooks = {}; Object.keys(match).forEach(function(bi){ match[bi].forEach(function(ki){ matchedBooks[ki] = 1; }); });
+  var dups = [];
+  bk.forEach(function(k){
+    if (used[k.i] || !k.name) return;
+    var twin = bk.filter(function(m){ return matchedBooks[m.i] && m.amount === k.amount && lc(m.name) === lc(k.name) && Math.abs(m.date - k.date) <= 5; })[0];
+    if (twin) { used[k.i] = 1; dups.push({ book: k.i, twin: twin.i }); }
+  });
+  // 4. before the bank lines
+  var preBal = acct.opening + sum(bk.filter(function(k){ return k.date < start; }), function(k){ return k.amount; });
+  var oldUn = bk.filter(function(k){ return k.date < start && !used[k.i]; }).sort(function(a, b){ return a.date - b.date || a.i - b.i; });
+  var pairedBook = {}; Object.keys(matchedBooks).forEach(function(i){ pairedBook[i] = 1; }); near.forEach(function(n){ pairedBook[n.book] = 1; });
+  var oldMatched = sum(bk.filter(function(k){ return k.date < start && pairedBook[k.i]; }), function(k){ return k.amount; });
+  var clearedBefore = [], fromBefore = [], explained = null, R = null;
+  var ub = order.filter(function(b){ return !match[b.i] && !nb[b.i]; });
+  if (bankBegin != null) {
+    R = preBal - bankBegin - oldMatched;
+    if (oldUn.length) {
+      var can = oldUn.filter(function(k){ return /^\d{3,6}$/.test(String(k.num || "").trim()) || start - k.date <= 10; });
+      var s2 = R === 0 ? [] : can.length <= 20 ? firstSet(can, R) : null;
+      if (s2) { var ids = {}; s2.forEach(function(k){ ids[k.i] = 1; }); clearedBefore = oldUn.filter(function(k){ return !ids[k.i]; }); explained = true; }
+      else { explained = false; clearedBefore = oldUn.slice(); }
+    } else {
+      var early = ub.filter(function(b){ return b.date - start <= 45; });
+      var s3 = R === 0 ? [] : firstSet(early, R);
+      if (s3) { fromBefore = s3; explained = true; } else explained = false;
+    }
+  } else clearedBefore = oldUn.slice();
+  var cb = {}, fb = {}, nbk = {}; clearedBefore.forEach(function(k){ cb[k.i] = 1; }); fromBefore.forEach(function(b){ fb[b.i] = 1; }); near.forEach(function(n){ nbk[n.book] = 1; });
+  var isDup = {}; dups.forEach(function(d){ isDup[d.book] = 1; });
+  var BI = {}, KI = {}; bank.forEach(function(b){ BI[b.i] = b; }); books.forEach(function(k){ KI[k.i] = k; });
+  var outstanding = bk.filter(function(k){ return !matchedBooks[k.i] && !cb[k.i] && !nbk[k.i] && !isDup[k.i]; });
+  var bankOnly = bank.filter(function(b){ return !match[b.i] && !fb[b.i] && !nb[b.i]; });
+  var decide = opts.decide || {};
+  near.forEach(function(n, j){ n.id = "n" + j; n.decision = decide[n.id] || "undecided"; });
+  dups.forEach(function(d, j){ d.id = "u" + j; d.decision = decide[d.id] || "undecided"; });
+  // a near miss or duplicate she says is NOT the same goes back to outstanding and bank-only
+  near.forEach(function(n){ if (n.decision === "not") { outstanding.push(KI[n.book]); bankOnly.push(BI[n.bank]); } });
+  dups.forEach(function(d){ if (d.decision === "not") outstanding.push(KI[d.book]); });
+  outstanding.sort(function(a, b){ return a.date - b.date || a.i - b.i; }); bankOnly.sort(function(a, b){ return a.date - b.date || a.i - b.i; });
+  var corrections = sum(near.filter(function(n){ return n.decision !== "not"; }), function(n){ return BI[n.bank].amount - KI[n.book].amount; }) - sum(dups.filter(function(d){ return d.decision !== "not"; }), function(d){ return KI[d.book].amount; });
+  var bookEnd = acct.opening + sum(bk, function(k){ return k.amount; });
+  var adjBank = bankEnd == null ? null : bankEnd + sum(outstanding, function(k){ return k.amount; });
+  var adjBook = bookEnd + sum(bankOnly, function(b){ return b.amount; }) + corrections;
+  var age = function(k){ return Math.round(end - k.date); };
+  var cls = opts.classify || {};
+  rep.matched = Object.keys(match).length;
+  rep.matchedChecks = Object.keys(match).filter(function(bi){ var v = match[bi], b = BI[bi]; return v.length === 1 && b.amount < 0 && checkNo(b) && KI[v[0]].num; }).length;
+  rep.batches = Object.keys(match).filter(function(bi){ return match[bi].length > 1; }).map(function(bi){ return { bankDate: isoOf(BI[bi].date), amount: dollars(BI[bi].amount), count: match[bi].length, items: match[bi].map(function(ki){ return dollars(KI[ki].amount); }) }; });
+  rep.near = near.map(function(n){ var b = BI[n.bank], k = KI[n.book]; return { id: n.id, kind: n.kind, decision: n.decision, bankDate: isoOf(b.date), bankAmount: dollars(b.amount), bankDesc: b.desc, bookDate: isoOf(k.date), bookAmount: dollars(k.amount), num: k.num, name: k.name, type: k.type }; });
+  rep.duplicates = dups.map(function(d){ var k = KI[d.book], t = KI[d.twin]; return { id: d.id, decision: d.decision, date: isoOf(k.date), amount: dollars(k.amount), name: k.name, type: k.type, twinDate: isoOf(t.date) }; });
+  rep.outstanding = outstanding.map(function(k){ var a = age(k), st = k.amount < 0 && a > 180; return { id: "o" + k.i, date: isoOf(k.date), num: k.num, name: k.name, type: k.type, memo: k.memo, amount: dollars(k.amount), age: a,
+    flag: k.amount < 0 ? (a > 180 ? "stale" : a > 90 ? "old" : "") : (a > 10 ? "old deposit" : ""), decision: st ? (decide["o" + k.i] || "undecided") : null }; });
+  rep.bankOnly = bankOnly.map(function(b){ var kind = bankKind(b), id = "b" + b.i;
+    var later = after.filter(function(k){ return k.amount === b.amount && k.date - b.date <= 30; })[0];
+    return { id: id, date: isoOf(b.date), desc: b.desc, amount: dollars(b.amount), kind: kind, bookedLater: later ? isoOf(later.date) : null,
+      treat: cls[id] || (later ? "later" : kind === "fee" ? "fee" : kind === "interest" ? "interest" : "ask") }; });
+  rep.clearedBefore = clearedBefore.length; rep.fromBefore = fromBefore.map(function(b){ return { date: isoOf(b.date), amount: dollars(b.amount), desc: b.desc }; });
+  rep.afterStatement = after.length; rep.corrections = dollars(corrections);
+  rep.booksEnding = dollars(bookEnd); rep.adjustedBank = adjBank == null ? null : dollars(adjBank); rep.adjustedBooks = dollars(adjBook);
+  rep.difference = adjBank == null ? null : dollars(adjBank - adjBook);
+  rep.startDifference = R == null ? null : dollars(R);
+  var stale = rep.outstanding.filter(function(o){ return o.flag === "stale"; }), oldO = rep.outstanding.filter(function(o){ return o.flag === "old"; }), oldD = rep.outstanding.filter(function(o){ return o.flag === "old deposit"; });
+  rep.stale = stale.length; rep.oldOutstanding = oldO.length; rep.oldDeposits = oldD.length;
+  rep.undecided = near.filter(function(n){ return n.decision === "undecided"; }).length + dups.filter(function(d){ return d.decision === "undecided"; }).length + stale.filter(function(o){ return o.decision === "undecided"; }).length;
+  rep._books = books; rep._acct = acct; rep._B = B; rep._L = L;
+
+  // ---- messages (each names the step where she acts)
+  if (B.gaps.length) ex("BANK_FILE_GAPS", "stop", "The bank's download does not add up: its running balance jumps " + (B.gaps[0] === "total" ? "between the beginning and ending balances" : "at row " + B.gaps[0]) + ", so a line is missing or was changed. Download it again and do not edit it.");
+  if (L.notAddUp.length) ex("BOOKS_DO_NOT_ADD_UP", "stop", "These accounts in the books' file do not add up to the report's own totals: " + L.notAddUp.join(", ") + ". Export the ledger again and do not edit it.");
+  if (rep.accounts.length > 1) ex("ACCOUNT_CHOSEN", "info", "The books' file has " + plural(rep.accounts.length, "account") + ". I reconciled “" + rep.account + "”; if that is not the bank account, choose it in step 2.");
+  if (bankBegin == null || bankEnd == null) ex("NEED_BALANCES", "care", "The bank's download has no balances, so I cannot prove the reconciliation or tell which older checks are still outstanding. Type the statement's beginning and ending balances in step 2.");
+  if (rep.difference != null && rep.difference !== 0) ex("DOES_NOT_TIE", "care", "It does not tie: the adjusted bank balance is " + money(Math.abs(cents(rep.difference))) + (rep.difference > 0 ? " more" : " less") + " than the adjusted books." + (explained === false ? " That is what the starting balances leave unexplained (see below)." : " Check the balances in step 2 and the decisions in step 3."));
+  if (explained === false) ex("START_NOT_EXPLAINED", "care", "On " + shortDay(start) + " the books and the bank differed by " + money(Math.abs(preBal - bankBegin)) + ", and no set of checks written before then explains it (" + money(Math.abs(R)) + " is left over). Check the bank's beginning balance, and that the books' file starts early enough; a book entry before " + shortDay(start) + " may have been changed after an earlier reconciliation.");
+  if (near.some(function(n){ return n.kind === "check amount differs"; })) ex("CHECK_AMOUNT_DIFFERS", "care", "Checks the bank paid for a different amount from the books, same check number. Decide each in step 3a.");
+  if (near.some(function(n){ return n.kind === "transposed"; })) ex("TRANSPOSED", "care", "Amounts that look typed with two digits swapped (the difference divides by 9). Decide each in step 3a.");
+  if (near.some(function(n){ return n.kind === "sign"; })) ex("SIGN_ERROR", "care", "Money in recorded as money out, or the reverse. Decide each in step 3a.");
+  if (dups.length) ex("BOOK_DUPLICATES", "care", "Entries in the books that the bank shows only once: probably entered twice. Decide each in step 3a.");
+  if (bankOnly.length) ex("BANK_ONLY", "care", plural(bankOnly.length, "bank item") + " " + (bankOnly.length === 1 ? "is" : "are") + " not in the books (" + money(sum(bankOnly, function(b){ return b.amount; })) + "): fees, interest or payments nobody recorded. Choose how to treat each in step 3b.");
+  if (stale.length) ex("STALE_CHECKS", "care", plural(stale.length, "check") + " outstanding more than six months. A bank need not pay a check over six months old (UCC 4-404), and an uncashed check becomes unclaimed property: ask the payee, then reverse it to a liability, not to income. Decide each in step 3c.");
+  if (oldO.length) ex("OLD_OUTSTANDING", "info", plural(oldO.length, "check or payment", "checks or payments") + " outstanding more than 90 days: worth a call to the payee.");
+  if (oldD.length) ex("OLD_DEPOSITS_IN_TRANSIT", "care", plural(oldD.length, "deposit") + " recorded in the books more than 10 days ago " + (oldD.length === 1 ? "has" : "have") + " not reached the bank. A deposit should clear within days: it may never have been made, or it was recorded twice.");
+  if (rep.batches.length) ex("BATCHES", "info", plural(rep.batches.length, "bank deposit") + " matched to several book entries that add up to " + (rep.batches.length === 1 ? "it" : "each") + " (card batches or deposits of several checks).");
+  if (fromBefore.length) ex("FROM_BEFORE", "info", plural(fromBefore.length, "bank item") + " early in the bank's dates " + (fromBefore.length === 1 ? "matches" : "match") + " what was outstanding at the start: recorded in the books before the books' file starts. Start the books' file earlier to see them matched.");
+  if (after.length) ex("AFTER_STATEMENT", "info", plural(after.length, "book entry", "book entries") + " dated after " + shortDay(end) + " " + (after.length === 1 ? "is" : "are") + " left out: after the bank's last date.");
+  if (B.gaps.length || L.notAddUp.length)      // a file that does not add up: fix it first; nothing else can be trusted
+    rep.exceptions = rep.exceptions.filter(function(e){ return e.level === "stop"; });
+  rep.status = "COMPUTED";
+  return rep;
+}
+
+/* =====================================================================================
+   PART 3 - THE SCREEN
+   ===================================================================================== */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function c$(d){ return money(cents(d)); }
+var files = { bank: null, books: null }, state = {}, keep = {}, bad = {}, current = null;
+function dateOf(iso){ return shortDay(Math.round(Date.parse(iso) / 86400000)); }
+function tag(kind){ return { auto: '<span class="tag auto">Automatic</span>', you: '<span class="tag you">You decide</span>', check: '<span class="tag you">You check</span>', built: '<span class="tag auto">Built from your choices</span>' }[kind]; }
+function inputVal(v){ return v == null ? "" : (v / 100).toFixed(2); }
+function badMsg(id){ return bad[id] ? '<span class="bad-input" role="alert">Not a number. Type digits, like 12,345.67.</span>' : ""; }
+function td(label, html, cls){ return '<td' + (label ? ' data-label="' + esc(label) + '"' : "") + (cls ? ' class="' + cls + '"' : "") + (html === "" ? ' aria-hidden="true"' : "") + '>' + html + '</td>'; }
+function todayStr(){ var d = new Date(); return (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear(); }
+function radios(name, id, value, choices){ return '<span class="decide" role="radiogroup">' + choices.map(function(c){ return '<label class="' + (value === c[0] ? "on" : "") + '"><input type="radio" class="dec" name="' + name + '" data-id="' + id + '" value="' + c[0] + '"' + (value === c[0] ? " checked" : "") + '>' + c[1] + '</label>'; }).join("") + '</span>'; }
+var TREAT = { fee: "Record: bank service charges", interest: "Record: interest income", ask: "Ask the client what it was", later: "Already recorded after the statement date" };
+var NEAR_LABEL = { "check amount differs": "Same check number, different amount", transposed: "Digits swapped", sign: "Money in and out reversed" };
+
+function render(rep){
+  var o = [], stops = rep.exceptions.filter(function(e){ return e.level === "stop"; }), notes = rep.exceptions.filter(function(e){ return e.level !== "stop"; }).sort(function(a, b){ return (a.level === "care" ? 0 : 1) - (b.level === "care" ? 0 : 1); });
+  var ties = rep.difference === 0;
+  o.push('<div class="wp-head"><div><p class="where no-print" id="where"></p><h1><span class="no-print">Why won’t the bank rec tie?</span><span class="print-only">Bank reconciliation, ' + esc(rep.account) + ', ' + dateOf(rep.bankEnd) + '</span></h1><p class="meta">' +
+    esc(rep.account) + ' · bank lines ' + dateOf(rep.bankStart) + ' to ' + dateOf(rep.bankEnd) + '<br>Files: ' + esc(rep.files.bank) + ' and ' + esc(rep.files.books) + '</p></div>');
+  o.push('<div class="sign">' + [["client", "Client"], ["wpRef", "Workpaper ref."], ["preparedBy", "Prepared by"], ["preparedOn", "Prepared on (date)"], ["reviewedBy", "Reviewed by"], ["reviewedOn", "Reviewed on (date)"]].map(function(p){
+    var v = keep[p[0]] != null ? keep[p[0]] : p[0] === "client" ? rep.company : p[0] === "preparedOn" ? todayStr() : "";
+    return '<label>' + p[1] + '<input id="' + p[0] + '" autocomplete="off" value="' + esc(v) + '"></label>'; }).join("") + '</div></div>');
+  var head = rep.difference == null ? "Not proven yet: the statement's balances are needed (step 2)." : ties ? "It ties: adjusted bank and adjusted books are both " + c$(rep.adjustedBank) + "." : "It does not tie: " + money(Math.abs(cents(rep.difference))) + " apart.";
+  o.push('<div class="verdict' + (stops.length || (rep.difference != null && !ties) ? " bad" : "") + '" id="verdict">' + esc((rep.company ? rep.company + ", " : "") + rep.account + ", " + dateOf(rep.bankEnd) + ". " + head) +
+    '<span class="sub">' + esc(plural(rep.matched, "bank line") + " matched of " + rep.bankLines + "; " + plural(rep.outstanding.length, "item") + " outstanding; " + plural(rep.bankOnly.length, "bank item") + " not in the books; " + plural(rep.near.length + rep.duplicates.length, "book entry", "book entries") + " that look wrong." + (rep.undecided ? " " + rep.undecided + " to decide." : "")) + '</span></div>');
+  o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
+  o.push('<h2 class="no-print">Check these first</h2><div class="no-print">' + (notes.length ? '<ul class="first">' + notes.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + (e.level === "care" ? "Decide. " : "For your file. ") + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>' : '<p class="ok">Nothing unusual.</p>') + '</div>');
+
+  // STEP 2
+  o.push('<h2 id="step-2"><span class="stepno">Step 2</span> Check what was read ' + tag("check") + '</h2><div id="step-2-body">');
+  o.push('<p class="purpose"><b>What this is for:</b> everything depends on reading the right account and the right balances. <b>What to do:</b> compare these with the bank statement; fix anything wrong here, then press the button.</p>');
+  o.push('<div class="scroll"><table id="read" class="cards"><tbody>' +
+    '<tr>' + td("", "<b>The bank’s download</b>") + td("", esc(rep.bankLayout) + ", " + plural(rep.bankLines, "line") + ", " + dateOf(rep.bankStart) + " to " + dateOf(rep.bankEnd)) + '</tr>' +
+    '<tr>' + td("", "Beginning balance") + td("", rep.bankBegin == null ? '<span class="undecided">not in the file: type it below</span>' : c$(rep.bankBegin) + (rep.bankBeginFrom === "typed" ? " (typed)" : " (from the file)")) + '</tr>' +
+    '<tr>' + td("", "Ending balance") + td("", rep.bankEnding == null ? '<span class="undecided">not in the file: type it below</span>' : c$(rep.bankEnding)) + '</tr>' +
+    '<tr>' + td("", "<b>The books’ ledger</b>") + td("", esc(rep.booksLayout) + ", " + plural(rep.accounts.length, "account")) + '</tr>' +
+    '<tr>' + td("", "The bank account in the books") + td("", '<select id="account" aria-label="Which account is the bank account">' + rep.accounts.map(function(a){ return '<option' + (a === rep.account ? " selected" : "") + '>' + esc(a) + '</option>'; }).join("") + '</select>') + '</tr>' +
+    '<tr>' + td("", "Books’ balance on " + dateOf(rep.bankEnd)) + td("", c$(rep.booksEnding)) + '</tr></tbody></table></div>');
+  o.push('<div class="typed grid3"><label for="bank-begin">Statement beginning balance (optional)<input id="bank-begin" inputmode="decimal" value="' + inputVal(state.bankBegin) + '">' + badMsg("bank-begin") + '</label>' +
+    '<label for="bank-end">Statement ending balance (optional)<input id="bank-end" inputmode="decimal" value="' + inputVal(state.bankEnd) + '">' + badMsg("bank-end") + '</label>' +
+    '<label>&nbsp;<button class="sec-btn" id="update-balances" type="button">Use these balances</button></label></div>');
+  o.push('<p class="note">Typed balances replace the file’s. Leave them empty to use the file’s. They are read only when you press the button.</p>');
+  o.push('<p class="no-print"><button class="sec-btn" id="read-ok" type="button">' + (state.readOk ? "✓ Checked: go to step 3" : "This is right: go to step 3") + '</button></p></div>');
+
+  // STEP 3
+  o.push('<h2 id="step-3"><span class="stepno">Step 3</span> Decide what was found</h2><div id="step-3-body">');
+  o.push('<p class="purpose"><b>What this is for:</b> the items that make the books and the bank differ. The page found them; you decide what they are. <b>What to do:</b> work through 3a to 3c. The reconciliation in step 4 updates as you go.</p>');
+  o.push('<h3>3a. Book entries that look wrong ' + tag("you") + '</h3>');
+  if (!rep.near.length && !rep.duplicates.length) o.push('<p class="ok">None: every book entry the bank shows matches its amount.</p>');
+  else {
+    o.push('<p>Each pairs a book entry with the bank line it probably is. Until you decide, the reconciliation treats them as the same transaction entered wrong.</p>');
+    o.push('<div class="scroll"><table id="errors" class="cards"><thead><tr><th>What it looks like</th><th>In the books</th><th>At the bank</th><th class="num">Correction</th><th>Your decision</th></tr></thead><tbody>');
+    rep.near.forEach(function(n){ o.push('<tr>' + td("What it looks like", NEAR_LABEL[n.kind]) + td("In the books", esc(dateOf(n.bookDate) + ", " + (n.num ? "#" + n.num + " " : "") + (n.name || n.type) + ", " + c$(n.bookAmount))) + td("At the bank", esc(dateOf(n.bankDate) + ", " + n.bankDesc + ", " + c$(n.bankAmount))) + td("Correction", c$(n.bankAmount - n.bookAmount), "num") +
+      td("Your decision", radios("d-" + n.id, n.id, n.decision, [["fix", "Same: correct the books"], ["not", "Not the same"]])) + '</tr>'); });
+    rep.duplicates.forEach(function(d){ o.push('<tr>' + td("What it looks like", "Entered twice") + td("In the books", esc(dateOf(d.date) + ", " + d.name + ", " + c$(d.amount) + " (and again on " + dateOf(d.twinDate) + ")")) + td("At the bank", "once") + td("Correction", c$(-d.amount), "num") +
+      td("Your decision", radios("d-" + d.id, d.id, d.decision, [["fix", "Entered twice: remove one"], ["not", "Two real items"]])) + '</tr>'); });
+    o.push('</tbody></table></div>');
+  }
+  o.push('<h3>3b. At the bank, not in the books ' + tag("you") + '</h3>');
+  if (!rep.bankOnly.length) o.push('<p class="ok">None.</p>');
+  else {
+    o.push('<div class="scroll"><table id="bank-only" class="cards"><thead><tr><th>Date</th><th>At the bank</th><th class="num">Amount</th><th>Treat as</th></tr></thead><tbody>');
+    rep.bankOnly.forEach(function(b){ o.push('<tr>' + td("Date", dateOf(b.date)) + td("At the bank", esc(b.desc) + (b.bookedLater ? ' <span class="pill">in the books on ' + dateOf(b.bookedLater) + '</span>' : "")) + td("Amount", c$(b.amount), "num") +
+      td("Treat as", '<select class="treat" data-id="' + b.id + '">' + Object.keys(TREAT).map(function(t){ return '<option value="' + t + '"' + (b.treat === t ? " selected" : "") + '>' + TREAT[t] + '</option>'; }).join("") + '</select>') + '</tr>'); });
+    o.push('</tbody></table></div><p class="note">The page suggests a treatment from the bank’s description; change any that is wrong.</p>');
+  }
+  if (rep.fromBefore.length) o.push('<p class="note">Not counted as missing: ' + esc(rep.fromBefore.map(function(b){ return dateOf(b.date) + " " + b.desc + " " + c$(b.amount); }).join("; ")) + '. They match what was outstanding when the bank’s dates start.</p>');
+  o.push('<h3>3c. Outstanding: in the books, not yet at the bank ' + tag("check") + '</h3>');
+  if (!rep.outstanding.length) o.push('<p class="ok">Nothing outstanding.</p>');
+  else {
+    o.push('<div class="scroll"><table id="outstanding" class="cards"><thead><tr><th>Date</th><th>Num</th><th>To or from</th><th class="num">Amount</th><th class="num">Days</th><th>Note</th></tr></thead><tbody>');
+    rep.outstanding.forEach(function(x){ o.push('<tr>' + td("Date", dateOf(x.date)) + td("Num", esc(x.num)) + td("To or from", esc(x.name || x.memo || x.type)) + td("Amount", c$(x.amount), "num") + td("Days", x.age, "num") +
+      td("Note", x.flag === "stale" ? '<span class="tie-bad">over six months</span>' + radios("d-" + x.id, x.id, x.decision, [["keep", "Keep outstanding"], ["reverse", "Reverse to unclaimed property"]]) : x.flag === "old" ? "over 90 days" : x.flag === "old deposit" ? '<span class="tie-bad">deposit not at the bank after 10 days</span>' : "") + '</tr>'); });
+    o.push('</tbody></table></div>');
+  }
+  o.push('<p class="note">' + (rep.clearedBefore ? plural(rep.clearedBefore, "older book entry", "older book entries") + " cleared before the bank’s dates start, as the starting balances show; they are left out. " : "") + (rep.matched ? plural(rep.matched, "bank line") + " matched" + (rep.matchedChecks ? ", " + rep.matchedChecks + " of them checks by number" : "") + (rep.batches.length ? ", " + plural(rep.batches.length, "deposit") + " to several book entries" : "") + "." : "") + '</p></div>');
+
+  // STEP 4
+  o.push('<h2 id="step-4"><span class="stepno">Step 4</span> The reconciliation ' + tag("built") + '</h2>');
+  o.push('<p class="purpose no-print"><b>What this is for:</b> the proof, the lists, the entries and the questions, from your choices. <b>What to do:</b> print it or save it as a PDF for the file.</p>');
+  o.push('<p class="no-print"><button class="main-btn" id="print" type="button">Print or save as PDF</button> <button class="linkish" id="again" type="button">Start over with other files</button></p>');
+  if (rep.undecided) o.push('<p class="stopbox" id="open-items"><b>Not finished:</b> ' + plural(rep.undecided, "item") + ' to decide in step 3. Until then the proof treats the book entries in 3a as the same transactions entered wrong.</p>');
+  var outIn = rep.outstanding.filter(function(x){ return x.amount > 0; }), outOut = rep.outstanding.filter(function(x){ return x.amount < 0; });
+  var nearFix = rep.near.filter(function(n){ return n.decision !== "not"; }), dupFix = rep.duplicates.filter(function(d){ return d.decision !== "not"; });
+  var pr = [];
+  pr.push(["Balance per bank, " + dateOf(rep.bankEnd), rep.bankEnding == null ? "not known" : c$(rep.bankEnding), ""]);
+  pr.push(["Add: deposits in transit (" + outIn.length + ")", c$(sum(outIn, function(x){ return x.amount; })), ""]);
+  pr.push(["Less: outstanding checks and payments (" + outOut.length + ")", c$(sum(outOut, function(x){ return x.amount; })), ""]);
+  pr.push(["Adjusted bank balance", rep.adjustedBank == null ? "not known" : c$(rep.adjustedBank), "big"]);
+  pr.push(["Balance per books, " + dateOf(rep.bankEnd), c$(rep.booksEnding), ""]);
+  pr.push(["Add or less: bank items not in the books (" + rep.bankOnly.length + ")", c$(sum(rep.bankOnly, function(b){ return b.amount; })), ""]);
+  pr.push(["Add or less: corrections of book entries (" + (nearFix.length + dupFix.length) + ")", c$(rep.corrections), ""]);
+  pr.push(["Adjusted book balance", c$(rep.adjustedBooks), "big"]);
+  pr.push(["Difference", rep.difference == null ? "not known" : rep.difference === 0 ? "$0.00: it ties" : c$(rep.difference), "big"]);
+  o.push('<div class="scroll"><table id="proof" class="proof"><tbody>' + pr.map(function(p){ return '<tr class="' + p[2] + '"><td>' + esc(p[0]) + '</td><td class="num">' + esc(p[1]) + '</td></tr>'; }).join("") + '</tbody></table></div>');
+  if (rep.startDifference != null && rep.difference) o.push('<p class="note">At the start of the bank’s dates the books and the bank differed by more than the outstanding items explain: ' + c$(rep.startDifference) + ' left over.</p>');
+  // entries
+  var J = [], other = [];
+  rep.bankOnly.forEach(function(b){
+    if (b.treat === "fee") J.push({ note: "Bank charge on " + dateOf(b.date) + " (“" + b.desc + "”)", lines: [["Bank service charges", -cents(b.amount), 0], [rep.account, 0, -cents(b.amount)]] });
+    else if (b.treat === "interest") J.push({ note: "Interest on " + dateOf(b.date), lines: [[rep.account, cents(b.amount), 0], ["Interest income", 0, cents(b.amount)]] });
+    else if (b.treat === "ask") other.push("Find out what the " + c$(b.amount) + " " + (b.amount > 0 ? "deposit" : "payment") + " on " + dateOf(b.date) + " (“" + b.desc + "”) was, and record it.");
+  });
+  nearFix.forEach(function(n){ other.push("Correct the " + (n.num ? "check #" + n.num : (n.type || "entry")) + " dated " + dateOf(n.bookDate) + (n.name ? " to " + n.name : "") + " from " + c$(n.bookAmount) + " to " + c$(n.bankAmount) + " (edit the transaction itself" + (n.bookDate < rep.bankStart ? "" : "") + ")."); });
+  dupFix.forEach(function(d){ other.push("Delete or void the second " + c$(d.amount) + " entry from " + d.name + " dated " + dateOf(d.date) + "; the bank shows it once."); });
+  rep.outstanding.filter(function(x){ return x.decision === "reverse"; }).forEach(function(x){ J.push({ note: "Stale check #" + (x.num || "") + " to " + (x.name || "") + " dated " + dateOf(x.date) + ": not cashed; reverse it to a liability until it is reissued or reported as unclaimed property", lines: [[rep.account, -cents(x.amount), 0], ["Unclaimed property payable", 0, -cents(x.amount)]] }); });
+  o.push('<h3>Entries and corrections</h3>');
+  if (J.length) {
+    o.push('<div class="scroll"><table id="entries" class="cards"><thead><tr><th>Entry</th><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead><tbody>');
+    J.forEach(function(e, i){ e.lines.forEach(function(l, j){ o.push('<tr' + (j === 0 ? ' class="first-line"' : "") + '>' + td("Entry", j === 0 ? "<b>AJE " + (i + 1) + "</b>" : "") + td("Account", esc(l[0])) + td("Debit", l[1] ? money(l[1]) : "", "num") + td("Credit", l[2] ? money(l[2]) : "", "num") + '</tr>'); });
+      o.push('<tr class="memo">' + td("", "") + td("Explanation", "<i>" + esc(e.note) + "</i>") + td("", "") + td("", "") + '</tr>'); });
+    o.push('</tbody></table></div>');
+  }
+  if (other.length) o.push('<ul id="corrections">' + other.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + '</ul>');
+  if (!J.length && !other.length) o.push('<p class="ok" id="entries">No entries.</p>');
+  var qs = [];
+  rep.bankOnly.filter(function(b){ return b.treat === "ask"; }).forEach(function(b){ qs.push("What was the " + c$(b.amount) + " " + (b.amount > 0 ? "deposit" : "payment") + " on " + dateOf(b.date) + " (“" + b.desc + "”)?"); });
+  rep.outstanding.filter(function(x){ return x.flag === "stale" || x.flag === "old"; }).forEach(function(x){ qs.push("Check #" + (x.num || "?") + " to " + (x.name || "?") + " for " + c$(-x.amount) + ", dated " + dateOf(x.date) + ", has not been cashed. Did the payee receive it?"); });
+  rep.outstanding.filter(function(x){ return x.flag === "old deposit"; }).forEach(function(x){ qs.push("The " + c$(x.amount) + " deposit from " + (x.name || "?") + " recorded on " + dateOf(x.date) + " has not reached the bank. Was it deposited?"); });
+  if (qs.length) o.push('<h3>Questions for the client</h3><ol id="questions">' + qs.map(function(q){ return "<li>" + esc(q) + "</li>"; }).join("") + '</ol>');
+  o.push('<div class="print-only"><h3>Outstanding items</h3><ul>' + rep.outstanding.map(function(x){ return "<li>" + esc(dateOf(x.date) + " " + (x.num ? "#" + x.num + " " : "") + (x.name || x.memo || x.type) + " " + c$(x.amount) + " (" + x.age + " days)" + (x.decision ? ": " + x.decision : "")) + "</li>"; }).join("") + '</ul>' +
+    '<h3>Bank items not in the books</h3><ul>' + rep.bankOnly.map(function(b){ return "<li>" + esc(dateOf(b.date) + " " + b.desc + " " + c$(b.amount) + ": " + TREAT[b.treat]) + "</li>"; }).join("") + '</ul></div>');
+  o.push('<h3>What I read</h3><p class="note">' + esc("Bank: " + rep.bankLayout + ", " + plural(rep.bankLines, "line") + ". Books: " + rep.booksLayout + ", account “" + rep.account + "”, " + plural(rep._books.length, "entry", "entries") + (rep.afterStatement ? " (" + rep.afterStatement + " after the bank’s last date, left out)" : "") + ".") + '</p>');
+  o.push('<p class="foot">Made by “Why won’t the bank rec tie?” version 1.0.0, on this computer. The files were read here and not sent anywhere. Arithmetic is done in whole cents. The page matches and explains; you decide what to post.</p>');
+  return o.join("");
+}
+
+function opts(){ return { account: state.account, bankBegin: state.bankBegin, bankEnd: state.bankEnd, decide: state.decide, classify: state.classify }; }
+function readMoney(id){ var v = ($(id) || {}).value || ""; if (!v.trim()) { delete bad[id]; return null; } var c = parseAmount(v); if (c == null || isNaN(c)) { bad[id] = 1; return undefined; } delete bad[id]; return c; }
+function setStep(n){
+  Array.prototype.forEach.call(document.querySelectorAll("#steps li"), function(li){
+    var s = +li.getAttribute("data-step"), done = (s === 1 && n > 1) || (s === 2 && state.readOk) || (s === 3 && current && !current.undecided && state.readOk);
+    li.className = s === n ? "now" : done ? "done" : ""; var b = li.querySelector("b"); if (b) b.textContent = done && s !== n ? "✓" : s;
+    if (s === n) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
+  });
+}
+function stepLinks(on){
+  Array.prototype.forEach.call(document.querySelectorAll("#steps li"), function(li){
+    var s = +li.getAttribute("data-step"), inner = li.querySelector(".s, a"), html = inner.innerHTML, el;
+    if (on) { el = document.createElement("a"); el.href = s === 1 ? "#" : "#step-" + s; if (s === 1) el.addEventListener("click", function(e){ e.preventDefault(); goStart(); }); }
+    else { el = document.createElement("span"); el.className = "s"; }
+    el.innerHTML = html; li.replaceChild(el, inner);
+  });
+}
+function goStart(){
+  if (current && !confirm("Start over? Your decisions and the balances you typed will be cleared.")) return;
+  $("report").hidden = true; $("start").hidden = false; $("problem").hidden = true; current = null; stepLinks(false); setStep(1); window.scrollTo(0, 0);
+}
+function onScroll(){
+  if (!current || $("report").hidden) return;
+  var n = 2; ["step-3", "step-4"].forEach(function(id, i){ var el = $(id); if (el && el.getBoundingClientRect().top < window.innerHeight * 0.45) n = i + 3; });
+  setStep(n);
+  var left = []; if (!state.readOk) left.push("step 2 (press “This is right”)"); if (current.undecided) left.push("step 3 (" + plural(current.undecided, "item") + " to decide)");
+  var w = $("where"); if (w) w.textContent = "You are looking at step " + n + " of 4. " + (left.length ? "Still to do: " + left.join("; ") + "." : "Everything is decided: print the reconciliation in step 4.");
+}
+window.addEventListener("scroll", onScroll);
+function publish(rep){
+  ["client", "wpRef", "preparedBy", "preparedOn", "reviewedBy", "reviewedOn"].forEach(function(id){ if ($(id)) keep[id] = $(id).value; });
+  current = rep; $("out").innerHTML = render(rep);
+  if (!$("start").hidden) { $("start").hidden = true; $("report").hidden = false; stepLinks(true); }
+  window.__report = JSON.parse(JSON.stringify(rep, function(k, v){ return k.charAt(0) === "_" ? undefined : v; }));
+  var again = function(f){ return function(){ var y = window.scrollY; f(); publish(reconcile(files.bank.rows, files.books.rows, { bank: files.bank.name, books: files.books.name }, opts())); window.scrollTo(0, y); onScroll(); }; };
+  $("update-balances").addEventListener("click", again(function(){ var a = readMoney("bank-begin"), b = readMoney("bank-end"); if (a !== undefined) state.bankBegin = a; if (b !== undefined) state.bankEnd = b; }));
+  $("account").addEventListener("change", again(function(){ state.account = $("account").value; state.decide = {}; state.classify = {}; }));
+  $("read-ok").addEventListener("click", function(){ state.readOk = true; this.textContent = "✓ Checked: go to step 3"; setStep(3); $("step-3").scrollIntoView(); });
+  Array.prototype.forEach.call(document.querySelectorAll("input.dec"), function(x){ x.addEventListener("change", again(function(){ state.decide = state.decide || {}; state.decide[x.getAttribute("data-id")] = x.value; })); });
+  Array.prototype.forEach.call(document.querySelectorAll("select.treat"), function(x){ x.addEventListener("change", again(function(){ state.classify = state.classify || {}; state.classify[x.getAttribute("data-id")] = x.value; })); });
+  $("print").addEventListener("click", function(){ if ($("open-items") && !confirm("This reconciliation is not finished: " + $("open-items").textContent.replace(/^Not finished:\s*/, "") + " Print anyway?")) return; setStep(4); window.print(); });
+  $("again").addEventListener("click", goStart);
+  onScroll();
+}
+function showProblem(msg){ var p = $("problem"); p.textContent = msg; p.hidden = false; }
+function tryStart(){
+  if (!files.bank || !files.books) return;
+  state = {}; bad = {};
+  var rep = reconcile(files.bank.rows, files.books.rows, { bank: files.bank.name, books: files.books.name }, opts());
+  if (rep.status === "NOT_RECOGNIZED") { window.__report = JSON.parse(JSON.stringify(rep, function(k, v){ return k.charAt(0) === "_" ? undefined : v; })); return showProblem(rep.exceptions[0].message); }
+  publish(rep); window.scrollTo(0, 0); onScroll();
+}
+function readFile(f, which){
+  if (/\.pdf$/i.test(f.name)) return showProblem("“" + f.name + "” is a PDF. Download or export it as CSV or Excel instead.");
+  if (!/\.(xlsx|xlsm|xls|csv|txt)$/i.test(f.name)) return showProblem("“" + f.name + "” is not an Excel or CSV file.");
+  window.__report = undefined; $("problem").hidden = true;
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var text = /\.(csv|txt)$/i.test(f.name);
+      var wb = text ? XLSX.read(new TextDecoder("utf-8").decode(reader.result), { type: "string", raw: true }) : XLSX.read(new Uint8Array(reader.result), { type: "array" });
+      var best = null;
+      wb.SheetNames.forEach(function(sn){ var rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: null, blankrows: true }); if (!best || rows.length > best.length) best = rows; });
+      files[which] = { name: f.name, rows: best || [] };
+      $(which + "-got").textContent = "✓ " + f.name;
+      tryStart();
+    } catch (e) { window.__report = { status: "ERROR", message: String(e) }; showProblem("Something in this file stopped me. Nothing was produced. (" + e + ")"); }
+  };
+  reader.readAsArrayBuffer(f);
+}
+["bank", "books"].forEach(function(which){
+  var inp = $(which + "-file");
+  inp.addEventListener("change", function(){ if (this.files && this.files[0]) readFile(this.files[0], which); this.value = ""; });
+  var box = inp.parentNode;
+  ["dragenter", "dragover"].forEach(function(ev){ box.addEventListener(ev, function(e){ e.preventDefault(); box.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function(ev){ box.addEventListener(ev, function(e){ e.preventDefault(); box.classList.remove("over"); }); });
+  box.addEventListener("drop", function(e){ var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) readFile(f, which); });
+});
+document.addEventListener("dragover", function(e){ e.preventDefault(); });
+document.addEventListener("drop", function(e){ e.preventDefault(); });
+setStep(1);
+
+// a made-up sample: one month for a small contractor
+$("sample").addEventListener("click", function(){
+  var bankRows = [["Date", "Description", "Amount", "Balance"]], bal = 2412000;
+  [["01/05/2026", "CHECK 1043", -45210], ["01/06/2026", "DEPOSIT ID 551201", 276500], ["01/09/2026", "ACH DEBIT METRO UTILITIES", -31845], ["01/14/2026", "CHECK 1044", -120000],
+   ["01/20/2026", "MERCHANT BANKCARD DEPOSIT", 184300], ["01/31/2026", "MONTHLY SERVICE FEE", -2500]].forEach(function(l){ bal += l[2]; bankRows.push([l[0], l[1], (l[2] / 100).toFixed(2), (bal / 100).toFixed(2)]); });
+  var g = [["Sample Contracting LLC"], ["General Ledger"], ["December 1, 2025 - January 31, 2026"], [], ["", "Date", "Transaction Type", "Num", "Name", "Memo/Description", "Split", "Amount", "Balance"], ["Checking"], ["", "Beginning Balance", "", "", "", "", "", "", 24120]];
+  var b2 = 2412000, tot = 0;
+  [["12/29/2025", "Check", "1043", "Coastal Insurance", -42510], ["01/05/2026", "Deposit", "", "Ember Hotel", 276500], ["01/07/2026", "Deposit", "", "Ember Hotel", 276500], ["01/09/2026", "Expense", "", "Metro Utilities", -31845],
+   ["01/12/2026", "Check", "1044", "Apex Plumbing", -120000], ["01/18/2026", "Sales Receipt", "", "Card sales", 98100], ["01/19/2026", "Sales Receipt", "", "Card sales", 86200], ["01/28/2026", "Check", "1045", "Harbor Supply Co", -65000]].forEach(function(l){
+    b2 += l[4]; tot += l[4]; g.push(["", l[0], l[1], l[2], l[3], "", "-Split-", l[4] / 100, b2 / 100]); });
+  g.push(["Total for Checking", "", "", "", "", "", "", tot / 100, ""]);
+  files.bank = { name: "made-up bank download", rows: bankRows }; files.books = { name: "made-up ledger", rows: g };
+  tryStart();
+});
+</script>
+</body>
+</html>
