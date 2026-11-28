@@ -1478,7 +1478,7 @@
     "bankAmount": -480.0,
     "bookDate": null,
     "bookAmount": null,
-    "num": ""
+    "num": "6001"
    },
    {
     "id": "n1",
@@ -1486,7 +1486,7 @@
     "decision": "fix",
     "bankDate": "2026-01-14",
     "bankAmount": -315.0,
-    "bookDate": null,
+    "bookDate": "2026-01-07",
     "bookAmount": null,
     "num": "6003"
    }

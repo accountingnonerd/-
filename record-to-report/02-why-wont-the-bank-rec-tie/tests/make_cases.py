@@ -184,8 +184,9 @@ def key_for(bank, books, opening, begin, end_bal, account, accounts, bank_layout
     r = reconcile(bank, books, opening, bb, be, stmt_end, dict(decide or []), tk)
     BK = {k["i"]: k for k in books}; BN = {b["i"]: b for b in bank}
     near = [{"id": n["id"], "kind": n["kind"], "decision": n["decision"], "bankDate": BN[n["bank"]]["date"].isoformat(), "bankAmount": BN[n["bank"]]["amount"] / 100,
-             "bookDate": BK[n["book"]]["date"].isoformat() if n["book"] is not None else None, "bookAmount": BK[n["book"]]["amount"] / 100 if n["book"] is not None else None,
-             "num": BK[n["book"]]["num"] if n["book"] is not None else (BK[n["zero"]]["num"] if n.get("zero") is not None else "")} for n in r["near"]]
+             "bookDate": BK[n["book"]]["date"].isoformat() if n["book"] is not None else (BK[n["zero"]]["date"].isoformat() if n.get("zero") is not None else None),
+             "bookAmount": BK[n["book"]]["amount"] / 100 if n["book"] is not None else None,
+             "num": BK[n["book"]]["num"] if n["book"] is not None else (BK[n["zero"]]["num"] if n.get("zero") is not None else (check_no(BN[n["bank"]]) or ""))} for n in r["near"]]
     batches = [{"bankDate": BN[bi]["date"].isoformat(), "amount": BN[bi]["amount"] / 100, "count": len(v)} for bi, v in r["match"].items() if len(v) > 1]
     sp = {}
     for bi, ki in r["split"].items(): sp.setdefault(ki, []).append(bi)

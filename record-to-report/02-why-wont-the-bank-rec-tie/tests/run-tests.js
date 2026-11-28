@@ -31,18 +31,19 @@ function compare(key, rep) {
   const extra = codes.filter((c) => !key.exceptions.includes(c));
   check("raises nothing else", "none", extra.length ? extra.join(",") : "none");
   if (key.status === "NOT_RECOGNIZED" || key.stopOnly) return out;
-  for (const f of ["account", "bankStart", "bankEnd", "bankLines", "matched", "matchedChecks", "clearedBefore", "afterStatement", "stale", "oldOutstanding", "oldDeposits"]) check(f, key[f], rep[f]);
+  for (const f of ["account", "bankStart", "bankEnd", "bankLines", "matched", "clearedBefore", "afterStatement", "stale", "oldOutstanding", "lateItems", "startMode", "startCandidates", "undecided", "ties"]) check(f, key[f], Array.isArray(rep[f]) ? rep[f].length : rep[f]);
   check("accounts read", key.accounts.join(","), (rep.accounts || []).join(","));
-  for (const f of ["bankBegin", "bankEnding", "booksEnding", "corrections", "adjustedBank", "adjustedBooks", "difference"])
+  for (const f of ["bankBegin", "bankEnding", "booksEnding", "bookCorrections", "bankCorrections", "adjustedBank", "adjustedBooks", "difference", "startLeft"])
     check(f, key[f], rep[f], key[f] === null ? rep[f] === null : near(key[f], rep[f]));
   check("batches", pairs(key.batches, (x) => `${x.bankDate} ${m2(x.amount)} x${x.count}`), pairs(rep.batches, (x) => `${x.bankDate} ${m2(x.amount)} x${x.count}`));
-  const nk = (x) => `${x.kind} bank ${x.bankDate} ${m2(x.bankAmount)} book ${x.bookDate} ${m2(x.bookAmount)} #${x.num}`;
+  const nk = (x) => `${x.kind} ${x.decision} bank ${x.bankDate} ${m2(x.bankAmount)} book ${x.bookDate} ${m2(x.bookAmount)} #${x.num}`;
   check("book entries that look wrong", pairs(key.near, nk), pairs(rep.near, nk));
   check("entered twice", pairs(key.duplicates, (x) => `${x.date} ${m2(x.amount)} ${x.name}`), pairs(rep.duplicates, (x) => `${x.date} ${m2(x.amount)} ${x.name}`));
   const ok = (x) => `${x.date} #${x.num} ${m2(x.amount)} ${x.age}d`;
   check("outstanding", pairs(key.outstanding, ok), pairs(rep.outstanding, ok));
   check("at the bank, not in the books", pairs(key.bankOnly, (x) => `${x.date} ${m2(x.amount)} ${x.kind}`), pairs(rep.bankOnly, (x) => `${x.date} ${m2(x.amount)} ${x.kind}`));
-  check("recorded before the books file", pairs(key.fromBefore, (x) => `${x.date} ${m2(x.amount)}`), pairs(rep.fromBefore, (x) => `${x.date} ${m2(x.amount)}`));
+  check("suggested as recorded before the books file", pairs(key.suggestBank, (x) => `${x.date} ${m2(x.amount)}`), pairs(rep.suggestBank, (x) => `${x.date} ${m2(x.amount)}`));
+  check("one book entry to several bank lines", pairs(key.splits, (x) => `${x.bookDate} ${m2(x.amount)} x${x.count}`), pairs(rep.splits, (x) => `${x.bookDate} ${m2(x.amount)} x${x.count}`));
   return out;
 }
 
@@ -65,12 +66,21 @@ function compare(key, rep) {
         await page.fill("input#bank-begin", key.typed.bankBegin.toFixed(2)); await page.fill("input#bank-end", key.typed.bankEnd.toFixed(2));
         await page.click("button#update-balances"); await wait(b);
       }
+      if (key.ticks) for (const [side, d, a] of key.ticks) {         // the accountant ticks what was outstanding at the start
+        const list = await page.evaluate((s) => (s === "book" ? window.__report.startCandidates : window.__report.suggestBank), side);
+        const hit = list.find((x) => x.date === d && Math.abs(x.amount - a) < 0.005);
+        if (!hit) { errors.push("nothing to tick for " + side + " " + d + " " + a); continue; }
+        const b = await page.evaluate(() => JSON.stringify(window.__report)); await page.check(`input.tick[data-id="${hit.id}"]`); await wait(b);
+      }
+      if (key.decide) for (const [id, choice] of key.decide) {         // the accountant's decisions in step 3a
+        const b = await page.evaluate(() => JSON.stringify(window.__report)); await page.check(`input.dec[data-id="${id}"][value="${choice}"]`); await wait(b);
+      }
       rep = await page.evaluate(() => JSON.parse(JSON.stringify(window.__report)));
       shown = await page.evaluate(() => { const vis = (el) => !!el && !el.hidden && el.offsetParent !== null && el.innerText.trim().length > 0;
         return { stop: vis(document.getElementById("stop-banner")) || vis(document.getElementById("problem")) }; });
     } catch (e) { errors.push(String(e).split("\n")[0]); }
     const ms = Date.now() - t0, checks = compare(key, rep);
-    const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "BANK_FILE_GAPS", "BOOKS_DO_NOT_ADD_UP"].includes(c));
+    const wantStop = key.exceptions.some((c) => ["NOT_RECOGNIZED", "BANK_FILE_GAPS", "BOOKS_DO_NOT_ADD_UP", "UNREAD_ROWS", "BALANCES_DISAGREE", "CARD_NOT_SUPPORTED"].includes(c));
     checks.push({ what: wantStop ? "shows the stop message" : "shows no stop message", expected: wantStop, got: !!shown.stop, ok: wantStop === !!shown.stop });
     if (errors.length) checks.push({ what: "runs without errors", expected: "no errors", got: errors.join(" | "), ok: false });
     results.push({ id, key, checks, ms, pass: checks.every((c) => c.ok) });
