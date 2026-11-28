@@ -17,8 +17,8 @@
   "bankEnding": 126838.75,
   "booksEnding": 128089.98,
   "matched": 53,
-  "matchedChecks": 18,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -71,15 +71,21 @@
    }
   ],
   "clearedBefore": 37,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 128033.4,
   "adjustedBooks": 128033.4,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY"
@@ -104,8 +110,8 @@
   "bankEnding": 128425.45,
   "booksEnding": 129676.68,
   "matched": 54,
-  "matchedChecks": 20,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -158,15 +164,21 @@
    }
   ],
   "clearedBefore": 36,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 129620.1,
   "adjustedBooks": 129620.1,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY"
@@ -193,8 +205,8 @@
   "bankEnding": 153852.85,
   "booksEnding": 153449.32,
   "matched": 53,
-  "matchedChecks": 18,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -254,15 +266,21 @@
    }
   ],
   "clearedBefore": 36,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 153392.74,
   "adjustedBooks": 153392.74,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "ACCOUNT_CHOSEN",
    "AFTER_STATEMENT",
@@ -288,8 +306,8 @@
   "bankEnding": 126829.69,
   "booksEnding": 128080.92,
   "matched": 55,
-  "matchedChecks": 21,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -342,15 +360,21 @@
    }
   ],
   "clearedBefore": 35,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 128024.34,
   "adjustedBooks": 128024.34,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY"
@@ -379,11 +403,13 @@
   "bankEnding": 117157.67,
   "booksEnding": 121137.9,
   "matched": 54,
-  "matchedChecks": 19,
   "batches": [],
+  "splits": [],
   "near": [
    {
+    "id": "n0",
     "kind": "check amount differs",
+    "decision": "fix",
     "bankDate": "2026-02-09",
     "bankAmount": -452.1,
     "bookDate": "2026-02-03",
@@ -391,7 +417,9 @@
     "num": "1033"
    },
    {
+    "id": "n1",
     "kind": "check amount differs",
+    "decision": "bank",
     "bankDate": "2026-02-22",
     "bankAmount": -834.0,
     "bookDate": "2026-02-17",
@@ -399,7 +427,9 @@
     "num": "1034"
    },
    {
+    "id": "n2",
     "kind": "transposed",
+    "decision": "fix",
     "bankDate": "2026-03-10",
     "bankAmount": -617.5,
     "bookDate": "2026-03-09",
@@ -409,6 +439,7 @@
   ],
   "duplicates": [
    {
+    "id": "u0",
     "date": "2026-01-22",
     "amount": 2765.0,
     "name": "Ember Hotel"
@@ -464,15 +495,21 @@
    }
   ],
   "clearedBefore": 37,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": -2729.0,
-  "adjustedBank": 118352.32,
-  "adjustedBooks": 118352.32,
+  "bookCorrections": -2738.0,
+  "bankCorrections": -9.0,
+  "adjustedBank": 118343.32,
+  "adjustedBooks": 118343.32,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY",
@@ -480,7 +517,25 @@
    "CHECK_AMOUNT_DIFFERS",
    "TRANSPOSED"
   ],
-  "status": "COMPUTED"
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "fix"
+   ],
+   [
+    "n1",
+    "bank"
+   ],
+   [
+    "n2",
+    "fix"
+   ],
+   [
+    "u0",
+    "fix"
+   ]
+  ]
  },
  "06": {
   "title": "Planted: card sales recorded one by one that land as one deposit; a refund paid out entered as money in; withdrawals and deposits columns",
@@ -500,7 +555,6 @@
   "bankEnding": 134745.13,
   "booksEnding": 136621.36,
   "matched": 58,
-  "matchedChecks": 21,
   "batches": [
    {
     "bankDate": "2026-01-12",
@@ -518,9 +572,12 @@
     "count": 4
    }
   ],
+  "splits": [],
   "near": [
    {
+    "id": "n0",
     "kind": "sign",
+    "decision": "undecided",
     "bankDate": "2026-02-21",
     "bankAmount": -312.5,
     "bookDate": "2026-02-20",
@@ -530,6 +587,13 @@
   ],
   "duplicates": [],
   "outstanding": [
+   {
+    "date": "2026-02-20",
+    "num": "",
+    "name": "Delta Fitness",
+    "amount": 312.5,
+    "age": 39
+   },
    {
     "date": "2026-03-26",
     "num": "1031",
@@ -560,6 +624,12 @@
     "kind": "fee"
    },
    {
+    "date": "2026-02-21",
+    "desc": "ACH DEBIT REFUND DELTA FITNESS",
+    "amount": -312.5,
+    "kind": "other"
+   },
+   {
     "date": "2026-02-28",
     "desc": "MONTHLY SERVICE FEE",
     "amount": -25.0,
@@ -579,19 +649,26 @@
    }
   ],
   "clearedBefore": 35,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": -625.0,
-  "adjustedBank": 135939.78,
-  "adjustedBooks": 135939.78,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 136252.28,
+  "adjustedBooks": 136252.28,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 1,
+  "undecided": 1,
+  "ties": false,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY",
    "BATCHES",
+   "LATE_ITEMS",
    "SIGN_ERROR"
   ],
   "status": "COMPUTED"
@@ -614,8 +691,8 @@
   "bankEnding": 113720.91,
   "booksEnding": 113147.82,
   "matched": 53,
-  "matchedChecks": 19,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -710,19 +787,25 @@
    }
   ],
   "clearedBefore": 35,
-  "fromBefore": [],
+  "startMode": "unique",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 113091.24,
   "adjustedBooks": 113091.24,
   "difference": 0.0,
   "stale": 2,
   "oldOutstanding": 1,
-  "oldDeposits": 1,
+  "lateItems": 1,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY",
-   "OLD_DEPOSITS_IN_TRANSIT",
+   "LATE_ITEMS",
    "OLD_OUTSTANDING",
    "STALE_CHECKS"
   ],
@@ -746,8 +829,8 @@
   "bankEnding": 121506.33,
   "booksEnding": 119539.78,
   "matched": 49,
-  "matchedChecks": 15,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -807,7 +890,9 @@
    }
   ],
   "clearedBefore": 0,
-  "fromBefore": [
+  "startMode": "bank lines",
+  "startCandidates": 0,
+  "suggestBank": [
    {
     "date": "2026-01-03",
     "amount": -1864.5
@@ -821,20 +906,41 @@
     "amount": -2335.85
    }
   ],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 119483.2,
   "adjustedBooks": 119483.2,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY",
-   "FROM_BEFORE"
+   "START_BANK_LINES"
   ],
-  "status": "COMPUTED"
+  "status": "COMPUTED",
+  "ticks": [
+   [
+    "bank",
+    "2026-01-03",
+    -1864.5
+   ],
+   [
+    "bank",
+    "2026-01-10",
+    -742.1
+   ],
+   [
+    "bank",
+    "2026-01-12",
+    -2335.85
+   ]
+  ]
  },
  "09": {
   "title": "Planted: a line missing from the bank's download, so its running balance jumps",
@@ -885,8 +991,8 @@
   "bankEnding": 149076.18,
   "booksEnding": 150227.41,
   "matched": 54,
-  "matchedChecks": 20,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -939,15 +1045,21 @@
    }
   ],
   "clearedBefore": 36,
-  "fromBefore": [],
+  "startMode": "not explained",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": -100.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 150270.83,
   "adjustedBooks": 150170.83,
   "difference": 100.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": false,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY",
@@ -975,8 +1087,8 @@
   "bankEnding": 115882.39,
   "booksEnding": 112615.46,
   "matched": 56,
-  "matchedChecks": 22,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -1036,15 +1148,21 @@
    }
   ],
   "clearedBefore": 33,
-  "fromBefore": [],
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": 112558.88,
   "adjustedBooks": 112558.88,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
   "exceptions": [
    "ACCOUNT_CHOSEN",
    "AFTER_STATEMENT",
@@ -1071,8 +1189,8 @@
   "bankEnding": null,
   "booksEnding": 112726.26,
   "matched": 52,
-  "matchedChecks": 18,
   "batches": [],
+  "splits": [],
   "near": [],
   "duplicates": [],
   "outstanding": [
@@ -1132,20 +1250,510 @@
    }
   ],
   "clearedBefore": 37,
-  "fromBefore": [],
+  "startMode": "unknown",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": null,
   "afterStatement": 1,
-  "corrections": 0.0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
   "adjustedBank": null,
   "adjustedBooks": 112669.68,
   "difference": null,
   "stale": 0,
   "oldOutstanding": 0,
-  "oldDeposits": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": false,
   "exceptions": [
    "AFTER_STATEMENT",
    "BANK_ONLY",
    "NEED_BALANCES"
   ],
   "status": "COMPUTED"
+ },
+ "15": {
+  "title": "A credit card account: this version reconciles bank accounts only, and says so",
+  "kind": "ugly",
+  "bankFile": "15-bank-card.csv",
+  "booksFile": "15-books-card.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "CARD_NOT_SUPPORTED"
+  ]
+ },
+ "16": {
+  "title": "A customer's check number on a payment received; a coffee, a building maintenance bill and a returned check that only look like bank fees",
+  "kind": "planted",
+  "bankFile": "16-bank.csv",
+  "booksFile": "16-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-05",
+  "bankEnd": "2026-01-31",
+  "bankLines": 7,
+  "bankBegin": 10000.0,
+  "bankEnding": 9222.5,
+  "booksEnding": 10950.0,
+  "matched": 3,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [
+   {
+    "date": "2026-01-12",
+    "desc": "DEBIT CARD BLUE BOTTLE COFFEE",
+    "amount": -12.5,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-15",
+    "desc": "ACH DEBIT ACME BUILDING MAINTENANCE",
+    "amount": -1200.0,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-20",
+    "desc": "RETURNED ITEM NSF",
+    "amount": -500.0,
+    "kind": "returned"
+   },
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY MAINTENANCE FEE",
+    "amount": -15.0,
+    "kind": "fee"
+   }
+  ],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 9222.5,
+  "adjustedBooks": 9222.5,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "BANK_ONLY",
+   "RETURNED_ITEMS"
+  ],
+  "status": "COMPUTED"
+ },
+ "17": {
+  "title": "Rent paid every month: January's is missing from the books, and December's (cleared in December) must not be taken for it",
+  "kind": "planted",
+  "bankFile": "17-bank.csv",
+  "booksFile": "17-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-02",
+  "bankEnd": "2026-02-27",
+  "bankLines": 3,
+  "bankBegin": 17500.0,
+  "bankEnding": 16500.0,
+  "booksEnding": 19000.0,
+  "matched": 2,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [
+   {
+    "date": "2026-01-02",
+    "desc": "ACH DEBIT OAKRIDGE PROPERTIES",
+    "amount": -2500.0,
+    "kind": "other"
+   }
+  ],
+  "clearedBefore": 1,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 16500.0,
+  "adjustedBooks": 16500.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "BANK_ONLY"
+  ],
+  "status": "COMPUTED"
+ },
+ "18": {
+  "title": "The same payment to the same vendor on 12/30 (cleared in December) and 1/2: not entered twice",
+  "kind": "ugly",
+  "bankFile": "18-bank.csv",
+  "booksFile": "18-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-03",
+  "bankEnd": "2026-01-20",
+  "bankLines": 2,
+  "bankBegin": 4750.0,
+  "bankEnding": 5400.0,
+  "booksEnding": 5400.0,
+  "matched": 2,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [],
+  "clearedBefore": 1,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 5400.0,
+  "adjustedBooks": 5400.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [],
+  "status": "COMPUTED"
+ },
+ "19": {
+  "title": "The bank paid check 6001 twice and paid check 6003, which the books voided; check 6002 for the same amount is still outstanding",
+  "kind": "planted",
+  "bankFile": "19-bank.csv",
+  "booksFile": "19-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-09",
+  "bankEnd": "2026-01-14",
+  "bankLines": 3,
+  "bankBegin": 8000.0,
+  "bankEnding": 6725.0,
+  "booksEnding": 7040.0,
+  "matched": 1,
+  "batches": [],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "paid twice",
+    "decision": "bank",
+    "bankDate": "2026-01-09",
+    "bankAmount": -480.0,
+    "bookDate": null,
+    "bookAmount": null,
+    "num": ""
+   },
+   {
+    "id": "n1",
+    "kind": "voided but paid",
+    "decision": "fix",
+    "bankDate": "2026-01-14",
+    "bankAmount": -315.0,
+    "bookDate": null,
+    "bookAmount": null,
+    "num": "6003"
+   }
+  ],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-01-06",
+    "num": "6002",
+    "name": "Harbor Supply Co",
+    "amount": -480.0,
+    "age": 8
+   }
+  ],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "all",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": -315.0,
+  "bankCorrections": 480.0,
+  "adjustedBank": 6725.0,
+  "adjustedBooks": 6725.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "PAID_TWICE",
+   "VOIDED_BUT_PAID"
+  ],
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "bank"
+   ],
+   [
+    "n1",
+    "fix"
+   ]
+  ]
+ },
+ "20": {
+  "title": "The statement ends 3/31 though the last line is 3/27; a pending line; amounts with DR, CR, USD and a true minus sign",
+  "kind": "ugly",
+  "bankFile": "20-bank.csv",
+  "booksFile": "20-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-03-02",
+  "bankEnd": "2026-03-31",
+  "bankLines": 3,
+  "bankBegin": 15000.0,
+  "bankEnding": 16277.5,
+  "booksEnding": 15947.5,
+  "matched": 3,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-30",
+    "num": "2102",
+    "name": "Apex Plumbing",
+    "amount": -330.0,
+    "age": 1
+   }
+  ],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 15947.5,
+  "adjustedBooks": 15947.5,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "PENDING_LEFT_OUT"
+  ],
+  "status": "COMPUTED"
+ },
+ "21": {
+  "title": "A bank line whose amount cannot be read: the page stops rather than drop it",
+  "kind": "ugly",
+  "bankFile": "21-bank.csv",
+  "booksFile": "18-books.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "UNREAD_ROWS"
+  ]
+ },
+ "22": {
+  "title": "Payroll posted to a sub-account, Checking:Payroll: the sub-account is part of the bank account",
+  "kind": "ugly",
+  "bankFile": "22-bank.csv",
+  "booksFile": "22-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking",
+   "Checking:Payroll"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-08",
+  "bankEnd": "2026-01-15",
+  "bankLines": 3,
+  "bankBegin": 9000.0,
+  "bankEnding": 10400.0,
+  "booksEnding": 10400.0,
+  "matched": 3,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 10400.0,
+  "adjustedBooks": 10400.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "SUBACCOUNTS"
+  ],
+  "status": "COMPUTED"
+ },
+ "23": {
+  "title": "One deposit in the books that the bank shows as two lines",
+  "kind": "ugly",
+  "bankFile": "23-bank.csv",
+  "booksFile": "23-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-12",
+  "bankEnd": "2026-01-20",
+  "bankLines": 3,
+  "bankBegin": 6000.0,
+  "bankEnding": 7300.0,
+  "booksEnding": 7300.0,
+  "matched": 1,
+  "batches": [],
+  "splits": [
+   {
+    "bookDate": "2026-01-11",
+    "amount": 1500.0,
+    "count": 2
+   }
+  ],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 7300.0,
+  "adjustedBooks": 7300.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "SPLITS"
+  ],
+  "status": "COMPUTED"
+ },
+ "24": {
+  "title": "Two old checks of $100, one still outstanding: the page cannot tell which and asks; the accountant ticks December's",
+  "kind": "planted",
+  "bankFile": "24-bank.csv",
+  "booksFile": "24-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-09",
+  "bankEnd": "2026-01-20",
+  "bankLines": 2,
+  "bankBegin": 9900.0,
+  "bankEnding": 10580.0,
+  "booksEnding": 10480.0,
+  "matched": 2,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2025-12-18",
+    "num": "5188",
+    "name": "Summit Office Systems",
+    "amount": -100.0,
+    "age": 33
+   }
+  ],
+  "bankOnly": [],
+  "clearedBefore": 1,
+  "startMode": "ambiguous",
+  "startCandidates": 2,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 10480.0,
+  "adjustedBooks": 10480.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "START_AMBIGUOUS"
+  ],
+  "status": "COMPUTED",
+  "ticks": [
+   [
+    "book",
+    "2025-12-18",
+    -100.0
+   ]
+  ]
  }
 }

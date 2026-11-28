@@ -13,7 +13,7 @@ Run:  python3 make_cases.py      writes cases/* and answer-key.json
 import csv, json, os, random
 from datetime import date, datetime, timedelta
 from openpyxl import Workbook
-from rules import reconcile, check_no, CHECK_RE
+from rules import reconcile, check_no, CHECK_RE, bank_kind
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "cases"); os.makedirs(OUT, exist_ok=True)
@@ -171,50 +171,68 @@ def books_xero(path, company, accounts, period_text):
 
 # ------------------------------------------------------------------ the key
 KEY = {}
-def bank_kind(b):
-    d = b["desc"].lower()
-    if b["amount"] < 0 and any(w in d for w in ("fee", "service charge", "maintenance", "overdraft", "nsf")): return "fee"
-    if b["amount"] > 0 and "interest" in d: return "interest"
-    return "other"
-def key_for(bank, books, opening, begin, end_bal, account, accounts, bank_layout, books_layout, period=None, known=(True, True)):
-    """bank, books as written to the files (book lines only for the account reconciled)."""
+def key_for(bank, books, opening, begin, end_bal, account, accounts, bank_layout, books_layout, period=None, known=(True, True), stmt_end=None,
+            decide=None, ticks=None, subaccounts=False, pending=0):
+    """bank, books as written to the files (book lines for the account reconciled, sub-accounts included)."""
     bb = begin if known[0] else None
     be = end_bal if known[1] else None
-    if bb is None and be is not None: pass
-    r = reconcile([dict(x) for x in bank], [dict(x) for x in books], opening, bb, be)
-    BK = {i: k for i, k in enumerate(books)}; BN = {i: b for i, b in enumerate(bank)}
-    ex = []
-    near = [{"kind": n["kind"], "bankDate": BN[n["bank"]]["date"].isoformat(), "bankAmount": BN[n["bank"]]["amount"] / 100,
-             "bookDate": BK[n["book"]]["date"].isoformat(), "bookAmount": BK[n["book"]]["amount"] / 100, "num": BK[n["book"]]["num"]} for n in r["near"]]
+    bank = [dict(x) for x in bank]; books = [dict(x) for x in books]
+    tk = set()
+    for side, d, a in (ticks or []):
+        lst = books if side == "book" else bank
+        hit = next(i for i, x in enumerate(lst) if x["date"] == d and x["amount"] == a); tk.add((side, hit))
+    r = reconcile(bank, books, opening, bb, be, stmt_end, dict(decide or []), tk)
+    BK = {k["i"]: k for k in books}; BN = {b["i"]: b for b in bank}
+    near = [{"id": n["id"], "kind": n["kind"], "decision": n["decision"], "bankDate": BN[n["bank"]]["date"].isoformat(), "bankAmount": BN[n["bank"]]["amount"] / 100,
+             "bookDate": BK[n["book"]]["date"].isoformat() if n["book"] is not None else None, "bookAmount": BK[n["book"]]["amount"] / 100 if n["book"] is not None else None,
+             "num": BK[n["book"]]["num"] if n["book"] is not None else (BK[n["zero"]]["num"] if n.get("zero") is not None else "")} for n in r["near"]]
     batches = [{"bankDate": BN[bi]["date"].isoformat(), "amount": BN[bi]["amount"] / 100, "count": len(v)} for bi, v in r["match"].items() if len(v) > 1]
+    sp = {}
+    for bi, ki in r["split"].items(): sp.setdefault(ki, []).append(bi)
+    splits = [{"bookDate": BK[ki]["date"].isoformat(), "amount": BK[ki]["amount"] / 100, "count": len(v)} for ki, v in sp.items()]
     end = r["end"]
     out = [{"date": k["date"].isoformat(), "num": k["num"], "name": k["name"], "amount": k["amount"] / 100, "age": (end - k["date"]).days} for k in r["outstanding"]]
     bo = [{"date": b["date"].isoformat(), "desc": b["desc"], "amount": b["amount"] / 100, "kind": bank_kind(b)} for b in r["bank_only"]]
+    adj_b = r["adj_bank"]; diff = None if adj_b is None else (adj_b - r["adj_book"]) / 100
     k = {"account": account, "accounts": accounts, "bankLayout": bank_layout, "booksLayout": books_layout,
          "bankStart": r["start"].isoformat(), "bankEnd": r["end"].isoformat(), "bankLines": len(bank),
          "bankBegin": None if bb is None else bb / 100, "bankEnding": None if r["bank_end"] is None else r["bank_end"] / 100,
-         "booksEnding": r["book_end"] / 100, "matched": len(r["match"]), "matchedChecks": sum(1 for bi, v in r["match"].items() if len(v) == 1 and BN[bi]["amount"] < 0 and check_no(BN[bi]) and BK[v[0]]["num"]),
-         "batches": batches, "near": near, "duplicates": [{"date": BK[d["book"]]["date"].isoformat(), "amount": BK[d["book"]]["amount"] / 100, "name": BK[d["book"]]["name"]} for d in r["dups"]],
-         "outstanding": out, "bankOnly": bo, "clearedBefore": len(r["cleared_before"]), "fromBefore": [{"date": b["date"].isoformat(), "amount": b["amount"] / 100} for b in r["from_before"]],
-         "afterStatement": len(r["after"]), "corrections": r["corrections"] / 100, "adjustedBank": None if r["adj_bank"] is None else r["adj_bank"] / 100, "adjustedBooks": r["adj_book"] / 100,
-         "difference": None if r["adj_bank"] is None else (r["adj_bank"] - r["adj_book"]) / 100,
-         "stale": len(r["stale"]), "oldOutstanding": len(r["old"]), "oldDeposits": len(r["old_dit"])}
+         "booksEnding": r["book_end"] / 100, "matched": len(r["match"]),
+         "batches": batches, "splits": splits, "near": near,
+         "duplicates": [{"id": d["id"], "date": BK[d["book"]]["date"].isoformat(), "amount": BK[d["book"]]["amount"] / 100, "name": BK[d["book"]]["name"]} for d in r["dups"]],
+         "outstanding": out, "bankOnly": bo, "clearedBefore": len(r["cleared_before"]), "startMode": r["mode"],
+         "startCandidates": len(r["can"]) if r["mode"] in ("ambiguous", "too many") else 0,
+         "suggestBank": [{"date": b["date"].isoformat(), "amount": b["amount"] / 100} for b in r["suggest_bank"]],
+         "startLeft": None if r["left"] is None else r["left"] / 100,
+         "afterStatement": len(r["after"]), "bookCorrections": r["book_corr"] / 100, "bankCorrections": r["bank_corr"] / 100,
+         "adjustedBank": None if adj_b is None else adj_b / 100, "adjustedBooks": r["adj_book"] / 100, "difference": diff,
+         "stale": len(r["stale"]), "oldOutstanding": len(r["old"]), "lateItems": len(r["late"]),
+         "undecided": sum(1 for n in r["near"] if n["decision"] == "undecided") + sum(1 for d in r["dups"] if d["decision"] == "undecided")}
+    k["ties"] = diff == 0 and k["undecided"] == 0 and r["left"] == 0
+    ex = []
     if len(accounts) > 1: ex.append("ACCOUNT_CHOSEN")
+    if subaccounts: ex.append("SUBACCOUNTS")
+    if pending: ex.append("PENDING_LEFT_OUT")
     if bb is None or be is None: ex.append("NEED_BALANCES")
-    if k["difference"] not in (None, 0): ex.append("DOES_NOT_TIE")
-    if r["start_explained"] is False: ex.append("START_NOT_EXPLAINED")
-    if any(n["kind"] == "check amount differs" for n in r["near"]): ex.append("CHECK_AMOUNT_DIFFERS")
-    if any(n["kind"] == "transposed" for n in r["near"]): ex.append("TRANSPOSED")
-    if any(n["kind"] == "sign" for n in r["near"]): ex.append("SIGN_ERROR")
+    if diff not in (None, 0): ex.append("DOES_NOT_TIE")
+    if r["mode"] == "not explained": ex.append("START_NOT_EXPLAINED")
+    if r["mode"] in ("ambiguous", "too many"): ex.append("START_AMBIGUOUS")
+    if r["mode"] == "bank lines": ex.append("START_BANK_LINES")
+    kinds = {n["kind"] for n in r["near"]}
+    for kind, code in (("check amount differs", "CHECK_AMOUNT_DIFFERS"), ("voided but paid", "VOIDED_BUT_PAID"), ("paid twice", "PAID_TWICE"), ("transposed", "TRANSPOSED"), ("sign", "SIGN_ERROR")):
+        if kind in kinds: ex.append(code)
     if r["dups"]: ex.append("BOOK_DUPLICATES")
     if r["bank_only"]: ex.append("BANK_ONLY")
+    if any(bank_kind(b) == "returned" for b in r["bank_only"]): ex.append("RETURNED_ITEMS")
     if r["stale"]: ex.append("STALE_CHECKS")
     if r["old"]: ex.append("OLD_OUTSTANDING")
-    if r["old_dit"]: ex.append("OLD_DEPOSITS_IN_TRANSIT")
+    if r["late"]: ex.append("LATE_ITEMS")
     if batches: ex.append("BATCHES")
-    if r["from_before"]: ex.append("FROM_BEFORE")
+    if splits: ex.append("SPLITS")
     if r["after"]: ex.append("AFTER_STATEMENT")
     k["exceptions"] = sorted(ex); k["status"] = "COMPUTED"
+    if decide: k["decide"] = decide
+    if ticks: k["ticks"] = [[s_, d.isoformat(), a / 100] for s_, d, a in ticks]
     return k, r
 def case(cid, title, kind, bank_file, books_file, k, extra=None):
     e = {"title": title, "kind": kind, "bankFile": bank_file, "booksFile": books_file}; e.update(k)
@@ -287,7 +305,10 @@ bank_generic(P("05-planted-bank.csv"), bank, begin)
 books_qbo(P("05-planted-books.xlsx"), "Granite Facility Services", [("Checking", w.opening, books)], PERIOD)
 k, r = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
 kinds = sorted(n["kind"] for n in k["near"]); assert kinds == ["check amount differs", "check amount differs", "transposed"], kinds
-assert len(k["duplicates"]) == 1
+assert len(k["duplicates"]) == 1 and k["undecided"] == 4 and not k["ties"]
+k, r = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo",
+               decide=[["n0", "fix"], ["n1", "bank"], ["n2", "fix"], ["u0", "fix"]])
+assert k["ties"], (k["difference"], k["startLeft"])
 case("05", "Planted: two checks entered for the wrong amount, an online payment with its digits swapped, a customer payment entered twice", "planted",
      "05-planted-bank.csv", "05-planted-books.xlsx", k)
 
@@ -317,7 +338,7 @@ books, bank, begin = w.lines()
 bank_generic(P("07-planted-bank.csv"), bank, begin)
 books_qbo(P("07-planted-books.xlsx"), "Copperline Plumbing Supply", [("Checking", w.opening, books)], "June 1, 2025 - April 20, 2026")
 k, r = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
-assert k["stale"] == 2 and k["oldOutstanding"] == 1 and k["oldDeposits"] == 1 and k["difference"] == 0, k
+assert k["stale"] == 2 and k["oldOutstanding"] == 1 and k["lateItems"] == 1 and k["difference"] == 0, (k["stale"], k["oldOutstanding"], k["lateItems"], k["difference"])
 case("07", "Planted: two checks over six months old, one over 90 days, and a deposit recorded but never made", "planted", "07-planted-bank.csv", "07-planted-books.xlsx", k)
 
 # ---- 08 the books file starts the same day as the bank's: items recorded earlier clear in January
@@ -327,9 +348,12 @@ cut = [k_ for k_ in books if k_["date"] >= w.start]
 opening8 = w.opening + sum(k_["amount"] for k_ in books if k_["date"] < w.start)
 bank_generic(P("08-bank.csv"), bank, begin)
 books_qbo(P("08-books-from-january.xlsx"), "Kestrel Bakery", [("Checking", opening8, cut)], "January 1 - April 20, 2026")
-k, r = key_for(strip(bank), strip(cut), opening8, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
-truth = sorted(round(e["bank_amount"] / 100, 2) for e in w.events if e["bank"] and e["lag"] is not None and e["date"] < w.start <= e["date"] + timedelta(days=e["lag"]))
-assert sorted(x["amount"] for x in k["fromBefore"]) == truth and k["difference"] == 0, (k["fromBefore"], truth)
+k0, r = key_for(strip(bank), strip(cut), opening8, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
+truth = sorted(e["bank_amount"] for e in w.events if e["bank"] and e["lag"] is not None and e["date"] < w.start <= e["date"] + timedelta(days=e["lag"]))
+assert k0["startMode"] == "bank lines" and sorted(round(x["amount"] * 100) for x in k0["suggestBank"]) == truth and k0["difference"] != 0, (k0["suggestBank"], truth)
+tick = [["bank", b_["date"], b_["amount"]] for b_ in r["suggest_bank"]]
+k, r = key_for(strip(bank), strip(cut), opening8, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo", ticks=tick)
+assert k["difference"] == 0 and k["ties"]
 case("08", "The books file starts on the bank file's first day: two checks written in December clear in January and are recognized as recorded before", "ugly",
      "08-bank.csv", "08-books-from-january.xlsx", k)
 
@@ -381,6 +405,120 @@ bank_headerless(P("14-bank-no-headings.csv"), bank)
 books_qbo(P("14-books.xlsx"), "Summit Landscaping", [("Checking", w.opening, books)], PERIOD)
 k, r = key_for(strip(bank), strip(books), w.opening, begin, None, "Checking", ["Checking"], "headerless", "qbo", known=(False, False))
 case("14", "No balances anywhere: the page matches, lists, and asks for the statement's balances before it can prove the tie", "ugly", "14-bank-no-headings.csv", "14-books.xlsx", k)
+
+# ------------------------------------------------------------------ cases from the CPA review
+def bank_status_csv(path, rows, begin):
+    """Date, Description, Amount, Balance, Status: some lines pending (no balance yet)."""
+    bal = begin
+    with open(path, "w", newline="") as f:
+        w_ = csv.writer(f); w_.writerow(["Date", "Description", "Amount", "Balance", "Status"])
+        for b in rows:
+            if b.get("pending"): w_.writerow([ds(b["date"]), b["desc"], money(b["amount"]), "", "Pending"]); continue
+            bal += b["amount"]; w_.writerow([ds(b["date"]), b["desc"], money(b["amount"]), money(bal), "Posted"])
+def L(d, desc, a, check=None): return dict(date=d, desc=desc, check=check, amount=a)
+def K(d, typ, num, name, a, memo=""): return dict(date=d, type=typ, num=num, name=name, memo=memo, amount=a)
+def simple_case(cid, title, kind, bank, books, opening, begin, layout="generic", account="Checking", accounts=None, ledger=None, extra=None, **kw):
+    accounts = accounts or [account]
+    endb = begin + sum(b["amount"] for b in bank if not b.get("pending"))
+    bank_file = f"{cid}-bank.csv"
+    if layout == "generic": bank_generic(P(bank_file), bank, begin)
+    elif layout == "status": bank_status_csv(P(bank_file), bank, begin)
+    books_file = f"{cid}-books.xlsx"
+    books_qbo(P(books_file), "Ridge Roofing", ledger or [(account, opening, books)], "September 1, 2025 - April 20, 2026")
+    posted = [b for b in bank if not b.get("pending")]
+    k, r = key_for(posted, books, opening, begin, endb, account, accounts, "amount" if layout != "status" else "amount", "qbo", **kw)
+    case(cid, title, kind, bank_file, books_file, k, extra)
+    return k, r
+
+# ---- 15 a credit card account: not reconciled by this version
+wb = Workbook(); ws = wb.active
+for r_ in [["Ridge Roofing"], ["General Ledger"], ["January 1 - March 31, 2026"], [], ["", "Date", "Transaction Type", "Num", "Name", "Memo/Description", "Split", "Amount", "Balance"],
+           ["Amex Business Card"], ["", "Beginning Balance", "", "", "", "", "", "", -1250.00], ["", "01/05/2026", "Expense", "", "Valley Fuel", "", "-Split-", -123.45, -1373.45],
+           ["Total for Amex Business Card", "", "", "", "", "", "", -123.45, ""]]: ws.append(r_)
+wb.save(P("15-books-card.xlsx"))
+bank_generic(P("15-bank-card.csv"), [L(D(2026, 1, 6), "VALLEY FUEL", 12_345)], -125_000)
+KEY["15"] = {"title": "A credit card account: this version reconciles bank accounts only, and says so", "kind": "ugly", "bankFile": "15-bank-card.csv", "booksFile": "15-books-card.xlsx",
+             "status": "COMPUTED", "stopOnly": True, "exceptions": ["CARD_NOT_SUPPORTED"]}
+
+# ---- 16 a customer's check number on a payment received; bank items that only look like fees; a returned item
+bank16 = [L(D(2026, 1, 5), "DEPOSIT ID 300101", 120_000), L(D(2026, 1, 8), "CHECK 1052", -75_000, "1052"), L(D(2026, 1, 12), "DEBIT CARD BLUE BOTTLE COFFEE", -1_250),
+          L(D(2026, 1, 15), "ACH DEBIT ACME BUILDING MAINTENANCE", -120_000), L(D(2026, 1, 20), "RETURNED ITEM NSF", -50_000), L(D(2026, 1, 31), "MONTHLY MAINTENANCE FEE", -1_500)]
+books16 = [K(D(2026, 1, 4), "Payment", "1052", "Harbor Cafe", 120_000, "Customer check 1052"), K(D(2026, 1, 6), "Check", "1052", "Apex Plumbing", -75_000),
+           K(D(2026, 1, 10), "Deposit", "", "Delta Fitness", 50_000)]
+bank16.insert(2, L(D(2026, 1, 11), "DEPOSIT ID 300177", 50_000))
+k16, r16 = simple_case("16", "A customer's check number on a payment received; a coffee, a building maintenance bill and a returned check that only look like bank fees", "planted",
+                       bank16, books16, 1_000_000, 1_000_000)
+assert [b["kind"] for b in k16["bankOnly"]] == ["other", "other", "returned", "fee"], k16["bankOnly"]
+assert k16["matched"] == 3 and not k16["near"], k16
+
+# ---- 17 rent paid every month: January's is missing from the books, and must not match December's
+bank17 = [L(D(2026, 1, 2), "ACH DEBIT OAKRIDGE PROPERTIES", -250_000), L(D(2026, 2, 2), "ACH DEBIT OAKRIDGE PROPERTIES", -250_000), L(D(2026, 2, 27), "DEPOSIT ID 311000", 400_000)]
+books17 = [K(D(2025, 12, 1), "Expense", "", "Oakridge Properties", -250_000, "December rent"), K(D(2026, 2, 1), "Expense", "", "Oakridge Properties", -250_000, "February rent"),
+           K(D(2026, 2, 26), "Deposit", "", "Granite Schools", 400_000)]
+k17, _ = simple_case("17", "Rent paid every month: January's is missing from the books, and December's (cleared in December) must not be taken for it", "planted",
+                     bank17, books17, 2_000_000, 2_000_000 - 250_000)
+assert any(b["date"] == "2026-01-02" for b in k17["bankOnly"]) and k17["difference"] == 0, k17
+
+# ---- 18 the same payment amount to the same vendor either side of the start: not a duplicate
+bank18 = [L(D(2026, 1, 3), "ACH DEBIT VALLEY FUEL", -25_000), L(D(2026, 1, 20), "DEPOSIT ID 320010", 90_000)]
+books18 = [K(D(2025, 12, 30), "Expense", "", "Valley Fuel", -25_000), K(D(2026, 1, 2), "Expense", "", "Valley Fuel", -25_000), K(D(2026, 1, 19), "Deposit", "", "Juniper Bakery", 90_000)]
+k18, _ = simple_case("18", "The same payment to the same vendor on 12/30 (cleared in December) and 1/2: not entered twice", "ugly", bank18, books18, 500_000, 500_000 - 25_000)
+assert not k18["duplicates"] and k18["difference"] == 0, k18
+
+# ---- 19 the bank paid a check twice, and paid a check the books voided
+bank19 = [L(D(2026, 1, 9), "CHECK 6001", -48_000, "6001"), L(D(2026, 1, 9), "CHECK 6001", -48_000, "6001"), L(D(2026, 1, 14), "CHECK 6003", -31_500, "6003")]
+books19 = [K(D(2026, 1, 5), "Check", "6001", "Harbor Supply Co", -48_000), K(D(2026, 1, 6), "Check", "6002", "Harbor Supply Co", -48_000), K(D(2026, 1, 7), "Check", "6003", "Metro Utilities", 0, "Voided")]
+k19, _ = simple_case("19", "The bank paid check 6001 twice and paid check 6003, which the books voided; check 6002 for the same amount is still outstanding", "planted",
+                     bank19, books19, 800_000, 800_000, decide=[["n0", "bank"], ["n1", "fix"]])
+assert {n["kind"] for n in k19["near"]} == {"paid twice", "voided but paid"} and [o["num"] for o in k19["outstanding"]] == ["6002"] and k19["ties"], k19
+
+# ---- 20 the statement ends after the last bank line; pending lines; amounts written with DR, CR, a currency code and a true minus sign
+rows20 = [L(D(2026, 3, 2), "DEPOSIT ID 330001", 210_000), L(D(2026, 3, 9), "CHECK 2101", -64_000, "2101"), L(D(2026, 3, 27), "ACH DEBIT METRO UTILITIES", -18_250)]
+with open(P("20-bank.csv"), "w", newline="") as f:
+    w_ = csv.writer(f)
+    w_.writerow(["Description", "", "Summary Amt."]); w_.writerow(["Beginning balance as of 03/01/2026", "", "USD 15,000.00"]); w_.writerow(["Ending balance as of 03/31/2026", "", "USD 16,277.50"]); w_.writerow([])
+    w_.writerow(["Date", "Description", "Amount", "Running Bal.", "Status"])
+    w_.writerow(["03/02/2026", "DEPOSIT ID 330001", "2,100.00 CR", "17,100.00", "Posted"]); w_.writerow(["03/09/2026", "CHECK 2101", "640.00 DR", "16,460.00", "Posted"])
+    w_.writerow(["03/27/2026", "ACH DEBIT METRO UTILITIES", "−182.50", "16,277.50", "Posted"]); w_.writerow(["04/01/2026", "ACH DEBIT VALLEY FUEL", "-95.00", "", "Pending"])
+books20 = [K(D(2026, 3, 1), "Deposit", "", "Ember Hotel", 210_000), K(D(2026, 3, 5), "Check", "2101", "Riverside Electric", -64_000), K(D(2026, 3, 25), "Expense", "", "Metro Utilities", -18_250),
+           K(D(2026, 3, 30), "Check", "2102", "Apex Plumbing", -33_000), K(D(2026, 4, 3), "Check", "2103", "Valley Fuel", -9_500)]
+books_qbo(P("20-books.xlsx"), "Ridge Roofing", [("Checking", 1_500_000, books20)], "March 1 - April 20, 2026")
+k20, _ = key_for(rows20, books20, 1_500_000, 1_500_000, 1_627_750, "Checking", ["Checking"], "amount", "qbo", stmt_end=D(2026, 3, 31), pending=1)
+assert k20["bankEnd"] == "2026-03-31" and [o["num"] for o in k20["outstanding"]] == ["2102"] and k20["difference"] == 0, k20
+case("20", "The statement ends 3/31 though the last line is 3/27; a pending line; amounts with DR, CR, USD and a true minus sign", "ugly", "20-bank.csv", "20-books.xlsx", k20)
+
+# ---- 21 a dated bank line whose amount cannot be read: stop
+with open(P("21-bank.csv"), "w", newline="") as f:
+    w_ = csv.writer(f); w_.writerow(["Date", "Description", "Amount", "Balance"])
+    w_.writerow(["01/05/2026", "DEPOSIT ID 1", "500.00", "1,500.00"]); w_.writerow(["01/06/2026", "CHECK 3001", "see statement", "1,400.00"])
+KEY["21"] = {"title": "A bank line whose amount cannot be read: the page stops rather than drop it", "kind": "ugly", "bankFile": "21-bank.csv", "booksFile": "18-books.xlsx",
+             "status": "COMPUTED", "stopOnly": True, "exceptions": ["UNREAD_ROWS"]}
+
+# ---- 22 payroll posted to a sub-account of Checking: included
+books22p = [K(D(2026, 1, 3), "Check", "4001", "Northline Rentals", -60_000), K(D(2026, 1, 10), "Deposit", "", "Alder Builders", 300_000)]
+books22s = [K(D(2026, 1, 15), "Payroll Check", "", "Payroll", -100_000)]
+bank22 = [L(D(2026, 1, 8), "CHECK 4001", -60_000, "4001"), L(D(2026, 1, 11), "DEPOSIT ID 4", 300_000), L(D(2026, 1, 15), "ACH DEBIT PAYROLL", -100_000)]
+bank_generic(P("22-bank.csv"), bank22, 900_000)
+books_qbo(P("22-books.xlsx"), "Ridge Roofing", [("Checking", 900_000, books22p), ("Checking:Payroll", 0, books22s)], "January 1 - March 31, 2026")
+k22, _ = key_for(bank22, books22p + books22s, 900_000, 900_000, 900_000 + 140_000, "Checking", ["Checking", "Checking:Payroll"], "amount", "qbo", subaccounts=True)
+assert k22["difference"] == 0 and not k22["bankOnly"], k22
+k22["exceptions"] = sorted(set(k22["exceptions"]) - {"ACCOUNT_CHOSEN"} | {"SUBACCOUNTS"}); k22["accounts"] = ["Checking", "Checking:Payroll"]
+case("22", "Payroll posted to a sub-account, Checking:Payroll: the sub-account is part of the bank account", "ugly", "22-bank.csv", "22-books.xlsx", k22)
+
+# ---- 23 a deposit the bank split in two lines
+bank23 = [L(D(2026, 1, 12), "DEPOSIT ID 501", 100_000), L(D(2026, 1, 12), "DEPOSIT ID 502", 50_000), L(D(2026, 1, 20), "CHECK 7001", -20_000, "7001")]
+books23 = [K(D(2026, 1, 11), "Deposit", "", "Cedar Apartments", 150_000), K(D(2026, 1, 15), "Check", "7001", "Valley Fuel", -20_000)]
+k23, _ = simple_case("23", "One deposit in the books that the bank shows as two lines", "ugly", bank23, books23, 600_000, 600_000)
+assert k23["splits"] and not k23["bankOnly"] and k23["difference"] == 0, k23
+
+# ---- 24 two old $100 checks, one still out: ambiguous; the accountant ticks the December one
+bank24 = [L(D(2026, 1, 9), "DEPOSIT ID 601", 80_000), L(D(2026, 1, 20), "ACH DEBIT METRO UTILITIES", -12_000)]
+books24 = [K(D(2025, 7, 10), "Check", "5101", "Greenfield Tools", -10_000), K(D(2025, 12, 18), "Check", "5188", "Summit Office Systems", -10_000),
+           K(D(2026, 1, 8), "Deposit", "", "Indigo Storage", 80_000), K(D(2026, 1, 19), "Expense", "", "Metro Utilities", -12_000)]
+# July's check cleared in July (before the bank file); December's is still out: bank began $100 higher than the books
+k24a, _ = simple_case("24", "Two old checks of $100, one still outstanding: the page cannot tell which and asks; the accountant ticks December's", "planted",
+                      bank24, books24, 1_000_000, 1_000_000 - 10_000, ticks=[["book", D(2025, 12, 18), -10_000]])
+assert k24a["startMode"] == "ambiguous" and [o["num"] for o in k24a["outstanding"]] == ["5188"] and k24a["ties"], k24a
 
 json.dump(KEY, open(os.path.join(HERE, "answer-key.json"), "w"), indent=1, default=str)
 print(len(KEY), "cases;", {c: (v["exceptions"], v.get("difference")) for c, v in KEY.items()})

@@ -1,0 +1,9 @@
+Description,,Summary Amt.
+Beginning balance as of 03/01/2026,,"USD 15,000.00"
+Ending balance as of 03/31/2026,,"USD 16,277.50"
+
+Date,Description,Amount,Running Bal.,Status
+03/02/2026,DEPOSIT ID 330001,"2,100.00 CR","17,100.00",Posted
+03/09/2026,CHECK 2101,640.00 DR,"16,460.00",Posted
+03/27/2026,ACH DEBIT METRO UTILITIES,−182.50,"16,277.50",Posted
+04/01/2026,ACH DEBIT VALLEY FUEL,-95.00,,Pending
