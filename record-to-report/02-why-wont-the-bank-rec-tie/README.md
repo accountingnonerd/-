@@ -71,8 +71,8 @@ from it and run it against the tests (see `rebuild-check/`).
    asks, choose "Use .html".
 5. Double-click the file. It opens in your browser with the title "Why won't the bank rec tie?" and
    two boxes to drop files in.
-6. Download the two files in [`sample/`](sample/): the bank download goes in box 1, the ledger in
-   box 2. Follow the steps on the screen, then compare with [`sample/README.md`](sample/README.md).
+6. Download the two files in [`sample/`](sample/): the bank download goes in the box "The bank's
+   download", the ledger in "The books' ledger". Follow the steps on the screen, then compare with [`sample/README.md`](sample/README.md).
 
 **If it does not work:**
 - *A blank page or half a page:* the code was cut off. Ask for the complete file again.

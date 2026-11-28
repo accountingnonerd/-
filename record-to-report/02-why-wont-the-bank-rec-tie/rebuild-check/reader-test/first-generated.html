@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why won't the bank rec tie?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--ink:#111;--muted:#444;--bg:#fbfaf7;--card:#fff;--line:#c9c4b8;--accent:#0b4f8a;--red:#a31515;--redbg:#fdecec;--green:#17602a;--greenbg:#e8f5ea;--amber:#7a4b00;--amberbg:#fff4dc}
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+main{max-width:1100px;margin:0 auto;padding:0 16px 60px}
+h1{font-size:2rem;margin:.6em 0 .2em}
+h2{font-size:1.45rem;margin:1.6em 0 .4em;border-bottom:2px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.2rem;margin:1.2em 0 .4em}
+a{color:var(--accent)}
+button,select,input{font:inherit}
+button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:.55em 1.1em;cursor:pointer}
+button.secondary{background:#fff;color:var(--accent);border:2px solid var(--accent)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f0a000;outline-offset:2px}
+input[type=text]{border:2px solid var(--line);border-radius:6px;padding:.35em .5em;background:#fff;min-width:10em}
+select{border:2px solid var(--line);border-radius:6px;padding:.3em .4em;background:#fff;max-width:100%}
+#stepbar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:2px solid var(--line);display:flex;gap:4px;padding:6px 16px;flex-wrap:nowrap;overflow:hidden}
+#stepbar .st{flex:1;display:flex;align-items:center;gap:.4em;padding:.35em .6em;border-radius:6px;color:var(--muted);text-decoration:none;font-size:.9rem;min-width:0}
+#stepbar .st .num{display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;border-radius:50%;border:2px solid var(--muted);font-weight:700;flex:none}
+#stepbar .st .who{display:block;font-size:.75rem;color:var(--muted)}
+#stepbar .st.current{background:#e6eef7;color:var(--ink);font-weight:600}
+#stepbar .st.current .num{border-color:var(--accent);background:var(--accent);color:#fff}
+#stepbar .st.done .num{border-color:var(--green);background:var(--green);color:#fff}
+#stepbar .st.disabled{opacity:.6;pointer-events:none}
+#todo{max-width:1100px;margin:.6em auto 0;padding:0 16px;color:var(--muted)}
+.lead{font-size:1.1rem}
+.drops{display:flex;gap:20px;margin:1em 0}
+.drop{flex:1;display:block;border:3px dashed var(--accent);border-radius:10px;background:#fff;padding:1.4em;text-align:center;cursor:pointer;min-height:9em}
+.drop.over{background:#e6eef7}
+.drop strong{display:block;font-size:1.3rem}
+.drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.drop .got{display:block;margin-top:.6em;color:var(--green);font-weight:600;word-break:break-all}
+#problem,.problem{background:var(--redbg);border:2px solid var(--red);color:var(--red);border-radius:8px;padding:.8em 1em;margin:1em 0}
+#stop-banner{background:var(--redbg);border:2px solid var(--red);color:var(--red);border-radius:8px;padding:.8em 1em;margin:1em 0}
+#stop-banner p{margin:.3em 0}
+#verdict{font-size:1.35rem;font-weight:700;padding:.7em 1em;border-radius:8px;margin:1em 0 .3em;border:2px solid var(--line);background:#fff}
+#verdict.ok{background:var(--greenbg);border-color:var(--green);color:var(--green)}
+#verdict.bad{background:var(--redbg);border-color:var(--red);color:var(--red)}
+#verdict.open{background:var(--amberbg);border-color:var(--amber);color:var(--amber)}
+#verdict-detail{margin:.2em 0 1em}
+.hdr{display:grid;grid-template-columns:repeat(2,1fr);gap:.5em 1.2em;margin:1em 0}
+.hdr label{display:flex;flex-direction:column;font-size:.85rem;color:var(--muted)}
+.hdr label.full{grid-column:1/-1}
+.hdr input{width:100%}
+.msgs{list-style:none;padding:0}
+.msgs li{background:#fff;border:1px solid var(--line);border-left:6px solid var(--amber);padding:.5em .8em;margin:.4em 0;border-radius:4px}
+.msgs li.info{border-left-color:var(--accent)}
+.msgs li.done{border-left-color:var(--green)}
+.msgs .lbl{font-weight:700;margin-right:.3em}
+.who-tag{font-size:.85rem;font-weight:600;color:var(--accent);background:#e6eef7;border-radius:4px;padding:.1em .4em;margin-left:.4em;vertical-align:middle}
+.explain{background:#fff;border:1px solid var(--line);border-radius:6px;padding:.6em 1em;margin:.4em 0 1em}
+.explain p{margin:.3em 0}
+table{border-collapse:collapse;width:100%;background:#fff;margin:.5em 0 1em}
+th,td{border:1px solid var(--line);padding:.4em .55em;text-align:left;vertical-align:top}
+th{background:#f1eee6}
+td.num,th.num{text-align:right;white-space:nowrap}
+tr.total td{font-weight:700;background:#f7f5ef}
+.radios label{display:block;white-space:nowrap;cursor:pointer}
+.flag-stale{color:var(--red);font-weight:700}
+.flag-old,.flag-late{color:var(--amber);font-weight:600}
+.inputs{display:flex;flex-wrap:wrap;gap:1em;align-items:flex-end;margin:.8em 0}
+.inputs label{display:flex;flex-direction:column;font-size:.9rem}
+.err{color:var(--red);font-weight:600}
+#open-items{background:var(--redbg);border:2px solid var(--red);color:var(--red);border-radius:8px;padding:.6em 1em;margin:1em 0}
+#open-items ul{margin:.3em 0}
+.actions{display:flex;gap:1em;align-items:center;flex-wrap:wrap;margin:1em 0}
+.print-only{display:none}
+footer{margin-top:3em;color:var(--muted);font-size:.9rem}
+.tickbox{display:block;margin:.3em 0}
+@media (max-width:700px){
+  h1{font-size:1.6rem}
+  .drops{flex-direction:column}
+  .hdr{grid-template-columns:1fr}
+  #stepbar .st:not(.current) .lbl{display:none}
+  #stepbar .st:not(.current){flex:none}
+  table,thead,tbody,tr,th,td{display:block;width:100%}
+  thead{display:none}
+  tr{border:1px solid var(--line);border-radius:6px;margin:0 0 .8em;background:#fff}
+  td{border:0;border-bottom:1px solid #eee;text-align:left!important;white-space:normal!important}
+  td::before{content:attr(data-label);display:block;font-size:.8rem;color:var(--muted);font-weight:600}
+  td[data-label=""]::before{display:none}
+}
+@media print{
+  html{font-size:11pt}
+  body{background:#fff}
+  #stepbar,#todo,#step2,#step3,#start,.actions,.no-print,.who-tag,button{display:none!important}
+  .print-only{display:block}
+  .screen-title{display:none}
+  h2,h3{break-after:avoid;page-break-after:avoid}
+  table{break-inside:auto}
+  tr{break-inside:avoid}
+  *:focus{outline:none!important}
+  .hdr input{border:0;border-bottom:1px solid #999;border-radius:0}
+}
+</style>
+</head>
+<body>
+<nav id="stepbar" aria-label="Steps">
+  <a class="st current" data-step="1" href="#"><span class="num">1</span><span class="lbl">Give the two files<span class="who">you</span></span></a>
+  <a class="st disabled" data-step="2" href="#step2"><span class="num">2</span><span class="lbl">Check what was read<span class="who">you check</span></span></a>
+  <a class="st disabled" data-step="3" href="#step3"><span class="num">3</span><span class="lbl">Decide what was found<span class="who">you decide</span></span></a>
+  <a class="st disabled" data-step="4" href="#step4"><span class="num">4</span><span class="lbl">Print the reconciliation<span class="who">built from your choices</span></span></a>
+</nav>
+<p id="todo">You are looking at step 1 of 4. Still to do: give the two files (step 1).</p>
+<main>
+<section id="start">
+  <p><strong>Step 1 of 4: give the page the bank's download and the books' ledger for the same account.</strong></p>
+  <h1>Why won't the bank rec tie?</h1>
+  <p class="lead">It matches the bank's lines to the books, lists what is outstanding and what the bank has that the books do not, points out the book entries that look wrong, and builds the reconciliation that proves it.</p>
+  <div class="drops">
+    <label class="drop" id="bank-drop">
+      <strong>1. The bank's download</strong>
+      <span>The transactions downloaded from the bank's website (CSV or Excel). Click to choose, or drop the file here.</span>
+      <input type="file" id="bank-file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+      <span class="got" id="bank-got"></span>
+    </label>
+    <label class="drop" id="books-drop">
+      <strong>2. The books' ledger</strong>
+      <span>The ledger detail for the same bank account, from QuickBooks Online, QuickBooks Desktop or Xero (Excel or CSV). Click to choose, or drop the file here.</span>
+      <input type="file" id="books-file" accept=".csv,.txt,.xlsx,.xls,.xlsm">
+      <span class="got" id="books-got"></span>
+    </label>
+  </div>
+  <div id="problem" role="alert" hidden></div>
+  <p><a href="#" id="try-sample">Try it on a made-up sample.</a></p>
+
+  <h2>What files to get</h2>
+  <p><strong>From the bank:</strong> the transactions for the months to reconcile, downloaded from the bank's website as CSV or Excel. If the download has no balance column, keep the statement handy: you will type its beginning and ending balances.</p>
+  <p><strong>From the books:</strong> the ledger detail for the same bank account, from about three months before the bank's first date to the statement date or later.</p>
+  <ul>
+    <li><strong>QuickBooks Online:</strong> Reports, General Ledger. Customize: set the dates, and under Filter choose the bank account. Run it, then Export, Export to Excel.</li>
+    <li><strong>QuickBooks Desktop:</strong> Reports, Accountant &amp; Taxes, General Ledger. Customize Report: set the dates; Filters, Account, the bank account. Then Excel, Create New Worksheet.</li>
+    <li><strong>Xero:</strong> Accounting, Reports, Account Transactions. Choose the bank account and the dates, Update, then Export, Excel.</li>
+    <li><strong>Other software:</strong> the general ledger or account detail report for the bank account, with a date, an amount (or debit and credit) and a running balance on each line, saved as Excel or CSV.</li>
+  </ul>
+  <p>Do not edit or sort either file. The page checks that each one adds up, and an edited file will not.</p>
+
+  <h2>What happens next</h2>
+  <ol start="2">
+    <li><strong>Check what was read</strong> (you check): the statement dates, the balances, and which account in the books is the bank account.</li>
+    <li><strong>Decide what was found</strong> (you decide): the book entries that look wrong, how to treat what is at the bank but not in the books, and any stale checks.</li>
+    <li><strong>Print the reconciliation</strong> (built from your choices): the proof, the entries, and the questions for the client.</li>
+  </ol>
+  <h2>Where your data goes: nowhere</h2>
+  <p>The files are read here, in your browser, on this computer. Nothing is uploaded, stored or sent.</p>
+  <p><strong>The page finds; you decide.</strong></p>
+  <footer>Version 1.0.0.</footer>
+</section>
+
+<section id="work" hidden>
+  <h1><span class="screen-title">Why won't the bank rec tie?</span><span class="print-only" id="print-title"></span></h1>
+  <p id="subtitle"></p>
+  <div class="hdr">
+    <label class="full">Client<input type="text" id="h-client"></label>
+    <label>Workpaper ref.<input type="text" id="h-ref"></label>
+    <label>Prepared by<input type="text" id="h-prep"></label>
+    <label>Prepared on<input type="text" id="h-prepon"></label>
+    <label>Reviewed by<input type="text" id="h-rev"></label>
+    <label>Reviewed on<input type="text" id="h-revon"></label>
+  </div>
+  <div id="verdict"></div>
+  <p id="verdict-detail"></p>
+  <div id="stop-banner" hidden></div>
+  <div id="content"></div>
+</section>
+</main>
+
+<script>
+'use strict';
+const VERSION = '1.0.0';
+const BAD = 'BAD';
+const DAY = 86400000;
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isAmt = x => typeof x === 'number';
+const sum = (arr, f) => arr.reduce((s, x) => s + (f ? f(x) : x.amount), 0);
+
+/* ---------- numbers and dates ---------- */
+function parseAmount(v) {
+  if (v == null) return null;
+  if (typeof v === 'number') return isFinite(v) ? Math.round(v * 100) : BAD;
+  let s = String(v).replace(/−/g, '-').trim();
+  if (s === '' || s === '-' || s === '–' || s === '—') return null;
+  let neg = false;
+  s = s.replace(/^(USD|US\$)\s*/i, '');
+  const m = s.match(/\s*(CR|DR)$/i);
+  if (m) { if (m[1].toUpperCase() === 'DR') neg = true; s = s.slice(0, m.index).trim(); }
+  if (/^\(.*\)$/.test(s)) { neg = true; s = s.slice(1, -1).trim(); }
+  if (/-$/.test(s)) { neg = true; s = s.slice(0, -1).trim(); }
+  s = s.replace(/[$,\s]/g, '');
+  if (s.startsWith('-')) { neg = true; s = s.slice(1); }
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(s)) return BAD;
+  const c = Math.round(parseFloat(s) * 100);
+  return neg ? -c : c;
+}
+const MON = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const MONFULL = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+function monthNum(w) {
+  w = w.toLowerCase().replace(/\.$/, '');
+  const i = MON.indexOf(w.slice(0, 3));
+  if (i < 0) return 0;
+  if (w === MON[i] || w === MONFULL[i] || w === 'sept') return i + 1;
+  return 0;
+}
+function mkDay(y, m, d) {
+  if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31)) return null;
+  const t = Date.UTC(y, m - 1, d), dt = new Date(t);
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== m - 1 || dt.getUTCDate() !== d) return null;
+  return t / DAY;
+}
+function parseDate(v) {
+  if (v == null) return null;
+  if (typeof v === 'number') return (v >= 20000 && v <= 80000) ? Math.floor(v) - 25569 : null;
+  if (v instanceof Date) return isNaN(v) ? null : Math.round(Date.UTC(v.getFullYear(), v.getMonth(), v.getDate()) / DAY);
+  const s = String(v).trim();
+  let m;
+  if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ].*)?$/))) return mkDay(+m[1], +m[2], +m[3]);
+  if ((m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}|\d{2})(?:\s+\d{1,2}:\d{2}.*)?$/))) {
+    let y = +m[3]; if (m[3].length === 2) y += 2000;
+    return mkDay(y, +m[1], +m[2]);
+  }
+  if ((m = s.match(/^(\d{1,2})[ -]([A-Za-z]{3,9}\.?)[ -](\d{4})$/))) { const mo = monthNum(m[2]); return mo ? mkDay(+m[3], mo, +m[1]) : null; }
+  if ((m = s.match(/^([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})$/))) { const mo = monthNum(m[1]); return mo ? mkDay(+m[3], mo, +m[2]) : null; }
+  return null;
+}
+function fmtDate(d) { if (d == null) return ''; const t = new Date(d * DAY); return (t.getUTCMonth() + 1) + '/' + t.getUTCDate() + '/' + t.getUTCFullYear(); }
+function isoDate(d) { if (d == null) return null; return new Date(d * DAY).toISOString().slice(0, 10); }
+function fmtMoney(c) {
+  if (c == null) return '';
+  const a = Math.abs(c), dollars = Math.floor(a / 100), cents = a % 100;
+  return (c < 0 ? '-' : '') + '$' + dollars.toLocaleString('en-US') + '.' + String(cents).padStart(2, '0');
+}
+const dol = c => c == null ? null : Math.round(c) / 100;
+const todayDay = () => { const n = new Date(); return Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / DAY; };
+
+/* ---------- file reading ---------- */
+class UserError extends Error {}
+async function readRows(file) {
+  const name = file.name, ext = (name.includes('.') ? name.split('.').pop() : '').toLowerCase();
+  if (ext === 'pdf') throw new UserError(name + ' is a PDF. Download or export it as CSV or Excel instead.');
+  if (!['xlsx','xlsm','xls','csv','txt'].includes(ext)) throw new UserError(name + ' is not an Excel or CSV file.');
+  if (typeof XLSX === 'undefined') throw new UserError('The page could not load its spreadsheet reader from the internet (cdnjs.cloudflare.com). Check the internet connection or the firewall, and open the page again.');
+  const buf = await file.arrayBuffer();
+  let wb;
+  if (ext === 'csv' || ext === 'txt') wb = XLSX.read(new TextDecoder('utf-8').decode(buf), {type: 'string', raw: true});
+  else wb = XLSX.read(new Uint8Array(buf), {type: 'array'});
+  let best = [];
+  for (const n of wb.SheetNames) {
+    const r = XLSX.utils.sheet_to_json(wb.Sheets[n], {header: 1, raw: true, defval: null, blankrows: true});
+    if (r.length > best.length) best = r;
+  }
+  return best;
+}
+const low = c => c == null ? '' : String(c).toLowerCase().trim();
+const isBlank = row => !row || row.every(c => c == null || String(c).trim() === '');
+const rowText = row => (row || []).filter(c => c != null && String(c).trim() !== '').map(c => String(c).trim()).join(' ');
+function pick(cells, list) { for (const h of list) { const i = cells.indexOf(h); if (i >= 0) return i; } return -1; }
+
+/* ---------- the bank's download ---------- */
+const BL = {
+  date: ['date','posting date','post date','posted date','transaction date','effective date'],
+  debit: ['debit','debits','withdrawal','withdrawals','withdrawal amount','payments','money out','debit amount'],
+  credit: ['credit','credits','deposit','deposits','deposit amount','money in','credit amount'],
+  desc: ['description','transaction','transaction description','memo','payee','name','details'],
+  chk: ['check or slip #','check number','check no.','check no','check #','chk #','check','serial number'],
+  bal: ['balance','running bal.','running balance','ledger balance','available balance'],
+  status: ['status','transaction status']
+};
+const MSG_NOT_BANK = "This is not a bank download I can read. I need the transactions downloaded from the bank's website: a date, a description and an amount (or withdrawals and deposits) on each line.";
+const MSG_SWAPPED = "This looks like the books' ledger, not the bank's download. Put it in box 2, and the bank's own download in box 1.";
+function parseBank(rows) {
+  let h = -1, cells = null;
+  for (let r = 0; r < Math.min(15, rows.length); r++) {
+    const c = (rows[r] || []).map(low);
+    const hasDate = BL.date.some(x => c.includes(x));
+    const hasAmt = c.includes('amount');
+    const hasDC = BL.debit.some(x => c.includes(x)) && BL.credit.some(x => c.includes(x));
+    if (hasDate && (hasAmt || hasDC)) { h = r; cells = c; break; }
+  }
+  const titles = [];
+  for (let r = 0; r < (h >= 0 ? h : Math.min(12, rows.length)); r++) { const t = rowText(rows[r]); if (t) titles.push(t); }
+  const tl = titles.join(' | ').toLowerCase();
+  const ledgerWords = ['general ledger','account transactions','transaction detail','trial balance','profit and loss','profit & loss','balance sheet'];
+  if (ledgerWords.some(w => tl.includes(w)) || (h >= 0 && ['num','split','transaction type','memo/description','contact','source'].some(w => cells.includes(w))))
+    return {status: 'NOT_RECOGNIZED', swapped: true, message: MSG_SWAPPED};
+  const B = {status: 'OK', lines: [], unread: [], pending: 0, begin: null, end: null, asOf: null, gap: null, layout: '', hasBalances: false};
+  // summary block
+  for (let r = 0; r < h; r++) {
+    const row = rows[r] || [], t = rowText(row).toLowerCase();
+    const amts = row.map(parseAmount).filter(isAmt);
+    if (t.includes('beginning balance') && amts.length) B.begin = amts[amts.length - 1];
+    if (t.includes('ending balance')) {
+      if (amts.length) B.end = amts[amts.length - 1];
+      const m = t.match(/as of\s+(\d{1,2}\/\d{1,2}\/\d{2,4}|\d{4}-\d{1,2}-\d{1,2}|[a-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}|\d{1,2}[ -][a-z]{3,9}\.?[ -]\d{4})/);
+      if (m) { const d = parseDate(m[1]); if (d != null) B.asOf = d; }
+    }
+  }
+  let col, first;
+  if (h >= 0) {
+    col = {date: pick(cells, BL.date), amt: cells.indexOf('amount'), debit: pick(cells, BL.debit), credit: pick(cells, BL.credit),
+      desc: pick(cells, BL.desc), chk: pick(cells, BL.chk), bal: pick(cells, BL.bal), status: pick(cells, BL.status)};
+    if (cells[col.desc] === 'details' && cells.includes('description')) col.desc = cells.indexOf('description');
+    B.layout = col.amt >= 0 ? 'date, description, amount' : 'withdrawals and deposits columns';
+    first = h + 1;
+  } else {
+    const r0 = rows[0] || [];
+    if (parseDate(r0[0]) != null && isAmt(parseAmount(r0[1]))) {
+      col = {date: 0, amt: 1, chk: 3, bal: -1, status: -1, desc: -1, headerless: true};
+      B.layout = 'no heading row'; first = 0;
+    } else return {status: 'NOT_RECOGNIZED', message: MSG_NOT_BANK};
+  }
+  let beginRow = null;
+  for (let r = first; r < rows.length; r++) {
+    const row = rows[r] || [];
+    if (isBlank(row)) continue;
+    const dv = row[col.date], d = parseDate(dv);
+    if (d == null) { if (/\d/.test(dv == null ? '' : String(dv))) B.unread.push(r + 1); continue; }
+    if (col.status >= 0 && /pending/i.test(String(row[col.status] || ''))) { B.pending++; continue; }
+    let amt;
+    if (col.amt >= 0) amt = parseAmount(row[col.amt]);
+    else {
+      const de = parseAmount(row[col.debit]), cr = parseAmount(row[col.credit]);
+      if (de === BAD || cr === BAD) amt = BAD;
+      else if (isAmt(de) && de !== 0) amt = -Math.abs(de);
+      else if (isAmt(cr) && cr !== 0) amt = Math.abs(cr);
+      else amt = null;
+    }
+    let desc = '';
+    if (col.headerless) {
+      for (let c = row.length - 1; c >= 2; c--) {
+        const v = row[c] == null ? '' : String(row[c]).trim();
+        if (!v || v === '*') continue;
+        if (c === 3 && /^\d+$/.test(v)) continue;
+        desc = v; break;
+      }
+    } else if (col.desc >= 0) desc = row[col.desc] == null ? '' : String(row[col.desc]).trim();
+    const bv = col.bal >= 0 ? parseAmount(row[col.bal]) : null;
+    const bal = isAmt(bv) ? bv : null;
+    if (amt === BAD) { B.unread.push(r + 1); continue; }
+    if (amt == null) { if (/beginning balance/i.test(desc) && bal != null) beginRow = bal; continue; }
+    const cv = col.chk >= 0 ? row[col.chk] : null, cs = cv == null ? '' : String(cv).trim();
+    B.lines.push({row: r + 1, date: d, desc, chk: /^\d{1,8}$/.test(cs) ? cs : '', amount: amt, bal});
+  }
+  if (!B.lines.length) return {status: 'NOT_RECOGNIZED', message: MSG_NOT_BANK};
+  if (B.begin == null && beginRow != null) B.begin = beginRow;
+  if (B.lines[0].date > B.lines[B.lines.length - 1].date) { B.lines.reverse(); B.layout += ', newest first'; }
+  B.lines.forEach((l, i) => l.i = i);
+  const L = B.lines;
+  if (L.every(l => l.bal != null)) {
+    B.hasBalances = true;
+    const days = [];
+    for (const l of L) { const last = days[days.length - 1]; if (last && last.date === l.date) last.lines.push(l); else days.push({date: l.date, lines: [l]}); }
+    const sim = start => {
+      let cur = start, gap = null;
+      for (const d of days) {
+        cur += sum(d.lines);
+        if (!d.lines.some(l => l.bal === cur)) { if (gap == null) gap = d.lines[0].row; cur = d.lines[d.lines.length - 1].bal; }
+      }
+      return {cur, gap};
+    };
+    let begin = B.begin;
+    if (begin == null) {
+      const d0 = days[0], tot = sum(d0.lines);
+      const order = [d0.lines[d0.lines.length - 1], ...d0.lines.slice(0, -1)];
+      let firstTry = null;
+      for (const l of order) { const s = l.bal - tot; if (firstTry == null) firstTry = s; if (sim(s).gap == null) { begin = s; break; } }
+      if (begin == null) begin = firstTry;
+      B.begin = begin;
+    }
+    const res = sim(begin);
+    B.gap = res.gap;
+    if (B.end == null) B.end = res.cur;
+  }
+  return B;
+}
+
+/* ---------- the books' ledger ---------- */
+function parseBooks(rows) {
+  let h = -1, cells = null;
+  for (let r = 0; r < Math.min(20, rows.length); r++) {
+    const c = (rows[r] || []).map(low);
+    if (c.includes('date') && (c.includes('amount') || (c.includes('debit') && c.includes('credit'))) && (c.includes('balance') || c.includes('running balance'))) { h = r; cells = c; break; }
+  }
+  const titles = [];
+  for (let r = 0; r < (h >= 0 ? h : Math.min(12, rows.length)); r++) { const t = rowText(rows[r]); if (t) titles.push(t); }
+  const tl = titles.join(' | ').toLowerCase();
+  const NEED = " I need the books' ledger for the bank account: every transaction, grouped by account, with a Date column, an Amount column (or Debit and Credit), and a Balance column.";
+  if (h < 0) {
+    let what = null;
+    if (tl.includes('trial balance')) what = 'a trial balance';
+    else if (tl.includes('profit and loss') || tl.includes('profit & loss') || tl.includes('income statement')) what = 'a profit and loss (income statement)';
+    else if (tl.includes('balance sheet')) what = 'a balance sheet';
+    else if (tl.includes('aging')) what = 'an aging report';
+    return {status: 'NOT_RECOGNIZED', message: (what ? 'This is ' + what + ', not a general ledger.' : 'This is not a general ledger I can read.') + NEED};
+  }
+  const ix = n => cells.indexOf(n);
+  const firstOf = (...ns) => { for (const n of ns) { const i = ix(n); if (i >= 0) return i; } return -1; };
+  const col = {date: ix('date'), type: firstOf('transaction type','type','source'), num: firstOf('num','reference','ref','no.'),
+    name: firstOf('name','contact'), memo: firstOf('memo/description','memo','description'), amt: ix('amount'),
+    debit: ix('debit'), credit: ix('credit'), bal: firstOf('balance','running balance')};
+  const layout = cells.includes('running balance') ? 'Xero' : (col.amt >= 0 ? 'QuickBooks Online' : 'QuickBooks Desktop');
+  const cell = (row, i) => i >= 0 && row[i] != null ? String(row[i]).trim() : '';
+  const amountOf = row => {
+    if (col.amt >= 0) { const a = parseAmount(row[col.amt]); return isAmt(a) ? a : null; }
+    const d = parseAmount(row[col.debit]), c = parseAmount(row[col.credit]);
+    if (!isAmt(d) && !isAmt(c)) return null;
+    return (isAmt(d) ? d : 0) - (isAmt(c) ? c : 0);
+  };
+  const balOf = row => { const b = col.bal >= 0 ? parseAmount(row[col.bal]) : null; return isAmt(b) ? b : null; };
+  const accounts = [], stack = [];
+  let lastClosed = null, unread = 0;
+  for (let r = h + 1; r < rows.length; r++) {
+    const row = rows[r] || [];
+    if (isBlank(row)) continue;
+    const lc = row.map(low);
+    const top = stack[stack.length - 1];
+    if (lc.includes('beginning balance') || lc.includes('opening balance')) { if (top) { const b = balOf(row); top.opening = b == null ? 0 : b; } continue; }
+    if (lc.includes('closing balance')) { if (lastClosed) lastClosed.closing = balOf(row); continue; }
+    const firstCell = lc.find(c => c !== '') || '';
+    if (firstCell.startsWith('total')) {
+      if (firstCell === 'total') continue;
+      const a = stack.pop();
+      if (a) { a.total = amountOf(row); if (a.total == null) a.total = 0; a.totalBal = balOf(row); lastClosed = a; }
+      continue;
+    }
+    const d = parseDate(row[col.date]);
+    if (d != null) {
+      if (!top) { unread++; continue; }
+      const amt = amountOf(row);
+      top.lines.push({row: r + 1, date: d, type: cell(row, col.type), num: cell(row, col.num), name: cell(row, col.name), memo: cell(row, col.memo), amount: amt == null ? 0 : amt});
+      const b = balOf(row); if (b != null) top.lastBal = b;
+      continue;
+    }
+    if (amountOf(row) != null) { unread++; continue; }
+    let label = (row.find(c => c != null && String(c).trim() !== '') + '').trim();
+    label = label.replace(/\s*\([A-Za-z0-9.\-]{1,10}\)\s*$/, '').replace(/^\d+\s*(?:·|-)?\s+/, '').trim();
+    const b = balOf(row);
+    const acc = {label, name: top ? top.name + ':' + label : label, parent: top || null, opening: b == null ? 0 : b, lines: [], total: null, totalBal: null, closing: null, lastBal: null};
+    accounts.push(acc); stack.push(acc);
+  }
+  for (const a of accounts) a.ending = a.opening + sum(a.lines);
+  const descendants = a => accounts.filter(x => { let p = x.parent; while (p) { if (p === a) return true; p = p.parent; } return false; });
+  const bad = [];
+  for (const a of accounts) {
+    const fam = [a, ...descendants(a)];
+    let ok = true;
+    if (a.total != null && a.total !== sum(fam, x => sum(x.lines))) ok = false;
+    if (a.totalBal != null && a.totalBal !== sum(fam, x => x.ending)) ok = false;
+    if (a.closing != null && a.closing !== a.ending) ok = false;
+    if (a.lastBal != null && a.lastBal !== a.ending) ok = false;
+    if (!ok) bad.push(a.name);
+  }
+  const kept = accounts.filter(a => a.lines.length || a.opening !== 0);
+  let company = '';
+  for (const t of titles) { const l = t.toLowerCase(); if (!['general ledger','account transactions','transaction detail','basis','period'].some(w => l.includes(w)) && !/\d{4}/.test(t)) { company = t; break; } }
+  return {status: 'OK', layout, accounts: kept, allAccounts: accounts, bad, company, unread};
+}
+const CARD_RE = /credit card|\bcard\b|visa|mastercard|amex|american express|discover|\bloan\b|line of credit/i;
+function topAccounts(books) {
+  return books.accounts.filter(a => { let p = a.parent; while (p) { if (books.accounts.includes(p)) return false; p = p.parent; } return true; });
+}
+function guessAccount(books) {
+  const tops = books.accounts.filter(a => !a.parent && !/undeposited|petty|clearing/i.test(a.name));
+  for (const re of [/checking/i, /operating/i, /bank/i, /savings|money market|cash/i]) { const a = tops.find(x => re.test(x.name)); if (a) return a.name; }
+  return books.accounts.length ? books.accounts[0].name : null;
+}
+
+/* ---------- state ---------- */
+const S = {};
+function resetState() {
+  Object.assign(S, {bankFile: null, booksFile: null, bankName: null, booksName: null, bankRows: null, booksRows: null, bank: null, books: null,
+    account: null, typed: {begin: null, end: null, stmtEnd: null}, inputs: {begin: '', end: '', stmtEnd: ''}, inputErr: {}, readOk: false,
+    dec: {}, ticks: {}, treats: {}, last: null});
+}
+resetState();
+
+/* ---------- the reconciliation ---------- */
+function bankChk(b) {
+  if (b.chk) return String(parseInt(b.chk, 10));
+  const m = b.desc.match(/(?:^|[^a-z])(?:check|chk|ck)\s*#?\s*(\d{3,6})(?!\d)/i);
+  return m ? String(parseInt(m[1], 10)) : '';
+}
+function findSubset(items, target, minK, maxK) {
+  const n = items.length;
+  for (let k = 1; k < (1 << n); k++) {
+    let cnt = 0, s = 0;
+    for (let j = 0; j < n; j++) if (k & (1 << j)) { cnt++; s += items[j].amount; }
+    if (cnt >= minK && cnt <= maxK && s === target) return items.filter((_, j) => k & (1 << j));
+  }
+  return null;
+}
+function findSets(items, target, stopAt) {
+  const n = items.length, found = [];
+  for (let k = 1; k < (1 << n); k++) {
+    let s = 0;
+    for (let j = 0; j < n; j++) if (k & (1 << j)) s += items[j].amount;
+    if (s === target) { found.push(items.filter((_, j) => k & (1 << j))); if (found.length >= stopAt) break; }
+  }
+  return found;
+}
+const FEE_WORDS = ['service charge','monthly fee','monthly service fee','monthly maintenance fee','maintenance fee','account fee','wire fee','wire transfer fee','overdraft','analysis fee','atm fee'];
+function kindOf(b) {
+  const d = b.desc.toLowerCase();
+  if (b.amount > 0 && /\binterest\b/.test(d) && !d.includes('charge')) return 'interest';
+  if ((/\bnsf\b/.test(d) || d.includes('returned item') || d.includes('return item') || d.includes('chargeback')) && !/\bfee\b/.test(d)) return 'returned';
+  if (b.amount < 0 && (FEE_WORDS.some(w => d.includes(w)) || /\bfee\b/.test(d))) return 'fee';
+  return 'other';
+}
+const TREATS = {later: 'Already in the books after the statement date', fee: 'Bank service charge', interest: 'Interest income', returned: "Returned item: back on the customer's balance", ask: 'Ask the client what it was'};
+const NEAR_CODE = {'check amount differs': 'CHECK_AMOUNT_DIFFERS', 'voided but paid': 'VOIDED_BUT_PAID', 'paid twice': 'PAID_TWICE', 'transposed': 'TRANSPOSED', 'sign': 'SIGN_ERROR'};
+
+function compute() {
+  const bank = S.bank, books = S.books;
+  const R = {version: VERSION, files: {bank: S.bankName, books: S.booksName}, status: 'COMPUTED', exceptions: []};
+  const X = {done: {}, R};
+  const msg = (code, level, message) => R.exceptions.push({code, level, message});
+  R.bankLayout = bank.layout; R.booksLayout = books.layout; R.company = books.company;
+  R.accounts = books.accounts.map(a => a.name);
+  const acc = books.accounts.find(a => a.name === S.account) || books.accounts[0];
+  R.account = acc ? acc.name : null;
+  const subs = acc ? books.accounts.filter(a => { let p = a.parent; while (p) { if (p === acc) return true; p = p.parent; } return false; }) : [];
+  R.subaccounts = subs.map(a => a.name);
+  X.acc = acc;
+  if (!acc) { msg('NOT_RECOGNIZED', 'stop', 'Stop. The books\' ledger has no accounts with entries.'); X.stopFiles = true; return X; }
+  if (CARD_RE.test(acc.name)) {
+    msg('CARD_NOT_SUPPORTED', 'stop', 'Stop. ' + acc.name + ' looks like a credit card or a loan. This version reconciles bank accounts (checking, savings, money market); cards and loans are on the list for later. If it is a bank account, choose it again in step 2.');
+    X.card = true; R.ties = false; return X;
+  }
+  // stops from the files
+  if (bank.unread.length) msg('UNREAD_ROWS', 'stop', 'Stop. I could not read the date or the amount on ' + bank.unread.length + ' line' + (bank.unread.length > 1 ? 's' : '') + " of the bank's download (row " + bank.unread.join(', ') + '). Rather than leave them out, I stop: download the file again, or fix the format of those lines.');
+  if (bank.gap != null) msg('BANK_FILE_GAPS', 'stop', "Stop. The running balance in the bank's download jumps at row " + bank.gap + ': a line is missing or was changed. Download it again and do not edit it.');
+  if (books.bad.length) msg('BOOKS_DO_NOT_ADD_UP', 'stop', "Stop. The books' ledger does not add up for " + books.bad.join(', ') + ': the lines are not what its totals and balances say. Export the ledger again and do not edit it.');
+
+  const L = bank.lines, nB = L.length;
+  const start = Math.min(...L.map(l => l.date)), lastDate = Math.max(...L.map(l => l.date));
+  let end, endFrom;
+  if (S.typed.stmtEnd != null) { end = S.typed.stmtEnd; endFrom = 'typed'; }
+  else if (bank.asOf != null) { end = bank.asOf; endFrom = 'file'; }
+  else { end = lastDate; endFrom = 'last line'; }
+  const sumAll = sum(L);
+  let begin = S.typed.begin != null ? S.typed.begin : bank.begin;
+  let ending = S.typed.end != null ? S.typed.end : bank.end;
+  if (begin != null && ending == null) ending = begin + sumAll;
+  const balancesFrom = (S.typed.begin != null || S.typed.end != null) ? 'typed' : ((begin != null || ending != null) ? 'file' : null);
+  Object.assign(X, {start, end, endFrom, begin, ending, sumAll});
+  // balances disagree
+  let disagree = null;
+  if (S.typed.begin != null && S.typed.end != null) { if (S.typed.begin + sumAll !== S.typed.end) disagree = {typed: true, b: S.typed.begin, e: S.typed.end}; }
+  else if (S.typed.begin == null && S.typed.end == null && bank.begin != null && bank.end != null && bank.gap == null && bank.begin + sumAll !== bank.end) disagree = {typed: false, b: bank.begin, e: bank.end};
+  if (disagree) msg('BALANCES_DISAGREE', 'stop', 'Stop. The beginning balance, ' + fmtMoney(disagree.b) + ', plus the lines, ' + fmtMoney(sumAll) + ', comes to ' + fmtMoney(disagree.b + sumAll) + ', not the ending balance, ' + fmtMoney(disagree.e) + (disagree.typed ? ' (both typed). Correct the balances in step 2.' : " (both from the file). Download the bank's file again and do not edit it."));
+  X.stopFiles = R.exceptions.some(e => e.level === 'stop' && e.code !== 'BALANCES_DISAGREE') || (disagree && !disagree.typed);
+  X.stopTyped = !!(disagree && disagree.typed);
+
+  // books' lines
+  const fam = [acc, ...subs];
+  let all = [];
+  fam.forEach(a => a.lines.forEach(l => all.push(l)));
+  all.sort((a, b) => a.date - b.date || a.row - b.row);
+  all = all.map((l, i) => {
+    const numN = /^\d+$/.test(l.num) ? String(parseInt(l.num, 10)) : l.num;
+    return Object.assign({}, l, {i, numN, isCheck: /^\d{3,6}$/.test(l.num) && l.amount < 0});
+  });
+  const opening = sum(fam, a => a.opening);
+  const after = all.filter(l => l.date > end);
+  const active = all.filter(l => l.date <= end && l.amount !== 0);
+  const voided = all.filter(l => l.date <= end && l.amount === 0);
+  const bUse = new Array(nB).fill(null), kUse = {};
+  const bankOrder = L.map((l, i) => i).sort((a, b) => L[a].date - L[b].date || a - b);
+  const nearest = (c, d) => c.slice().sort((x, y) => Math.abs(x.date - d) - Math.abs(y.date - d) || x.i - y.i)[0];
+  const near = [];
+  // 1. checks by number
+  const checkSeen = new Set();
+  for (const bi of bankOrder) {
+    const b = L[bi]; if (b.amount >= 0) continue;
+    const n = bankChk(b); if (!n) continue;
+    const c = active.filter(k => !kUse[k.i] && k.amount < 0 && k.numN === n);
+    const same = c.filter(k => k.amount === b.amount);
+    if (same.length) { const k = nearest(same, b.date); kUse[k.i] = 'matched'; bUse[bi] = 'matched'; checkSeen.add(n); continue; }
+    if (c.length) { const k = c[0]; kUse[k.i] = 'paired'; bUse[bi] = 'paired'; near.push({kind: 'check amount differs', b, k}); checkSeen.add(n); continue; }
+    const v = voided.find(k => !kUse[k.i] && k.numN === n);
+    if (v) { kUse[v.i] = 'paired'; bUse[bi] = 'paired'; near.push({kind: 'voided but paid', b, k: v, voided: true}); checkSeen.add(n); continue; }
+    if (checkSeen.has(n)) { bUse[bi] = 'paired'; near.push({kind: 'paid twice', b, k: null, num: n}); }
+  }
+  // 2. same amount
+  for (const bi of bankOrder) {
+    if (bUse[bi]) continue;
+    const b = L[bi], n = bankChk(b);
+    const c = active.filter(k => {
+      if (kUse[k.i] || k.amount !== b.amount) return false;
+      const dd = k.date - b.date;
+      if (dd < (k.isCheck ? -180 : -60) || dd > 5) return false;
+      if (!k.isCheck && k.date < start - 10) return false;
+      if (n && k.isCheck && k.numN !== n) return false;
+      return true;
+    });
+    if (c.length) { const k = nearest(c, b.date); kUse[k.i] = 'matched'; bUse[bi] = 'matched'; }
+  }
+  // 3. several book lines to one bank line
+  const batches = [];
+  for (const bi of bankOrder) {
+    if (bUse[bi]) continue;
+    const b = L[bi], sg = Math.sign(b.amount);
+    let c = active.filter(k => !kUse[k.i] && Math.sign(k.amount) === sg && k.date - b.date >= -5 && k.date - b.date <= 1);
+    c.sort((x, y) => Math.abs(x.date - b.date) - Math.abs(y.date - b.date) || x.i - y.i);
+    c = c.slice(0, 12).sort((x, y) => x.date - y.date || x.i - y.i);
+    const set = findSubset(c, b.amount, 2, 6);
+    if (set) { set.forEach(k => kUse[k.i] = 'matched'); bUse[bi] = 'matched'; batches.push({b, items: set}); }
+  }
+  // 4. one book line to several bank lines
+  const splits = [];
+  for (const k of active) {
+    if (kUse[k.i]) continue;
+    const sg = Math.sign(k.amount);
+    let c = bankOrder.filter(bi => !bUse[bi] && Math.sign(L[bi].amount) === sg && L[bi].date - k.date >= -1 && L[bi].date - k.date <= 5).map(bi => L[bi]);
+    c.sort((x, y) => Math.abs(x.date - k.date) - Math.abs(y.date - k.date) || x.i - y.i);
+    c = c.slice(0, 12).sort((x, y) => x.date - y.date || x.i - y.i);
+    const set = findSubset(c, k.amount, 2, 6);
+    if (set) { set.forEach(b => bUse[b.i] = 'split'); kUse[k.i] = 'matched'; splits.push({k, items: set}); }
+  }
+  // 5. near misses
+  const digits = a => String(Math.abs(a)).split('').sort().join('');
+  for (const bi of bankOrder) {
+    if (bUse[bi]) continue;
+    const b = L[bi], sg = Math.sign(b.amount);
+    let c = active.filter(k => !kUse[k.i] && Math.abs(k.date - b.date) <= 10 && Math.sign(k.amount) === sg && k.amount !== b.amount && (k.amount - b.amount) % 9 === 0 && digits(k.amount) === digits(b.amount));
+    if (c.length) { const k = nearest(c, b.date); kUse[k.i] = 'paired'; bUse[bi] = 'paired'; near.push({kind: 'transposed', b, k}); continue; }
+    c = active.filter(k => !kUse[k.i] && Math.abs(k.date - b.date) <= 10 && k.amount === -b.amount);
+    if (c.length) { const k = nearest(c, b.date); kUse[k.i] = 'paired'; bUse[bi] = 'paired'; near.push({kind: 'sign', b, k}); }
+  }
+  // 6. entered twice
+  const dups = [];
+  const matched14 = active.filter(k => kUse[k.i] === 'matched' && k.date >= start);
+  for (const k of active) {
+    if (kUse[k.i] || !k.name || k.date < start) continue;
+    const t = matched14.filter(m => m.amount === k.amount && m.name.toLowerCase() === k.name.toLowerCase() && Math.abs(m.date - k.date) <= 5);
+    if (t.length) { const tw = nearest(t, k.date); kUse[k.i] = 'paired'; dups.push({k, twin: tw}); }
+  }
+  // 7. before the bank's dates
+  const booksBefore = opening + sum(all.filter(l => l.date < start));
+  const old = active.filter(k => k.date < start);
+  const oldItems = old.filter(k => !kUse[k.i]);
+  const cands = oldItems.filter(k => k.isCheck || k.date >= start - 10);
+  let mode, Rd = null, left = null, oldOut = [], suggest = [], startCands = [];
+  if (begin == null) mode = 'unknown';
+  else {
+    Rd = booksBefore - begin - sum(old.filter(k => kUse[k.i] === 'matched' || kUse[k.i] === 'paired'));
+    if (cands.length) {
+      if (Rd === 0) mode = 'none';
+      else if (sum(cands) === Rd) { mode = 'all'; oldOut = cands; }
+      else if (cands.length <= 20) {
+        const sets = findSets(cands, Rd, 2);
+        if (sets.length === 1) { mode = 'unique'; oldOut = sets[0]; }
+        else if (sets.length === 2) mode = 'ambiguous';
+        else mode = 'not explained';
+      } else mode = 'too many';
+      if (mode === 'ambiguous' || mode === 'too many') { startCands = cands; oldOut = cands.filter(k => S.ticks['k' + k.i]); }
+    } else if (Rd === 0) mode = 'none';
+    else {
+      const pool = bankOrder.filter(bi => !bUse[bi] && L[bi].date <= start + 45).slice(0, 20).map(bi => L[bi]);
+      const sets = findSets(pool, Rd, 1);
+      if (sets.length) { mode = 'bank lines'; suggest = sets[0]; } else mode = 'not explained';
+    }
+    const tickedBank = suggest.filter(b => S.ticks['b' + b.i]);
+    tickedBank.forEach(b => bUse[b.i] = 'ticked');
+    left = Rd - sum(oldOut) - sum(tickedBank);
+  }
+  // 8. her decisions
+  near.forEach((n, p) => { n.id = 'n' + p; n.decision = S.dec[n.id] || 'undecided'; });
+  dups.forEach((d, p) => { d.id = 'u' + p; d.decision = S.dec[d.id] || 'undecided'; });
+  let bookCorr = 0, bankCorr = 0;
+  const outExtra = [], bankExtra = [];
+  for (const n of near) {
+    const bA = n.b.amount, kA = n.k && !n.voided ? n.k.amount : 0;
+    if (n.decision === 'fix') bookCorr += n.kind === 'voided but paid' ? bA : bA - kA;
+    else if (n.decision === 'bank') bankCorr += n.kind === 'paid twice' ? -bA : kA - bA;
+    else { bankExtra.push(n.b); if (n.k && !n.voided) outExtra.push(n.k); }
+  }
+  for (const d of dups) {
+    if (d.decision === 'fix') bookCorr -= d.k.amount;
+    else outExtra.push(d.k);
+  }
+  // 9. outstanding and bank-only
+  const outRaw = active.filter(k => !kUse[k.i] && k.date >= start).concat(oldOut, outExtra);
+  outRaw.sort((a, b) => a.date - b.date || a.i - b.i);
+  const out = outRaw.map(k => {
+    const age = end - k.date;
+    let flag = '';
+    if (k.isCheck) { if (age > 180) flag = 'stale'; else if (age > 90) flag = 'old'; }
+    else if (age > 10) flag = k.amount > 0 ? 'late deposit' : 'late payment';
+    const id = 'o' + k.i;
+    return {id, k, age, flag, decision: flag === 'stale' ? (S.dec[id] || 'undecided') : null};
+  });
+  out.forEach(o => { if (o.decision === 'reverse') bookCorr -= o.k.amount; });
+  const bankOnlyRaw = bankOrder.filter(bi => !bUse[bi]).map(bi => L[bi]).concat(bankExtra);
+  bankOnlyRaw.sort((a, b) => a.date - b.date || a.i - b.i);
+  const bankOnly = bankOnlyRaw.map(b => {
+    const kind = kindOf(b);
+    const later = after.find(k => k.amount === b.amount && Math.abs(k.date - b.date) <= 30);
+    const suggested = later ? 'later' : ({fee: 'fee', interest: 'interest', returned: 'returned', other: 'ask'})[kind];
+    const id = 'b' + b.i;
+    return {id, b, kind, later: later || null, suggested, treat: S.treats[id] || suggested};
+  });
+  // 10. the proof
+  const booksEnding = opening + sum(all.filter(l => l.date <= end));
+  const outCounted = out.filter(o => o.decision !== 'reverse');
+  const outTotal = sum(outCounted, o => o.k.amount);
+  const bankOnlyTotal = sum(bankOnly, o => o.b.amount);
+  const adjustedBank = ending != null ? ending + outTotal + bankCorr : null;
+  const adjustedBooks = booksEnding + bankOnlyTotal + bookCorr;
+  const difference = (begin != null && ending != null) ? adjustedBank - adjustedBooks : null;
+  const undecided = near.filter(n => n.decision === 'undecided').length + dups.filter(d => d.decision === 'undecided').length;
+  const openStale = out.filter(o => o.decision === 'undecided').length;
+  const anyStop = R.exceptions.some(e => e.level === 'stop');
+  const ties = !anyStop && difference === 0 && undecided === 0 && left === 0;
+
+  // messages
+  if (books.accounts.length > 1 && topAccounts(books).length > 1) msg('ACCOUNT_CHOSEN', 'info', "The books' file has " + topAccounts(books).length + ' accounts; I reconciled ' + acc.name + '. To reconcile another, choose it in step 2.');
+  if (subs.length) msg('SUBACCOUNTS', 'info', 'The sub-accounts ' + subs.map(s => s.name).join(', ') + ' are part of the bank account and are included (step 2).');
+  if (bank.pending) msg('PENDING_LEFT_OUT', 'info', bank.pending + ' pending bank line' + (bank.pending > 1 ? 's' : '') + ' left out: not yet posted.');
+  if (bank.begin == null && S.typed.begin == null) msg('NEED_BALANCES', 'care', "The bank's download has no balances: type the statement's beginning and ending balances in step 2.");
+  if (difference != null && difference !== 0) msg('DOES_NOT_TIE', 'care', 'The adjusted bank balance is ' + fmtMoney(Math.abs(difference)) + (difference > 0 ? ' more' : ' less') + ' than the adjusted books. Look at what is left in step 3.');
+  if (mode === 'not explained') { msg('START_NOT_EXPLAINED', 'care', "The books' balance the day before " + fmtDate(start) + ' is ' + fmtMoney(booksBefore) + " and the bank's beginning balance is " + fmtMoney(begin) + ': ' + fmtMoney(Rd) + ' of what was outstanding then is not explained. Check the bank\'s beginning balance in step 2, start the books\' file earlier, or look for an old entry that was changed.'); X.done.START_NOT_EXPLAINED = left === 0; }
+  if (mode === 'ambiguous' || mode === 'too many') { msg('START_AMBIGUOUS', 'care', 'Checks from before ' + fmtDate(start) + ' should add up to ' + fmtMoney(Rd) + (mode === 'ambiguous' ? ', and more than one set of them does.' : ', and there are too many to choose from.') + ' Tick the ones still outstanding in step 3c.'); X.done.START_AMBIGUOUS = left === 0; }
+  if (mode === 'bank lines') { msg('START_BANK_LINES', 'care', "The books' file starts on the bank's first date. " + suggest.length + ' early bank line' + (suggest.length > 1 ? 's add' : ' adds') + ' up to ' + fmtMoney(Rd) + ': tick ' + (suggest.length > 1 ? 'them' : 'it') + ' in step 3b if recorded in the books before the file starts. Better: export the books from earlier.'); X.done.START_BANK_LINES = left === 0; }
+  const nearText = {
+    'check amount differs': n => n + (n > 1 ? ' checks were' : ' check was') + ' paid for a different amount than the books show. Decide in step 3a.',
+    'voided but paid': n => n + (n > 1 ? ' checks' : ' check') + ' voided in the books ' + (n > 1 ? 'were' : 'was') + ' paid by the bank. Decide in step 3a.',
+    'paid twice': n => n + (n > 1 ? ' checks look' : ' check looks') + ' paid twice by the bank. Decide in step 3a.',
+    'transposed': n => n + (n > 1 ? ' entries look' : ' entry looks') + ' like digits swapped. Decide in step 3a.',
+    'sign': n => n + (n > 1 ? ' entries look' : ' entry looks') + ' like money in and out reversed. Decide in step 3a.'
+  };
+  for (const kind of Object.keys(NEAR_CODE)) {
+    const ks = near.filter(n => n.kind === kind);
+    if (ks.length) { msg(NEAR_CODE[kind], 'care', nearText[kind](ks.length)); X.done[NEAR_CODE[kind]] = ks.every(n => n.decision !== 'undecided'); }
+  }
+  if (dups.length) { msg('BOOK_DUPLICATES', 'care', dups.length + (dups.length > 1 ? ' entries look' : ' entry looks') + ' entered twice in the books (once at the bank). Decide in step 3a.'); X.done.BOOK_DUPLICATES = dups.every(d => d.decision !== 'undecided'); }
+  if (bankOnly.length) msg('BANK_ONLY', 'care', bankOnly.length + ' bank item' + (bankOnly.length > 1 ? 's are' : ' is') + ' not in the books (' + fmtMoney(bankOnlyTotal) + '): choose how to treat each in step 3b.');
+  if (bankOnly.some(o => o.kind === 'returned')) msg('RETURNED_ITEMS', 'care', "A returned (NSF) item: put it back on the customer's balance and ask them to pay again; it is not a bank charge (step 3b).");
+  const staleN = out.filter(o => o.flag === 'stale').length, oldN = out.filter(o => o.flag === 'old').length, lateN = out.filter(o => o.flag.startsWith('late')).length;
+  if (staleN) { msg('STALE_CHECKS', 'care', staleN + (staleN > 1 ? ' checks have' : ' check has') + ' been outstanding more than six months: stale-dated (UCC 4-404). Ask the payee. An uncashed check becomes unclaimed property after the state\'s dormancy period: reverse it to a liability, never to income. Decide each in step 3c.'); X.done.STALE_CHECKS = openStale === 0; }
+  if (oldN) msg('OLD_OUTSTANDING', 'info', oldN + (oldN > 1 ? ' checks have' : ' check has') + ' been outstanding over 90 days: worth a call to the payee (step 3c).');
+  if (lateN) msg('LATE_ITEMS', 'care', lateN + ' deposit' + (lateN > 1 ? 's or electronic payments are' : ' or electronic payment is') + ' not at the bank after 10 days: probably never made, entered twice, or with the wrong date or amount (step 3c).');
+  if (batches.length) msg('BATCHES', 'info', batches.length + ' bank line' + (batches.length > 1 ? 's' : '') + ' matched to several book entries (card batches or deposits of several checks): ' + batches.map(x => fmtDate(x.b.date) + ' ' + fmtMoney(x.b.amount) + ' = ' + x.items.length + ' entries').join('; ') + '.');
+  if (splits.length) msg('SPLITS', 'info', splits.length + ' book entr' + (splits.length > 1 ? 'ies' : 'y') + ' matched to several bank lines: ' + splits.map(x => fmtDate(x.k.date) + ' ' + fmtMoney(x.k.amount) + ' = ' + x.items.length + ' bank lines').join('; ') + '.');
+  if (after.length) msg('AFTER_STATEMENT', 'info', after.length + ' book entr' + (after.length > 1 ? 'ies' : 'y') + ' dated after the statement date (' + fmtDate(end) + ') ' + (after.length > 1 ? 'were' : 'was') + ' left out.');
+
+  const matched = bUse.filter(u => u === 'matched').length;
+  Object.assign(R, {
+    bankStart: isoDate(start), bankEnd: isoDate(end), endFrom, bankLines: nB, balancesFrom,
+    bankBegin: dol(begin), bankEnding: dol(ending), booksBefore: dol(booksBefore), booksEnding: dol(booksEnding), matched,
+    batches: batches.map(x => ({bankDate: isoDate(x.b.date), amount: dol(x.b.amount), count: x.items.length})),
+    splits: splits.map(x => ({bookDate: isoDate(x.k.date), amount: dol(x.k.amount), count: x.items.length, name: x.k.name})),
+    near: near.map(n => ({id: n.id, kind: n.kind, decision: n.decision, bankDate: isoDate(n.b.date), bankAmount: dol(n.b.amount), bankDesc: n.b.desc,
+      bookDate: n.k ? isoDate(n.k.date) : null, bookAmount: n.k && !n.voided ? dol(n.k.amount) : null,
+      num: n.k ? n.k.num : n.num, name: n.k ? n.k.name : '', type: n.k ? n.k.type : ''})),
+    duplicates: dups.map(d => ({id: d.id, decision: d.decision, date: isoDate(d.k.date), amount: dol(d.k.amount), name: d.k.name, type: d.k.type, twinDate: isoDate(d.twin.date)})),
+    outstanding: out.map(o => ({id: o.id, date: isoDate(o.k.date), num: o.k.num, name: o.k.name, type: o.k.type, memo: o.k.memo, amount: dol(o.k.amount), age: o.age, flag: o.flag, decision: o.decision})),
+    bankOnly: bankOnly.map(o => ({id: o.id, date: isoDate(o.b.date), desc: o.b.desc, amount: dol(o.b.amount), kind: o.kind, bookedLater: o.later ? isoDate(o.later.date) : null, treat: o.treat})),
+    clearedBefore: oldItems.length - oldOut.length,
+    startMode: mode, startDifference: dol(Rd), startLeft: dol(left),
+    startCandidates: startCands.map(k => ({id: 'k' + k.i, date: isoDate(k.date), num: k.num, name: k.name, amount: dol(k.amount), ticked: !!S.ticks['k' + k.i]})),
+    suggestBank: suggest.map(b => ({id: 'b' + b.i, date: isoDate(b.date), desc: b.desc, amount: dol(b.amount), ticked: !!S.ticks['b' + b.i]})),
+    afterStatement: after.length, bookCorrections: dol(bookCorr), bankCorrections: dol(bankCorr),
+    adjustedBank: dol(adjustedBank), adjustedBooks: dol(adjustedBooks), difference: dol(difference),
+    stale: staleN, oldOutstanding: oldN, lateItems: lateN, undecided, openStale, ties
+  });
+  Object.assign(X, {near, dups, out, outCounted, bankOnly, batches, splits, after, opening, booksBefore, booksEnding, mode, Rd, left, oldOut, suggest, startCands,
+    bookCorr, bankCorr, adjustedBank, adjustedBooks, difference, undecided, openStale, ties, matched, nB, oldItems, all});
+  return X;
+}
+
+/* ---------- drawing ---------- */
+function table(id, heads, rows, cls) {
+  let h = '<table' + (id ? ' id="' + id + '"' : '') + (cls ? ' class="' + cls + '"' : '') + '><thead><tr>';
+  heads.forEach(x => { const [t, c] = Array.isArray(x) ? x : [x, '']; h += '<th' + (c ? ' class="' + c + '"' : '') + '>' + esc(t) + '</th>'; });
+  h += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    const rc = r.cls ? ' class="' + r.cls + '"' : '';
+    h += '<tr' + rc + '>';
+    (r.cells || r).forEach((c, i) => { const hd = heads[i], [t, cc] = Array.isArray(hd) ? hd : [hd, '']; h += '<td data-label="' + esc(t) + '"' + (cc ? ' class="' + cc + '"' : '') + '>' + c + '</td>'; });
+    h += '</tr>';
+  });
+  return h + '</tbody></table>';
+}
+const radio = (id, value, label, cur) => '<label><input type="radio" class="dec" name="dec-' + id + '" data-id="' + id + '" value="' + value + '"' + (cur === value ? ' checked' : '') + '> ' + esc(label) + '</label>';
+const DEC_OPTS = {
+  'check amount differs': [['fix', 'Books wrong: correct them'], ['bank', 'Bank error: ask the bank'], ['not', 'Not the same']],
+  'transposed': [['fix', 'Same: correct the books'], ['not', 'Not the same']],
+  'sign': [['fix', 'Same: correct the books'], ['not', 'Not the same']],
+  'voided but paid': [['fix', 'The check was good: record it again'], ['bank', 'Bank error: ask the bank'], ['not', 'Not the same']],
+  'paid twice': [['bank', 'Bank error: ask the bank to reverse'], ['not', 'Two real payments']],
+  'dup': [['fix', 'Entered twice: remove one'], ['not', 'Two real items']]
+};
+const KIND_LABEL = {'check amount differs': 'Same check number, different amount', 'transposed': 'Digits swapped?', 'sign': 'Money in and out reversed?', 'voided but paid': 'Voided in the books, paid by the bank', 'paid twice': 'Check paid twice?'};
+const decLabel = (opts, d) => d === 'undecided' || d == null ? 'NOT DECIDED' : ((opts.find(o => o[0] === d) || [d, d])[1]);
+const bookDesc = k => esc(fmtDate(k.date) + ', ' + (k.num ? '#' + k.num + ' ' : '') + (k.name || k.type || k.memo || '') + ', ') + fmtMoney(k.amount);
+const bankDescF = b => esc(fmtDate(b.date) + ', ' + b.desc + ', ') + fmtMoney(b.amount);
+
+function draw() {
+  const X = S.last, R = X.R;
+  const acc = X.acc;
+  const company = S.books.company || 'Client';
+  const stops = R.exceptions.filter(e => e.level === 'stop');
+  const others = R.exceptions.filter(e => e.level !== 'stop').sort((a, b) => (a.level === 'care' ? 0 : 1) - (b.level === 'care' ? 0 : 1));
+  $('#subtitle').textContent = (acc ? acc.name : '') + (X.start != null ? ' · statement ' + fmtDate(X.start) + ' to ' + fmtDate(X.end) : '') + ' · files: ' + S.bankName + ' and ' + S.booksName;
+  if (!$('#h-client').value) $('#h-client').value = company;
+  if (!$('#h-prepon').value) $('#h-prepon').value = fmtDate(todayDay());
+  $('#print-title').textContent = 'Bank reconciliation, ' + (acc ? acc.name : '') + (X.end != null ? ', ' + fmtDate(X.end) : '');
+  // verdict
+  const v = $('#verdict');
+  let vt = company + ', ' + (acc ? acc.name : '') + (X.end != null ? ', ' + fmtDate(X.end) : '') + '. ';
+  let vc = '';
+  if (stops.length) { vt += 'Stopped: fix the file first (see the red box).'; vc = 'bad'; }
+  else if (X.begin == null || X.ending == null) { vt += "Not proven yet: type the statement's balances in step 2."; vc = 'open'; }
+  else if (X.ties) { vt += 'It ties: adjusted bank and adjusted books are both ' + fmtMoney(X.adjustedBank) + '.' + (X.openStale ? ' Still to decide: ' + X.openStale + ' stale check' + (X.openStale > 1 ? 's' : '') + ' (step 3c).' : ''); vc = 'ok'; }
+  else if (X.difference !== 0) { vt += 'It does not tie: ' + fmtMoney(Math.abs(X.difference)) + ' apart.'; vc = 'bad'; }
+  else { const n = X.undecided + (X.left ? 1 : 0); vt += 'Not finished: ' + n + ' item' + (n === 1 ? '' : 's') + ' to decide before it can be called reconciled.'; vc = 'open'; }
+  v.textContent = vt; v.className = vc;
+  $('#verdict-detail').textContent = X.card || X.nB == null ? '' : X.matched + ' bank lines matched of ' + X.nB + '; ' + X.out.length + ' items outstanding; ' + X.bankOnly.length + ' bank items not in the books; ' + (X.near.length + X.dups.length) + ' entries that look wrong.';
+  const sb = $('#stop-banner');
+  if (stops.length) { sb.hidden = false; sb.innerHTML = stops.map(e => '<p>' + esc(e.message) + '</p>').join(''); } else { sb.hidden = true; sb.innerHTML = ''; }
+  let h = '';
+  if (X.card) { h += drawStep2(X, true); $('#content').innerHTML = h; afterDraw(); return; }
+  if (X.stopFiles) { $('#content').innerHTML = '<p class="actions"><a href="#" class="start-over">Start over with other files</a></p>'; afterDraw(); return; }
+  if (X.stopTyped) { h += drawStep2(X, false); $('#content').innerHTML = h; afterDraw(); return; }
+  // messages
+  h += '<section id="messages"><h2>Check these first</h2>';
+  if (!others.length) h += '<p>Nothing unusual.</p>';
+  else {
+    h += '<ul class="msgs">' + others.map(e => {
+      const done = e.level === 'care' && X.done[e.code] === true;
+      const lbl = e.level === 'info' ? 'For your file.' : (done ? 'Done.' : 'Decide.');
+      return '<li class="' + (e.level === 'info' ? 'info' : (done ? 'done' : 'care')) + '"><span class="lbl">' + lbl + '</span>' + esc(e.message) + '</li>';
+    }).join('') + '</ul>';
+  }
+  h += '</section>';
+  h += drawStep2(X, false) + drawStep3(X) + drawStep4(X);
+  $('#content').innerHTML = h;
+  afterDraw();
+}
+function drawStep2(X, cardOnly) {
+  const R = X.R, books = S.books, bank = S.bank;
+  let h = '<section id="step2"><h2>Step 2. Check what was read <span class="who-tag">you check</span></h2>';
+  h += '<div class="explain"><p><strong>What this is for:</strong> everything after this depends on the dates, the balances and the account being right.</p><p><strong>What to do:</strong> compare this table with the bank statement. If a balance is missing or wrong, type it below and press "Use these". Then press "This is right".</p></div>';
+  const tops = topAccounts(books);
+  const sel = '<select id="account">' + tops.map(a => {
+    const subs = books.accounts.filter(x => x !== a && x.name.startsWith(a.name + ':'));
+    return '<option value="' + esc(a.name) + '"' + (X.acc && a.name === X.acc.name ? ' selected' : '') + '>' + esc(a.name + (subs.length ? ' (with ' + subs.map(s => s.name).join(', ') + ')' : '')) + '</option>';
+  }).join('') + '</select>';
+  if (cardOnly) return h + table('', ['What', 'Read'], [['The bank account in the books', sel]]) + '</section>';
+  const endFromTxt = {file: 'from the file', typed: 'typed', 'last line': "the last line's date: type the statement's if later"}[X.endFrom];
+  const balTxt = (val, typed) => val == null ? 'not in the file: required, type it below' : fmtMoney(val) + (typed ? ' (typed)' : ' (from the file)');
+  const rows = [
+    ["The bank's download", esc(bank.layout + '; ' + bank.lines.length + ' lines from ' + fmtDate(X.start))],
+    ['Statement', esc(fmtDate(X.start) + ' to ' + fmtDate(X.end) + ' (end date: ' + endFromTxt + ')')],
+    ['Beginning balance', esc(balTxt(X.begin, S.typed.begin != null))],
+    ['Ending balance', esc(X.ending == null ? 'not in the file: required, type it below' : fmtMoney(X.ending) + (S.typed.end != null ? ' (typed)' : (bank.end == null ? ' (beginning plus the lines)' : ' (from the file)')))],
+    ["The books' ledger", esc(books.layout + '; ' + tops.length + ' account' + (tops.length > 1 ? 's' : ''))],
+    ['The bank account in the books', sel],
+    ["The books' balance the day before " + esc(fmtDate(X.start)), X.booksBefore == null ? '' : esc(fmtMoney(X.booksBefore) + (X.begin != null ? ' (compare with the beginning balance: the difference, ' + fmtMoney(X.booksBefore - X.begin) + ', is what was outstanding then)' : ''))],
+    ["The books' balance on " + esc(fmtDate(X.end)), X.booksEnding == null ? '' : esc(fmtMoney(X.booksEnding))]
+  ];
+  h += table('read-table', ['What', 'Read'], rows);
+  const need = bank.begin == null;
+  const ph = need ? '(required)' : "(to replace the file's)";
+  const errs = S.inputErr;
+  h += '<div class="inputs">' +
+    '<label>Statement beginning balance ' + ph + '<input type="text" id="bank-begin" inputmode="decimal" value="' + esc(S.inputs.begin) + '" placeholder="' + ph + '">' + (errs.begin ? '<span class="err">' + esc(errs.begin) + '</span>' : '') + '</label>' +
+    '<label>Statement ending balance ' + ph + '<input type="text" id="bank-end" inputmode="decimal" value="' + esc(S.inputs.end) + '" placeholder="' + ph + '">' + (errs.end ? '<span class="err">' + esc(errs.end) + '</span>' : '') + '</label>' +
+    '<label>Statement end date, if later<input type="text" id="stmt-end" value="' + esc(S.inputs.stmtEnd) + '" placeholder="like 3/31/2026">' + (errs.stmtEnd ? '<span class="err">' + esc(errs.stmtEnd) + '</span>' : '') + '</label>' +
+    '<button type="button" id="update-balances" class="secondary">Use these</button></div>';
+  h += '<p><button type="button" id="read-ok">' + (S.readOk ? '✓ Checked: go to step 3' : 'This is right: go to step 3') + '</button></p>';
+  return h + '</section>';
+}
+function drawStep3(X) {
+  let h = '<section id="step3"><h2>Step 3. Decide what was found <span class="who-tag">you decide</span></h2>';
+  h += '<div class="explain"><p><strong>What this is for:</strong> the page has matched what it could. What is left is listed here: entries that look wrong, bank items not in the books, and what is still outstanding.</p><p><strong>What to do:</strong> decide each entry in 3a, check the treatment of each bank item in 3b, and decide any stale check in 3c. The reconciliation in step 4 follows your choices.</p></div>';
+  // 3a
+  h += '<h3>3a. Book entries that look wrong <span class="who-tag">you decide</span></h3>';
+  if (!X.near.length && !X.dups.length) h += '<p>None.</p>';
+  else {
+    h += '<p>Each pairs a book entry with the bank line it probably is. Until you decide, both count as separate items, so the reconciliation is not finished.</p>';
+    const rows = [];
+    for (const n of X.near) {
+      const opts = DEC_OPTS[n.kind];
+      const bA = n.b.amount, kA = n.k && !n.voided ? n.k.amount : 0;
+      const eff = n.kind === 'paid twice' ? 'none (a bank error)' : fmtMoney(n.kind === 'voided but paid' ? bA : bA - kA);
+      const inBooks = n.k ? (n.voided ? esc(fmtDate(n.k.date) + ', #' + n.k.num + ' ' + n.k.name + ', voided ($0.00)') : bookDesc(n.k)) : 'not in the books again';
+      rows.push([esc(KIND_LABEL[n.kind]), inBooks, bankDescF(n.b), eff, '<div class="radios">' + opts.map(o => radio(n.id, o[0], o[1], n.decision)).join('') + '</div>']);
+    }
+    for (const d of X.dups) {
+      rows.push(['Entered twice?', esc(fmtDate(d.twin.date) + ' and ' + fmtDate(d.k.date) + ', ' + d.k.name + ', ') + fmtMoney(d.k.amount) + ' each', esc('once, matched to the ' + fmtDate(d.twin.date) + ' entry'), fmtMoney(-d.k.amount), '<div class="radios">' + DEC_OPTS.dup.map(o => radio(d.id, o[0], o[1], d.decision)).join('') + '</div>']);
+    }
+    h += table('wrong', ['What it looks like', 'In the books', 'At the bank', ['Effect on the books\' balance if corrected', 'num'], 'Your decision'], rows);
+  }
+  // 3b
+  h += '<h3>3b. At the bank, not in the books <span class="who-tag">you decide</span></h3>';
+  if (X.suggest.length) {
+    h += '<div class="explain"><p><strong>Recorded before the books\' file starts?</strong> The books\' file starts on the bank\'s first date, and these early bank lines add up to the ' + esc(fmtMoney(X.Rd)) + ' difference at the start. Tick each one that was recorded in the books before the file starts.</p>' +
+      X.suggest.map(b => '<label class="tickbox"><input type="checkbox" class="tick" data-id="b' + b.i + '"' + (S.ticks['b' + b.i] ? ' checked' : '') + '> ' + bankDescF(b) + '</label>').join('') + '</div>';
+  }
+  if (!X.bankOnly.length) h += '<p>None.</p>';
+  else {
+    const rows = X.bankOnly.map(o => [esc(fmtDate(o.b.date)), esc(o.b.desc) + (o.later ? ' <em>(in the books on ' + esc(fmtDate(o.later.date)) + ')</em>' : ''), fmtMoney(o.b.amount),
+      '<select class="treat" data-id="' + o.id + '">' + Object.keys(TREATS).map(t => '<option value="' + t + '"' + (o.treat === t ? ' selected' : '') + '>' + esc(TREATS[t]) + '</option>').join('') + '</select>']);
+    h += table('bank-only', ['Date', 'Description', ['Amount', 'num'], 'Treatment'], rows);
+  }
+  // 3c
+  const hasStale = X.out.some(o => o.flag === 'stale');
+  h += '<h3>3c. Outstanding: in the books, not yet at the bank <span class="who-tag">' + (hasStale ? 'you decide' : 'automatic') + '</span></h3>';
+  if (X.startCands.length) {
+    const tickedSum = sum(X.oldOut, k => k.amount);
+    h += '<div class="explain"><p>Which of these checks from before ' + esc(fmtDate(X.start)) + ' are still outstanding? They should add up to ' + esc(fmtMoney(X.Rd)) + ' (the books\' balance the day before, less the bank\'s beginning balance, less the older entries that cleared in the period). Tick them from last reconciliation\'s outstanding list.</p>' +
+      X.startCands.map(k => '<label class="tickbox"><input type="checkbox" class="tick" data-id="k' + k.i + '"' + (S.ticks['k' + k.i] ? ' checked' : '') + '> ' + bookDesc(k) + '</label>').join('') +
+      '<p><strong>' + (X.left === 0 ? 'Accounted for.' : 'Still to account for: ' + esc(fmtMoney(X.Rd - tickedSum)) + '.') + '</strong></p></div>';
+  }
+  if (!X.out.length) h += '<p>None.</p>';
+  else {
+    const rows = X.out.map(o => {
+      let note = '';
+      if (o.flag === 'stale') note = '<span class="flag-stale">stale-dated: over six months</span><div class="radios">' + radio(o.id, 'keep', 'Keep outstanding', o.decision) + radio(o.id, 'reverse', 'Reverse to a liability', o.decision) + '</div>';
+      else if (o.flag === 'old') note = '<span class="flag-old">over 90 days</span>';
+      else if (o.flag === 'late deposit') note = '<span class="flag-late">deposit not at the bank after 10 days</span>';
+      else if (o.flag === 'late payment') note = '<span class="flag-late">payment not at the bank after 10 days</span>';
+      return [esc(fmtDate(o.k.date)), esc(o.k.num), esc(o.k.name || o.k.memo), fmtMoney(o.k.amount), String(o.age), note];
+    });
+    h += table('outstanding', ['Date', 'Num', 'To or from', ['Amount', 'num'], ['Age in days', 'num'], 'Note'], rows);
+  }
+  h += '<p>' + X.R.clearedBefore + ' older entr' + (X.R.clearedBefore === 1 ? 'y' : 'ies') + ' cleared before the bank\'s dates. ' + X.matched + ' of ' + X.nB + ' bank lines matched.' +
+    (X.batches.length ? ' Matched several to one: ' + X.batches.map(x => esc(x.items.map(k => fmtDate(k.date) + ' ' + fmtMoney(k.amount)).join(' + ') + ' = the bank deposit of ' + fmtMoney(x.b.amount) + ' on ' + fmtDate(x.b.date))).join('; ') + '.' : '') + '</p>';
+  return h + '</section>';
+}
+function openItems(X) {
+  const items = [];
+  if (X.begin == null || X.ending == null) items.push("the statement's balances (step 2)");
+  if (X.undecided) items.push(X.undecided + ' entr' + (X.undecided > 1 ? 'ies' : 'y') + ' that look wrong (step 3a)');
+  if (X.left) items.push(fmtMoney(X.left) + ' left unexplained at the start (step 3)');
+  if (X.openStale) items.push(X.openStale + ' stale check' + (X.openStale > 1 ? 's' : '') + ' (step 3c)');
+  return items;
+}
+function drawStep4(X) {
+  const acct = X.acc.name;
+  let h = '<section id="step4"><h2>Step 4. The reconciliation <span class="who-tag">built from your choices</span></h2>';
+  h += '<div class="actions"><button type="button" id="print">Print or save as PDF</button> <a href="#" class="start-over">Start over with other files</a></div>';
+  const items = openItems(X);
+  if (items.length) h += '<div id="open-items"><strong>' + (X.ties ? 'Still to decide: ' : 'Not finished: ') + '</strong><ul>' + items.map(i => '<li>' + esc(i) + '</li>').join('') + '</ul></div>';
+  const dit = X.outCounted.filter(o => o.k.amount > 0), oc = X.outCounted.filter(o => o.k.amount < 0);
+  const rows = [];
+  rows.push(['Balance per bank statement, ' + esc(fmtDate(X.end)), fmtMoney(X.ending)]);
+  rows.push(['Add: deposits in transit (' + dit.length + ')', fmtMoney(sum(dit, o => o.k.amount))]);
+  rows.push(['Less: outstanding checks and payments (' + oc.length + ')', fmtMoney(sum(oc, o => o.k.amount))]);
+  if (X.near.some(n => n.decision === 'bank')) rows.push(['Bank errors to be corrected by the bank', fmtMoney(X.bankCorr)]);
+  rows.push({cls: 'total', cells: ['<strong>Adjusted bank balance</strong>', '<strong>' + fmtMoney(X.adjustedBank) + '</strong>']});
+  rows.push(['Balance per books, ' + esc(fmtDate(X.end)), fmtMoney(X.booksEnding)]);
+  rows.push(['Add or less: bank items not in the books (' + X.bankOnly.length + ')', fmtMoney(sum(X.bankOnly, o => o.b.amount))]);
+  rows.push(['Add or less: corrections of book entries', fmtMoney(X.bookCorr)]);
+  rows.push({cls: 'total', cells: ['<strong>Adjusted book balance</strong>', '<strong>' + fmtMoney(X.adjustedBooks) + '</strong>']});
+  const diffTxt = X.difference == null ? 'not known: type the balances in step 2' : (X.difference === 0 ? (X.ties ? '$0.00: reconciled' : '$0.00, but not finished (see above)') : fmtMoney(X.difference));
+  rows.push({cls: 'total', cells: ['Difference', diffTxt]});
+  h += table('proof', ['', ['Amount', 'num']], rows);
+  // entries
+  h += '<h3>Entries and corrections, dated ' + esc(fmtDate(X.end)) + '</h3>';
+  const je = [];
+  let n = 0;
+  for (const o of X.bankOnly) {
+    const a = Math.abs(o.b.amount), what = o.b.desc + ', ' + fmtDate(o.b.date);
+    let dr, cr, ex;
+    if (o.treat === 'fee') { [dr, cr] = o.b.amount < 0 ? ['Bank service charges', acct] : [acct, 'Bank service charges']; ex = what + ': bank service charge.'; }
+    else if (o.treat === 'interest') { [dr, cr] = o.b.amount > 0 ? [acct, 'Interest income'] : ['Interest income', acct]; ex = what + ': interest earned.'; }
+    else if (o.treat === 'returned') { [dr, cr] = o.b.amount < 0 ? ['Accounts receivable (the customer)', acct] : [acct, 'Accounts receivable (the customer)']; ex = what + ": returned item, back on the customer's balance."; }
+    else continue;
+    n++; je.push({n, dr, cr, a, ex});
+  }
+  for (const o of X.out) if (o.decision === 'reverse') { n++; je.push({n, dr: acct, cr: 'Outstanding checks payable (unclaimed property)', a: Math.abs(o.k.amount), ex: 'Check #' + o.k.num + ' to ' + o.k.name + ', ' + fmtDate(o.k.date) + ', stale-dated: reversed to a liability until it is paid or reported as unclaimed property.'}); }
+  if (je.length) {
+    const rows2 = [];
+    je.forEach(e => {
+      rows2.push(['AJE ' + e.n, esc(e.dr), fmtMoney(e.a), '']);
+      rows2.push(['', esc(e.cr), '', fmtMoney(e.a)]);
+      rows2.push({cls: 'expl', cells: ['', '<em>' + esc(e.ex) + '</em>', '', '']});
+    });
+    h += table('entries', ['Entry', 'Account', ['Debit', 'num'], ['Credit', 'num']], rows2);
+  }
+  const corr = [];
+  for (const nm of X.near) {
+    if (nm.decision === 'fix') {
+      if (nm.kind === 'voided but paid') corr.push('Check #' + nm.k.num + ' (' + nm.k.name + '), voided in the books on ' + fmtDate(nm.k.date) + ', was paid by the bank for ' + fmtMoney(nm.b.amount) + ' on ' + fmtDate(nm.b.date) + ': record the voided check again. Edit the transaction if its period is open, otherwise post a correcting entry.');
+      else corr.push((nm.k.num ? 'Check #' + nm.k.num + ', ' : '') + (nm.k.name || nm.k.type) + ', ' + fmtDate(nm.k.date) + ': correct the entry from ' + fmtMoney(nm.k.amount) + ' to ' + fmtMoney(nm.b.amount) + ' (the bank: ' + nm.b.desc + ', ' + fmtDate(nm.b.date) + '). Edit the transaction if its period is open, otherwise post a correcting entry.');
+    } else if (nm.decision === 'bank') corr.push('Ask the bank to correct ' + nm.b.desc + ' on ' + fmtDate(nm.b.date) + ', ' + fmtMoney(nm.b.amount) + (nm.kind === 'paid twice' ? ': the check was already paid.' : (nm.k ? ': the books show ' + fmtMoney(nm.k.amount) + '.' : '.')));
+  }
+  for (const d of X.dups) if (d.decision === 'fix') corr.push(d.k.name + ', ' + fmtMoney(d.k.amount) + ' on ' + fmtDate(d.k.date) + ' is the same as the entry on ' + fmtDate(d.twin.date) + ': entered twice. Delete or void it.');
+  for (const o of X.bankOnly) if (o.treat === 'ask') corr.push(o.b.desc + ', ' + fmtDate(o.b.date) + ', ' + fmtMoney(o.b.amount) + ': find out what it was.');
+  if (corr.length) h += '<ol id="corrections">' + corr.map(c => '<li>' + esc(c) + '</li>').join('') + '</ol>';
+  if (!je.length && !corr.length) h += '<p id="corrections">No entries.</p>';
+  // questions
+  const q = [];
+  for (const o of X.bankOnly) {
+    if (o.treat === 'ask') q.push('What was ' + o.b.desc + ' on ' + fmtDate(o.b.date) + ', ' + fmtMoney(o.b.amount) + '?');
+    else if (o.kind === 'returned') q.push(o.b.desc + ' on ' + fmtDate(o.b.date) + ', ' + fmtMoney(o.b.amount) + ' came back unpaid: which customer, and have they been asked to pay again?');
+  }
+  for (const o of X.out) {
+    if (o.flag === 'stale' || o.flag === 'old') q.push('Check #' + o.k.num + ' to ' + o.k.name + ', ' + fmtMoney(Math.abs(o.k.amount)) + ', dated ' + fmtDate(o.k.date) + ', has not cleared after ' + o.age + ' days: did the payee receive it?');
+    else if (o.flag.startsWith('late')) q.push((o.k.amount > 0 ? 'The deposit from ' : 'The payment to ') + (o.k.name || o.k.memo) + ', ' + fmtMoney(Math.abs(o.k.amount)) + ' on ' + fmtDate(o.k.date) + ', is not at the bank after ' + o.age + ' days: was it made, and for this amount?');
+  }
+  h += '<h3>Questions for the client</h3>' + (q.length ? '<ol id="questions">' + q.map(x => '<li>' + esc(x) + '</li>').join('') + '</ol>' : '<p>None.</p>');
+  // print-only details
+  let p = '<div class="print-only"><h3>Outstanding items</h3>';
+  p += X.out.length ? table('', ['Date', 'Num', 'To or from', ['Amount', 'num'], ['Age', 'num'], 'Decision'], X.out.map(o => [esc(fmtDate(o.k.date)), esc(o.k.num), esc(o.k.name), fmtMoney(o.k.amount), String(o.age), o.flag === 'stale' ? (o.decision === 'keep' ? 'Stale: keep outstanding' : o.decision === 'reverse' ? 'Stale: reversed to a liability' : 'NOT DECIDED') : esc(o.flag)])) : '<p>None.</p>';
+  p += '<h3>Bank items not in the books</h3>';
+  p += X.bankOnly.length ? table('', ['Date', 'Description', ['Amount', 'num'], 'Treatment'], X.bankOnly.map(o => [esc(fmtDate(o.b.date)), esc(o.b.desc), fmtMoney(o.b.amount), esc(TREATS[o.treat])])) : '<p>None.</p>';
+  p += '<h3>Book entries that looked wrong</h3>';
+  const wr = X.near.map(nm => [esc(KIND_LABEL[nm.kind]), nm.k ? bookDesc(nm.k) : '', bankDescF(nm.b), esc(decLabel(DEC_OPTS[nm.kind], nm.decision))])
+    .concat(X.dups.map(d => ['Entered twice?', bookDesc(d.k), esc('once, on ' + fmtDate(d.twin.date)), esc(decLabel(DEC_OPTS.dup, d.decision))]));
+  p += wr.length ? table('', ['What', 'In the books', 'At the bank', 'Decision'], wr) : '<p>None.</p>';
+  p += '</div>';
+  h += p;
+  h += '<h3>What I read</h3><ul><li>The bank\'s download: ' + esc(S.bankName) + ', ' + esc(S.bank.layout) + ', ' + X.nB + ' lines, ' + esc(fmtDate(X.start)) + ' to ' + esc(fmtDate(Math.max(...S.bank.lines.map(l => l.date))))
+    + '.</li><li>The books\' ledger: ' + esc(S.booksName) + ', ' + esc(S.books.layout) + ', ' + X.all.length + ' entries in ' + esc(acct) + (X.R.subaccounts.length ? ' and its sub-accounts' : '') + '.</li>'
+    + (X.after.length ? '<li>' + X.after.length + ' book entr' + (X.after.length > 1 ? 'ies' : 'y') + ' after the statement date left out.</li>' : '') + '</ul>';
+  h += '<footer>Made by "Why won\'t the bank rec tie?" version 1.0.0, on this computer. The files were read here and not sent anywhere. Arithmetic is done in whole cents. The page matches and explains; you decide what to post.</footer>';
+  return h + '</section>';
+}
+
+/* ---------- step bar ---------- */
+function step3Done(X) { return X && !X.card && !X.stopFiles && X.undecided === 0 && X.openStale === 0 && X.left === 0; }
+function step2Done(X) { return X && S.readOk && X.begin != null && X.ending != null; }
+function currentStep() {
+  if ($('#work').hidden) return 1;
+  let cur = 2;
+  const top = $('#stepbar').offsetHeight + 40;
+  for (const n of [2, 3, 4]) { const s = document.getElementById('step' + n); if (s && s.getBoundingClientRect().top <= top) cur = n; }
+  if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4 && document.getElementById('step4')) cur = 4;
+  return cur;
+}
+function updateBar() {
+  const X = S.last, cur = currentStep(), read = !$('#work').hidden;
+  document.querySelectorAll('#stepbar .st').forEach(a => {
+    const n = +a.dataset.step;
+    a.classList.toggle('current', n === cur);
+    a.classList.toggle('disabled', n > 1 && (!read || !document.getElementById('step' + n)));
+    const done = (n === 1 && read) || (n === 2 && step2Done(X)) || (n === 3 && step3Done(X));
+    a.classList.toggle('done', !!done);
+    a.querySelector('.num').textContent = done ? '✓' : String(n);
+  });
+  let t = 'You are looking at step ' + cur + ' of 4. ';
+  if (!read) t += 'Still to do: give the two files (step 1).';
+  else {
+    const todo = [];
+    if (X && !X.card && !X.stopFiles) {
+      if (X.begin == null || X.ending == null) todo.push("type the statement's balances (step 2)");
+      if (!S.readOk) todo.push('press "This is right" (step 2)');
+      if (!step3Done(X)) todo.push('decide what was found (step 3)');
+    } else todo.push('fix what the red box says');
+    t += todo.length ? 'Still to do: ' + todo.join('; ') + '.' : 'Everything is decided: print the reconciliation in step 4.';
+  }
+  $('#todo').textContent = t;
+}
+window.addEventListener('scroll', updateBar, {passive: true});
+window.addEventListener('resize', updateBar);
+document.querySelectorAll('#stepbar .st').forEach(a => a.addEventListener('click', e => {
+  const n = +a.dataset.step;
+  if (n === 1) {
+    e.preventDefault();
+    if (!$('#work').hidden) { if (confirm('Start over? Your decisions and the balances you typed will be cleared.')) startOver(); }
+    else window.scrollTo(0, 0);
+  } else {
+    e.preventDefault();
+    const s = document.getElementById('step' + n);
+    if (s) window.scrollTo(0, s.getBoundingClientRect().top + window.scrollY - $('#stepbar').offsetHeight - 8);
+  }
+}));
+function afterDraw() { updateBar(); }
+
+/* ---------- running it ---------- */
+function setReport(r) {
+  if (r === undefined) { window.__report = undefined; return; }
+  window.__report = JSON.parse(JSON.stringify(r, (k, v) => k.startsWith('_') ? undefined : v));
+}
+function showProblem(text, swapped) {
+  const p = $('#problem');
+  p.hidden = false;
+  p.innerHTML = '<p>' + esc(text) + '</p>' + (swapped ? '<p><button type="button" id="swap">Swap the two files</button></p>' : '');
+}
+function hideProblem() { const p = $('#problem'); p.hidden = true; p.innerHTML = ''; }
+function notRecognized(message, swapped) {
+  const r = {version: VERSION, files: {bank: S.bankName, books: S.booksName}, status: 'NOT_RECOGNIZED', exceptions: [{code: 'NOT_RECOGNIZED', level: 'stop', message}]};
+  if (swapped) r.swapped = true;
+  setReport(r);
+  showProblem(message, swapped);
+}
+function fail(err) {
+  console.error(err);
+  const message = err && err.message ? err.message : String(err);
+  window.__report = {status: 'ERROR', message};
+  if ($('#work').hidden) showProblem('Something went wrong: ' + message);
+  else { const sb = $('#stop-banner'); sb.hidden = false; sb.innerHTML = '<p>Something went wrong: ' + esc(message) + '</p>'; }
+}
+async function loadBank(file) {
+  setReport(undefined); hideProblem();
+  S.bankFile = file; S.bankName = file.name; S.bank = null; S.bankRows = null;
+  $('#bank-got').textContent = '';
+  try { S.bankRows = await readRows(file); }
+  catch (e) { if (e instanceof UserError) return notRecognized(e.message); return fail(e); }
+  $('#bank-got').textContent = '✓ ' + file.name;
+  const b = parseBank(S.bankRows);
+  if (b.status === 'NOT_RECOGNIZED') return notRecognized(b.message, b.swapped);
+  S.bank = b;
+  if (S.booksRows) go();
+}
+async function loadBooks(file) {
+  setReport(undefined); hideProblem();
+  S.booksFile = file; S.booksName = file.name; S.books = null; S.booksRows = null;
+  $('#books-got').textContent = '';
+  try { S.booksRows = await readRows(file); }
+  catch (e) { if (e instanceof UserError) return notRecognized(e.message); return fail(e); }
+  $('#books-got').textContent = '✓ ' + file.name;
+  if (S.bank) go();
+  else if (S.bankRows) { const b = parseBank(S.bankRows); if (b.status === 'NOT_RECOGNIZED') notRecognized(b.message, b.swapped); }
+}
+function go() {
+  try {
+    const k = parseBooks(S.booksRows);
+    if (k.status === 'NOT_RECOGNIZED') return notRecognized(k.message);
+    S.books = k;
+    S.account = guessAccount(k);
+    $('#start').hidden = true; $('#work').hidden = false;
+    rerun(true);
+    window.scrollTo(0, 0);
+  } catch (e) { fail(e); }
+}
+function rerun(fresh) {
+  try {
+    const y = window.scrollY;
+    S.last = compute();
+    setReport(S.last.R);
+    draw();
+    if (!fresh) window.scrollTo(0, y);
+    updateBar();
+  } catch (e) { fail(e); }
+}
+function startOver() {
+  const keep = {};
+  resetState();
+  setReport(undefined);
+  $('#bank-file').value = ''; $('#books-file').value = '';
+  $('#bank-got').textContent = ''; $('#books-got').textContent = '';
+  hideProblem();
+  document.querySelectorAll('.hdr input').forEach(i => i.value = '');
+  $('#work').hidden = true; $('#start').hidden = false;
+  window.scrollTo(0, 0); updateBar();
+}
+function applyBalances() {
+  const errs = {};
+  const t = S.typed;
+  const nb = S.inputs.begin.trim(), ne = S.inputs.end.trim(), nd = S.inputs.stmtEnd.trim();
+  if (nb === '') t.begin = null; else { const a = parseAmount(nb); if (isAmt(a)) t.begin = a; else errs.begin = 'Not a number. Type digits, like 12,345.67.'; }
+  if (ne === '') t.end = null; else { const a = parseAmount(ne); if (isAmt(a)) t.end = a; else errs.end = 'Not a number. Type digits, like 12,345.67.'; }
+  if (nd === '') t.stmtEnd = null; else { const d = parseDate(nd); if (d != null) t.stmtEnd = d; else errs.stmtEnd = 'Not a date. Type it like 3/31/2026.'; }
+  S.inputErr = errs;
+  rerun();
+}
+
+/* events */
+const content = $('#content');
+content.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'account') { S.account = t.value; S.dec = {}; S.ticks = {}; S.treats = {}; rerun(); }
+  else if (t.classList.contains('dec')) { S.dec[t.dataset.id] = t.value; rerun(); }
+  else if (t.classList.contains('tick')) { S.ticks[t.dataset.id] = t.checked; rerun(); }
+  else if (t.classList.contains('treat')) { S.treats[t.dataset.id] = t.value; rerun(); }
+});
+content.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'bank-begin') S.inputs.begin = t.value;
+  else if (t.id === 'bank-end') S.inputs.end = t.value;
+  else if (t.id === 'stmt-end') S.inputs.stmtEnd = t.value;
+});
+content.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && ['bank-begin', 'bank-end', 'stmt-end'].includes(e.target.id)) { e.preventDefault(); applyBalances(); }
+});
+content.addEventListener('click', e => {
+  const t = e.target;
+  if (t.id === 'update-balances') applyBalances();
+  else if (t.id === 'read-ok') {
+    S.readOk = true; rerun();
+    const s = document.getElementById('step3');
+    if (s) window.scrollTo(0, s.getBoundingClientRect().top + window.scrollY - $('#stepbar').offsetHeight - 8);
+  } else if (t.id === 'print') {
+    const items = openItems(S.last);
+    if (items.length && !confirm('This reconciliation has open items: ' + items.join('; ') + '. Print anyway?')) return;
+    window.print();
+  } else if (t.classList.contains('start-over')) {
+    e.preventDefault();
+    if (confirm('Start over? Your decisions and the balances you typed will be cleared.')) startOver();
+  }
+});
+let savedTitle = document.title;
+window.addEventListener('beforeprint', () => { savedTitle = document.title; if (S.last && S.last.acc) document.title = 'Bank reconciliation, ' + S.last.acc.name + (S.last.end != null ? ', ' + fmtDate(S.last.end) : ''); });
+window.addEventListener('afterprint', () => { document.title = savedTitle; });
+
+$('#problem').addEventListener('click', e => {
+  if (e.target.id !== 'swap') return;
+  const bf = S.bankFile, kf = S.booksFile, br = S.bankRows, kr = S.booksRows;
+  hideProblem();
+  S.bankFile = kf; S.booksFile = bf; S.bankRows = kr; S.booksRows = br;
+  const bn = S.bankName, kn = S.booksName; S.bankName = kn; S.booksName = bn;
+  $('#bank-got').textContent = S.bankName ? '✓ ' + S.bankName : '';
+  $('#books-got').textContent = S.booksName ? '✓ ' + S.booksName : '';
+  S.bank = null;
+  if (S.bankRows) {
+    const b = parseBank(S.bankRows);
+    if (b.status === 'NOT_RECOGNIZED') return notRecognized(b.message, b.swapped);
+    S.bank = b;
+    if (S.booksRows) go();
+  }
+});
+function wireDrop(labelId, inputId, loader) {
+  const lab = document.getElementById(labelId), inp = document.getElementById(inputId);
+  inp.addEventListener('change', () => { if (inp.files && inp.files[0]) loader(inp.files[0]); });
+  lab.addEventListener('dragover', e => { e.preventDefault(); lab.classList.add('over'); });
+  lab.addEventListener('dragleave', () => lab.classList.remove('over'));
+  lab.addEventListener('drop', e => { e.preventDefault(); lab.classList.remove('over'); const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) loader(f); });
+}
+wireDrop('bank-drop', 'bank-file', loadBank);
+wireDrop('books-drop', 'books-file', loadBooks);
+
+/* ---------- the built-in sample ---------- */
+$('#try-sample').addEventListener('click', e => {
+  e.preventDefault();
+  setReport(undefined); hideProblem();
+  const bankRows = [
+    ['Date', 'Description', 'Amount', 'Balance'],
+    ['05/03/2026', 'DEPOSIT', '1,250.00', '11,250.00'],
+    ['05/09/2026', 'CHECK 501', '-423.10', '10,826.90'],
+    ['05/11/2026', 'DEPOSIT', '2,000.00', '12,826.90'],
+    ['05/22/2026', 'BANKCARD DEPOSIT', '200.50', '13,027.40'],
+    ['05/31/2026', 'MONTHLY SERVICE FEE', '-15.00', '13,012.40']
+  ];
+  const H = [null, 'Date', 'Transaction Type', 'Num', 'Name', 'Memo/Description', 'Split', 'Amount', 'Balance'];
+  const ln = (d, t, n, nm, m, a, b) => [null, d, t, n, nm, m, '-Split-', a, b];
+  const booksRows = [
+    ['Sample Company LLC'], ['General Ledger'], ['May 1-31, 2026'], [], H,
+    ['Checking'],
+    [null, 'Beginning Balance', null, null, null, null, null, null, 10000],
+    ln('05/03/2026', 'Deposit', null, 'Oak Cafe', 'Customer payment', 1250, 11250),
+    ln('05/06/2026', 'Check', '501', 'Pine Supply', 'Bill payment', -432.10, 10817.90),
+    ln('05/10/2026', 'Deposit', null, 'Elm Clinic', 'Customer payment', 2000, 12817.90),
+    ln('05/12/2026', 'Deposit', null, 'Elm Clinic', 'Customer payment', 2000, 14817.90),
+    ln('05/20/2026', 'Sales Receipt', null, 'Card sales', 'Card batch', 120, 14937.90),
+    ln('05/21/2026', 'Sales Receipt', null, 'Card sales', 'Card batch', 80.50, 15018.40),
+    ln('05/27/2026', 'Check', '502', 'River Rent', 'Bill payment', -1500, 13518.40),
+    ['Total for Checking', null, null, null, null, null, null, 3518.40, null]
+  ];
+  resetState();
+  S.bankName = 'sample-bank-download.csv'; S.booksName = 'sample-general-ledger.xlsx';
+  S.bankRows = bankRows; S.booksRows = booksRows;
+  $('#bank-got').textContent = '✓ ' + S.bankName; $('#books-got').textContent = '✓ ' + S.booksName;
+  const b = parseBank(bankRows);
+  S.bank = b;
+  go();
+});
+updateBar();
+</script>
+</body>
+</html>

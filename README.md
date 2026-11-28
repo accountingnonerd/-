@@ -24,6 +24,10 @@ Every tool in this repository:
 | 4 | [Order-to-Cash](order-to-cash/) | 02 | [What's really collectible?](order-to-cash/02-whats-really-collectible/) | Reads a client's A/R aging detail and produces the receivables review: payments and credits never applied, customers the client owes, duplicates and mis-postings to clean first; who to chase, ranked, with a draft letter each; the allowance from your loss rates, the write-offs and the entry. | 2026-11-16 | 1.0.0 |
 | 5 | [Acquire-to-Retire](acquire-to-retire/) | 01 | [What goes on the asset schedule?](acquire-to-retire/01-what-goes-on-the-asset-schedule/) | Reads a client's general ledger for the year and finds what the depreciation schedule needs: purchases recorded as assets, bills in expense accounts that may be equipment, sales and write-offs, and whether the books agree with last year's schedule and this year's depreciation; with the entries and the client questions. The first agent published with its rebuild prompt and a sample to check a rebuilt copy. | 2026-11-25 | 1.0.0 |
 
+| Series 2 agent | Process | Folder no. | Tool | What it does | Date | Version |
+|---|---|---|---|---|---|---|
+| 1 | [Record-to-Report (close)](record-to-report/) | 02 | [Why won't the bank rec tie?](record-to-report/02-why-wont-the-bank-rec-tie/) | Matches the bank's download to the books' ledger for any span of months: checks by number, card batches, outstanding items and their age, bank items not in the books, the entries that look wrong (wrong amount, digits swapped, sign reversed, entered twice, paid twice), and the reconciliation that proves it, with the entries and the client questions. | not yet published | 1.0.0 |
+
 ## Parked tools
 
 Built and tested, not released. Each can be released later as it stands.

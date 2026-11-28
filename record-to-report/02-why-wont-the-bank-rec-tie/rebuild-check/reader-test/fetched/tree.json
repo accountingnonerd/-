@@ -1,0 +1,4570 @@
+{
+  "sha": "fe51f02ccbb234bfb7080fe2a930eaf9ef8c70c2",
+  "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/fe51f02ccbb234bfb7080fe2a930eaf9ef8c70c2",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e315bfa3f6e924027c79f10b7473446b3ba55333",
+      "size": 114,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e315bfa3f6e924027c79f10b7473446b3ba55333"
+    },
+    {
+      "path": "ARTICLE-FORMAT-RESEARCH.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cdc3eaac93a6f856677bb74c3d304ee17c046e31",
+      "size": 27186,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cdc3eaac93a6f856677bb74c3d304ee17c046e31"
+    },
+    {
+      "path": "ARTICLE-FORMAT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ede98acbddf5cc942f6225801ade79ef2d7a5d6e",
+      "size": 4791,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ede98acbddf5cc942f6225801ade79ef2d7a5d6e"
+    },
+    {
+      "path": "BACKLOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3994d6aefe44a0d17cce41bcaa11e2b323dbc6b5",
+      "size": 5576,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3994d6aefe44a0d17cce41bcaa11e2b323dbc6b5"
+    },
+    {
+      "path": "GROWTH.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0db2f9213b3f6bcfc8fd9834297d38166a7ef99f",
+      "size": 6109,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0db2f9213b3f6bcfc8fd9834297d38166a7ef99f"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a9188a43b019568b550a22949cd4733824e0dbc2",
+      "size": 5234,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a9188a43b019568b550a22949cd4733824e0dbc2"
+    },
+    {
+      "path": "SERIES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0b9d13672efc16cf74381bc029cd409bbc81917",
+      "size": 9628,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f0b9d13672efc16cf74381bc029cd409bbc81917"
+    },
+    {
+      "path": "acquire-to-retire",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ea01cd590ecd56671110a877f4b3510f625baae0",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/ea01cd590ecd56671110a877f4b3510f625baae0"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6a79f4167aa0a53401e878bab8b0d678a6f8aa51",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/6a79f4167aa0a53401e878bab8b0d678a6f8aa51"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e4a49913a9599e774fbc8896f5dd5b243f3399d",
+      "size": 1886,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6e4a49913a9599e774fbc8896f5dd5b243f3399d"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/PROMPT.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "860c1f76e6643b155cd3ed7164184fdac57e3910",
+      "size": 29977,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/860c1f76e6643b155cd3ed7164184fdac57e3910"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "895e405fbff191856fc58103d1f57abd9f4f3a2b",
+      "size": 7613,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/895e405fbff191856fc58103d1f57abd9f4f3a2b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "07e4247501b153d2fece8df23ecd30fa1e3ca32b",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/07e4247501b153d2fece8df23ecd30fa1e3ca32b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f8f1d18c4e9d8ad93fdf3c7d38bda9fc8752f1a",
+      "size": 1363,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2f8f1d18c4e9d8ad93fdf3c7d38bda9fc8752f1a"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/agent/what-goes-on-the-asset-schedule.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c917eb51bb0c6e5ede64ce2b5bba6e4074838137",
+      "size": 970344,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c917eb51bb0c6e5ede64ce2b5bba6e4074838137"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/agent/what-goes-on-the-asset-schedule.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb9f06fe713c23e6dac18aa82d4c7128a6a78a22",
+      "size": 88657,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cb9f06fe713c23e6dac18aa82d4c7128a6a78a22"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c13c12cfa2e3837d74726decb075497ded866090",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/c13c12cfa2e3837d74726decb075497ded866090"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c666198bc4b81a3700855d8cedc30a41cdafa1af",
+      "size": 12818,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c666198bc4b81a3700855d8cedc30a41cdafa1af"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/COMPANION-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e52f8c2caae999711f08ba0e289a247f6a884fb",
+      "size": 588,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2e52f8c2caae999711f08ba0e289a247f6a884fb"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/FOLLOW-UP-POST.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b038a483273a242a51195c4882163f69a0c561e",
+      "size": 970,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7b038a483273a242a51195c4882163f69a0c561e"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/LINKEDIN-PASTE.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d90572e9059ad8fedd56a65dc53b4e65f8d8b861",
+      "size": 49875,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d90572e9059ad8fedd56a65dc53b4e65f8d8b861"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/LINKEDIN-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb1d1a0ba43ea69307b77d286852830e025f64fa",
+      "size": 1617,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fb1d1a0ba43ea69307b77d286852830e025f64fa"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "972cef4e3e9ef08df59d9fec98e9d97b0353cb60",
+      "size": 1995297,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/972cef4e3e9ef08df59d9fec98e9d97b0353cb60"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/build_article.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c54fa272cc4e410038415fc1e4124b08bad469a0",
+      "size": 10622,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c54fa272cc4e410038415fc1e4124b08bad469a0"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d06b02adaedc3296520ab39ef6462228cb764967",
+      "size": 2435,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d06b02adaedc3296520ab39ef6462228cb764967"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "927fec6389ffa46e2e6e7ca6b72b4f113e50bb83",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/927fec6389ffa46e2e6e7ca6b72b4f113e50bb83"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/images/00-cover.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3dc8aad0c2c320e7257918eafb253d957fce48e9",
+      "size": 102865,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3dc8aad0c2c320e7257918eafb253d957fce48e9"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/images/01-verdict.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa406c77d4826c3553f87d021e65c4324ed4f344",
+      "size": 87570,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/aa406c77d4826c3553f87d021e65c4324ed4f344"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/images/01-workpaper.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa142e8548730515e86aba8797463af82f856a54",
+      "size": 420214,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/aa142e8548730515e86aba8797463af82f856a54"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/images/02-four-steps.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9efc10face999ae437976b798d074eeb2d882a8b",
+      "size": 121330,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9efc10face999ae437976b798d074eeb2d882a8b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/images/03-decide.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a42e87c0409d3db90a99e6b82fb19de8885acc1",
+      "size": 816294,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9a42e87c0409d3db90a99e6b82fb19de8885acc1"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/preview",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "122009053873b671dcf623ee02dda6c2106122aa",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/122009053873b671dcf623ee02dda6c2106122aa"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/preview/desktop-full.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31f0ddc7ea62aab0d371fb4882ed96b1aeb43d26",
+      "size": 3444527,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/31f0ddc7ea62aab0d371fb4882ed96b1aeb43d26"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/preview/desktop-top.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "deffd5b6a6961f70667ee1570bea76e4583c5085",
+      "size": 120661,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/deffd5b6a6961f70667ee1570bea76e4583c5085"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/preview/mobile-full.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ef830d0a88aa81adfb2ba44d46963c84d130981",
+      "size": 2589150,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8ef830d0a88aa81adfb2ba44d46963c84d130981"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/preview/mobile-top.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8f672f6e309200adf57aa183ef28cd25f401fd0",
+      "size": 95988,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f8f672f6e309200adf57aa183ef28cd25f401fd0"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8984602dad0493cc1354a4390ba8918bdcebfdcc",
+      "size": 3805,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8984602dad0493cc1354a4390ba8918bdcebfdcc"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/shoot.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e58ed3742b86985c3ebf992deba0910b13e7a58",
+      "size": 1937,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0e58ed3742b86985c3ebf992deba0910b13e7a58"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/visuals.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7745a2d677149446b385d3329d833c5f7fb1fd63",
+      "size": 3683,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7745a2d677149446b385d3329d833c5f7fb1fd63"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/article/what-goes-on-the-asset-schedule-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd385df150fe65a9a3270c2985820301ee4e5876",
+      "size": 1382449,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fd385df150fe65a9a3270c2985820301ee4e5876"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b07906ca74c84b27d9974c1f686d57f9f822daae",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/b07906ca74c84b27d9974c1f686d57f9f822daae"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/reader-test",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "aed6cac1ede83ff06dd86d08152fbbe99e67e7cd",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/aed6cac1ede83ff06dd86d08152fbbe99e67e7cd"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/reader-test/NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d579c06408a5dacd980fe01d82c20f01acf7024",
+      "size": 5927,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7d579c06408a5dacd980fe01d82c20f01acf7024"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/reader-test/after-one-fix.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00acb9760bf430fff088ce72486cb204cc800740",
+      "size": 84233,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/00acb9760bf430fff088ce72486cb204cc800740"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/reader-test/first-generated.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8839deaf251eb0e96cbac1949910569bb27e81e",
+      "size": 84010,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e8839deaf251eb0e96cbac1949910569bb27e81e"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/reader-test/step5-open.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79cc55de9bb24ea8044a936815d44f1e78ea080b",
+      "size": 158325,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/79cc55de9bb24ea8044a936815d44f1e78ea080b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/reader-test/step6-6-workpaper.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fefff4d81f5e7c06ad703568dfbb4cb30425835c",
+      "size": 155342,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fefff4d81f5e7c06ad703568dfbb4cb30425835c"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3ada09b87d756a12cec9f90bfb72d3d3f2f1b441",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/3ada09b87d756a12cec9f90bfb72d3d3f2f1b441"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1/NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b1f8ae913c7880cf28f695fde72d882fa2d1e7b",
+      "size": 2318,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6b1f8ae913c7880cf28f695fde72d882fa2d1e7b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d494e799a0edf3e3e87792b71d47207226aaa0bc",
+      "size": 3322,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d494e799a0edf3e3e87792b71d47207226aaa0bc"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1/final-run.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70b4f81bcf4c58146da5102fdb67b55d12d19a90",
+      "size": 2935,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/70b4f81bcf4c58146da5102fdb67b55d12d19a90"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1/first-run.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b91ec89d172cbaea741f999a6337f65b8eec9805",
+      "size": 3108,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b91ec89d172cbaea741f999a6337f65b8eec9805"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/rebuild-check/rebuild-1/what-goes-on-the-asset-schedule.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8fc64a924683760777cd6c7859f406085f2c3e7",
+      "size": 80523,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d8fc64a924683760777cd6c7859f406085f2c3e7"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/sample",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fed368fcd83d317fb1053eeca50b19b85d864817",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/fed368fcd83d317fb1053eeca50b19b85d864817"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/sample/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cdd35a9527b00d81842af9ea66786b93cf347c54",
+      "size": 4047,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cdd35a9527b00d81842af9ea66786b93cf347c54"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/sample/ridgeline-depreciation-2026-from-tax-software.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20897b04e7f78a574aa29f85a5c69875bb32226b",
+      "size": 497,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/20897b04e7f78a574aa29f85a5c69875bb32226b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/sample/ridgeline-depreciation-schedule-2025.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51352863a3e13cd4848c1b887201ece8b47dbb86",
+      "size": 455,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/51352863a3e13cd4848c1b887201ece8b47dbb86"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/sample/ridgeline-general-ledger-2026.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a062f1c819d865420ed1492d9c36aff3c323121",
+      "size": 10700,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0a062f1c819d865420ed1492d9c36aff3c323121"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "60e70e66aa04ce0070d69152aab3ad1ad527ccfd",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/60e70e66aa04ce0070d69152aab3ad1ad527ccfd"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3ed2e3bfcef976dd0fc48985790d5f340242086",
+      "size": 1412,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a3ed2e3bfcef976dd0fc48985790d5f340242086"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f2eb388a066b091218d5caceeca88a67f9c4de2",
+      "size": 11226,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1f2eb388a066b091218d5caceeca88a67f9c4de2"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a9aad1975ae09c31104118a7258a3963e3d26b5",
+      "size": 46456,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7a9aad1975ae09c31104118a7258a3963e3d26b5"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0e541e257f826787bc9cfdef8e2e8e9890cb59d6",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/0e541e257f826787bc9cfdef8e2e8e9890cb59d6"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/01-northgate-general-ledger.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ff67e56b61151e2c644a2f20122fcf142e19f6f",
+      "size": 11464,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0ff67e56b61151e2c644a2f20122fcf142e19f6f"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/03-planted-purchases-in-expense.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd16490d92ca1654a45882266942de8b42649175",
+      "size": 10754,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cd16490d92ca1654a45882266942de8b42649175"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/04-planted-truck-sold.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9a3c7ec88892725a7652ecd5e066421774e86c5",
+      "size": 11300,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c9a3c7ec88892725a7652ecd5e066421774e86c5"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/05-planted-no-depreciation.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76f8507ab1225f004c2b0c38bc219c0eb0f70e47",
+      "size": 9856,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/76f8507ab1225f004c2b0c38bc219c0eb0f70e47"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/06-planted-opening-differs.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0dc32f4a7e954b80b802168474f06f5775321e7",
+      "size": 11409,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a0dc32f4a7e954b80b802168474f06f5775321e7"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/07-xero-account-transactions.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a610893791221f060b1e097ce1263f3927a9982",
+      "size": 10798,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3a610893791221f060b1e097ce1263f3927a9982"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/08-quickbooks-desktop-gl.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e55d6b422838d980c9cd37fd1e3458ad230973d0",
+      "size": 11545,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e55d6b422838d980c9cd37fd1e3458ad230973d0"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/09-quickbooks-online-csv.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5bdcbcfc10bf07a9b102cec7baaa3ca30acd0ea4",
+      "size": 11862,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5bdcbcfc10bf07a9b102cec7baaa3ca30acd0ea4"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/10-reversal-and-journal-entry.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8ce7ca3d5cbd849c6bcb237168cbb05aac0acfe",
+      "size": 11467,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b8ce7ca3d5cbd849c6bcb237168cbb05aac0acfe"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/11-trial-balance.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c102e8b000bdcda84e9270ab3cb6e708dc167f34",
+      "size": 5052,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c102e8b000bdcda84e9270ab3cb6e708dc167f34"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/12-ar-aging.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3c19e9a3fffbbefdf2d6892d2345ddb4a9a990b",
+      "size": 5086,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d3c19e9a3fffbbefdf2d6892d2345ddb4a9a990b"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/13-planted-line-missing.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1db94b213ec0ccb20498c384a90d61ade9cf3462",
+      "size": 11515,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1db94b213ec0ccb20498c384a90d61ade9cf3462"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/14-threshold-5000.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce7f5dc503b1fe0087c6f093ff41d0261e558cf0",
+      "size": 10428,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ce7f5dc503b1fe0087c6f093ff41d0261e558cf0"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/15-unrecognized-asset-account.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c635c1a9123e2dfbb93b47a42e654aaa98853f1",
+      "size": 11021,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4c635c1a9123e2dfbb93b47a42e654aaa98853f1"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/16-fiscal-year.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2dca3bf62de4b8ac0871523bbd456fb4c09b4ad",
+      "size": 11178,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b2dca3bf62de4b8ac0871523bbd456fb4c09b4ad"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/17-sale-booked-properly.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30c80d3bcb6c71a2413b92f9d8d4585a9be127ab",
+      "size": 11410,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30c80d3bcb6c71a2413b92f9d8d4585a9be127ab"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/18-fixed-asset-tracking-subaccounts.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fc77f3ff6061dbce1d4cba10182de0d19f8909c",
+      "size": 10961,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5fc77f3ff6061dbce1d4cba10182de0d19f8909c"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/19-loans-gains-and-amortization.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5daef848acf55c4c8bc4285e69af7c56840c71ef",
+      "size": 13086,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5daef848acf55c4c8bc4285e69af7c56840c71ef"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/20-trade-in-payments-land.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9ac774d745d8eb7fc401727da06a910ecc32b01",
+      "size": 12607,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c9ac774d745d8eb7fc401727da06a910ecc32b01"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/21-reclass-refund-split-transfer.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4e7fb364496f82cc62792e5963b1dc407ec22d0",
+      "size": 12725,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e4e7fb364496f82cc62792e5963b1dc407ec22d0"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/cases/22-sample-ridgeline-landscaping.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a062f1c819d865420ed1492d9c36aff3c323121",
+      "size": 10700,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0a062f1c819d865420ed1492d9c36aff3c323121"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b3115e81e75c3e66b1fbed3b4e214800c91da9d",
+      "size": 53630,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0b3115e81e75c3e66b1fbed3b4e214800c91da9d"
+    },
+    {
+      "path": "acquire-to-retire/01-what-goes-on-the-asset-schedule/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ee7a9a668ae1e9d1f3ec7e56c5886ad6ac08fc4",
+      "size": 12102,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5ee7a9a668ae1e9d1f3ec7e56c5886ad6ac08fc4"
+    },
+    {
+      "path": "acquire-to-retire/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6dfbae8ecaff1d34ca0df0d8c23540bb41c67a0",
+      "size": 5494,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f6dfbae8ecaff1d34ca0df0d8c23540bb41c67a0"
+    },
+    {
+      "path": "agent5-linkedin-kit.zip",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c0ce855ac6a0bb3ae77b52d7adf99e8b6757c53",
+      "size": 1413327,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7c0ce855ac6a0bb3ae77b52d7adf99e8b6757c53"
+    },
+    {
+      "path": "hire-to-retire",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "78d850c0d71e4e669a5067047c7ea8931c05864f",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/78d850c0d71e4e669a5067047c7ea8931c05864f"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "32b230e16b1167c5c32bc6b82e19296fe73775bb",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/32b230e16b1167c5c32bc6b82e19296fe73775bb"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e7089de735b343fa088430544fa31f1f0e146ec1",
+      "size": 2356,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e7089de735b343fa088430544fa31f1f0e146ec1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31cb0c885c7b79083153bf34bd747aace89be746",
+      "size": 5546,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/31cb0c885c7b79083153bf34bd747aace89be746"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/REBUILD-PROMPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c194edf7ccf7fe46f2b5fa22b16141c442a8490",
+      "size": 19687,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9c194edf7ccf7fe46f2b5fa22b16141c442a8490"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f5f40c3c02935024cb0efe5c694132927057519c",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/f5f40c3c02935024cb0efe5c694132927057519c"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a75faf8df4b5f383f8de439ebf8aa755cfbd3a4",
+      "size": 1311,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9a75faf8df4b5f383f8de439ebf8aa755cfbd3a4"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/agent/do-the-941s-match-the-w3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fbf73868717d9ff275ca36a04c71c3b27002f98a",
+      "size": 1466971,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fbf73868717d9ff275ca36a04c71c3b27002f98a"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/agent/do-the-941s-match-the-w3.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e8c13ffb28185a9f2eaac973ab3a77f1d0a3dd2",
+      "size": 59740,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6e8c13ffb28185a9f2eaac973ab3a77f1d0a3dd2"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2e6a7e077fc379281a96f828d74547de1b768ce4",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/2e6a7e077fc379281a96f828d74547de1b768ce4"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "348d26b2fdbf8a2497178d994209e87e6c0d21bf",
+      "size": 26025,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/348d26b2fdbf8a2497178d994209e87e6c0d21bf"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d1baa9b6f53d98e663b879c5ce5361fb72e58b5",
+      "size": 2970806,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9d1baa9b6f53d98e663b879c5ce5361fb72e58b5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93048718bd301a8d4e6a0cb4c32e43afd5351365",
+      "size": 1512,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/93048718bd301a8d4e6a0cb4c32e43afd5351365"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/build_preview.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f14e455aeb97777b91209cba624d87cd5e49f5f5",
+      "size": 3496,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f14e455aeb97777b91209cba624d87cd5e49f5f5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "73a1524222ff996edb76ec44b6c733fa62ce0953",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/73a1524222ff996edb76ec44b6c733fa62ce0953"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images/cover.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc0d48bead0b1c691bd27c4587e48398b4d09744",
+      "size": 135566,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/dc0d48bead0b1c691bd27c4587e48398b4d09744"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images/fig1-provider-switch.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ad3292692065a39eef6a9189888c76b4b304d30",
+      "size": 205700,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5ad3292692065a39eef6a9189888c76b4b304d30"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images/fig2-four-ways.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "17bdb73f0236463cbc2e032bd3aa4716b27feff3",
+      "size": 512090,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/17bdb73f0236463cbc2e032bd3aa4716b27feff3"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images/fig3-reconciliation.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "595771b298d7e81b1453e17e05dbf92f1b9c8f4d",
+      "size": 792695,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/595771b298d7e81b1453e17e05dbf92f1b9c8f4d"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images/fig4-every-check-found-something.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e0f49b3b0fed34dd54ef381e57cc33d7e01418a",
+      "size": 301507,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6e0f49b3b0fed34dd54ef381e57cc33d7e01418a"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/images/fig5-series-map.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "043edc0ad89477473cbcdb15ab893872e35fd776",
+      "size": 259216,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/043edc0ad89477473cbcdb15ab893872e35fd776"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/payroll-letter-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "554141940b2b573adc191b1193640f362841878e",
+      "size": 2170680,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/554141940b2b573adc191b1193640f362841878e"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "89a8cb009e57771c940493c70c096ccacd3cca8b",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/89a8cb009e57771c940493c70c096ccacd3cca8b"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/_recon.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13b5925e8117afd955ad6810bf7fcf8fbba85a04",
+      "size": 729513,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/13b5925e8117afd955ad6810bf7fcf8fbba85a04"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/_t-fillable-1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ee4e1acfaa3ca526644c49cf1998405ce0b4b9de",
+      "size": 106661,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ee4e1acfaa3ca526644c49cf1998405ce0b4b9de"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/_t-printed-01.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9886a45d5bce26ea4ed290d7fcec6bdbe17e831",
+      "size": 106893,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c9886a45d5bce26ea4ed290d7fcec6bdbe17e831"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/_t-provider-1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e478210bdf522cc03e898d7c94bcd0414d5bc10",
+      "size": 48917,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2e478210bdf522cc03e898d7c94bcd0414d5bc10"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/_t-scan-1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b862c5c98a61d6d9eb46543cf205e89503debfd9",
+      "size": 135199,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b862c5c98a61d6d9eb46543cf205e89503debfd9"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/cover.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f6532eb12ea4eb2d55f5bcc154b3b3a1c190f68",
+      "size": 2627,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7f6532eb12ea4eb2d55f5bcc154b3b3a1c190f68"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/fig1-provider-switch.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e93abdc8c42f8c3ad8f478eb62154395ef9fc7e8",
+      "size": 3262,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e93abdc8c42f8c3ad8f478eb62154395ef9fc7e8"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/fig2-four-ways.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edf80e68ccd66320d963aafb3b86818c07ad18d1",
+      "size": 1988,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/edf80e68ccd66320d963aafb3b86818c07ad18d1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/fig3-reconciliation.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2dd58bcbdc325a0aa81af93c054da4a4d5ae886c",
+      "size": 1719,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2dd58bcbdc325a0aa81af93c054da4a4d5ae886c"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/fig4-every-check-found-something.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ced14cd0a8d0fa9e9447e0d2260dc5c9e65af539",
+      "size": 3087,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ced14cd0a8d0fa9e9447e0d2260dc5c9e65af539"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/fig5-series-map.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fe34bdb299f4ee9b42f26bbe6c593e20b9b0100",
+      "size": 4124,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5fe34bdb299f4ee9b42f26bbe6c593e20b9b0100"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ac795779441e2ef16c14c89e20f4ee94d26dfd0",
+      "size": 2940,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1ac795779441e2ef16c14c89e20f4ee94d26dfd0"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/article/visuals/style.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30d6ecb88fe3b62215c762bbc3e364485f0a55c0",
+      "size": 1223,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30d6ecb88fe3b62215c762bbc3e364485f0a55c0"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "97ba15f2e16d57c116406c7687a52e3e17864712",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/97ba15f2e16d57c116406c7687a52e3e17864712"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f824b7aa309f847cf2e37f795a9a289662e740d4",
+      "size": 2803,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f824b7aa309f847cf2e37f795a9a289662e740d4"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "484c004ddc72e06b6e7cd4209a23e230b03c9465",
+      "size": 9383,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/484c004ddc72e06b6e7cd4209a23e230b03c9465"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90bbbffef46b1029259bef6f8bf1c849401d08e5",
+      "size": 33138,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/90bbbffef46b1029259bef6f8bf1c849401d08e5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8b22f9a2cd275d3439c158a12ebdd367483086c1",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/8b22f9a2cd275d3439c158a12ebdd367483086c1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/01-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8bf6aa4d8a766ea64963aee4d9b83877d009fb84",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8bf6aa4d8a766ea64963aee4d9b83877d009fb84"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/01-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98a40a65af9f04805a0594295f28229b8fb148c1",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/98a40a65af9f04805a0594295f28229b8fb148c1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/01-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2172c8ccf9855c2b05b5c444701f23ee7780564",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2172c8ccf9855c2b05b5c444701f23ee7780564"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/01-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f296255884d990056b1156041c80ea40501118a0",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f296255884d990056b1156041c80ea40501118a0"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/01-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3",
+      "size": 558062,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/02-year-end-packet.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1d107db7d407c0586646e53fe853e10dbe52431",
+      "size": 971810,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e1d107db7d407c0586646e53fe853e10dbe52431"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/03-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57ae1c676c040d2ea107dee646916884fa3b37f2",
+      "size": 985478,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/57ae1c676c040d2ea107dee646916884fa3b37f2"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/03-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8826af05abf057e83eb8cd1b5999c08af73f507",
+      "size": 985478,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f8826af05abf057e83eb8cd1b5999c08af73f507"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/03-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e66aecf84df995eded3182f81ca33de94ab72c2",
+      "size": 985516,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6e66aecf84df995eded3182f81ca33de94ab72c2"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/03-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d72e41b16a6709ceac07794b3d986a78713c70e7",
+      "size": 985516,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d72e41b16a6709ceac07794b3d986a78713c70e7"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/03-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea46285d527a2f58892345cf6e6bffadb3d4617f",
+      "size": 558089,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ea46285d527a2f58892345cf6e6bffadb3d4617f"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/04-q1-941-old-provider.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb1eda6c7bd26871052aeaa292ae21f5b864539",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9bb1eda6c7bd26871052aeaa292ae21f5b864539"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/04-q2-941-old-provider.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0f0ed1f165699f7b6a297deabc88abc7cd4b511",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a0f0ed1f165699f7b6a297deabc88abc7cd4b511"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/04-q3-941-ledgerline.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "864ca591a6b9c456dacc0fba83aba820fda5b8f4",
+      "size": 2374,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/864ca591a6b9c456dacc0fba83aba820fda5b8f4"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/04-q4-941-ledgerline.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eace19e5b7f4d261f8d15ee357f2cb220061d8bf",
+      "size": 2376,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/eace19e5b7f4d261f8d15ee357f2cb220061d8bf"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/04-w3-ledgerline.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "acfa231f7e65c35bcfafdeaad528b1a49c3e55f5",
+      "size": 1630,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/acfa231f7e65c35bcfafdeaad528b1a49c3e55f5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/05-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb1eda6c7bd26871052aeaa292ae21f5b864539",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9bb1eda6c7bd26871052aeaa292ae21f5b864539"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/05-q2-941-second-copy.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1d17db4f18b28fca7ab0c1db616987fa9e0047c",
+      "size": 2370,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f1d17db4f18b28fca7ab0c1db616987fa9e0047c"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/05-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0f0ed1f165699f7b6a297deabc88abc7cd4b511",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a0f0ed1f165699f7b6a297deabc88abc7cd4b511"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/05-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8d715866db47286ec82b9ea5d2e06e6b779ec96",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b8d715866db47286ec82b9ea5d2e06e6b779ec96"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/05-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "17db69df14aa080174fb5ab3f6aad0c7cc339405",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/17db69df14aa080174fb5ab3f6aad0c7cc339405"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/05-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c789b97a2358cc1fc33519e77606d7d7039391b2",
+      "size": 558063,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c789b97a2358cc1fc33519e77606d7d7039391b2"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/06-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8bf6aa4d8a766ea64963aee4d9b83877d009fb84",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8bf6aa4d8a766ea64963aee4d9b83877d009fb84"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/06-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98a40a65af9f04805a0594295f28229b8fb148c1",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/98a40a65af9f04805a0594295f28229b8fb148c1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/06-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2172c8ccf9855c2b05b5c444701f23ee7780564",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2172c8ccf9855c2b05b5c444701f23ee7780564"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/06-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3",
+      "size": 558062,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/07-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8edb0e07f98175c01d1bdcd35e1f2cb4a58f100d",
+      "size": 985453,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8edb0e07f98175c01d1bdcd35e1f2cb4a58f100d"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/07-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b573f2ee2dff02e950964c0119c91452040a4c5",
+      "size": 985438,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4b573f2ee2dff02e950964c0119c91452040a4c5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/07-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "187c5541dc2fc38b651da79e6960df0388799259",
+      "size": 985438,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/187c5541dc2fc38b651da79e6960df0388799259"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/07-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2414c5b73472f6951d93e516615550f60c243e48",
+      "size": 985459,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2414c5b73472f6951d93e516615550f60c243e48"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/07-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f1dd641d474baea0dbb7f0e19f98af74526bfec",
+      "size": 558074,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7f1dd641d474baea0dbb7f0e19f98af74526bfec"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/08-941s-2026.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d132afcac1c5c1884380d2d7320f71ce0d5c81a5",
+      "size": 310494,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d132afcac1c5c1884380d2d7320f71ce0d5c81a5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/08-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff7296ea9fdc1a0597d122c98c9d03962b36ae6f",
+      "size": 44665,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ff7296ea9fdc1a0597d122c98c9d03962b36ae6f"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/09-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8bf6aa4d8a766ea64963aee4d9b83877d009fb84",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8bf6aa4d8a766ea64963aee4d9b83877d009fb84"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/09-q2-941-scanned.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90a22e748787510265b91b407218b23d253fad9c",
+      "size": 267637,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/90a22e748787510265b91b407218b23d253fad9c"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/09-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2172c8ccf9855c2b05b5c444701f23ee7780564",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2172c8ccf9855c2b05b5c444701f23ee7780564"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/09-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f296255884d990056b1156041c80ea40501118a0",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f296255884d990056b1156041c80ea40501118a0"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/09-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3",
+      "size": 558062,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/10-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8bf6aa4d8a766ea64963aee4d9b83877d009fb84",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8bf6aa4d8a766ea64963aee4d9b83877d009fb84"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/10-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98a40a65af9f04805a0594295f28229b8fb148c1",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/98a40a65af9f04805a0594295f28229b8fb148c1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/10-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2172c8ccf9855c2b05b5c444701f23ee7780564",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2172c8ccf9855c2b05b5c444701f23ee7780564"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/10-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "849140c8ccef16c70462219a15d704a1b0bfd879",
+      "size": 2373,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/849140c8ccef16c70462219a15d704a1b0bfd879"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/10-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3",
+      "size": 558062,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/11-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43b52205f29c918dbc3a7d202f8ab0816d78ec9b",
+      "size": 985414,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/43b52205f29c918dbc3a7d202f8ab0816d78ec9b"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/11-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98a40a65af9f04805a0594295f28229b8fb148c1",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/98a40a65af9f04805a0594295f28229b8fb148c1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/11-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2172c8ccf9855c2b05b5c444701f23ee7780564",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2172c8ccf9855c2b05b5c444701f23ee7780564"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/11-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f296255884d990056b1156041c80ea40501118a0",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f296255884d990056b1156041c80ea40501118a0"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/11-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3",
+      "size": 558062,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/03b4d0d3e7bf81ca4b81907d6377daa9ce9d1db3"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/12-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb1eda6c7bd26871052aeaa292ae21f5b864539",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9bb1eda6c7bd26871052aeaa292ae21f5b864539"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/12-q2-941-x.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "374f3b29e1e757522d322b73812ac287984e4893",
+      "size": 577248,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/374f3b29e1e757522d322b73812ac287984e4893"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/12-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0f0ed1f165699f7b6a297deabc88abc7cd4b511",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a0f0ed1f165699f7b6a297deabc88abc7cd4b511"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/12-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8d715866db47286ec82b9ea5d2e06e6b779ec96",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b8d715866db47286ec82b9ea5d2e06e6b779ec96"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/12-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "17db69df14aa080174fb5ab3f6aad0c7cc339405",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/17db69df14aa080174fb5ab3f6aad0c7cc339405"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/12-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c4a306a5d87db50c80d3950cb2e0cd649e879a1",
+      "size": 558063,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5c4a306a5d87db50c80d3950cb2e0cd649e879a1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/13-form-944.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78ebd8da4103d3c5dc686c7d99d35edb47415b17",
+      "size": 81548,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/78ebd8da4103d3c5dc686c7d99d35edb47415b17"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/14-bank-statement.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d6516c6285fff5369cd588f60986c860b71e396",
+      "size": 1137,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1d6516c6285fff5369cd588f60986c860b71e396"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/15-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8bf6aa4d8a766ea64963aee4d9b83877d009fb84",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8bf6aa4d8a766ea64963aee4d9b83877d009fb84"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/15-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98a40a65af9f04805a0594295f28229b8fb148c1",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/98a40a65af9f04805a0594295f28229b8fb148c1"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/15-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2172c8ccf9855c2b05b5c444701f23ee7780564",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2172c8ccf9855c2b05b5c444701f23ee7780564"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/15-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f296255884d990056b1156041c80ea40501118a0",
+      "size": 985421,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f296255884d990056b1156041c80ea40501118a0"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/16-q1-941-old-provider.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb1eda6c7bd26871052aeaa292ae21f5b864539",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9bb1eda6c7bd26871052aeaa292ae21f5b864539"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/16-q2-941-old-provider.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0f0ed1f165699f7b6a297deabc88abc7cd4b511",
+      "size": 985422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a0f0ed1f165699f7b6a297deabc88abc7cd4b511"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/16-q3-941-ledgerline.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "864ca591a6b9c456dacc0fba83aba820fda5b8f4",
+      "size": 2374,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/864ca591a6b9c456dacc0fba83aba820fda5b8f4"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/16-q4-941-ledgerline.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eace19e5b7f4d261f8d15ee357f2cb220061d8bf",
+      "size": 2376,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/eace19e5b7f4d261f8d15ee357f2cb220061d8bf"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/16-w3-ledgerline.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "acfa231f7e65c35bcfafdeaad528b1a49c3e55f5",
+      "size": 1630,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/acfa231f7e65c35bcfafdeaad528b1a49c3e55f5"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/16-w3-old-provider.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d61db895fe33315e37f04af30594103b520786f8",
+      "size": 558062,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d61db895fe33315e37f04af30594103b520786f8"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/17-q1-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57ae1c676c040d2ea107dee646916884fa3b37f2",
+      "size": 985478,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/57ae1c676c040d2ea107dee646916884fa3b37f2"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/17-q2-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0d86106d73448e92b1cc2a241bcdbed4000fa8b",
+      "size": 985499,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f0d86106d73448e92b1cc2a241bcdbed4000fa8b"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/17-q3-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e66aecf84df995eded3182f81ca33de94ab72c2",
+      "size": 985516,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6e66aecf84df995eded3182f81ca33de94ab72c2"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/17-q4-941.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d72e41b16a6709ceac07794b3d986a78713c70e7",
+      "size": 985516,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d72e41b16a6709ceac07794b3d986a78713c70e7"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/cases/17-w3.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7dc5c5f4f8a8a088dc1640975a4ec7ea2ceba1e",
+      "size": 558104,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f7dc5c5f4f8a8a088dc1640975a4ec7ea2ceba1e"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/forms",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f7650b958883243aba400740217200f69835ae32",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/f7650b958883243aba400740217200f69835ae32"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/forms/f941-2025.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b5b657f95f4f460f7349c21009be0950009769f",
+      "size": 831930,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2b5b657f95f4f460f7349c21009be0950009769f"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/forms/f941-2026.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06dfb9f78eed416212051b1a469f6bc233f1192b",
+      "size": 841648,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/06dfb9f78eed416212051b1a469f6bc233f1192b"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/forms/f941x.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de8c2b74ad49c9a75985038a9e0f6805af8564d4",
+      "size": 218936,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/de8c2b74ad49c9a75985038a9e0f6805af8564d4"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/forms/f944.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3769f69b18bb7546158dda08693c9a14e252f77",
+      "size": 126012,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b3769f69b18bb7546158dda08693c9a14e252f77"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/forms/fw3-2026.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0030f60a44bd7b2bd2a205b3f2cc4a95b467d64",
+      "size": 491312,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e0030f60a44bd7b2bd2a205b3f2cc4a95b467d64"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1eb60ecf22f7a76aa1fbf0a2cf2c7d2b55000aca",
+      "size": 36908,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1eb60ecf22f7a76aa1fbf0a2cf2c7d2b55000aca"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "df73720aa1c715793376aa2f1aef3def7ff1d010",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/df73720aa1c715793376aa2f1aef3def7ff1d010"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/rebuild-check/rebuilt-from-final-prompt.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42b8c896d61897e2df5510a10f07a8500d972288",
+      "size": 66726,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/42b8c896d61897e2df5510a10f07a8500d972288"
+    },
+    {
+      "path": "hire-to-retire/01-do-the-941s-match-the-w3/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53cda1ad4895d3c4555cb6e1504cb646550fbf31",
+      "size": 6618,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/53cda1ad4895d3c4555cb6e1504cb646550fbf31"
+    },
+    {
+      "path": "hire-to-retire/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ec54c136dc0c7be8ecb5eac9c6aa9ab70f0350b",
+      "size": 4618,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8ec54c136dc0c7be8ecb5eac9c6aa9ab70f0350b"
+    },
+    {
+      "path": "order-to-cash",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "17ef101311dadca6dc34ea82c89239ae35410519",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/17ef101311dadca6dc34ea82c89239ae35410519"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a6a9a83f400265cb5d1a2e89ecd65cf67e53b656",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/a6a9a83f400265cb5d1a2e89ecd65cf67e53b656"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "21ad392d7b5dad4eafc71a244eb9c1449aca051d",
+      "size": 2050,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/21ad392d7b5dad4eafc71a244eb9c1449aca051d"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6db69da00376d8598b35390ff58346ef5e38ba9a",
+      "size": 4016,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6db69da00376d8598b35390ff58346ef5e38ba9a"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/REBUILD-PROMPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c087c1568fedb952d0493f3c4a3779d9d74d1722",
+      "size": 13602,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c087c1568fedb952d0493f3c4a3779d9d74d1722"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2a849d34de1c5ee8688fe8bb53aaa55afb303577",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/2a849d34de1c5ee8688fe8bb53aaa55afb303577"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e82a1c95e2054fb7e969bff9bbccccb5cf6ef93",
+      "size": 1298,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5e82a1c95e2054fb7e969bff9bbccccb5cf6ef93"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/agent/does-the-1099k-tie.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae0159b23beb7186d53bc3de776cc7589f4994fe",
+      "size": 935603,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ae0159b23beb7186d53bc3de776cc7589f4994fe"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/agent/does-the-1099k-tie.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c746b7a2e2388709f89afd605bf266b0efb296a1",
+      "size": 53916,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c746b7a2e2388709f89afd605bf266b0efb296a1"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9e6e9d08eb02aca16d393f176ade02510b1efbf9",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/9e6e9d08eb02aca16d393f176ade02510b1efbf9"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a546545acac7c86eaa3e240cef49ea072745fe3b",
+      "size": 20601,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a546545acac7c86eaa3e240cef49ea072745fe3b"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/FIRST-COMMENT.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4970ebfba734928a55189bfa5409ad1a38c064d0",
+      "size": 402,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4970ebfba734928a55189bfa5409ad1a38c064d0"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/LINKEDIN-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e57224b6f5d2cb3d4757f906f297152fdc9eeb3",
+      "size": 1201,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1e57224b6f5d2cb3d4757f906f297152fdc9eeb3"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/NEWSLETTER-PASTE.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "babd433caff46d3dbd05e4d0998b680641fd584a",
+      "size": 23348,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/babd433caff46d3dbd05e4d0998b680641fd584a"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64e7e55d06a811f6c1ac017cd427e97afbbf7f62",
+      "size": 887791,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/64e7e55d06a811f6c1ac017cd427e97afbbf7f62"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/SUPPORT-POSTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4c91dcadf928a3269a4cd0e1ff151536287b890",
+      "size": 2005,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a4c91dcadf928a3269a4cd0e1ff151536287b890"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/build_paste.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c5bbe2a2603b3d76f47355506645d5e36a8ad35",
+      "size": 4274,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1c5bbe2a2603b3d76f47355506645d5e36a8ad35"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f6fb9d72d97fc4b8bfe74927d8f236a59b7709d",
+      "size": 1520,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0f6fb9d72d97fc4b8bfe74927d8f236a59b7709d"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/build_preview.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9ebb3f0db5436818bb67be97de172eb47a45cc0",
+      "size": 3476,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d9ebb3f0db5436818bb67be97de172eb47a45cc0"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fe63a6ece61d416fd64b79f5305a0ed99e8cc83f",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/fe63a6ece61d416fd64b79f5305a0ed99e8cc83f"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/_shot.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c5902658fc5140a49b2be66c91a600ff8c36b00",
+      "size": 256801,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7c5902658fc5140a49b2be66c91a600ff8c36b00"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/carousel.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4a0144adf1ae6285eccbeaa94ababf95ab6d1698",
+      "size": 12811,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4a0144adf1ae6285eccbeaa94ababf95ab6d1698"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/does-the-1099k-tie-carousel.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e8057e19fe33538c5824ee1b14c2018988404b0",
+      "size": 442746,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2e8057e19fe33538c5824ee1b14c2018988404b0"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd7d7a42d996d447b3895577a92727d67693bcba",
+      "size": 2218,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fd7d7a42d996d447b3895577a92727d67693bcba"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4da7c3fb9932c002cfe9ab19817cdb2cbe0b3441",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/4da7c3fb9932c002cfe9ab19817cdb2cbe0b3441"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/01.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "488fbda5f5e2b6ca3e44d6f71ce6fcaf70d31fa4",
+      "size": 119112,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/488fbda5f5e2b6ca3e44d6f71ce6fcaf70d31fa4"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/02.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53983298222012eea762c60d38f94a7286c381fb",
+      "size": 127059,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/53983298222012eea762c60d38f94a7286c381fb"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/03.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8fcdee725f58b583f104d0074df671a8023e1ba3",
+      "size": 129028,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8fcdee725f58b583f104d0074df671a8023e1ba3"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/04.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf449a96bf9b3feeac347ca79ad43addc370a65d",
+      "size": 132900,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bf449a96bf9b3feeac347ca79ad43addc370a65d"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/05.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c639ee14c6d38fb3efdb1b0e1f96cab209aff66",
+      "size": 115424,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7c639ee14c6d38fb3efdb1b0e1f96cab209aff66"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/06.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be71445aa47d9591b2ee601fa2dd3ed4a5005fda",
+      "size": 142675,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/be71445aa47d9591b2ee601fa2dd3ed4a5005fda"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/07.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29566ba76a2700ea0ea90a2ba8ea8a186ee26736",
+      "size": 187613,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/29566ba76a2700ea0ea90a2ba8ea8a186ee26736"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/08.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0af9efbacf98893d1e5d59e7fb5401747c6b5575",
+      "size": 125075,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0af9efbacf98893d1e5d59e7fb5401747c6b5575"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/09.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bef8f64d2492b30ce0f1696a2ec32252a5396100",
+      "size": 93492,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bef8f64d2492b30ce0f1696a2ec32252a5396100"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/10.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe2a4c45681d6c1c584b718566695e1397006e2d",
+      "size": 110534,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fe2a4c45681d6c1c584b718566695e1397006e2d"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/11.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbc88eb09d35bb8f86b8c30fa043162133e644c9",
+      "size": 90377,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bbc88eb09d35bb8f86b8c30fa043162133e644c9"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/carousel/slides/12.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c0da2443271b83f578dd0cafc9d899caed4a85f",
+      "size": 98849,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2c0da2443271b83f578dd0cafc9d899caed4a85f"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/article/does-the-1099k-tie-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8091717e0f94d3cb654802dd4ef8b54ceb54a588",
+      "size": 669201,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8091717e0f94d3cb654802dd4ef8b54ceb54a588"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e875f4fa760f2ab85b4c28cfee82dbc0196dc965",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/e875f4fa760f2ab85b4c28cfee82dbc0196dc965"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a00c7ba07942516e8fd5f9923033c91a152b2d3e",
+      "size": 2481,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a00c7ba07942516e8fd5f9923033c91a152b2d3e"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14d1fcff360f70fbae1a0e066d3bd2bf9c0efa31",
+      "size": 7226,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/14d1fcff360f70fbae1a0e066d3bd2bf9c0efa31"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "331a2e16672826d85b23852d59c410e8ce09c60b",
+      "size": 16842,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/331a2e16672826d85b23852d59c410e8ce09c60b"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cc03f420c280481b0985a81754aaf2bbb1e1a9a8",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/cc03f420c280481b0985a81754aaf2bbb1e1a9a8"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/01-square-juniper-street-2025.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a4bbd9ecbe7f52293948c7a9091f467b3fbb317",
+      "size": 623955,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5a4bbd9ecbe7f52293948c7a9091f467b3fbb317"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/03-stripe-fernhill-ceramics-2025.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f54cc6b326895052baa15ad1867e14162d68dc4",
+      "size": 91529,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2f54cc6b326895052baa15ad1867e14162d68dc4"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/04-paypal-ridgeline-prints-2025.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "381737e73f804f3b13ba6cdede9bea3cecbe089e",
+      "size": 47476,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/381737e73f804f3b13ba6cdede9bea3cecbe089e"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/05-square-two-exports-pasted.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "916bfbdfb2c34c8604fb3c0cf976dd254df81b8a",
+      "size": 665806,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/916bfbdfb2c34c8604fb3c0cf976dd254df81b8a"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/06-stripe-september-missing.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a64a9b3bd65007c11f76c9193997a330339ec4fe",
+      "size": 105653,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a64a9b3bd65007c11f76c9193997a330339ec4fe"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/07-paypal-dec-to-jan.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1bdfe63abbd545f45c08efad11ea758898ef76a1",
+      "size": 44466,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1bdfe63abbd545f45c08efad11ea758898ef76a1"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/08-square-one-location.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a73453e60f26773202edb1b470b55d27ded32923",
+      "size": 608390,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a73453e60f26773202edb1b470b55d27ded32923"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/09-square-excel-with-totals.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "607658e79f2468ef5154ce18f921d077c6204c68",
+      "size": 232443,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/607658e79f2468ef5154ce18f921d077c6204c68"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/10-bank-statement.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f40442b0755285dcb65b36e50c1e2c25ded3725a",
+      "size": 137,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f40442b0755285dcb65b36e50c1e2c25ded3725a"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/11-square-refund-of-last-years-sale.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02a4c9b29dfa85f675d0c551f4eb69a9dfde62b2",
+      "size": 434224,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/02a4c9b29dfa85f675d0c551f4eb69a9dfde62b2"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/12-paypal-pending-and-denied.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8c1d9ab172278c82287afa5fec4bbe52306b14f1",
+      "size": 42784,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8c1d9ab172278c82287afa5fec4bbe52306b14f1"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/cases/13-stripe-local-dates.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b258ef74571872fcff61583294fc249779089cd2",
+      "size": 116489,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b258ef74571872fcff61583294fc249779089cd2"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9732cd795e99162a6a0afe3225fc8750ff8e2f6",
+      "size": 32309,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b9732cd795e99162a6a0afe3225fc8750ff8e2f6"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "658f8a416404e37ecfc116fb349c417f17061d22",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/658f8a416404e37ecfc116fb349c417f17061d22"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/rebuild-check/rebuild-1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a1012417d41b1551905fedf045a93f6f02fa707",
+      "size": 53623,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2a1012417d41b1551905fedf045a93f6f02fa707"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/rebuild-check/rebuild-2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e66d65a5334f9d149536fa5d1aa110ee8c651ba0",
+      "size": 60187,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e66d65a5334f9d149536fa5d1aa110ee8c651ba0"
+    },
+    {
+      "path": "order-to-cash/01-does-the-1099k-tie/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05efa9e944f505cb92352858bf0c82c4e6820e58",
+      "size": 8487,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/05efa9e944f505cb92352858bf0c82c4e6820e58"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8c984a72f125190fff37f3242be72b2bcae67167",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/8c984a72f125190fff37f3242be72b2bcae67167"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c2682695a76641937d61ad759ca118e511a0a67",
+      "size": 1945,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2c2682695a76641937d61ad759ca118e511a0a67"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aff050d9163feae04d423b8c07e0588c455b990",
+      "size": 3684,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9aff050d9163feae04d423b8c07e0588c455b990"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/REBUILD-PROMPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "80a9755575e4cb8fa84af1039091a01582fa2468",
+      "size": 19288,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/80a9755575e4cb8fa84af1039091a01582fa2468"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5e48a03acca2d59b620ae0dd722ecc917ca01fce",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/5e48a03acca2d59b620ae0dd722ecc917ca01fce"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4f0ef8b790518510250f9c5b782bddb4603f745",
+      "size": 1328,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f4f0ef8b790518510250f9c5b782bddb4603f745"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/agent/whats-really-collectible.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f5a09b922a2f3b331e82b8300f6fea647bd412c1",
+      "size": 938436,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f5a09b922a2f3b331e82b8300f6fea647bd412c1"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/agent/whats-really-collectible.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa6d74ebf0400e2ececaa922bc95713e0e21fcb2",
+      "size": 56749,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fa6d74ebf0400e2ececaa922bc95713e0e21fcb2"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "634e5d625b5a602b4b7e096d4ab2aa28ff0ef27b",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/634e5d625b5a602b4b7e096d4ab2aa28ff0ef27b"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4832937223795180425a74c9587437985d4b5a34",
+      "size": 9704,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4832937223795180425a74c9587437985d4b5a34"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/FIRST-COMMENT.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b56de33c9c288652d6a38ffcf1dda0fb8c267ef",
+      "size": 449,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6b56de33c9c288652d6a38ffcf1dda0fb8c267ef"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/LINKEDIN-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dbd4bde5d736879eae980471cb2670c97c2d524f",
+      "size": 1275,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/dbd4bde5d736879eae980471cb2670c97c2d524f"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/NEWSLETTER-PASTE.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b49ff8265b252da868ff583b1200b0976b28575a",
+      "size": 11855,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b49ff8265b252da868ff583b1200b0976b28575a"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf066535b0a4ee1461093397dad4936e7efbb28b",
+      "size": 1419746,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bf066535b0a4ee1461093397dad4936e7efbb28b"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/SUPPORT-POSTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a0798fadab73178811c72e2da2a3e81616737b3",
+      "size": 2071,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6a0798fadab73178811c72e2da2a3e81616737b3"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/build_paste.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "058d1a102c45832617b491c040051ca89b7f956e",
+      "size": 4262,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/058d1a102c45832617b491c040051ca89b7f956e"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf91d3ba18fc6324d46bbfd467ff7507658ac011",
+      "size": 1514,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bf91d3ba18fc6324d46bbfd467ff7507658ac011"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/build_preview.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f440c0254226839c608573440b1fa68b574e481",
+      "size": 3477,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2f440c0254226839c608573440b1fa68b574e481"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fdd4813307d4e11cee0de701dbe53eab9073c3b0",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/fdd4813307d4e11cee0de701dbe53eab9073c3b0"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/carousel.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0eb2682a280eb49bc135f172cb5fe1c783a2cb1e",
+      "size": 14925,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0eb2682a280eb49bc135f172cb5fe1c783a2cb1e"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a201f4b0f4e80334fd7d593eae6717489d919758",
+      "size": 1230,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a201f4b0f4e80334fd7d593eae6717489d919758"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0f05a842982dc9c7915b35f61d6a58ef890eb363",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/0f05a842982dc9c7915b35f61d6a58ef890eb363"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/01.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "faced34ed51e4c4da058675535905a41a8fd2465",
+      "size": 142986,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/faced34ed51e4c4da058675535905a41a8fd2465"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/02.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5fddf48a0ebbfaeba6786af8b17b03b4550f22c",
+      "size": 134703,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c5fddf48a0ebbfaeba6786af8b17b03b4550f22c"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/03.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f88560389b61f6efdedbdfc1ce97aa6bf4bb085a",
+      "size": 142150,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f88560389b61f6efdedbdfc1ce97aa6bf4bb085a"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/04.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b29c163d94358b45a9acafa1d1103d888aad77b",
+      "size": 130791,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1b29c163d94358b45a9acafa1d1103d888aad77b"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/05.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "375a3097b755f7b726e3ede392b443930aa74c5a",
+      "size": 137868,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/375a3097b755f7b726e3ede392b443930aa74c5a"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/06.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7dac4322a506df0367cf888fbc0d2efecad67214",
+      "size": 144647,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7dac4322a506df0367cf888fbc0d2efecad67214"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/07.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a641c8514b64246c99c27969e5906bee598b7d7",
+      "size": 140708,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7a641c8514b64246c99c27969e5906bee598b7d7"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/08.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3209854658342c9a7500b9a3bd6e4b48bd7339e0",
+      "size": 142837,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3209854658342c9a7500b9a3bd6e4b48bd7339e0"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/09.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "209dc99639aa76d21978b4aa4dde5e7b9bf8fec4",
+      "size": 130127,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/209dc99639aa76d21978b4aa4dde5e7b9bf8fec4"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/10.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66057ba84ce508b7473dcc4ac99ba78ec2d3dc6f",
+      "size": 124782,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/66057ba84ce508b7473dcc4ac99ba78ec2d3dc6f"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/11.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e395acc0f3646fea4fe669d743add86ea451f639",
+      "size": 112143,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e395acc0f3646fea4fe669d743add86ea451f639"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/slides/12.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8f0122d782a479fedd3e1dc50a1d9cfbe39094a6",
+      "size": 90483,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8f0122d782a479fedd3e1dc50a1d9cfbe39094a6"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/carousel/whats-really-collectible-carousel.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30b96b6f116dc0ebcb5e54d8b8e6af29c1623310",
+      "size": 224183,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30b96b6f116dc0ebcb5e54d8b8e6af29c1623310"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/article/whats-really-collectible-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7bc53a6721b6e1761712476e62ad81611ed7ea18",
+      "size": 963223,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7bc53a6721b6e1761712476e62ad81611ed7ea18"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "78a72c733dbff4f545645163f599b271368f2b39",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/78a72c733dbff4f545645163f599b271368f2b39"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/rebuild-check/rebuild-1",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e3e75f80ca3f762cafb8991e2a6e14a8eedc02bd",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/e3e75f80ca3f762cafb8991e2a6e14a8eedc02bd"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/rebuild-check/rebuild-1/NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5945d88a8b40d1c22b76a2458fd14d80b1cb5ff2",
+      "size": 4013,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5945d88a8b40d1c22b76a2458fd14d80b1cb5ff2"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/rebuild-check/rebuild-1/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47b012c5b95ba354bf1f7b53dbda909922e7cb22",
+      "size": 2187,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/47b012c5b95ba354bf1f7b53dbda909922e7cb22"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/rebuild-check/rebuild-1/first-run.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "deb8f1cf00086f3e2d220125d34d339f754f502a",
+      "size": 1874,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/deb8f1cf00086f3e2d220125d34d339f754f502a"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/rebuild-check/rebuild-1/whats-really-collectible.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "56506d8683dd1f5b5445b5c984c701be75b83150",
+      "size": 53284,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/56506d8683dd1f5b5445b5c984c701be75b83150"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b404fe7053ada6eca8bacd254efaa97a480c5919",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/b404fe7053ada6eca8bacd254efaa97a480c5919"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "56de5044e055c82b1e0eebe9a45c3ff6d86f821f",
+      "size": 2207,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/56de5044e055c82b1e0eebe9a45c3ff6d86f821f"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "987da3918c8e7bb3755f3d2d39d85b3d7950d0cc",
+      "size": 8940,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/987da3918c8e7bb3755f3d2d39d85b3d7950d0cc"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7a7a5fc929b1a40cab539e8896835b4c8fb2dcb",
+      "size": 81475,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c7a7a5fc929b1a40cab539e8896835b4c8fb2dcb"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a196280288d52e03fb297f401f2f1f6f9734cb11",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/a196280288d52e03fb297f401f2f1f6f9734cb11"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/01-northgate-ar-aging-detail.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af2e6b933574b988611d41896a71cc816cb874d2",
+      "size": 11935,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/af2e6b933574b988611d41896a71cc816cb874d2"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/03-planted-unapplied-credits.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db461e02b5548810d309c1023f97a88aae933a8b",
+      "size": 12262,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/db461e02b5548810d309c1023f97a88aae933a8b"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/04-planted-duplicate-invoice.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "276006a2ae8b6c3f4b41fd6706aa42c7e6db1db3",
+      "size": 12163,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/276006a2ae8b6c3f4b41fd6706aa42c7e6db1db3"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/06-xero-bellwether-aged-receivables.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5549d7c26020ada32c33dcc6b709106e884164b1",
+      "size": 9673,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5549d7c26020ada32c33dcc6b709106e884164b1"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/07-desktop-hollis-tate-ar-aging.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95ff1176462ebdc0ec45cbe072e817b61649504b",
+      "size": 13269,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/95ff1176462ebdc0ec45cbe072e817b61649504b"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/08-old-and-small-balances.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2764743215507a79ff5f9a6faa26ce868ce04bee",
+      "size": 11703,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2764743215507a79ff5f9a6faa26ce868ce04bee"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/09-qbo-csv-sub-customers.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a94b777f6f24e32e479ef7e46a996ce73c8049b7",
+      "size": 8397,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a94b777f6f24e32e479ef7e46a996ce73c8049b7"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/10-ap-aging-detail.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a8e5bc777512d3bbed12521604b1a9fa1627b109",
+      "size": 243,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a8e5bc777512d3bbed12521604b1a9fa1627b109"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/11-ar-aging-summary.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9eacdbb8b7cab8cfc9369dc54f430a1e9d9bde00",
+      "size": 202,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9eacdbb8b7cab8cfc9369dc54f430a1e9d9bde00"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/12-planted-total-typed-over.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "84692f205bab00f38b897ebd8b58a57fd1c0f47c",
+      "size": 12172,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/84692f205bab00f38b897ebd8b58a57fd1c0f47c"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/13-planted-rows-pasted-twice.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d4db624efa5b2721423d3727947ce4e818e6429",
+      "size": 11580,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4d4db624efa5b2721423d3727947ce4e818e6429"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/14-allowance-rates-journal-entry.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b38ff6032f32af3d813b6410888f8b9326b771bf",
+      "size": 8417,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b38ff6032f32af3d813b6410888f8b9326b771bf"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/15-two-identical-payments.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3db9d097e822e0e1bb0b633d851ce3439c65c72d",
+      "size": 9997,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3db9d097e822e0e1bb0b633d851ce3439c65c72d"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/16-no-as-of-date.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "effda16e68717c4a0bad0c828c5d88a0cf67f3eb",
+      "size": 9186,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/effda16e68717c4a0bad0c828c5d88a0cf67f3eb"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/cases/17-planted-netting-and-misposting.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dbf2205ca691d00f2e18d9e93b57758434f7031b",
+      "size": 10005,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/dbf2205ca691d00f2e18d9e93b57758434f7031b"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e342690d185ff5e1325d0be1fb74e572a7d4a450",
+      "size": 29388,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e342690d185ff5e1325d0be1fb74e572a7d4a450"
+    },
+    {
+      "path": "order-to-cash/02-whats-really-collectible/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ecd6e69f55d94e717406d8ce7cc748f78fb4a04",
+      "size": 10149,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4ecd6e69f55d94e717406d8ce7cc748f78fb4a04"
+    },
+    {
+      "path": "order-to-cash/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d2fce43887e17c1426be5a3531c37ccc583d8e6",
+      "size": 12813,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2d2fce43887e17c1426be5a3531c37ccc583d8e6"
+    },
+    {
+      "path": "procure-to-pay",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e5454c4f5057da7f3ddd1bf5a8cea64706fb67e6",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/e5454c4f5057da7f3ddd1bf5a8cea64706fb67e6"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "264e5322d6ed2e10d8e43de973ca602bb1261536",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/264e5322d6ed2e10d8e43de973ca602bb1261536"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "978281fe60a0aef061daaca1aff24e03ce434b9b",
+      "size": 3993,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/978281fe60a0aef061daaca1aff24e03ce434b9b"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18c08fe3d686ab0dfc291e4c035bbc50dbce372a",
+      "size": 6976,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/18c08fe3d686ab0dfc291e4c035bbc50dbce372a"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/REBUILD-PROMPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25dc5ba9b2fd06ddc1b02e3384aee923a600243d",
+      "size": 17771,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/25dc5ba9b2fd06ddc1b02e3384aee923a600243d"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "16b26d96734c008fd112072ac2aa525fcf35a2c3",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/16b26d96734c008fd112072ac2aa525fcf35a2c3"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a245c7ca62230f8dd217a497c28280992b4d8a4",
+      "size": 1283,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7a245c7ca62230f8dd217a497c28280992b4d8a4"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/agent/who-gets-a-1099.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a088b0394d8301a843dcf98f8f29a55f565ab773",
+      "size": 951482,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a088b0394d8301a843dcf98f8f29a55f565ab773"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/agent/who-gets-a-1099.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76c95df886dc0e3f636f0f722bb7ea7abd1c49a6",
+      "size": 69795,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/76c95df886dc0e3f636f0f722bb7ea7abd1c49a6"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d8fd1c32036bb4a1a7ecffc39818f4588c8a6894",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/d8fd1c32036bb4a1a7ecffc39818f4588c8a6894"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5bb5461363ec467017e469ae5a32d52ff46a990",
+      "size": 25381,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d5bb5461363ec467017e469ae5a32d52ff46a990"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/LINKEDIN-PASTE.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29135f4f8edb0e9837403dbd6a78e39ac6bc874c",
+      "size": 28824,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/29135f4f8edb0e9837403dbd6a78e39ac6bc874c"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/LINKEDIN-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8d1308d467670a19654a2db3f9d8e92b9a5244c",
+      "size": 937,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c8d1308d467670a19654a2db3f9d8e92b9a5244c"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88b681237c5c133e60c1c0997e3bb8573676f05a",
+      "size": 2523438,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/88b681237c5c133e60c1c0997e3bb8573676f05a"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/build_paste.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43e0c690579e876f2f9f727af6a61903cef213dc",
+      "size": 4286,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/43e0c690579e876f2f9f727af6a61903cef213dc"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06ec3b88e6f9c6c86a5684d74781726ce51adffb",
+      "size": 1512,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/06ec3b88e6f9c6c86a5684d74781726ce51adffb"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/build_preview.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18ed5477959873da84f73b27d023587739507a53",
+      "size": 3483,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/18ed5477959873da84f73b27d023587739507a53"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fe2fdc1342f265aba694c33da6e3fc47647270d7",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/fe2fdc1342f265aba694c33da6e3fc47647270d7"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images/cover.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7257da50d7b75349e7510ffd41aad0fa31ab225a",
+      "size": 184602,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7257da50d7b75349e7510ffd41aad0fa31ab225a"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images/fig1-three-spellings.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64d644e902a779ef1b8a3b10742a3a4544c458ed",
+      "size": 211306,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/64d644e902a779ef1b8a3b10742a3a4544c458ed"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images/fig2-what-it-adds.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00c44a5258ce5cbfdc133e29dadece7c3cb2b983",
+      "size": 288095,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/00c44a5258ce5cbfdc133e29dadece7c3cb2b983"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images/fig3-worksheet.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9102faedf2d4697cb5509a2f2e8221945613b5df",
+      "size": 674390,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9102faedf2d4697cb5509a2f2e8221945613b5df"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images/fig4-we-tried-to-break-it.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9952f1d76c925405d6e444e372285bb94836fc7f",
+      "size": 269864,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9952f1d76c925405d6e444e372285bb94836fc7f"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/images/fig5-series-map.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e76f410cc555c325406f822c1cbcda4fa71ffa4",
+      "size": 243760,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0e76f410cc555c325406f822c1cbcda4fa71ffa4"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f54edc47f3b5c749d01f79fe584d0dac11d5daf9",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/f54edc47f3b5c749d01f79fe584d0dac11d5daf9"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/_worksheet.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4cb1014bb24ce53e8a7f928a35c38defd5685eb",
+      "size": 601416,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f4cb1014bb24ce53e8a7f928a35c38defd5685eb"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/cover.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "317cbc64bcfd2642051409a279bbf4e0cc955bb4",
+      "size": 2650,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/317cbc64bcfd2642051409a279bbf4e0cc955bb4"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/fig1-three-spellings.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "933625289f61c01e94c4abe69fe98141174c2ac8",
+      "size": 3791,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/933625289f61c01e94c4abe69fe98141174c2ac8"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/fig2-what-it-adds.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b53952c44fa3c4d622f3c00e0c4592592675b8ae",
+      "size": 2737,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b53952c44fa3c4d622f3c00e0c4592592675b8ae"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/fig3-worksheet.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b83bb065d1674943cfa476d273479316da8c3e7",
+      "size": 1778,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7b83bb065d1674943cfa476d273479316da8c3e7"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/fig4-we-tried-to-break-it.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78d6464715e085c7c063e7b3bff4f5896be8fb0a",
+      "size": 2842,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/78d6464715e085c7c063e7b3bff4f5896be8fb0a"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/fig5-series-map.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8152b88843e999be97a67da43f7c0f63ddf80cf0",
+      "size": 3941,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8152b88843e999be97a67da43f7c0f63ddf80cf0"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "281854a627fa41f846a1e53008810861e039a3cc",
+      "size": 3327,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/281854a627fa41f846a1e53008810861e039a3cc"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/visuals/style.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30d6ecb88fe3b62215c762bbc3e364485f0a55c0",
+      "size": 1223,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30d6ecb88fe3b62215c762bbc3e364485f0a55c0"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/article/who-gets-a-1099-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e1b5ba1c66ad0c1f3e4c32f430b3a370d644954",
+      "size": 1727690,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0e1b5ba1c66ad0c1f3e4c32f430b3a370d644954"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e386a673b456d33773de11e9fa5f16691ac5e5f3",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/e386a673b456d33773de11e9fa5f16691ac5e5f3"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0fdc432cb4fe24fab210d19ff96c91ef7d1ca6c5",
+      "size": 3460,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0fdc432cb4fe24fab210d19ff96c91ef7d1ca6c5"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98c796abcbfe6f1fd1de3d5fc2367fa8c2bfbed6",
+      "size": 9990,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/98c796abcbfe6f1fd1de3d5fc2367fa8c2bfbed6"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bcde2de0621f465785ca970d1f14b49b3e38e0fc",
+      "size": 18869,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bcde2de0621f465785ca970d1f14b49b3e38e0fc"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f9a2b9e83873e192959a223e36a2c26946fc7957",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/f9a2b9e83873e192959a223e36a2c26946fc7957"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/01-clean-check-register.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e06b07a1fb43e87b4d39e8a6eae77fbd312bd42",
+      "size": 3591,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8e06b07a1fb43e87b4d39e8a6eae77fbd312bd42"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/02-card-check-paypal-zelle.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9f40d37b757b75e45c2ff9e6ce967adfb49c04a",
+      "size": 2718,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f9f40d37b757b75e45c2ff9e6ce967adfb49c04a"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/03-quickbooks-style-by-vendor.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "074313dbb61c9914fd46db9aafcb43deb8b56977",
+      "size": 16373,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/074313dbb61c9914fd46db9aafcb43deb8b56977"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/04-vendor-name-variants.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7f66796557acbca68bd0abeabb3a3e06a6c8b03",
+      "size": 1300,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c7f66796557acbca68bd0abeabb3a3e06a6c8b03"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/05-attorneys-medical-corporations.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2aae997c3b681b968929289d7c6d0225126f5c1",
+      "size": 7956,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2aae997c3b681b968929289d7c6d0225126f5c1"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/06-messy-export.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d3f3ce9298e2259578f73584cb8d46446c02cbd",
+      "size": 1150,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7d3f3ce9298e2259578f73584cb8d46446c02cbd"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/07-bank-style-negative-amounts.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "897c99c60406934b2d36b3eef669d43f63b8236c",
+      "size": 943,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/897c99c60406934b2d36b3eef669d43f63b8236c"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/08-ledger-debit-credit-columns.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c910a3e819ad75764112aa32e30946ebe174af8c",
+      "size": 2371,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c910a3e819ad75764112aa32e30946ebe174af8c"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/09-planted-duplicate-checks.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4a0791b1e9efccbd6385ef7b0e53cdd0a2a4b5e",
+      "size": 775,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c4a0791b1e9efccbd6385ef7b0e53cdd0a2a4b5e"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/10-planted-totals-do-not-tie.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a9fb6956680b07c426a717352a373ab6d7afdce",
+      "size": 5729,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6a9fb6956680b07c426a717352a373ab6d7afdce"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/11-wrong-period.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1416c71104b54360e4581bc860c26be3005dded",
+      "size": 708,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a1416c71104b54360e4581bc860c26be3005dded"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/12-prior-year-600-limit.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c58e47189ea2eb26465d2e12f02cf341b6db299",
+      "size": 939,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0c58e47189ea2eb26465d2e12f02cf341b6db299"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/13-future-year.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac79451d1b0fb0a3dfd9d79c669d3ca767346545",
+      "size": 882,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ac79451d1b0fb0a3dfd9d79c669d3ca767346545"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/14-not-a-payments-file.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c92384b0120f4437f99cd306e34a5e839d450624",
+      "size": 194,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c92384b0120f4437f99cd306e34a5e839d450624"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/cases/15-bills-and-bill-payments.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b48a64882371444fdd86bbfe99b625b6a74623d",
+      "size": 6332,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3b48a64882371444fdd86bbfe99b625b6a74623d"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74500e6e3f0b95bec50bd6ebea50e21323a31858",
+      "size": 47611,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/74500e6e3f0b95bec50bd6ebea50e21323a31858"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bed13bec92d9a4cfaffee5bd6139ac9cea780da4",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/bed13bec92d9a4cfaffee5bd6139ac9cea780da4"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/rebuild-check/rebuilt-from-final-prompt.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2cbaad58ad234337338a0ace20df0c904f364689",
+      "size": 70040,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2cbaad58ad234337338a0ace20df0c904f364689"
+    },
+    {
+      "path": "procure-to-pay/01-who-gets-a-1099/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edec974da0286d88fe89beee01a5934d2532e413",
+      "size": 8548,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/edec974da0286d88fe89beee01a5934d2532e413"
+    },
+    {
+      "path": "procure-to-pay/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4cfe845e9ca4c3b69fe8c5a90bc9fa775ad27b5b",
+      "size": 2786,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4cfe845e9ca4c3b69fe8c5a90bc9fa775ad27b5b"
+    },
+    {
+      "path": "record-to-report",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5bc95c1578cd54c509658243dfe1c2f01fd7df3d",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/5bc95c1578cd54c509658243dfe1c2f01fd7df3d"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "24a1d7395d909a01d5e69f649fb41a3b70ad3789",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/24a1d7395d909a01d5e69f649fb41a3b70ad3789"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "580ab206100a695e7e159d88df0a0faf50cb4e8f",
+      "size": 2895,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/580ab206100a695e7e159d88df0a0faf50cb4e8f"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc6d7a043df7d2059bf786b7aa9338a19ec6efc2",
+      "size": 6691,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cc6d7a043df7d2059bf786b7aa9338a19ec6efc2"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/REBUILD-PROMPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "69a3bbcfa5472699e2c0b74ea5f9b20ffde76e5d",
+      "size": 22457,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/69a3bbcfa5472699e2c0b74ea5f9b20ffde76e5d"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "877a7bb2583977971ed20edfc6bc11993d774cdc",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/877a7bb2583977971ed20edfc6bc11993d774cdc"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb459fa2ef0405877d64a0dae9697d90c1108c14",
+      "size": 1308,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cb459fa2ef0405877d64a0dae9697d90c1108c14"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/agent/did-last-year-change.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e5b3ba5efd576fccd533f6d961440c3c8db9073",
+      "size": 955511,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2e5b3ba5efd576fccd533f6d961440c3c8db9073"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/agent/did-last-year-change.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8110edf47b08025543176b861dbeecf7c8294721",
+      "size": 73824,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8110edf47b08025543176b861dbeecf7c8294721"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5ed8c04c429780e0dd1c8defa968fe700f201f4d",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/5ed8c04c429780e0dd1c8defa968fe700f201f4d"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a5233e2dbb364f1d5190c1ab3e2eecbd75bdace",
+      "size": 30216,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0a5233e2dbb364f1d5190c1ab3e2eecbd75bdace"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/FIRST-COMMENT.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab9ab014832ab32e58f45aa5a24736f2fed624a6",
+      "size": 336,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ab9ab014832ab32e58f45aa5a24736f2fed624a6"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/LINKEDIN-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9f40bbd9ea4a5310da6709ca796a90b857fbf4d",
+      "size": 2187,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b9f40bbd9ea4a5310da6709ca796a90b857fbf4d"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e724cc18e8231240bc88fd776d0e90ac7f86b0d2",
+      "size": 2866825,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e724cc18e8231240bc88fd776d0e90ac7f86b0d2"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1a0a62c9bbda15b7c34e341818098eda479ca5d",
+      "size": 1511,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d1a0a62c9bbda15b7c34e341818098eda479ca5d"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/build_preview.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e540568bc854e783e35246ffb38f3613098a3fd",
+      "size": 3483,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4e540568bc854e783e35246ffb38f3613098a3fd"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ca054297990ddfb5e25fa970b35af7b53502f2a5",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/ca054297990ddfb5e25fa970b35af7b53502f2a5"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images/cover.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63f15d93afa10f7e8932e491af04b60c734a9f9c",
+      "size": 134274,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/63f15d93afa10f7e8932e491af04b60c734a9f9c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images/fig1-what-each-means.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50fcc3b8227c9752d67a46441876c2dbc5e60b86",
+      "size": 281535,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/50fcc3b8227c9752d67a46441876c2dbc5e60b86"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images/fig2-what-it-reads.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e200c7026696742651a15ef524b8a849d70a7ea",
+      "size": 233844,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4e200c7026696742651a15ef524b8a849d70a7ea"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images/fig3-workpaper.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4c387e4919b5672287cc22ec96d490be7431d50",
+      "size": 895691,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d4c387e4919b5672287cc22ec96d490be7431d50"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images/fig4-every-check-found-something.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2887e2862a909e032fb8ec8f2d4f1522d5287c52",
+      "size": 324335,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2887e2862a909e032fb8ec8f2d4f1522d5287c52"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/images/fig5-series-map.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72be8e62ee93e72af1f556c5e7e60dd3d873c738",
+      "size": 255860,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/72be8e62ee93e72af1f556c5e7e60dd3d873c738"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e049f66571043a3234b7397a7661e308d22499da",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/e049f66571043a3234b7397a7661e308d22499da"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/_ws.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b60ec8fd79c78d237df1a3392e2580404c70266",
+      "size": 794210,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3b60ec8fd79c78d237df1a3392e2580404c70266"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/cover.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a9c9a1a02a27f2e6ae36ed0e22579ae0c9d6f45",
+      "size": 2677,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5a9c9a1a02a27f2e6ae36ed0e22579ae0c9d6f45"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/fig1-what-each-means.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19d962f1119d80b8bf017c5911e8edaa3d44e43b",
+      "size": 2462,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/19d962f1119d80b8bf017c5911e8edaa3d44e43b"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/fig2-what-it-reads.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37d307bdd7958e05099dc8c4c102ed59312524b5",
+      "size": 2676,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/37d307bdd7958e05099dc8c4c102ed59312524b5"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/fig3-workpaper.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "742f1395aa235495dd8d65a80c479119f52d651c",
+      "size": 1756,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/742f1395aa235495dd8d65a80c479119f52d651c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/fig4-every-check-found-something.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f05211523f0907ed17f22ed6acf54eb55cf52236",
+      "size": 3171,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f05211523f0907ed17f22ed6acf54eb55cf52236"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/fig5-series-map.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0d0d97d192fa01e310a1e08892c9507dbbe6664c",
+      "size": 4025,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0d0d97d192fa01e310a1e08892c9507dbbe6664c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cafa90fbf64e19fa1089f848c7c9c260959e5faf",
+      "size": 3077,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cafa90fbf64e19fa1089f848c7c9c260959e5faf"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/visuals/style.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30d6ecb88fe3b62215c762bbc3e364485f0a55c0",
+      "size": 1223,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30d6ecb88fe3b62215c762bbc3e364485f0a55c0"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/article/year-that-wont-stay-closed-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "21ef804a5cb725b1eed5c52eaa8efc53d1739189",
+      "size": 1974226,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/21ef804a5cb725b1eed5c52eaa8efc53d1739189"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "51fa997b4f46cbffedc1a58aeb8cc5195b4f47b1",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/51fa997b4f46cbffedc1a58aeb8cc5195b4f47b1"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9f076a03e97d367c3d0c48fa62f6dad1e496ea9",
+      "size": 3660,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d9f076a03e97d367c3d0c48fa62f6dad1e496ea9"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6eb1cc7f25aca42545b008c18f82538afb7c58b7",
+      "size": 9944,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6eb1cc7f25aca42545b008c18f82538afb7c58b7"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87fdfe519208c676bdd46021b34ecc76dd5b58ef",
+      "size": 13263,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/87fdfe519208c676bdd46021b34ecc76dd5b58ef"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "277e95953f08343c6e4dd1222beca70d2192cb25",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/277e95953f08343c6e4dd1222beca70d2192cb25"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/01-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/01-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02496298b7357e576bd10dfb133f623b5acc5cf5",
+      "size": 5963,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/02496298b7357e576bd10dfb133f623b5acc5cf5"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/02-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/02-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55c5e2e114573545c9e694bd36542a4a44f28237",
+      "size": 5963,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/55c5e2e114573545c9e694bd36542a4a44f28237"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/03-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b109f8ff1886e35bc42040bbb99728ad19b019c",
+      "size": 5938,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2b109f8ff1886e35bc42040bbb99728ad19b019c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/03-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0aa2540ff7bc9aae8ec711ede602567ae14d3de1",
+      "size": 5937,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0aa2540ff7bc9aae8ec711ede602567ae14d3de1"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/04-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "826ca4a7751e041ae4dac69e19243ff062a8f569",
+      "size": 5782,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/826ca4a7751e041ae4dac69e19243ff062a8f569"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/04-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08420c2716a495f31b89faa1bf55e24478dcc25e",
+      "size": 5782,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/08420c2716a495f31b89faa1bf55e24478dcc25e"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/05-final-workpaper.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18bf7b22ad3617705cb9104602e98962e7e82510",
+      "size": 6500,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/18bf7b22ad3617705cb9104602e98962e7e82510"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/05-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05f0e865c23e5aa64af3b3ea35cc1040ab171754",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/05f0e865c23e5aa64af3b3ea35cc1040ab171754"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/06-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c50a0955cf27ebbddff784d1d56125954f1fbc9a",
+      "size": 6239,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c50a0955cf27ebbddff784d1d56125954f1fbc9a"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/06-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "903477a403fb2409c2feb324202277e9272a5d7e",
+      "size": 6241,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/903477a403fb2409c2feb324202277e9272a5d7e"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/07-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b109f8ff1886e35bc42040bbb99728ad19b019c",
+      "size": 5938,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2b109f8ff1886e35bc42040bbb99728ad19b019c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/07-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41d17ebd566ea367ec9fe5c15ef9b95cd3b5358e",
+      "size": 5918,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/41d17ebd566ea367ec9fe5c15ef9b95cd3b5358e"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/08-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/08-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b986c253d343c1d9dd87e415f48f7362c99c8234",
+      "size": 5963,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b986c253d343c1d9dd87e415f48f7362c99c8234"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/09-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b109f8ff1886e35bc42040bbb99728ad19b019c",
+      "size": 5938,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2b109f8ff1886e35bc42040bbb99728ad19b019c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/09-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47c1f0681d23ab657adc4ad37d89ab3ceacdca84",
+      "size": 5877,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/47c1f0681d23ab657adc4ad37d89ab3ceacdca84"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/10-final.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "053a41d94ccb5ad57aa2c0a8f1ad4169d0bd0586",
+      "size": 1101,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/053a41d94ccb5ad57aa2c0a8f1ad4169d0bd0586"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/10-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6955fbdeecc4e0aa9465da0797df7e9c54f0f15c",
+      "size": 5939,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6955fbdeecc4e0aa9465da0797df7e9c54f0f15c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/11-final-postclosing.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef472c2979a6409132ceb3d89e80bbd5fd379029",
+      "size": 5343,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ef472c2979a6409132ceb3d89e80bbd5fd379029"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/11-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c50a0955cf27ebbddff784d1d56125954f1fbc9a",
+      "size": 6239,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c50a0955cf27ebbddff784d1d56125954f1fbc9a"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/12-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/12-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e19d0726bc751e8fd38dd53212b0e8181dab16eb",
+      "size": 5885,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e19d0726bc751e8fd38dd53212b0e8181dab16eb"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/13-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "826ca4a7751e041ae4dac69e19243ff062a8f569",
+      "size": 5782,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/826ca4a7751e041ae4dac69e19243ff062a8f569"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/13-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "605498d731544c046b9622aeab7264bafe353a48",
+      "size": 5784,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/605498d731544c046b9622aeab7264bafe353a48"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/14-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/14-today-balance-sheet.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cad434a84046d6027fbc34b76c8198c8de13820",
+      "size": 5531,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7cad434a84046d6027fbc34b76c8198c8de13820"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/15-same.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c50a0955cf27ebbddff784d1d56125954f1fbc9a",
+      "size": 6239,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c50a0955cf27ebbddff784d1d56125954f1fbc9a"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/16-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05f0e865c23e5aa64af3b3ea35cc1040ab171754",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/05f0e865c23e5aa64af3b3ea35cc1040ab171754"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/16-workpaper.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f1356afc9a70f8168bfe9c0cd14f6eec87f346c",
+      "size": 6452,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0f1356afc9a70f8168bfe9c0cd14f6eec87f346c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/17-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/17-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d8548f8cbf6a192ffb477be1cea8752edc9dbd9",
+      "size": 5963,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1d8548f8cbf6a192ffb477be1cea8752edc9dbd9"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/18-final-postclosing.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b4321277708a1f27154519125077e307cdc0739",
+      "size": 5344,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4b4321277708a1f27154519125077e307cdc0739"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/18-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02496298b7357e576bd10dfb133f623b5acc5cf5",
+      "size": 5963,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/02496298b7357e576bd10dfb133f623b5acc5cf5"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/19-final-workpaper.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23ffca799ad9dba9f2b5138472fe800ba0afca6b",
+      "size": 6393,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/23ffca799ad9dba9f2b5138472fe800ba0afca6b"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/19-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "826ca4a7751e041ae4dac69e19243ff062a8f569",
+      "size": 5782,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/826ca4a7751e041ae4dac69e19243ff062a8f569"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/20-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "826ca4a7751e041ae4dac69e19243ff062a8f569",
+      "size": 5782,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/826ca4a7751e041ae4dac69e19243ff062a8f569"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/20-today-cash.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "138320dadaed553e9c5484de9c6d37bdb0de2310",
+      "size": 5725,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/138320dadaed553e9c5484de9c6d37bdb0de2310"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/21-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30a5caf626eb460294c6ac4d0f04aec70412931c",
+      "size": 5962,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/30a5caf626eb460294c6ac4d0f04aec70412931c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/21-today-other-client.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9832cc5a585bd8e8143dc7e1e654834799611dce",
+      "size": 5938,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9832cc5a585bd8e8143dc7e1e654834799611dce"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/22-final.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b109f8ff1886e35bc42040bbb99728ad19b019c",
+      "size": 5938,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2b109f8ff1886e35bc42040bbb99728ad19b019c"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/cases/22-today.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11acb5ae47aa9804fcd645ee5d51417ce205510f",
+      "size": 5921,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/11acb5ae47aa9804fcd645ee5d51417ce205510f"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae1837357eb6287e5143a0df888d9ed75a008a13",
+      "size": 38610,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ae1837357eb6287e5143a0df888d9ed75a008a13"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "28c3ed964de89b35b7ede66fca59b4f813993ffd",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/28c3ed964de89b35b7ede66fca59b4f813993ffd"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/rebuild-check/rebuild-1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c6163dfc715841e246a9a15d6bc0d418a74cadf",
+      "size": 64036,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9c6163dfc715841e246a9a15d6bc0d418a74cadf"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/rebuild-check/rebuild-2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4911056e7581e11bbb9274f3508b1369143b22e3",
+      "size": 75227,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4911056e7581e11bbb9274f3508b1369143b22e3"
+    },
+    {
+      "path": "record-to-report/01-did-last-year-change/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "82146ae7bcf7ba8806a05641aa8c5b5689570d7f",
+      "size": 8662,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/82146ae7bcf7ba8806a05641aa8c5b5689570d7f"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1f8f0083d1ac761969373115a84597d839840a3c",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/1f8f0083d1ac761969373115a84597d839840a3c"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/ACCOUNTANT-TEST-SCRIPT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75d739e27c429e7c48700db50c51e5dcb1d8533b",
+      "size": 1934,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/75d739e27c429e7c48700db50c51e5dcb1d8533b"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/PROMPT.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "344d5713cea7c4edfe078ae6c53f2ecca99e67bb",
+      "size": 34050,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/344d5713cea7c4edfe078ae6c53f2ecca99e67bb"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5aba9dc990bfef08fe491fbc639ab9c0df7636d",
+      "size": 8146,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a5aba9dc990bfef08fe491fbc639ab9c0df7636d"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4479027996ea86b44bf93dcd84fc21e37b7c7c7a",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/4479027996ea86b44bf93dcd84fc21e37b7c7c7a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/agent/build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0b968e72863e5f5c5bfde7fe1c97bc129ddbb09",
+      "size": 1333,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f0b968e72863e5f5c5bfde7fe1c97bc129ddbb09"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/agent/why-wont-the-bank-rec-tie.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7396065ecf4f1095f45f72fcb0c4fc91e00e955e",
+      "size": 976858,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7396065ecf4f1095f45f72fcb0c4fc91e00e955e"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/agent/why-wont-the-bank-rec-tie.src.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d1738e165aabb9a44cd8011bcb2934436df4dbc",
+      "size": 95171,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4d1738e165aabb9a44cd8011bcb2934436df4dbc"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "88089b0e4da33716da31b64f0374596faf71a2e9",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/88089b0e4da33716da31b64f0374596faf71a2e9"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/ARTICLE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e60b2ca8fe4f59e26558ad8396c372b2536c76f4",
+      "size": 11195,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e60b2ca8fe4f59e26558ad8396c372b2536c76f4"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/LINKEDIN-PASTE.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8910a232d00372d43b788405fd10de9732a0a78e",
+      "size": 53313,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8910a232d00372d43b788405fd10de9732a0a78e"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/LINKEDIN-POST.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "49298924c2ca5ebf1ce700e3fdde3b657b61c9c6",
+      "size": 1615,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/49298924c2ca5ebf1ce700e3fdde3b657b61c9c6"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/PREVIEW.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "293cdf9e3be0a9b6cf541313d9b10d5795c41dab",
+      "size": 857668,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/293cdf9e3be0a9b6cf541313d9b10d5795c41dab"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/build_article.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f431c12a14ea4fa6cac434373e29438176d58d1",
+      "size": 10617,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7f431c12a14ea4fa6cac434373e29438176d58d1"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/build_pdf.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3fdfc3e6780b66705723ae6ba74e1584086c2595",
+      "size": 2422,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3fdfc3e6780b66705723ae6ba74e1584086c2595"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ce675b5941254e39bf86b6a5bee79da4241f6418",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/ce675b5941254e39bf86b6a5bee79da4241f6418"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/images/00-cover.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b99c9d0cb597624c9638d9bfc2938eaf889f344c",
+      "size": 103101,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b99c9d0cb597624c9638d9bfc2938eaf889f344c"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/images/01-proof.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9089ae9522258c8a317be495ef8d86cebd7101f",
+      "size": 197858,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f9089ae9522258c8a317be495ef8d86cebd7101f"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/images/01-verdict.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1b977caa6d2c5c5ac9fbdc3feedf0157a216ee8",
+      "size": 65056,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e1b977caa6d2c5c5ac9fbdc3feedf0157a216ee8"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/images/02-four-steps.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afea1f8ec7b37f9393cfa2b3173257f1b032c786",
+      "size": 110532,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/afea1f8ec7b37f9393cfa2b3173257f1b032c786"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/images/03-decide.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a355f9f0d4600702401785c5d95ac250e4ce3e76",
+      "size": 193431,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a355f9f0d4600702401785c5d95ac250e4ce3e76"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/render.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f8bc9736b2522af7e0db067776188076fce9ef8",
+      "size": 3059,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4f8bc9736b2522af7e0db067776188076fce9ef8"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/visuals.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd7c1a9881475a7783d12a51e04b2f9a29b9134f",
+      "size": 3666,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cd7c1a9881475a7783d12a51e04b2f9a29b9134f"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/article/why-wont-the-bank-rec-tie-article.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb767b1e1cac58eebe24b00fcf1a09df92176c8",
+      "size": 646805,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/9bb767b1e1cac58eebe24b00fcf1a09df92176c8"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b0b4296277ce8c862e61dcb76fa74aaf3eb48843",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/b0b4296277ce8c862e61dcb76fa74aaf3eb48843"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bd1aae1baf4b0876319323bf083d8269c4e7b46b",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/bd1aae1baf4b0876319323bf083d8269c4e7b46b"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5deb97a0b7e68d33f3a40ba66a17bf69668289ed",
+      "size": 10099,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5deb97a0b7e68d33f3a40ba66a17bf69668289ed"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/PROMPT-as-given.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fee83168be8fa34e7317497d26721c1810cb1d80",
+      "size": 32712,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fee83168be8fa34e7317497d26721c1810cb1d80"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3dca77fd1ea28d77a4811fe068451f46a87f031",
+      "size": 4239,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c3dca77fd1ea28d77a4811fe068451f46a87f031"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/final-run.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "059e2cfec8b7694cd9ba43829e0da5e3bcdc3af2",
+      "size": 4104,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/059e2cfec8b7694cd9ba43829e0da5e3bcdc3af2"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/first-run.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b55508b47b3d4e89ed85e3dbdf9708d67b2563d5",
+      "size": 4854,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b55508b47b3d4e89ed85e3dbdf9708d67b2563d5"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/second-run.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "059e2cfec8b7694cd9ba43829e0da5e3bcdc3af2",
+      "size": 4104,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/059e2cfec8b7694cd9ba43829e0da5e3bcdc3af2"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/rebuild-check/rebuild-1/why-wont-the-bank-rec-tie.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40657318947da678c4ae6f7a646aa31d695c280a",
+      "size": 89298,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/40657318947da678c4ae6f7a646aa31d695c280a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/sample",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "08b1601340b54ff8789017639c245a4fd30a90b8",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/08b1601340b54ff8789017639c245a4fd30a90b8"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/sample/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6879ca9738525cbacd82ba1cd89ce51f18d5a392",
+      "size": 3919,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6879ca9738525cbacd82ba1cd89ce51f18d5a392"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/sample/mapleton-checking-bank-download-q1-2026.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c770a5a661a2450398fb8b698caef967bd6ffac8",
+      "size": 3282,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/c770a5a661a2450398fb8b698caef967bd6ffac8"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/sample/mapleton-general-ledger.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cce8b1f793a08689649165a37b93b309bb9a215d",
+      "size": 10533,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cce8b1f793a08689649165a37b93b309bb9a215d"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4582d99cc76b93e89d21895a61a875336ed570b4",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/4582d99cc76b93e89d21895a61a875336ed570b4"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/MANUAL-BASELINE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f269500925dad5dc670274c289674027f22b6f2",
+      "size": 1197,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7f269500925dad5dc670274c289674027f22b6f2"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/RESULTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19f2464590a4f31641ec313f9883c558592f0c1a",
+      "size": 11958,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/19f2464590a4f31641ec313f9883c558592f0c1a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/__pycache__",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6f3e31ec6e8c4baa0999244144c7554e946ab7bd",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/6f3e31ec6e8c4baa0999244144c7554e946ab7bd"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/__pycache__/rules.cpython-313.pyc",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47dd8b559997520c5b855c3174eebcb695609978",
+      "size": 30703,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/47dd8b559997520c5b855c3174eebcb695609978"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/answer-key.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f2f54ef2fa2296c855c02d4536d4c6ca61544a6",
+      "size": 44810,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0f2f54ef2fa2296c855c02d4536d4c6ca61544a6"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "01095c5eb7971df4c145cda6f60d02120c11ebff",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/01095c5eb7971df4c145cda6f60d02120c11ebff"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/01-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26832e4e0a208b57263233afd4e224dc1400cc82",
+      "size": 3065,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/26832e4e0a208b57263233afd4e224dc1400cc82"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/01-books-general-ledger.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7663116e1cf00b681d81d7cbf2e94efdf0ee4218",
+      "size": 10217,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7663116e1cf00b681d81d7cbf2e94efdf0ee4218"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/02-bank-newest-first.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6306add5bb838e0a2eee5a43b98615973da04348",
+      "size": 3880,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6306add5bb838e0a2eee5a43b98615973da04348"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/02-books-general-ledger.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "07e3fba1dd112af806bde6e791edfa687b67cf73",
+      "size": 10229,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/07e3fba1dd112af806bde6e791edfa687b67cf73"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/03-bank-with-summary.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "17e13ac98d71ab440a5e1473b176d3b8ebb25bd6",
+      "size": 3312,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/17e13ac98d71ab440a5e1473b176d3b8ebb25bd6"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/03-books-xero.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a93017a6f2b27fd9737a25ad7702591db8f68b3",
+      "size": 9836,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/6a93017a6f2b27fd9737a25ad7702591db8f68b3"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/04-bank-no-headings.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "07d8875182a804cab997f2468154733636a40037",
+      "size": 3077,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/07d8875182a804cab997f2468154733636a40037"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/04-books-desktop.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53b725d20f090a3862cf229cab479e67b2d831f7",
+      "size": 10439,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/53b725d20f090a3862cf229cab479e67b2d831f7"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/05-planted-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b7ccacf1151c3b66880609d980c25e660daa5f2",
+      "size": 3239,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1b7ccacf1151c3b66880609d980c25e660daa5f2"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/05-planted-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f17c073bdcd1de05c39a1fb3b308e80c0a3a9f3e",
+      "size": 10443,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f17c073bdcd1de05c39a1fb3b308e80c0a3a9f3e"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/06-planted-bank.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ca4a910fb04deafb47830f3e8e890846bbef39e3",
+      "size": 7448,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ca4a910fb04deafb47830f3e8e890846bbef39e3"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/06-planted-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8814a18927365e112011050b6d36ec3c2f70a50c",
+      "size": 10883,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/8814a18927365e112011050b6d36ec3c2f70a50c"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/07-planted-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "844c8f5e5c5de2a2979670964d9a767c8eb5c856",
+      "size": 3033,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/844c8f5e5c5de2a2979670964d9a767c8eb5c856"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/07-planted-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4160f587a2b416703d6b9904b338d471c5258c2",
+      "size": 10431,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/d4160f587a2b416703d6b9904b338d471c5258c2"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/08-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b727a922361293f4e84752a5530a65ed72f42849",
+      "size": 3005,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b727a922361293f4e84752a5530a65ed72f42849"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/08-books-from-january.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4209d386ddc961284732499715798b8c451670ca",
+      "size": 8188,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4209d386ddc961284732499715798b8c451670ca"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/09-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "472dee0408da5a6a00ca97d8fcbf0dc029b824eb",
+      "size": 10193,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/472dee0408da5a6a00ca97d8fcbf0dc029b824eb"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/09-planted-bank-line-missing.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef60ebae69f773f40c5f68d1ecd580dd79281f6d",
+      "size": 7152,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ef60ebae69f773f40c5f68d1ecd580dd79281f6d"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/10-trial-balance.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48db2480092a8d8361ac8b0d711b4c7856f963ee",
+      "size": 4971,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/48db2480092a8d8361ac8b0d711b4c7856f963ee"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/12-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4f4b73815f7c19435cfe739e295aeaba14398c3",
+      "size": 3127,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e4f4b73815f7c19435cfe739e295aeaba14398c3"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/12-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e44f435f5b2cdaf99693dc5725a4d1b533181638",
+      "size": 10209,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/e44f435f5b2cdaf99693dc5725a4d1b533181638"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/13-bank-savings.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a67fa31c774257b73233297964e5b595e72945dd",
+      "size": 3178,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a67fa31c774257b73233297964e5b595e72945dd"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/13-books.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb158ce8679371e77024d8cc8bc903e2fd56288f",
+      "size": 10142,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bb158ce8679371e77024d8cc8bc903e2fd56288f"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/14-bank-no-headings.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a7b196ad6e394287fdd030411403288be82662a",
+      "size": 2947,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/7a7b196ad6e394287fdd030411403288be82662a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/14-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b7359815d8f5ee73aa5efa2db1938a838e4e2fe",
+      "size": 10220,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/4b7359815d8f5ee73aa5efa2db1938a838e4e2fe"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/15-bank-card.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a24f4d1d5d9b36a5a9a0a33d3fc0ae094ec15240",
+      "size": 76,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a24f4d1d5d9b36a5a9a0a33d3fc0ae094ec15240"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/15-books-card.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "92937d5e8a633d7548d8874320ce5bc7b555ba2a",
+      "size": 5169,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/92937d5e8a633d7548d8874320ce5bc7b555ba2a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/16-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50589bcb1636a019f7877c8ea366c71825769089",
+      "size": 555,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/50589bcb1636a019f7877c8ea366c71825769089"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/16-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "60ed1bcde263e2cb8e720b0ad4786f0e19b05407",
+      "size": 5416,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/60ed1bcde263e2cb8e720b0ad4786f0e19b05407"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/17-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3af155bd19577385a8c39d615a1a0023e05a4b31",
+      "size": 267,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/3af155bd19577385a8c39d615a1a0023e05a4b31"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/17-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "787f310caa5fb95ecd2570844e2bd6acde9fd42c",
+      "size": 5397,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/787f310caa5fb95ecd2570844e2bd6acde9fd42c"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/18-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f448540229bc999fc56ad1cccf536d864397e66",
+      "size": 182,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1f448540229bc999fc56ad1cccf536d864397e66"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/18-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a8b11d7a7927de225ee7e94dc85e53ea830702b9",
+      "size": 5376,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/a8b11d7a7927de225ee7e94dc85e53ea830702b9"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/19-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27c8f26b89b05752c3b5702b45afe883ccd1d52c",
+      "size": 159,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/27c8f26b89b05752c3b5702b45afe883ccd1d52c"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/19-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0aec825d9d5ddbb0133b9dae978ca57e1cb33a26",
+      "size": 5335,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/0aec825d9d5ddbb0133b9dae978ca57e1cb33a26"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/20-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b49ca5e273b477cb075c3f370f96e43f1f64bdaa",
+      "size": 409,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b49ca5e273b477cb075c3f370f96e43f1f64bdaa"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/20-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ba96051bf23c73407fabbe6f46cce4e24feebfe",
+      "size": 5477,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/5ba96051bf23c73407fabbe6f46cce4e24feebfe"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/21-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "715d04bf4f7a5347084a561c8a0f874fd882413a",
+      "size": 124,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/715d04bf4f7a5347084a561c8a0f874fd882413a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/22-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2aa51b73474abb3f7f0daf481bdeecae718705a",
+      "size": 177,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/f2aa51b73474abb3f7f0daf481bdeecae718705a"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/22-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba76cb91698c5675a4f9757049861430cd0140f6",
+      "size": 5429,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/ba76cb91698c5675a4f9757049861430cd0140f6"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/23-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2de2b4bf78e3133f561e0a29bea5b26e3cbf6a36",
+      "size": 211,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/2de2b4bf78e3133f561e0a29bea5b26e3cbf6a36"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/23-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74db7673d240446ed46d77cf176a03c95026bb6b",
+      "size": 5346,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/74db7673d240446ed46d77cf176a03c95026bb6b"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/24-bank.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfc63be79f225d99f561fe620708b9d955b7ead6",
+      "size": 137,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/cfc63be79f225d99f561fe620708b9d955b7ead6"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/cases/24-books.xlsx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1456e682593788a885d442f24c86717b00b5c6d2",
+      "size": 5416,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1456e682593788a885d442f24c86717b00b5c6d2"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/make_cases.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdbde4528f02fa5daf1b61aa24fd09ef9de58f81",
+      "size": 50133,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/bdbde4528f02fa5daf1b61aa24fd09ef9de58f81"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/rules.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aba47f00856d0841c361a38d24ec2b4d90dc3d1d",
+      "size": 17973,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/aba47f00856d0841c361a38d24ec2b4d90dc3d1d"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/run-tests.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1816b526c6a4cc8a4375b1f7cc82be875a6bfc37",
+      "size": 9078,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/1816b526c6a4cc8a4375b1f7cc82be875a6bfc37"
+    },
+    {
+      "path": "record-to-report/02-why-wont-the-bank-rec-tie/tests/sample-expected.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb88c43ac004e00bee6509d453be5170a24d4f1f",
+      "size": 2584,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/fb88c43ac004e00bee6509d453be5170a24d4f1f"
+    },
+    {
+      "path": "record-to-report/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53757c1818a383a8d9f44db407341de0399f2308",
+      "size": 12844,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/53757c1818a383a8d9f44db407341de0399f2308"
+    },
+    {
+      "path": "tools",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2df1db71ea5d2366cb9cd0b4f5d3554433d68dfc",
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/trees/2df1db71ea5d2366cb9cd0b4f5d3554433d68dfc"
+    },
+    {
+      "path": "tools/package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2bb4a85012044dbaf670508cac9b89add3ba21d",
+      "size": 31954,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/b2bb4a85012044dbaf670508cac9b89add3ba21d"
+    },
+    {
+      "path": "tools/package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "791b76cd18243bcf35b99a69b2d5603043684217",
+      "size": 297,
+      "url": "https://api.github.com/repos/accountingnonerd/-/git/blobs/791b76cd18243bcf35b99a69b2d5603043684217"
+    }
+  ],
+  "truncated": false
+}

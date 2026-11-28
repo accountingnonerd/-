@@ -1,0 +1,28 @@
+Series 2 · Agent 1 | Why won't the bank rec tie?
+
+Check #1033 entered as $683.50, paid by the bank as $638.50. A $4,120 customer payment entered twice. Three card sales that arrive as one $766.55 deposit. A $415 check from last August nobody cashed.
+
+That is one quarter of one checking account. QuickBooks just says it's off.
+
+Agent 1 of One Painful Problem, Series 2, is a free tool. Drop in the bank's download and the books' ledger (QuickBooks Online, QuickBooks Desktop or Xero), and it gives you:
+
+→ Checks matched by number, card batches matched to the one deposit
+→ The entries that look wrong: wrong amount, digits swapped, sign reversed, entered twice, paid twice
+→ What the bank has that the books don't, with a suggested treatment
+→ What's outstanding and how old, with stale checks flagged
+→ The proof, the entries, and the questions for the client
+
+It decides nothing for you. Until you say what each odd pair is, it won't say "it ties".
+
+You can rebuild it yourself: one prompt pasted into an AI assistant, about 15 minutes, no coding. A sample client and the numbers you should see are included.
+
+Before release: 28 test files, 839 checks. A skeptical-CPA review called the first version "not ready": it could tie by plugging the opening difference. That is fixed, along with everything else it found.
+
+The prompt, the sample and the ready-made tool:
+https://github.com/accountingnonerd/-/tree/main/record-to-report/02-why-wont-the-bank-rec-tie
+
+Next in Series 2: the 13-week cash flow.
+
+Where does your bank rec usually get stuck? Tell me in the comments.
+
+#Accounting #Bookkeeping #CPA

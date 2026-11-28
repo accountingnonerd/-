@@ -42,7 +42,7 @@ The files are read on your computer. Nothing is uploaded, stored or sent.
 
 **2. Check what was read.** You check. The statement dates, the beginning and ending balances, and which account in the books is the bank account. If the bank's download has no balances, you type them from the statement.
 
-**3. Decide what was found.** You decide. The page matches checks by number first, then the same amount within a few days, then card batches (several book entries that add up to one deposit). What is left is where the time usually goes:
+**3. Decide what was found.** You decide. The page matches checks by number first, then the same amount within a window (up to 60 days back, 180 for checks), then card batches (several book entries that add up to one deposit). What is left is where the time usually goes:
 - **Book entries that look wrong.** A check for a different amount than the bank paid, digits swapped, money in and out reversed, a voided check the bank paid anyway, a check paid twice, an entry made twice. **The page decides none of them.** Until you do, both sides count as separate items, and the reconciliation says it is not finished.
 - **At the bank, not in the books.** Each with a suggested treatment you can change.
 - **Outstanding.** With its age. A stale check waits for you: keep it outstanding, or reverse it to a liability.
@@ -57,7 +57,7 @@ It also does the part that is easy to forget: which checks were already outstand
 
 Before release, a separate AI review played a skeptical CPA and ran 18 file pairs of its own. Its verdict on the first version: not ready. The worst problem was that the start of the bank file worked like a plug. Whatever old items added up to the difference were declared outstanding, so the rec tied by construction. In one of its files, an unrecorded $1,200 loan payment disappeared that way. It also found a customer's check number matched to the company's own check, and "fee" matched inside "coffee". All of these are fixed, and each is now a test file. The tool must pass 28 test files, 839 checks in all.
 
-A second review played a first-time user working from the screen alone. It found that the page could say "It ties" while an unexplained difference sat in the opening balances. Now it never says "ties" while anything is undecided or unexplained.
+A second review played a first-time user working from the screen alone. It found that the page could say "It ties" while an unexplained difference sat in the opening balances. Now it says "ties" only when every entry that looks wrong is decided and the start is explained. A stale check still to decide is named next to it.
 
 The last check was the prompt itself. A fresh AI session, given only the prompt, rebuilt the tool and ran it through the same tests: 22 of 27 on the first try, all 27 after one round of fixes taken from the prompt. It listed every place the prompt was unclear, and those are now spelled out. It also found a real bug: a statement balance typed wrong stopped the page with no way back except starting over. That is fixed, and it is test file 28.
 
@@ -71,14 +71,14 @@ You don't need to download anything from me to have this tool. It comes from one
 - About 15 minutes, most of it waiting for the reply.
 
 **Steps**
-1. **Copy the prompt.** The safest copy is the master on GitHub. The repository's name is a single hyphen, so the address ends in "/-", and that is right. Open [PROMPT.txt](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/PROMPT.txt) and press the "Copy raw file" button (two small squares, top right of the file). It is also printed in full below.
+1. **Copy the prompt.** The safest copy is the master on GitHub. The repository's name is a single hyphen (github.com/accountingnonerd/-), and that is right. Open [PROMPT.txt](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/PROMPT.txt) and press the "Copy raw file" button (two small squares next to "Raw", top right of the file). The prompt is long, about 34,000 characters; some assistants show a paste that long as an attached file. That is normal. It is also printed in full below.
 2. **Paste it into a new chat** in your AI assistant and send it.
 3. **Wait for one long block of code.** If the assistant offers it as a file to download, or shows it in a side panel with a download or copy button, use that. If the reply stops partway, write: "Please send the complete file again in one code block."
 4. **Save it as a web page.** If there was no download, copy the whole code block into a plain-text editor and save it as why-wont-the-bank-rec-tie.html. On Windows, use Notepad: in the Save dialog, set "Save as type" to "All files", or it saves as .html.txt. On a Mac, use TextEdit: first choose Format, then Make Plain Text, and when it asks, choose "Use .html".
 5. **Open it.** Double-click the file. You should see "Why won't the bank rec tie?" and two boxes to drop files into.
-6. **Try it on the sample client** before any real file. Download the [Mapleton bank download](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/sample/mapleton-checking-bank-download-q1-2026.csv) and the [Mapleton ledger](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/sample/mapleton-general-ledger.xlsx). On each page, press "Download raw file". Drop the bank file in box 1 and the ledger in box 2, and follow the steps on the screen.
+6. **Try it on the sample client** before any real file. Download the [Mapleton bank download](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/sample/mapleton-checking-bank-download-q1-2026.csv) and the [Mapleton ledger](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/sample/mapleton-general-ledger.xlsx). On each page, press "Download raw file". Drop the bank file in the box "The bank's download" and the ledger in "The books' ledger", and follow the steps on the screen.
 
-**What you should see.** The top line reads "Mapleton Landscaping LLC, Checking, 3/31/2026. Not finished: 2 items to decide before it can be called reconciled." In step 2 the balances are $81,868.88 and $108,730.18; press "This is right". In step 3a, choose "Books wrong: correct them" for check #1033 and "Entered twice: remove one" for the Birch Dental deposit. In 3c, keep the stale check #998 outstanding. The top line then reads "It ties: adjusted bank and adjusted books are both $109,509.83." The full walkthrough is in the [sample's README](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/sample/README.md).
+**What you should see.** The top line reads "Mapleton Landscaping LLC, Checking, 3/31/2026. Not finished: 2 items to decide before it can be called reconciled." In step 2 the balances are $81,868.88 and $108,730.18; press "This is right". In step 3a, choose "Books wrong: correct them" for check #1033 and "Entered twice: remove one" for the Birch Dental deposit. The top line already reads "It ties ... Still to decide: 1 stale check (step 3c)", and the counts drop (5 bank items to 4, 6 outstanding to 4), because the paired lines are now one item. In 3b, the four suggested treatments are right; change nothing. In 3c, keep the stale check #998 outstanding. The top line then reads "It ties: adjusted bank and adjusted books are both $109,509.83." The full walkthrough is in the [sample's README](https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/sample/README.md).
 
 **If it does not work**
 - *A blank page, or half a page:* the code was cut off. Ask the assistant for the complete file again.
@@ -111,7 +111,7 @@ You don't need to download anything from me to have this tool. It comes from one
 
 ## What's next
 
-This is the first agent of Series 2: five more processes, one painful problem each, each one free. Next: the 13-week cash flow.
+This is the first agent of Series 2: four more to come, one for each of the other processes, each one free. Next: the 13-week cash flow.
 
 **Follow me** so the next one reaches you, with its prompt, its sample and its tests.
 

@@ -1,0 +1,246 @@
+{
+  "title": "Why won't the bank rec tie?",
+  "h1": "Why won't the bank rec tie?",
+  "boxes": 2,
+  "afterLoad": {
+    "verdict": "Mapleton Landscaping LLC, Checking, 3/31/2026. Not finished: 2 items to decide before it can be called reconciled.",
+    "detail": "57 bank lines matched of 62; 6 items outstanding; 5 bank items not in the books; 2 entries that look wrong.",
+    "todo": "You are looking at step 2 of 4. Still to do: press \"This is right\" (step 2); decide what was found (step 3).",
+    "stop": "",
+    "problem": ""
+  },
+  "step2": "What\tRead\nThe bank's download\tdate, description, amount; 62 lines from 1/1/2026\nStatement\t1/1/2026 to 3/31/2026 (end date: the last line's date: type the statement's if later)\nBeginning balance\t$81,868.88 (from the file)\nEnding balance\t$108,730.18 (from the file)\nThe books' ledger\tQuickBooks Online; 1 account\nThe bank account in the books\t\nChecking\n\nThe books' balance the day before 1/1/2026\t$77,821.42 (compare with the beginning balance: the difference, -$4,047.46, is what was outstanding then)\nThe books' balance on 3/31/2026\t$113,641.41",
+  "messages": "Check these first\nDecide.1 check was paid for a different amount than the books show. Decide in step 3a.\nDecide.1 entry looks entered twice in the books (once at the bank). Decide in step 3a.\nDecide.5 bank items are not in the books (-$695.08): choose how to treat each in step 3b.\nDecide.1 check has been outstanding more than six months: stale-dated (UCC 4-404). Ask the payee. An uncashed check becomes unclaimed property after the state's dormancy period: reverse it to a liability, never to income. Decide each in step 3c.\nDecide.1 deposit or electronic payment is not at the bank after 10 days: probably never made, entered twice, or with the wrong date or amount (step 3c).\nFor your file.1 bank line matched to several book entries (card batches or deposits of several checks): 2/24/2026 $766.55 = 3 entries.\nFor your file.1 book entry dated after the statement date (3/31/2026) was left out.",
+  "step3a": "What it looks like\tIn the books\tAt the bank\tEffect on the books' balance if corrected\tYour decision\nSame check number, different amount\t2/10/2026, #1033 Coastal Insurance, -$683.50\t2/15/2026, CHECK 1033, -$638.50\t$45.00\t\n Books wrong: correct them\n Bank error: ask the bank\n Not the same\n\nEntered twice?\t3/4/2026 and 3/6/2026, Birch Dental Group, $4,120.00 each\tonce, matched to the 3/4/2026 entry\t-$4,120.00\t\n Entered twice: remove one\n Two real items",
+  "step3b": "Date\tDescription\tAmount\tTreatment\n1/31/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n2/15/2026\tCHECK 1033\t-$638.50\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n2/28/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n3/31/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n3/31/2026\tINTEREST PAYMENT\t$18.42\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was",
+  "step3c": "Date\tNum\tTo or from\tAmount\tAge in days\tNote\n8/14/2025\t998\tGreenfield Tools\t-$415.00\t229\tstale-dated: over six months\n Keep outstanding\n Reverse to a liability\n\n2/10/2026\t1033\tCoastal Insurance\t-$683.50\t49\t\n3/6/2026\t\tBirch Dental Group\t$4,120.00\t25\tdeposit not at the bank after 10 days\n3/26/2026\t1031\tHarbor Supply Co\t-$1,423.00\t5\t\n3/30/2026\t1032\tApex Plumbing\t-$568.75\t1\t\n3/31/2026\t\tGranite Schools\t$3,186.40\t0\t",
+  "step3text": "Step 3. Decide what was found you decide\n\nWhat this is for: the page has matched what it could. What is left is listed here: entries that look wrong, bank items not in the books, and what is still outstanding.\n\nWhat to do: decide each entry in 3a, check the treatment of each bank item in 3b, and decide any stale check in 3c. The reconciliation in step 4 follows your choices.\n\n3a. Book entries that look wrong you decide\n\nEach pairs a book entry with the bank line it probably is. Until you decide, both count as separate items, so the reconciliation is not finished.\n\nWhat it looks like\tIn the books\tAt the bank\tEffect on the books' balance if corrected\tYour decision\nSame check number, different amount\t2/10/2026, #1033 Coastal Insurance, -$683.50\t2/15/2026, CHECK 1033, -$638.50\t$45.00\t\n Books wrong: correct them\n Bank error: ask the bank\n Not the same\n\nEntered twice?\t3/4/2026 and 3/6/2026, Birch Dental Group, $4,120.00 each\tonce, matched to the 3/4/2026 entry\t-$4,120.00\t\n Entered twice: remove one\n Two real items\n3b. At the bank, not in the books you decide\nDate\tDescription\tAmount\tTreatment\n1/31/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n2/15/2026\tCHECK 1033\t-$638.50\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n2/28/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n3/31/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n3/31/2026\tINTEREST PAYMENT\t$18.42\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n3c. Outstanding: in the books, not yet at the bank you decide\nDate\tNum\tTo or from\tAmount\tAge in days\tNote\n8/14/2025\t998\tGreenfield Tools\t-$415.00\t229\tstale-dated: over six months\n Keep outstanding\n Reverse to a liability\n\n2/10/2026\t1033\tCoastal Insurance\t-$683.50\t49\t\n3/6/2026\t\tBirch Dental Group\t$4,120.00\t25\tdeposit not at the bank after 10 days\n3/26/2026\t1031\tHarbor Supply Co\t-$1,423.00\t5\t\n3/30/2026\t1032\tApex Plumbing\t-$568.75\t1\t\n3/31/2026\t\tGranite Schools\t$3,186.40\t0\t\n\n35 older entries cleared before the bank's dates. 57 of 62 bank lines matched. Matched several to one: 2/21/2026 $189.60 + 2/22/2026 $362.15 + 2/23/2026 $214.80 = the bank deposit of $766.55 on 2/24/2026.",
+  "afterReadOk": {
+    "verdict": "Mapleton Landscaping LLC, Checking, 3/31/2026. Not finished: 2 items to decide before it can be called reconciled.",
+    "detail": "57 bank lines matched of 62; 6 items outstanding; 5 bank items not in the books; 2 entries that look wrong.",
+    "todo": "You are looking at step 3 of 4. Still to do: decide what was found (step 3).",
+    "stop": "",
+    "problem": ""
+  },
+  "after3a": {
+    "verdict": "Mapleton Landscaping LLC, Checking, 3/31/2026. It ties: adjusted bank and adjusted books are both $109,509.83. Still to decide: 1 stale check (step 3c).",
+    "detail": "57 bank lines matched of 62; 4 items outstanding; 4 bank items not in the books; 2 entries that look wrong.",
+    "todo": "You are looking at step 3 of 4. Still to do: decide what was found (step 3).",
+    "stop": "",
+    "problem": ""
+  },
+  "step3bAfter": "Date\tDescription\tAmount\tTreatment\n1/31/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n2/28/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n3/31/2026\tMONTHLY SERVICE FEE\t-$25.00\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was\n\n3/31/2026\tINTEREST PAYMENT\t$18.42\t\nAlready in the books after the statement date\nBank service charge\nInterest income\nReturned item: back on the customer's balance\nAsk the client what it was",
+  "step3cAfter": "Date\tNum\tTo or from\tAmount\tAge in days\tNote\n8/14/2025\t998\tGreenfield Tools\t-$415.00\t229\tstale-dated: over six months\n Keep outstanding\n Reverse to a liability\n\n3/26/2026\t1031\tHarbor Supply Co\t-$1,423.00\t5\t\n3/30/2026\t1032\tApex Plumbing\t-$568.75\t1\t\n3/31/2026\t\tGranite Schools\t$3,186.40\t0\t",
+  "final": {
+    "verdict": "Mapleton Landscaping LLC, Checking, 3/31/2026. It ties: adjusted bank and adjusted books are both $109,509.83.",
+    "detail": "57 bank lines matched of 62; 4 items outstanding; 4 bank items not in the books; 2 entries that look wrong.",
+    "todo": "You are looking at step 3 of 4. Everything is decided: print the reconciliation in step 4.",
+    "stop": "",
+    "problem": ""
+  },
+  "proof": "\tAmount\nBalance per bank statement, 3/31/2026\t$108,730.18\nAdd: deposits in transit (1)\t$3,186.40\nLess: outstanding checks and payments (3)\t-$2,406.75\nAdjusted bank balance\t$109,509.83\nBalance per books, 3/31/2026\t$113,641.41\nAdd or less: bank items not in the books (4)\t-$56.58\nAdd or less: corrections of book entries\t-$4,075.00\nAdjusted book balance\t$109,509.83\nDifference\t$0.00: reconciled",
+  "entries": "Entry\tAccount\tDebit\tCredit\nAJE 1\tBank service charges\t$25.00\t\n\tChecking\t\t$25.00\n\tMONTHLY SERVICE FEE, 1/31/2026: bank service charge.\t\t\nAJE 2\tBank service charges\t$25.00\t\n\tChecking\t\t$25.00\n\tMONTHLY SERVICE FEE, 2/28/2026: bank service charge.\t\t\nAJE 3\tBank service charges\t$25.00\t\n\tChecking\t\t$25.00\n\tMONTHLY SERVICE FEE, 3/31/2026: bank service charge.\t\t\nAJE 4\tChecking\t$18.42\t\n\tInterest income\t\t$18.42\n\tINTEREST PAYMENT, 3/31/2026: interest earned.\t\t",
+  "corrections": "Check #1033, Coastal Insurance, 2/10/2026: correct the entry from -$683.50 to -$638.50 (the bank: CHECK 1033, 2/15/2026). Edit the transaction if its period is open, otherwise post a correcting entry.\nBirch Dental Group, $4,120.00 on 3/6/2026 is the same as the entry on 3/4/2026: entered twice. Delete or void it.",
+  "questions": "Check #998 to Greenfield Tools, $415.00, dated 8/14/2025, has not cleared after 229 days: did the payee receive it?",
+  "openItems": null,
+  "report": {
+    "version": "1.0.0",
+    "files": {
+      "bank": "mapleton-checking-bank-download-q1-2026.csv",
+      "books": "mapleton-general-ledger.xlsx"
+    },
+    "status": "COMPUTED",
+    "exceptions": [
+      {
+        "code": "CHECK_AMOUNT_DIFFERS",
+        "level": "care",
+        "message": "1 check was paid for a different amount than the books show. Decide in step 3a."
+      },
+      {
+        "code": "BOOK_DUPLICATES",
+        "level": "care",
+        "message": "1 entry looks entered twice in the books (once at the bank). Decide in step 3a."
+      },
+      {
+        "code": "BANK_ONLY",
+        "level": "care",
+        "message": "4 bank items are not in the books (-$56.58): choose how to treat each in step 3b."
+      },
+      {
+        "code": "STALE_CHECKS",
+        "level": "care",
+        "message": "1 check has been outstanding more than six months: stale-dated (UCC 4-404). Ask the payee. An uncashed check becomes unclaimed property after the state's dormancy period: reverse it to a liability, never to income. Decide each in step 3c."
+      },
+      {
+        "code": "BATCHES",
+        "level": "info",
+        "message": "1 bank line matched to several book entries (card batches or deposits of several checks): 2/24/2026 $766.55 = 3 entries."
+      },
+      {
+        "code": "AFTER_STATEMENT",
+        "level": "info",
+        "message": "1 book entry dated after the statement date (3/31/2026) was left out."
+      }
+    ],
+    "bankLayout": "date, description, amount",
+    "booksLayout": "QuickBooks Online",
+    "company": "Mapleton Landscaping LLC",
+    "accounts": [
+      "Checking"
+    ],
+    "account": "Checking",
+    "subaccounts": [],
+    "bankStart": "2026-01-01",
+    "bankEnd": "2026-03-31",
+    "endFrom": "last line",
+    "bankLines": 62,
+    "balancesFrom": "file",
+    "bankBegin": 81868.88,
+    "bankEnding": 108730.18,
+    "booksBefore": 77821.42,
+    "booksEnding": 113641.41,
+    "matched": 57,
+    "batches": [
+      {
+        "bankDate": "2026-02-24",
+        "amount": 766.55,
+        "count": 3
+      }
+    ],
+    "splits": [],
+    "near": [
+      {
+        "id": "n0",
+        "kind": "check amount differs",
+        "decision": "fix",
+        "bankDate": "2026-02-15",
+        "bankAmount": -638.5,
+        "bankDesc": "CHECK 1033",
+        "bookDate": "2026-02-10",
+        "bookAmount": -683.5,
+        "num": "1033",
+        "name": "Coastal Insurance",
+        "type": "Check"
+      }
+    ],
+    "duplicates": [
+      {
+        "id": "u0",
+        "decision": "fix",
+        "date": "2026-03-06",
+        "amount": 4120,
+        "name": "Birch Dental Group",
+        "type": "Deposit",
+        "twinDate": "2026-03-04"
+      }
+    ],
+    "outstanding": [
+      {
+        "id": "o0",
+        "date": "2025-08-14",
+        "num": "998",
+        "name": "Greenfield Tools",
+        "type": "Check",
+        "memo": "Bill payment",
+        "amount": -415,
+        "age": 229,
+        "flag": "stale",
+        "decision": "keep"
+      },
+      {
+        "id": "o97",
+        "date": "2026-03-26",
+        "num": "1031",
+        "name": "Harbor Supply Co",
+        "type": "Check",
+        "memo": "Bill payment",
+        "amount": -1423,
+        "age": 5,
+        "flag": "",
+        "decision": null
+      },
+      {
+        "id": "o98",
+        "date": "2026-03-30",
+        "num": "1032",
+        "name": "Apex Plumbing",
+        "type": "Check",
+        "memo": "Bill payment",
+        "amount": -568.75,
+        "age": 1,
+        "flag": "",
+        "decision": null
+      },
+      {
+        "id": "o99",
+        "date": "2026-03-31",
+        "num": "",
+        "name": "Granite Schools",
+        "type": "Deposit",
+        "memo": "Customer payment",
+        "amount": 3186.4,
+        "age": 0,
+        "flag": "",
+        "decision": null
+      }
+    ],
+    "bankOnly": [
+      {
+        "id": "b24",
+        "date": "2026-01-31",
+        "desc": "MONTHLY SERVICE FEE",
+        "amount": -25,
+        "kind": "fee",
+        "bookedLater": null,
+        "treat": "fee"
+      },
+      {
+        "id": "b40",
+        "date": "2026-02-28",
+        "desc": "MONTHLY SERVICE FEE",
+        "amount": -25,
+        "kind": "fee",
+        "bookedLater": null,
+        "treat": "fee"
+      },
+      {
+        "id": "b60",
+        "date": "2026-03-31",
+        "desc": "MONTHLY SERVICE FEE",
+        "amount": -25,
+        "kind": "fee",
+        "bookedLater": null,
+        "treat": "fee"
+      },
+      {
+        "id": "b61",
+        "date": "2026-03-31",
+        "desc": "INTEREST PAYMENT",
+        "amount": 18.42,
+        "kind": "interest",
+        "bookedLater": null,
+        "treat": "interest"
+      }
+    ],
+    "clearedBefore": 35,
+    "startMode": "unique",
+    "startDifference": -415,
+    "startLeft": 0,
+    "startCandidates": [],
+    "suggestBank": [],
+    "afterStatement": 1,
+    "bookCorrections": -4075,
+    "bankCorrections": 0,
+    "adjustedBank": 109509.83,
+    "adjustedBooks": 109509.83,
+    "difference": 0,
+    "stale": 1,
+    "oldOutstanding": 0,
+    "lateItems": 0,
+    "undecided": 0,
+    "openStale": 0,
+    "ties": true
+  },
+  "phoneScrollWidth": 390,
+  "log": []
+}

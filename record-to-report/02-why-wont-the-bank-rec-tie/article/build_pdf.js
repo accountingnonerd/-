@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Makes the article as a PDF for a regular LinkedIn document post: node build_pdf.js (run build_article.py first).
-   The 33,000-character prompt is not printed; the PDF links to the master copy on GitHub instead. */
+   The 34,000-character prompt is not printed; the PDF links to the master copy on GitHub instead. */
 const path = require("path"), { chromium } = require("playwright");
 const GH = "https://github.com/accountingnonerd/-/blob/main/record-to-report/02-why-wont-the-bank-rec-tie/PROMPT.txt";
 (async () => {
@@ -11,7 +11,8 @@ const GH = "https://github.com/accountingnonerd/-/blob/main/record-to-report/02-
     document.querySelector(".nl").remove();
     const pre = document.getElementById("prompt-block");
     const box = document.createElement("p");
-    box.innerHTML = '<b>The prompt</b> is about 33,000 characters, so it lives on GitHub: <a href="' + gh + '">' + gh.replace("https://", "") + '</a>. Press "Copy raw file" there.';
+    const nw = (t) => '<span style="white-space:nowrap">' + t + '</span>';
+    box.innerHTML = '<b>The prompt</b> is about 34,000 characters, so it lives on GitHub. Links in a PDF may not open on LinkedIn: use the link in the post, or type ' + nw('github.com/accountingnonerd/-') + ' and open ' + nw('record-to-report') + ', then ' + nw('02-why-wont-the-bank-rec-tie') + ', then ' + nw('PROMPT.txt') + '. Press "Copy raw file" there. The sample files are in the ' + nw('sample') + ' folder next to it.';
     box.style.cssText = "background:#e4f0eb;border-left:6px solid #15614a;padding:14px 18px";
     pre.replaceWith(box);
     for (const el of document.querySelectorAll("p, li")) {

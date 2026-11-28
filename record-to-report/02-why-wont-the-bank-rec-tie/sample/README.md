@@ -11,7 +11,7 @@ amounts.
 
 ## What you should see
 
-**Step 1. Give the two files.** Drop the CSV in the bank box and the ledger in the books box. The
+**Step 1. Give the two files.** Drop the CSV in the box "The bank's download" and the ledger in "The books' ledger". The
 line at the top reads:
 
 > Mapleton Landscaping LLC, Checking, 3/31/2026. Not finished: 2 items to decide before it can be
@@ -35,9 +35,13 @@ They are right, so press "This is right: go to step 3".
 | Same check number, different amount | 2/10/2026, #1033 Coastal Insurance, -$683.50 | 2/15/2026, CHECK 1033, -$638.50 | **Books wrong: correct them.** The bank paid what was written on the check; the books swapped two digits. |
 | Entered twice? | 3/4/2026 and 3/6/2026, Birch Dental Group, $4,120.00 each | once, matched to the 3/4/2026 entry | **Entered twice: remove one.** One payment, recorded twice. |
 
+Once both are decided, the top line already reads "It ties: adjusted bank and adjusted books are both
+$109,509.83. Still to decide: 1 stale check (step 3c)." The counts drop too (5 bank items to 4, 6
+outstanding to 4): each pair that was counted on both sides is now one item.
+
 **Step 3b. Four bank items not in the books.** The page suggests a treatment from each description:
 three monthly service fees of $25.00 (bank service charge) and $18.42 of interest (interest income).
-They are right.
+They are right; change nothing.
 
 **Step 3c. Outstanding.** Check #998 to Greenfield Tools, $415.00, dated 8/14/2025, is 229 days old:
 stale-dated. Choose **Keep outstanding** and ask the client whether the payee received it. (If you

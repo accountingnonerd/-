@@ -1,0 +1,2242 @@
+{
+ "01": {
+  "title": "A normal quarter: generic bank CSV, QuickBooks Online ledger; checks outstanding, a deposit in transit, fees and interest not in the books",
+  "kind": "clean",
+  "bankFile": "01-bank.csv",
+  "booksFile": "01-books-general-ledger.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-02",
+  "bankEnd": "2026-03-31",
+  "bankLines": 57,
+  "bankBegin": 79967.46,
+  "bankEnding": 126838.75,
+  "booksEnding": 128089.98,
+  "matched": 53,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 37,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 128033.4,
+  "adjustedBooks": 128033.4,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY"
+  ],
+  "status": "COMPUTED"
+ },
+ "02": {
+  "title": "The bank's download newest first, with a check-number column",
+  "kind": "ugly",
+  "bankFile": "02-bank-newest-first.csv",
+  "booksFile": "02-books-general-ledger.xlsx",
+  "account": "Business Checking",
+  "accounts": [
+   "Business Checking"
+  ],
+  "bankLayout": "newest-first",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-03",
+  "bankEnd": "2026-03-31",
+  "bankLines": 58,
+  "bankBegin": 85352.09,
+  "bankEnding": 128425.45,
+  "booksEnding": 129676.68,
+  "matched": 54,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 36,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 129620.1,
+  "adjustedBooks": 129620.1,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY"
+  ],
+  "status": "COMPUTED"
+ },
+ "03": {
+  "title": "A summary block above the bank's lines; a Xero ledger with three accounts, the checking account chosen",
+  "kind": "ugly",
+  "bankFile": "03-bank-with-summary.csv",
+  "booksFile": "03-books-xero.xlsx",
+  "account": "Business Checking",
+  "accounts": [
+   "Savings Account",
+   "Business Checking",
+   "Fuel"
+  ],
+  "bankLayout": "summary",
+  "booksLayout": "xero",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 57,
+  "bankBegin": 108655.36,
+  "bankEnding": 153852.85,
+  "booksEnding": 153449.32,
+  "matched": 53,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-17",
+    "num": "1018",
+    "name": "Metro Utilities",
+    "amount": -1654.76,
+    "age": 14
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 36,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 153392.74,
+  "adjustedBooks": 153392.74,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "ACCOUNT_CHOSEN",
+   "AFTER_STATEMENT",
+   "BANK_ONLY"
+  ],
+  "status": "COMPUTED"
+ },
+ "04": {
+  "title": "No heading row, no balance column (the accountant types the statement's beginning and ending balances); QuickBooks Desktop ledger",
+  "kind": "ugly",
+  "bankFile": "04-bank-no-headings.csv",
+  "booksFile": "04-books-desktop.xlsx",
+  "account": "Operating Account",
+  "accounts": [
+   "Operating Account"
+  ],
+  "bankLayout": "headerless",
+  "booksLayout": "qbd",
+  "bankStart": "2026-01-03",
+  "bankEnd": "2026-03-31",
+  "bankLines": 59,
+  "bankBegin": 84099.77,
+  "bankEnding": 126829.69,
+  "booksEnding": 128080.92,
+  "matched": 55,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 35,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 128024.34,
+  "adjustedBooks": 128024.34,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY"
+  ],
+  "status": "COMPUTED",
+  "typed": {
+   "bankBegin": 84099.77,
+   "bankEnd": 126829.69
+  }
+ },
+ "05": {
+  "title": "Planted: two checks entered for the wrong amount, an online payment with its digits swapped, a customer payment entered twice",
+  "kind": "planted",
+  "bankFile": "05-planted-bank.csv",
+  "booksFile": "05-planted-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-02",
+  "bankEnd": "2026-03-31",
+  "bankLines": 61,
+  "bankBegin": 65640.7,
+  "bankEnding": 117157.67,
+  "booksEnding": 121137.9,
+  "matched": 54,
+  "batches": [],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "check amount differs",
+    "decision": "fix",
+    "bankDate": "2026-02-09",
+    "bankAmount": -452.1,
+    "bookDate": "2026-02-03",
+    "bookAmount": -425.1,
+    "num": "1033"
+   },
+   {
+    "id": "n1",
+    "kind": "check amount differs",
+    "decision": "bank",
+    "bankDate": "2026-02-22",
+    "bankAmount": -834.0,
+    "bookDate": "2026-02-17",
+    "bookAmount": -843.0,
+    "num": "1034"
+   },
+   {
+    "id": "n2",
+    "kind": "transposed",
+    "decision": "fix",
+    "bankDate": "2026-03-10",
+    "bankAmount": -617.5,
+    "bookDate": "2026-03-09",
+    "bookAmount": -671.5,
+    "num": ""
+   }
+  ],
+  "duplicates": [
+   {
+    "id": "u0",
+    "date": "2026-01-22",
+    "amount": 2765.0,
+    "name": "Ember Hotel"
+   }
+  ],
+  "outstanding": [
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 37,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": -2738.0,
+  "bankCorrections": -9.0,
+  "adjustedBank": 118343.32,
+  "adjustedBooks": 118343.32,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "BOOK_DUPLICATES",
+   "CHECK_AMOUNT_DIFFERS",
+   "TRANSPOSED"
+  ],
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "fix"
+   ],
+   [
+    "n1",
+    "bank"
+   ],
+   [
+    "n2",
+    "fix"
+   ],
+   [
+    "u0",
+    "fix"
+   ]
+  ]
+ },
+ "06": {
+  "title": "Planted: card sales recorded one by one that land as one deposit; a refund paid out entered as money in; withdrawals and deposits columns",
+  "kind": "planted",
+  "bankFile": "06-planted-bank.xlsx",
+  "booksFile": "06-planted-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "debit-credit",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 63,
+  "bankBegin": 90116.13,
+  "bankEnding": 134745.13,
+  "booksEnding": 136621.36,
+  "matched": 58,
+  "batches": [
+   {
+    "bankDate": "2026-01-12",
+    "amount": 1559.02,
+    "count": 5
+   },
+   {
+    "bankDate": "2026-02-09",
+    "amount": 2285.69,
+    "count": 5
+   },
+   {
+    "bankDate": "2026-03-16",
+    "amount": 1469.68,
+    "count": 4
+   }
+  ],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "sign",
+    "decision": "undecided",
+    "bankDate": "2026-02-21",
+    "bankAmount": -312.5,
+    "bookDate": "2026-02-20",
+    "bookAmount": 312.5,
+    "num": ""
+   }
+  ],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-02-20",
+    "num": "",
+    "name": "Delta Fitness",
+    "amount": 312.5,
+    "age": 39
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-21",
+    "desc": "ACH DEBIT REFUND DELTA FITNESS",
+    "amount": -312.5,
+    "kind": "other"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 35,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 136252.28,
+  "adjustedBooks": 136252.28,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 1,
+  "undecided": 1,
+  "ties": false,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "BATCHES",
+   "LATE_ITEMS",
+   "SIGN_ERROR"
+  ],
+  "status": "COMPUTED"
+ },
+ "07": {
+  "title": "Planted: two checks over six months old, two over 90 days (one at about 165 days), and a deposit recorded but never made",
+  "kind": "planted",
+  "bankFile": "07-planted-bank.csv",
+  "booksFile": "07-planted-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-02",
+  "bankEnd": "2026-03-31",
+  "bankLines": 57,
+  "bankBegin": 75876.03,
+  "bankEnding": 113720.91,
+  "booksEnding": 113049.07,
+  "matched": 53,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2025-07-14",
+    "num": "1033",
+    "name": "Summit Office Systems",
+    "amount": -389.0,
+    "age": 260
+   },
+   {
+    "date": "2025-09-02",
+    "num": "1034",
+    "name": "Apex Plumbing",
+    "amount": -124.5,
+    "age": 210
+   },
+   {
+    "date": "2025-10-16",
+    "num": "1036",
+    "name": "Lakeshore Signs",
+    "amount": -98.75,
+    "age": 166
+   },
+   {
+    "date": "2025-11-20",
+    "num": "1035",
+    "name": "Brightside Media",
+    "amount": -273.0,
+    "age": 131
+   },
+   {
+    "date": "2026-03-12",
+    "num": "",
+    "name": "Cedar Apartments",
+    "amount": 1450.0,
+    "age": 19
+   },
+   {
+    "date": "2026-03-23",
+    "num": "1026",
+    "name": "Metro Utilities",
+    "amount": -1893.34,
+    "age": 8
+   },
+   {
+    "date": "2026-03-24",
+    "num": "1024",
+    "name": "Metro Utilities",
+    "amount": -594.48,
+    "age": 7
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 35,
+  "startMode": "unique",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 112992.49,
+  "adjustedBooks": 112992.49,
+  "difference": 0.0,
+  "stale": 2,
+  "oldOutstanding": 2,
+  "lateItems": 1,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "LATE_ITEMS",
+   "OLD_OUTSTANDING",
+   "STALE_CHECKS"
+  ],
+  "status": "COMPUTED"
+ },
+ "08": {
+  "title": "The books file starts on the bank file's first day: two checks written in December clear in January and are recognized as recorded before",
+  "kind": "ugly",
+  "bankFile": "08-bank.csv",
+  "booksFile": "08-books-from-january.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 56,
+  "bankBegin": 76565.38,
+  "bankEnding": 121506.33,
+  "booksEnding": 119539.78,
+  "matched": 49,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-19",
+    "num": "1015",
+    "name": "Summit Office Systems",
+    "amount": -3217.78,
+    "age": 12
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 0,
+  "startMode": "bank lines",
+  "startCandidates": 0,
+  "suggestBank": [
+   {
+    "date": "2026-01-03",
+    "amount": -1864.5
+   },
+   {
+    "date": "2026-01-10",
+    "amount": -742.1
+   },
+   {
+    "date": "2026-01-12",
+    "amount": -2335.85
+   }
+  ],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 119483.2,
+  "adjustedBooks": 119483.2,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "START_BANK_LINES"
+  ],
+  "status": "COMPUTED",
+  "ticks": [
+   [
+    "bank",
+    "2026-01-03",
+    -1864.5
+   ],
+   [
+    "bank",
+    "2026-01-10",
+    -742.1
+   ],
+   [
+    "bank",
+    "2026-01-12",
+    -2335.85
+   ]
+  ]
+ },
+ "09": {
+  "title": "Planted: a line missing from the bank's download, so its running balance jumps",
+  "kind": "planted",
+  "bankFile": "09-planted-bank-line-missing.xlsx",
+  "booksFile": "09-books.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "BANK_FILE_GAPS"
+  ]
+ },
+ "10": {
+  "title": "The wrong books file: a trial balance",
+  "kind": "ugly",
+  "bankFile": "01-bank.csv",
+  "booksFile": "10-trial-balance.xlsx",
+  "status": "NOT_RECOGNIZED",
+  "exceptions": [
+   "NOT_RECOGNIZED"
+  ]
+ },
+ "11": {
+  "title": "The wrong bank file: the books' ledger dropped as the bank's download",
+  "kind": "ugly",
+  "bankFile": "01-books-general-ledger.xlsx",
+  "booksFile": "01-books-general-ledger.xlsx",
+  "status": "NOT_RECOGNIZED",
+  "exceptions": [
+   "NOT_RECOGNIZED"
+  ]
+ },
+ "12": {
+  "title": "Planted: $100.00 that no transaction explains (the bank's beginning balance does not fit the books), so it does not tie",
+  "kind": "planted",
+  "bankFile": "12-bank.csv",
+  "booksFile": "12-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 58,
+  "bankBegin": 101714.81,
+  "bankEnding": 149076.18,
+  "booksEnding": 150227.41,
+  "matched": 54,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 36,
+  "startMode": "not explained",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": -100.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 150270.83,
+  "adjustedBooks": 150170.83,
+  "difference": 100.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": false,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "DOES_NOT_TIE",
+   "START_NOT_EXPLAINED"
+  ],
+  "status": "COMPUTED"
+ },
+ "13": {
+  "title": "The ledger as CSV with dollar signs and parentheses; two bank accounts, the accountant chooses the second",
+  "kind": "ugly",
+  "bankFile": "13-bank-savings.csv",
+  "booksFile": "13-books.csv",
+  "account": "Reserve Account",
+  "accounts": [
+   "Operating Checking",
+   "Reserve Account"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 60,
+  "bankBegin": 96571.09,
+  "bankEnding": 115882.39,
+  "booksEnding": 112615.46,
+  "matched": 56,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-21",
+    "num": "1025",
+    "name": "Apex Plumbing",
+    "amount": -4518.16,
+    "age": 10
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 33,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 112558.88,
+  "adjustedBooks": 112558.88,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "ACCOUNT_CHOSEN",
+   "AFTER_STATEMENT",
+   "BANK_ONLY"
+  ],
+  "status": "COMPUTED",
+  "chooseAccount": "Reserve Account"
+ },
+ "14": {
+  "title": "No balances anywhere: the page matches, lists, and asks for the statement's balances before it can prove the tie",
+  "kind": "ugly",
+  "bankFile": "14-bank-no-headings.csv",
+  "booksFile": "14-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "headerless",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 56,
+  "bankBegin": null,
+  "bankEnding": null,
+  "booksEnding": 112726.26,
+  "matched": 52,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-24",
+    "num": "1021",
+    "name": "Riverside Electric",
+    "amount": -515.17,
+    "age": 7
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 37,
+  "startMode": "unknown",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": null,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": null,
+  "adjustedBooks": 112669.68,
+  "difference": null,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": false,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "NEED_BALANCES"
+  ],
+  "status": "COMPUTED"
+ },
+ "15": {
+  "title": "A credit card account: this version reconciles bank accounts only, and says so",
+  "kind": "ugly",
+  "bankFile": "15-bank-card.csv",
+  "booksFile": "15-books-card.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "CARD_NOT_SUPPORTED"
+  ]
+ },
+ "16": {
+  "title": "A customer's check number on a payment received; a coffee, a building maintenance bill and a returned check that only look like bank fees",
+  "kind": "planted",
+  "bankFile": "16-bank.csv",
+  "booksFile": "16-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-05",
+  "bankEnd": "2026-01-31",
+  "bankLines": 10,
+  "bankBegin": 10000.0,
+  "bankEnding": 9287.5,
+  "booksEnding": 11350.0,
+  "matched": 4,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [
+   {
+    "date": "2026-01-12",
+    "desc": "DEBIT CARD BLUE BOTTLE COFFEE",
+    "amount": -12.5,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-15",
+    "desc": "ACH DEBIT ACME BUILDING MAINTENANCE",
+    "amount": -1200.0,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-20",
+    "desc": "RETURNED ITEM NSF",
+    "amount": -500.0,
+    "kind": "returned"
+   },
+   {
+    "date": "2026-01-20",
+    "desc": "NSF RETURN ITEM FEE",
+    "amount": -35.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-01-22",
+    "desc": "CHECK 1060",
+    "amount": -300.0,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY MAINTENANCE FEE",
+    "amount": -15.0,
+    "kind": "fee"
+   }
+  ],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 9287.5,
+  "adjustedBooks": 9287.5,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "BANK_ONLY",
+   "RETURNED_ITEMS"
+  ],
+  "status": "COMPUTED"
+ },
+ "17": {
+  "title": "Rent paid every month: January's is missing from the books, and December's (cleared in December) must not be taken for it",
+  "kind": "planted",
+  "bankFile": "17-bank.csv",
+  "booksFile": "17-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-02",
+  "bankEnd": "2026-03-23",
+  "bankLines": 4,
+  "bankBegin": 17500.0,
+  "bankEnding": 17250.0,
+  "booksEnding": 19750.0,
+  "matched": 2,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-01-06",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 750.0,
+    "age": 76
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-02",
+    "desc": "ACH DEBIT OAKRIDGE PROPERTIES",
+    "amount": -2500.0,
+    "kind": "other"
+   },
+   {
+    "date": "2026-03-23",
+    "desc": "DEPOSIT ID 311500",
+    "amount": 750.0,
+    "kind": "other"
+   }
+  ],
+  "clearedBefore": 1,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 18000.0,
+  "adjustedBooks": 18000.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 1,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "BANK_ONLY",
+   "LATE_ITEMS"
+  ],
+  "status": "COMPUTED"
+ },
+ "18": {
+  "title": "The same payment to the same vendor on 12/30 (cleared in December) and 1/2: not entered twice",
+  "kind": "ugly",
+  "bankFile": "18-bank.csv",
+  "booksFile": "18-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-02",
+  "bankEnd": "2026-01-20",
+  "bankLines": 3,
+  "bankBegin": 4750.0,
+  "bankEnding": 5800.0,
+  "booksEnding": 5800.0,
+  "matched": 3,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [],
+  "clearedBefore": 1,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 5800.0,
+  "adjustedBooks": 5800.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [],
+  "status": "COMPUTED"
+ },
+ "19": {
+  "title": "The bank paid check 6001 twice and paid check 6003, which the books voided; check 6002 for the same amount is still outstanding",
+  "kind": "planted",
+  "bankFile": "19-bank.csv",
+  "booksFile": "19-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-09",
+  "bankEnd": "2026-01-14",
+  "bankLines": 3,
+  "bankBegin": 8000.0,
+  "bankEnding": 6725.0,
+  "booksEnding": 7040.0,
+  "matched": 1,
+  "batches": [],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "paid twice",
+    "decision": "bank",
+    "bankDate": "2026-01-09",
+    "bankAmount": -480.0,
+    "bookDate": null,
+    "bookAmount": null,
+    "num": "6001"
+   },
+   {
+    "id": "n1",
+    "kind": "voided but paid",
+    "decision": "fix",
+    "bankDate": "2026-01-14",
+    "bankAmount": -315.0,
+    "bookDate": "2026-01-07",
+    "bookAmount": null,
+    "num": "6003"
+   }
+  ],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-01-06",
+    "num": "6002",
+    "name": "Harbor Supply Co",
+    "amount": -480.0,
+    "age": 8
+   }
+  ],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "all",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": -315.0,
+  "bankCorrections": 480.0,
+  "adjustedBank": 6725.0,
+  "adjustedBooks": 6725.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "PAID_TWICE",
+   "VOIDED_BUT_PAID"
+  ],
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "bank"
+   ],
+   [
+    "n1",
+    "fix"
+   ]
+  ]
+ },
+ "20": {
+  "title": "The statement ends 3/31 though the last line is 3/27; a pending line; amounts with DR, CR, USD and a true minus sign",
+  "kind": "ugly",
+  "bankFile": "20-bank.csv",
+  "booksFile": "20-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-03-02",
+  "bankEnd": "2026-03-31",
+  "bankLines": 3,
+  "bankBegin": 15000.0,
+  "bankEnding": 16277.5,
+  "booksEnding": 15947.5,
+  "matched": 3,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-30",
+    "num": "2102",
+    "name": "Apex Plumbing",
+    "amount": -330.0,
+    "age": 1
+   }
+  ],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 15947.5,
+  "adjustedBooks": 15947.5,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "PENDING_LEFT_OUT"
+  ],
+  "status": "COMPUTED"
+ },
+ "21": {
+  "title": "A bank line whose amount cannot be read: the page stops rather than drop it",
+  "kind": "ugly",
+  "bankFile": "21-bank.csv",
+  "booksFile": "18-books.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "UNREAD_ROWS"
+  ]
+ },
+ "22": {
+  "title": "Payroll posted to a sub-account, Checking:Payroll: the sub-account is part of the bank account",
+  "kind": "ugly",
+  "bankFile": "22-bank.csv",
+  "booksFile": "22-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking",
+   "Checking:Payroll"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-08",
+  "bankEnd": "2026-01-15",
+  "bankLines": 3,
+  "bankBegin": 9000.0,
+  "bankEnding": 10400.0,
+  "booksEnding": 10400.0,
+  "matched": 3,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [],
+  "bankOnly": [],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 10400.0,
+  "adjustedBooks": 10400.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "SUBACCOUNTS"
+  ],
+  "status": "COMPUTED"
+ },
+ "23": {
+  "title": "One deposit in the books that the bank shows as two lines; a bank check for the same amount as a book check but a different number",
+  "kind": "ugly",
+  "bankFile": "23-bank.csv",
+  "booksFile": "23-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-12",
+  "bankEnd": "2026-01-27",
+  "bankLines": 4,
+  "bankBegin": 6000.0,
+  "bankEnding": 6967.0,
+  "booksEnding": 6967.0,
+  "matched": 1,
+  "batches": [],
+  "splits": [
+   {
+    "bookDate": "2026-01-11",
+    "amount": 1500.0,
+    "count": 2
+   }
+  ],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-01-21",
+    "num": "7002",
+    "name": "Harbor Supply Co",
+    "amount": -333.0,
+    "age": 6
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-27",
+    "desc": "CHECK 7031",
+    "amount": -333.0,
+    "kind": "other"
+   }
+  ],
+  "clearedBefore": 0,
+  "startMode": "none",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 6634.0,
+  "adjustedBooks": 6634.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "BANK_ONLY",
+   "SPLITS"
+  ],
+  "status": "COMPUTED"
+ },
+ "24": {
+  "title": "Two old checks of $100, one still outstanding: the page cannot tell which and asks; the accountant ticks December's",
+  "kind": "planted",
+  "bankFile": "24-bank.csv",
+  "booksFile": "24-books.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "amount",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-09",
+  "bankEnd": "2026-01-20",
+  "bankLines": 2,
+  "bankBegin": 9900.0,
+  "bankEnding": 10580.0,
+  "booksEnding": 10480.0,
+  "matched": 2,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2025-12-18",
+    "num": "5188",
+    "name": "Summit Office Systems",
+    "amount": -100.0,
+    "age": 33
+   }
+  ],
+  "bankOnly": [],
+  "clearedBefore": 1,
+  "startMode": "ambiguous",
+  "startCandidates": 2,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 0,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 10480.0,
+  "adjustedBooks": 10480.0,
+  "difference": 0.0,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "START_AMBIGUOUS"
+  ],
+  "status": "COMPUTED",
+  "ticks": [
+   [
+    "book",
+    "2025-12-18",
+    -100.0
+   ]
+  ]
+ },
+ "25": {
+  "title": "Same files as 08, but the accountant ticks only one of the two suggested lines: the other stays unexplained and it does not tie",
+  "kind": "ugly",
+  "bankFile": "08-bank.csv",
+  "booksFile": "08-books-from-january.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 56,
+  "bankBegin": 76565.38,
+  "bankEnding": 121506.33,
+  "booksEnding": 119539.78,
+  "matched": 49,
+  "batches": [],
+  "splits": [],
+  "near": [],
+  "duplicates": [],
+  "outstanding": [
+   {
+    "date": "2026-03-19",
+    "num": "1015",
+    "name": "Summit Office Systems",
+    "amount": -3217.78,
+    "age": 12
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-10",
+    "desc": "CHECK 1014",
+    "amount": -742.1,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-12",
+    "desc": "CHECK 1008",
+    "amount": -2335.85,
+    "kind": "other"
+   },
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 0,
+  "startMode": "bank lines",
+  "startCandidates": 0,
+  "suggestBank": [
+   {
+    "date": "2026-01-03",
+    "amount": -1864.5
+   },
+   {
+    "date": "2026-01-10",
+    "amount": -742.1
+   },
+   {
+    "date": "2026-01-12",
+    "amount": -2335.85
+   }
+  ],
+  "startLeft": -3077.95,
+  "afterStatement": 1,
+  "bookCorrections": 0.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 119483.2,
+  "adjustedBooks": 116405.25,
+  "difference": 3077.95,
+  "stale": 0,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": false,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "DOES_NOT_TIE",
+   "START_BANK_LINES"
+  ],
+  "status": "COMPUTED",
+  "ticks": [
+   [
+    "bank",
+    "2026-01-03",
+    -1864.5
+   ]
+  ]
+ },
+ "26": {
+  "title": "The readers' sample: Mapleton Landscaping, with the reader's decisions (fix the check entered for the wrong amount, remove the deposit entered twice, keep the stale check outstanding)",
+  "kind": "planted",
+  "bankFile": "../../sample/mapleton-checking-bank-download-q1-2026.csv",
+  "booksFile": "../../sample/mapleton-general-ledger.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 62,
+  "bankBegin": 81868.88,
+  "bankEnding": 108730.18,
+  "booksEnding": 113641.41,
+  "matched": 57,
+  "batches": [
+   {
+    "bankDate": "2026-02-24",
+    "amount": 766.55,
+    "count": 3
+   }
+  ],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "check amount differs",
+    "decision": "fix",
+    "bankDate": "2026-02-15",
+    "bankAmount": -638.5,
+    "bookDate": "2026-02-10",
+    "bookAmount": -683.5,
+    "num": "1033"
+   }
+  ],
+  "duplicates": [
+   {
+    "id": "u0",
+    "date": "2026-03-06",
+    "amount": 4120.0,
+    "name": "Birch Dental Group"
+   }
+  ],
+  "outstanding": [
+   {
+    "date": "2025-08-14",
+    "num": "998",
+    "name": "Greenfield Tools",
+    "amount": -415.0,
+    "age": 229
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 35,
+  "startMode": "unique",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": -4075.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 109509.83,
+  "adjustedBooks": 109509.83,
+  "difference": 0.0,
+  "stale": 1,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "BATCHES",
+   "BOOK_DUPLICATES",
+   "CHECK_AMOUNT_DIFFERS",
+   "STALE_CHECKS"
+  ],
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "fix"
+   ],
+   [
+    "u0",
+    "fix"
+   ],
+   [
+    "o0",
+    "keep"
+   ]
+  ]
+ },
+ "27": {
+  "title": "The sample again, with the stale check reversed to a liability: it leaves the outstanding total and the books go up by the same $415.00",
+  "kind": "planted",
+  "bankFile": "../../sample/mapleton-checking-bank-download-q1-2026.csv",
+  "booksFile": "../../sample/mapleton-general-ledger.xlsx",
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 62,
+  "bankBegin": 81868.88,
+  "bankEnding": 108730.18,
+  "booksEnding": 113641.41,
+  "matched": 57,
+  "batches": [
+   {
+    "bankDate": "2026-02-24",
+    "amount": 766.55,
+    "count": 3
+   }
+  ],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "check amount differs",
+    "decision": "fix",
+    "bankDate": "2026-02-15",
+    "bankAmount": -638.5,
+    "bookDate": "2026-02-10",
+    "bookAmount": -683.5,
+    "num": "1033"
+   }
+  ],
+  "duplicates": [
+   {
+    "id": "u0",
+    "date": "2026-03-06",
+    "amount": 4120.0,
+    "name": "Birch Dental Group"
+   }
+  ],
+  "outstanding": [
+   {
+    "date": "2025-08-14",
+    "num": "998",
+    "name": "Greenfield Tools",
+    "amount": -415.0,
+    "age": 229
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 35,
+  "startMode": "unique",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": -3660.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 109924.83,
+  "adjustedBooks": 109924.83,
+  "difference": 0.0,
+  "stale": 1,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "BATCHES",
+   "BOOK_DUPLICATES",
+   "CHECK_AMOUNT_DIFFERS",
+   "STALE_CHECKS"
+  ],
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "fix"
+   ],
+   [
+    "u0",
+    "fix"
+   ],
+   [
+    "o0",
+    "reverse"
+   ]
+  ]
+ },
+ "28": {
+  "title": "Statement balances typed wrong (beginning plus the lines is not the ending): the page stops and keeps the boxes to correct them",
+  "kind": "ugly",
+  "bankFile": "04-bank-no-headings.csv",
+  "booksFile": "04-books-desktop.xlsx",
+  "status": "COMPUTED",
+  "stopOnly": true,
+  "exceptions": [
+   "BALANCES_DISAGREE"
+  ],
+  "typed": {
+   "bankBegin": 1000.0,
+   "bankEnd": 2000.0
+  }
+ }
+}
