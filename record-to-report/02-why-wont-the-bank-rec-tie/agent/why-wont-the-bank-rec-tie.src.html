@@ -708,7 +708,16 @@ function render(rep){
   o.push('<div class="verdict' + (stops.length || !rep.ties ? " bad" : "") + '" id="verdict">' + esc((rep.company ? rep.company + ", " : "") + rep.account + ", " + dateOf(rep.bankEnd) + ". " + head) +
     '<span class="sub">' + esc(plural(rep.matched, "bank line") + " matched of " + rep.bankLines + "; " + plural(rep.outstanding.length, "item") + " outstanding; " + plural(rep.bankOnly.length, "bank item") + " not in the books; " + plural(rep.near.length + rep.duplicates.length, "entry", "entries") + " that look wrong.") + '</span></div>');
   o.push('<div id="stop-banner" class="stopbox"' + (stops.length ? "" : " hidden") + '>' + stops.map(function(e){ return "<p><b>Stop.</b> " + esc(e.message) + "</p>"; }).join("") + '</div>');
-  o.push('<h2>Check these first</h2>' + (notes.length ? '<ul class="first">' + notes.map(function(e){ return '<li class="' + e.level + '"><span class="tag">' + (e.level === "care" ? "Decide. " : "For your file. ") + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>' : '<p class="ok">Nothing unusual.</p>'));
+  // a message whose items she has all decided says "Done." instead of "Decide."
+  var KIND = { CHECK_AMOUNT_DIFFERS: "check amount differs", VOIDED_BUT_PAID: "voided but paid", PAID_TWICE: "paid twice", TRANSPOSED: "transposed", SIGN_ERROR: "sign" };
+  var settled = function(code){
+    if (KIND[code]) return rep.near.filter(function(n){ return n.kind === KIND[code]; }).every(function(n){ return n.decision !== "undecided"; });
+    if (code === "BOOK_DUPLICATES") return rep.duplicates.every(function(d){ return d.decision !== "undecided"; });
+    if (code === "STALE_CHECKS") return !rep.openStale;
+    if (code === "START_AMBIGUOUS" || code === "START_BANK_LINES") return rep.startLeft === 0;
+    return false; };
+  o.push('<h2>Check these first</h2>' + (notes.length ? '<ul class="first">' + notes.map(function(e){ var done = e.level === "care" && settled(e.code);
+    return '<li class="' + (done ? "info done" : e.level) + '"><span class="tag">' + (done ? "Done. " : e.level === "care" ? "Decide. " : "For your file. ") + '</span>' + esc(e.message) + '</li>'; }).join("") + '</ul>' : '<p class="ok">Nothing unusual.</p>'));
   if (stops.length) return o.join("") + '<p class="no-print"><button class="linkish" id="again" type="button">Start over with other files</button></p>';
 
   // STEP 2
