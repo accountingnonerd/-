@@ -12,6 +12,7 @@ Transactions  ->  Bank reconciliations  ->  Adjusting entries  ->  Review  ->  S
 | No. | Tool | Step | What it adds to what she already has | Version | Date |
 |---|---|---|---|---|---|
 | 01 | [Did last year change?](01-did-last-year-change/) | Opening a new year | Compares last year's final trial balance from her file with the client's books as they stand today, for the same date. Lists every account that moved, says whether last year's profit changed, finds the adjusting entries the client never posted, and drafts the entry that puts the opening balances back. | 1.0.0 | 2026-11-13, [published](https://www.linkedin.com/feed/update/urn:li:ugcPost:7527075530622431233) |
+| 02 | [Why won't the bank rec tie?](02-why-wont-the-bank-rec-tie/) | Every month | Matches the bank's transactions to the books for any span of months, including checks by number and card batches that land as one deposit. It lists what is outstanding and how old, what the bank has that the books do not, likely typos, sign errors and duplicates, and the reconciliation that proves it, with the entries. | in progress | |
 
 ## Stage 1: how episode 01 was chosen
 
@@ -96,3 +97,62 @@ Transactions  ->  Bank reconciliations  ->  Adjusting entries  ->  Review  ->  S
    before she relies on the opening balances; the tool does that in a minute. It earns its
    keep with new clients, clients who know the password, Xero clients, and adjusting
    entries that lived only in her workpapers.
+
+
+## Stage 1: how episode 02 was chosen (2026-11-28)
+
+Series 2 starts here because the bank reconciliation is the most common monthly job in the close, and
+the place where errors from every other process show up.
+
+### Evidence
+Several pages could not be opened from the build environment, so the quotes below come from search
+summaries of them.
+- **It takes the most time.** Ledge's 2025 month-end close benchmarks put cash reconciliation as the
+  most time-consuming close activity, at 20 to 50 hours a month for the teams surveyed. A Sage survey
+  found only 45% of accountants and bookkeepers automate bank reconciliation.
+  ([Ledge](https://ledge.co/content/month-end-close-benchmarks-for-2025);
+  [Sage](https://www.sage.com/en-gb/blog/time-intensive-tasks-accountants-automate/))
+- **The software's own help pages are about it not tying.** Intuit: "A discrepancy in your beginning
+  balance means something changed on a transaction since a past reconciliation", most commonly "a
+  categorised bank feed transaction that was undone and sent back to pending" or a transaction
+  "reconciled manually". The fix is to read the audit log and the discrepancy report.
+  ([Intuit](https://quickbooks.intuit.com/learn-support/en-global/help-article/statement-reconciliation/fix-issues-accounts-reconciled-past-quickbooks/L8lx6PQQ5_ROW_en))
+  A community thread with a recurring $166.67 difference ended with the advice to "unreconcile the
+  entire reconciliation for the month".
+- **Bank feeds miss and duplicate lines.** Xero accountants list "missing statement lines, duplicate
+  statement lines, and deleted statement lines" as the usual reasons a reconciliation is out of
+  balance; Xero has a "Duplicate statement lines" report and users have asked for automatic removal.
+  "Verify against the bank's own closing balance, not just Xero's green ticks."
+  ([Fuel Accounting](https://fuel-accounting.webware.io/blogs/cloud-accountants-bookkeepers-blog/804060-fixing-bank-reconciliation--out-of-balance--problems-in-xero);
+  [Xero product ideas](https://productideas.xero.com/forums/967136-banking-chart-of-accounts/suggestions/45978244-bank-reconciliation-automatically-recognise-and-r))
+- **Clean-ups start with old, uncleared items.** Catch-up and clean-up guides list old outstanding
+  checks and deposits that never cleared as a standard clean-up category, and say to start a
+  catch-up from the bank statements.
+  ([Fit Small Business](https://fitsmallbusiness.com/accounting/bookkeeping-clean-up/))
+- **The rules for old checks.** A bank need not pay a check presented more than six months after its
+  date (UCC 4-404). An uncashed check is reportable unclaimed property after the state's dormancy
+  period, so a stale check is reversed to a liability, not to income.
+
+### What she already has, and what it leaves
+- **The reconcile screen** in QuickBooks Online, Desktop or Xero: tick off cleared items one month
+  at a time against the statement's ending balance. When the difference is not zero, it does not say
+  why. Finding why means reading both lists side by side.
+- **Bank feed matching** suggests matches line by line, but misses and duplicates lines, and a card
+  batch that lands as one deposit has to be matched by hand.
+- **Left by hand:** catching up several months at once; finding the transposed check, the deposit
+  entered twice, the fee nobody booked; listing what is outstanding and how old; the entries.
+
+### Candidates considered
+
+| Candidate | Who, how often | By hand | Error cost | Why software has not solved it | Verdict |
+|---|---|---|---|---|---|
+| **Bank reconciliation matcher: statement vs books, any span, with the reasons it does not tie** | Every client, every account, every month; worst at catch-up and year end | 30 minutes to several hours per account (estimate) | Wrong cash, missed fees and deposits, duplicate income, stale checks never cleared | The reconcile screen ticks items; it does not explain a difference or handle several months at once | **Chosen** |
+| Reconciliation discrepancy finder (what changed since the last reconciliation) | When a beginning balance breaks | 30 to 90 minutes | Same | QuickBooks has a discrepancy report on some plans; narrower | Folded into the chosen tool's checks where the files allow |
+| Credit card reconciliation | Clients with company cards, monthly | Same as bank | Same | Same | Covered: the same tool works for any account with a statement |
+
+### Value test
+1. **What she already uses:** the reconcile screens and bank feeds. Named above.
+2. **What it leaves by hand:** finding why it does not tie, several months at once, the old items.
+3. **One export in:** the bank's own CSV download and the ledger detail for the account. No login.
+4. **Checkable:** every match and every exception points to a line on each side.
+5. **Common:** every client, every month. Passes.
