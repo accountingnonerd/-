@@ -616,9 +616,11 @@ function reconcile(bankRows, booksRows, files, opts){
     else if (n.decision === "bank") bankCorr += (k ? k.amount : 0) - b.amount;
     else { bankOnly.push(b); if (k) outstanding.push(k); } });
   dups.forEach(function(d){ if (d.decision === "fix") bookCorr -= KI[d.book].amount; else outstanding.push(KI[d.book]); });
+  // a stale check the accountant reverses: the entry puts it back in the books' balance, so it leaves the outstanding list in the proof
+  var reversed = {}; outstanding.forEach(function(k){ if (isCheckNum(k.num) && k.amount < 0 && Math.round(end - k.date) > 180 && decide["o" + k.i] === "reverse") { reversed[k.i] = 1; bookCorr -= k.amount; } });
   outstanding.sort(function(a, b){ return a.date - b.date || a.i - b.i; }); bankOnly.sort(function(a, b){ return a.date - b.date || a.i - b.i; });
   var bookEnd = opening + sum(bk, function(k){ return k.amount; });
-  var adjBank = bankEnd == null ? null : bankEnd + sum(outstanding, function(k){ return k.amount; }) + bankCorr;
+  var adjBank = bankEnd == null ? null : bankEnd + sum(outstanding, function(k){ return reversed[k.i] ? 0 : k.amount; }) + bankCorr;
   var adjBook = bookEnd + sum(bankOnly, function(b){ return b.amount; }) + bookCorr;
   var age = function(k){ return Math.round(end - k.date); }, isChk = function(k){ return isCheckNum(k.num) && k.amount < 0; };
   var cls = opts.classify || {};
@@ -719,7 +721,7 @@ function render(rep){
   var head;
   if (stops.length) head = "Stopped: fix the file first (see the red box).";
   else if (rep.difference == null) head = "Not proven yet: type the statement’s balances in step 2.";
-  else if (rep.ties) head = "It ties: adjusted bank and adjusted books are both " + c$(rep.adjustedBank) + ".";
+  else if (rep.ties) head = "It ties: adjusted bank and adjusted books are both " + c$(rep.adjustedBank) + "." + (rep.openStale ? " Still to decide: " + plural(rep.openStale, "stale check") + " (step 3c)." : "");
   else if (rep.difference !== 0) head = "It does not tie: " + money(Math.abs(cents(rep.difference))) + " apart.";
   else head = "Not finished: " + plural(rep.undecided + (rep.startLeft ? 1 : 0), "item") + " to decide before it can be called reconciled.";
   o.push('<div class="wp-head"><div><p class="where no-print" id="where"></p><h1><span class="no-print">Why won’t the bank rec tie?</span><span class="print-only">Bank reconciliation, ' + esc(rep.account) + ', ' + dateOf(rep.bankEnd) + '</span></h1><p class="meta">' +
@@ -776,7 +778,7 @@ function render(rep){
       td("Treat as", '<select class="treat" data-id="' + b.id + '">' + Object.keys(TREAT).map(function(t){ return '<option value="' + t + '"' + (b.treat === t ? " selected" : "") + '>' + TREAT[t] + '</option>'; }).join("") + '</select>') + '</tr>'); });
     o.push('</tbody></table></div><p class="note">The page suggests a treatment from the bank’s description; change any that is wrong.</p>');
   }
-  o.push('<h3>3c. Outstanding: in the books, not yet at the bank ' + tag("auto") + '</h3>');
+  o.push('<h3>3c. Outstanding: in the books, not yet at the bank ' + tag((Array.isArray(rep.stale) ? rep.stale.length : rep.stale) ? "you" : "auto") + '</h3>');
   if (rep.startCandidates.length) o.push('<p><b>Which of these checks from before ' + dateOf(rep.bankStart) + ' are still outstanding?</b> They should add up to ' + c$(rep.startDifference) + ', and the files cannot say which. Tick each one still outstanding (the last reconciliation’s outstanding list will say):</p><ul class="ticks">' +
     rep.startCandidates.map(function(k){ return '<li><label><input type="checkbox" class="tick" data-id="' + k.id + '"' + (k.ticked ? " checked" : "") + '> ' + esc(dateOf(k.date) + " #" + k.num + " " + k.name + " " + c$(k.amount)) + '</label></li>'; }).join("") + '</ul>' +
     (rep.startLeft ? '<p class="undecided">Still to account for: ' + c$(rep.startLeft) + '.</p>' : '<p class="tie-ok">Accounted for.</p>'));
@@ -798,8 +800,8 @@ function render(rep){
   if (rep.undecided) openList.push(plural(rep.undecided, "entry", "entries") + " that look wrong (step 3a)");
   if (rep.startLeft) openList.push(c$(rep.startLeft) + " at the start not yet accounted for (step " + (rep.suggestBank.length ? "3b" : "3c") + ")");
   if (rep.openStale) openList.push(plural(rep.openStale, "stale check") + " (step 3c)");
-  if (openList.length) o.push('<p class="stopbox" id="open-items"><b>Not finished:</b> ' + esc(openList.join("; ")) + '.</p>');
-  var outIn = rep.outstanding.filter(function(x){ return x.amount > 0; }), outOut = rep.outstanding.filter(function(x){ return x.amount < 0; });
+  if (openList.length) o.push('<p class="stopbox" id="open-items"><b>' + (rep.ties ? "Still to decide:" : "Not finished:") + '</b> ' + esc(openList.join("; ")) + '.</p>');
+  var outIn = rep.outstanding.filter(function(x){ return x.amount > 0; }), outOut = rep.outstanding.filter(function(x){ return x.amount < 0 && x.decision !== "reverse"; });
   var pr = [["Balance per bank statement, " + dateOf(rep.bankEnd), rep.bankEnding == null ? "not known" : c$(rep.bankEnding), ""],
     ["Add: deposits in transit (" + outIn.length + ")", c$(sum(outIn, function(x){ return x.amount; })), ""],
     ["Less: outstanding checks and payments (" + outOut.length + ")", c$(sum(outOut, function(x){ return x.amount; })), ""]];
@@ -897,7 +899,7 @@ function publish(rep){
   Array.prototype.forEach.call(document.querySelectorAll("input.dec"), function(x){ x.addEventListener("change", again(function(){ state.decide = state.decide || {}; state.decide[x.getAttribute("data-id")] = x.value; })); });
   Array.prototype.forEach.call(document.querySelectorAll("input.tick"), function(x){ x.addEventListener("change", again(function(){ state.ticks = state.ticks || {}; state.ticks[x.getAttribute("data-id")] = x.checked; })); });
   Array.prototype.forEach.call(document.querySelectorAll("select.treat"), function(x){ x.addEventListener("change", again(function(){ state.classify = state.classify || {}; state.classify[x.getAttribute("data-id")] = x.value; })); });
-  $("print").addEventListener("click", function(){ if ($("open-items") && !confirm("This reconciliation is not finished: " + $("open-items").textContent.replace(/^Not finished:\s*/, "") + " Print anyway?")) return; setStep(4); window.print(); });
+  $("print").addEventListener("click", function(){ if ($("open-items") && !confirm("This reconciliation has open items: " + $("open-items").textContent.replace(/^(Not finished|Still to decide):\s*/, "") + " Print anyway?")) return; setStep(4); window.print(); });
   onScroll();
 }
 function showProblem(msg, swap){ var p = $("problem"); p.innerHTML = esc(msg) + (swap ? ' <button class="sec-btn" id="swap" type="button">Swap the two files</button>' : ""); p.hidden = false;

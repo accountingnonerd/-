@@ -62,9 +62,13 @@ Money is integer cents, positive = money into the account. "Old" means dated bef
    interest), returned item (NSF, returned item, return item, chargeback, but not a fee), other.
 6. The proof. Adjusted bank = bank ending balance + outstanding + bank-side corrections. Adjusted
    books = books' balance at the end date + bank-only + book-side corrections. Difference = adjusted
-   bank - adjusted books.
+   bank - adjusted books. A stale check (step 7) the accountant reverses (decision o{i} = "reverse")
+   stays listed with its decision, but leaves the outstanding total and adds its amount to the
+   book-side corrections: the reversing entry puts it back in the books.
 7. Age at the end date. A check outstanding more than 180 days is stale-dated (UCC 4-404); more than
-   90 days, old. A non-check payment or a deposit not at the bank after 10 days is flagged.
+   90 days, old. A non-check payment or a deposit not at the bank after 10 days is flagged. A stale
+   check waits for the accountant: keep it outstanding or reverse it to a liability. It does not
+   stop the tie.
 """
 from datetime import date, timedelta
 import re
@@ -232,10 +236,13 @@ def reconcile(bank, books, opening, bank_begin=None, bank_end=None, stmt_end=Non
     for d in dups:
         if d["decision"] == "fix": book_corr -= KI[d["book"]]["amount"]
         else: outstanding.append(KI[d["book"]])
+    # a stale check the accountant reverses: the entry puts it back in the books, so it leaves the outstanding list in the proof
+    reversed_ = {k["i"] for k in outstanding if is_check_num(k["num"]) and k["amount"] < 0 and (end - k["date"]).days > 180 and decide.get(f"o{k['i']}") == "reverse"}
+    book_corr -= sum(k["amount"] for k in outstanding if k["i"] in reversed_)
     outstanding.sort(key=lambda k: (k["date"], k["i"])); bank_only.sort(key=lambda b: (b["date"], b["i"]))
     book_end = opening + sum(k["amount"] for k in bk)
     if bank_end is None and bank_begin is not None: bank_end = bank_begin + sum(b["amount"] for b in bank)
-    adj_bank = None if bank_end is None else bank_end + sum(k["amount"] for k in outstanding) + bank_corr
+    adj_bank = None if bank_end is None else bank_end + sum(k["amount"] for k in outstanding if k["i"] not in reversed_) + bank_corr
     adj_book = book_end + sum(b["amount"] for b in bank_only) + book_corr
     def age(k): return (end - k["date"]).days
     def is_chk(k): return is_check_num(k["num"]) and k["amount"] < 0

@@ -334,13 +334,14 @@ w.book_from = D(2025, 6, 1)
 w.cheque(D(2025, 7, 14), 38_900, "Summit Office Systems", "Bill payment", lag="never")   # never cleared: stale
 w.cheque(D(2025, 9, 2), 12_450, "Apex Plumbing", "Bill payment", lag="never")            # never cleared: stale
 w.cheque(D(2025, 11, 20), 27_300, "Brightside Media", "Bill payment", lag="never")       # never cleared: old (90-180)
+w.cheque(D(2025, 10, 16), 9_875, "Lakeshore Signs", "Bill payment", lag="never")         # never cleared: about 165 days, old but not yet stale
 w.ev(D(2026, 3, 12), 145_000, "Deposit", "Cedar Apartments", "Customer payment", lag=None, bank=False)   # recorded, never deposited
 books, bank, begin = w.lines()
 bank_generic(P("07-planted-bank.csv"), bank, begin)
 books_qbo(P("07-planted-books.xlsx"), "Copperline Plumbing Supply", [("Checking", w.opening, books)], "June 1, 2025 - April 20, 2026")
 k, r = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
-assert k["stale"] == 2 and k["oldOutstanding"] == 1 and k["lateItems"] == 1 and k["difference"] == 0, (k["stale"], k["oldOutstanding"], k["lateItems"], k["difference"])
-case("07", "Planted: two checks over six months old, one over 90 days, and a deposit recorded but never made", "planted", "07-planted-bank.csv", "07-planted-books.xlsx", k)
+assert k["stale"] == 2 and k["oldOutstanding"] == 2 and k["lateItems"] == 1 and k["difference"] == 0, (k["stale"], k["oldOutstanding"], k["lateItems"], k["difference"])
+case("07", "Planted: two checks over six months old, two over 90 days (one at about 165 days), and a deposit recorded but never made", "planted", "07-planted-bank.csv", "07-planted-books.xlsx", k)
 
 # ---- 08 the books file starts the same day as the bank's: items recorded earlier clear in January
 w = standard(8)
@@ -447,22 +448,29 @@ bank16 = [L(D(2026, 1, 5), "DEPOSIT ID 300101", 120_000), L(D(2026, 1, 8), "CHEC
 books16 = [K(D(2026, 1, 4), "Payment", "1052", "Harbor Cafe", 120_000, "Customer check 1052"), K(D(2026, 1, 6), "Check", "1052", "Apex Plumbing", -75_000),
            K(D(2026, 1, 10), "Deposit", "", "Delta Fitness", 50_000)]
 bank16.insert(2, L(D(2026, 1, 11), "DEPOSIT ID 300177", 50_000))
+# a second customer check (number 1060) deposited; the bank also paid a check 1060 of the company's that the books never recorded
+books16.append(K(D(2026, 1, 13), "Payment", "1060", "Pine Dental", 40_000, "Customer check 1060"))
+bank16 += [L(D(2026, 1, 14), "DEPOSIT ID 300190", 40_000), L(D(2026, 1, 22), "CHECK 1060", -30_000, "1060")]
+bank16.sort(key=lambda b: b["date"])
 k16, r16 = simple_case("16", "A customer's check number on a payment received; a coffee, a building maintenance bill and a returned check that only look like bank fees", "planted",
                        bank16, books16, 1_000_000, 1_000_000)
-assert [b["kind"] for b in k16["bankOnly"]] == ["other", "other", "returned", "fee", "fee"], k16["bankOnly"]
-assert k16["matched"] == 3 and not k16["near"], k16
+assert sorted(b["kind"] for b in k16["bankOnly"]) == ["fee", "fee", "other", "other", "other", "returned"], k16["bankOnly"]
+assert k16["matched"] == 4 and not k16["near"], k16
 
 # ---- 17 rent paid every month: January's is missing from the books, and must not match December's
 bank17 = [L(D(2026, 1, 2), "ACH DEBIT OAKRIDGE PROPERTIES", -250_000), L(D(2026, 2, 2), "ACH DEBIT OAKRIDGE PROPERTIES", -250_000), L(D(2026, 2, 27), "DEPOSIT ID 311000", 400_000)]
 books17 = [K(D(2025, 12, 1), "Expense", "", "Oakridge Properties", -250_000, "December rent"), K(D(2026, 2, 1), "Expense", "", "Oakridge Properties", -250_000, "February rent"),
-           K(D(2026, 2, 26), "Deposit", "", "Granite Schools", 400_000)]
+           K(D(2026, 2, 26), "Deposit", "", "Granite Schools", 400_000), K(D(2026, 1, 6), "Deposit", "", "Granite Schools", 75_000)]
+# a deposit of $750 recorded 1/6 and one of $750 at the bank 3/23: 76 days apart, too far to be the same deposit
+bank17.append(L(D(2026, 3, 23), "DEPOSIT ID 311500", 75_000))
 k17, _ = simple_case("17", "Rent paid every month: January's is missing from the books, and December's (cleared in December) must not be taken for it", "planted",
                      bank17, books17, 2_000_000, 2_000_000 - 250_000)
-assert any(b["date"] == "2026-01-02" for b in k17["bankOnly"]) and k17["difference"] == 0, k17
+assert any(b["date"] == "2026-01-02" for b in k17["bankOnly"]) and any(b["date"] == "2026-03-23" for b in k17["bankOnly"]) and k17["difference"] == 0, k17
 
 # ---- 18 the same payment amount to the same vendor either side of the start: not a duplicate
-bank18 = [L(D(2026, 1, 3), "ACH DEBIT VALLEY FUEL", -25_000), L(D(2026, 1, 20), "DEPOSIT ID 320010", 90_000)]
-books18 = [K(D(2025, 12, 30), "Expense", "", "Valley Fuel", -25_000), K(D(2026, 1, 2), "Expense", "", "Valley Fuel", -25_000), K(D(2026, 1, 19), "Deposit", "", "Juniper Bakery", 90_000)]
+bank18 = [L(D(2026, 1, 2), "DEPOSIT ID 320001", 40_000), L(D(2026, 1, 3), "ACH DEBIT VALLEY FUEL", -25_000), L(D(2026, 1, 20), "DEPOSIT ID 320010", 90_000)]
+books18 = [K(D(2025, 12, 30), "Expense", "", "Valley Fuel", -25_000), K(D(2026, 1, 2), "Expense", "", "Valley Fuel", -25_000), K(D(2026, 1, 19), "Deposit", "", "Juniper Bakery", 90_000),
+           K(D(2026, 1, 1), "Deposit", "", "Juniper Bakery", 40_000)]   # the bank's file starts 1/2, so the 1/2 payment is inside it
 k18, _ = simple_case("18", "The same payment to the same vendor on 12/30 (cleared in December) and 1/2: not entered twice", "ugly", bank18, books18, 500_000, 500_000 - 25_000)
 assert not k18["duplicates"] and k18["difference"] == 0, k18
 
@@ -508,9 +516,11 @@ case("22", "Payroll posted to a sub-account, Checking:Payroll: the sub-account i
 
 # ---- 23 a deposit the bank split in two lines
 bank23 = [L(D(2026, 1, 12), "DEPOSIT ID 501", 100_000), L(D(2026, 1, 12), "DEPOSIT ID 502", 50_000), L(D(2026, 1, 20), "CHECK 7001", -20_000, "7001")]
-books23 = [K(D(2026, 1, 11), "Deposit", "", "Cedar Apartments", 150_000), K(D(2026, 1, 15), "Check", "7001", "Valley Fuel", -20_000)]
-k23, _ = simple_case("23", "One deposit in the books that the bank shows as two lines", "ugly", bank23, books23, 600_000, 600_000)
-assert k23["splits"] and not k23["bankOnly"] and k23["difference"] == 0, k23
+books23 = [K(D(2026, 1, 11), "Deposit", "", "Cedar Apartments", 150_000), K(D(2026, 1, 15), "Check", "7001", "Valley Fuel", -20_000), K(D(2026, 1, 21), "Check", "7002", "Harbor Supply Co", -33_300)]
+# the bank paid a check 7031 for the same $333.00 as the books' check 7002: a different check, not a match
+bank23.append(L(D(2026, 1, 27), "CHECK 7031", -33_300, "7031"))
+k23, _ = simple_case("23", "One deposit in the books that the bank shows as two lines; a bank check for the same amount as a book check but a different number", "ugly", bank23, books23, 600_000, 600_000)
+assert k23["splits"] and [b["date"] for b in k23["bankOnly"]] == ["2026-01-27"] and [o["num"] for o in k23["outstanding"]] == ["7002"] and k23["difference"] == 0, k23
 
 # ---- 24 two old $100 checks, one still out: ambiguous; the accountant ticks the December one
 bank24 = [L(D(2026, 1, 9), "DEPOSIT ID 601", 80_000), L(D(2026, 1, 20), "ACH DEBIT METRO UTILITIES", -12_000)]
@@ -520,6 +530,49 @@ books24 = [K(D(2025, 7, 10), "Check", "5101", "Greenfield Tools", -10_000), K(D(
 k24a, _ = simple_case("24", "Two old checks of $100, one still outstanding: the page cannot tell which and asks; the accountant ticks December's", "planted",
                       bank24, books24, 1_000_000, 1_000_000 - 10_000, ticks=[["book", D(2025, 12, 18), -10_000]])
 assert k24a["startMode"] == "ambiguous" and [o["num"] for o in k24a["outstanding"]] == ["5188"] and k24a["ties"], k24a
+
+# ---- 25 like 08, but the accountant ticks only one of the two lines suggested: what is not ticked stays unexplained
+w = standard(8)
+books, bank, begin = w.lines()
+cut = [k_ for k_ in books if k_["date"] >= w.start]
+opening8 = w.opening + sum(k_["amount"] for k_ in books if k_["date"] < w.start)
+k0, r = key_for(strip(bank), strip(cut), opening8, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
+one = r["suggest_bank"][0]
+k, r = key_for(strip(bank), strip(cut), opening8, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo", ticks=[["bank", one["date"], one["amount"]]])
+assert not k["ties"] and k["startLeft"] != 0, k
+case("25", "Same files as 08, but the accountant ticks only one of the two suggested lines: the other stays unexplained and it does not tie", "ugly",
+     "08-bank.csv", "08-books-from-january.xlsx", k)
+
+# ---- 26 the sample for readers: Mapleton Landscaping (also in ../sample/), with the decisions a reader makes
+w = standard(26, opening=3_164_000)
+w.book_from = D(2025, 7, 1)
+st = w.cheque(D(2025, 8, 14), 41_500, "Greenfield Tools", "Bill payment", lag="never")                  # never cleared: stale by March 31
+st["num"] = "998"; w.check -= 1                                                                          # written from the old checkbook
+e = w.cheque(D(2026, 2, 10), 63_850, "Coastal Insurance", "Bill payment", lag=5); e["amount"] = -68_350   # books 683.50, bank 638.50: same check number
+for day in (D(2026, 2, 23),):
+    sales = [21_480, 36_215, 18_960]
+    for j, a in enumerate(sales): w.ev(day - timedelta(days=j), a, "Sales Receipt", "Card sales", "Card batch", lag=None, bank=False)
+    w.ev(day, sum(sales), "Deposit", "", "", lag=1, bank_desc="MERCHANT BANKCARD DEPOSIT", book=False)
+w.ev(D(2026, 3, 4), 412_000, "Deposit", "Birch Dental Group", "Customer payment", lag=1, bank_desc="DEPOSIT ID 640118")
+w.ev(D(2026, 3, 6), 412_000, "Deposit", "Birch Dental Group", "Customer payment", lag=None, bank=False)      # the same payment entered again
+books, bank, begin = w.lines()
+SAMPLE = os.path.join(HERE, "..", "sample"); os.makedirs(SAMPLE, exist_ok=True)
+bank_generic(os.path.join(SAMPLE, "mapleton-checking-bank-download-q1-2026.csv"), bank, begin)
+books_qbo(os.path.join(SAMPLE, "mapleton-general-ledger.xlsx"), "Mapleton Landscaping LLC", [("Checking", w.opening, books)], "July 1, 2025 - April 20, 2026")
+k0, r = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo")
+assert [n["kind"] for n in k0["near"]] == ["check amount differs"] and len(k0["duplicates"]) == 1 and len(k0["batches"]) == 1 and k0["stale"] == 1 and not k0["ties"], k0
+SAMPLE_BEFORE = {f: k0[f] for f in ("difference", "undecided", "adjustedBank", "adjustedBooks", "bankEnding", "booksEnding", "bankBegin")}
+k, r = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo",
+               decide=[["n0", "fix"], ["u0", "fix"], [f"o{r['stale'][0]['i']}", "keep"]])
+assert k["ties"], (k["difference"], k["startLeft"])
+case("26", "The readers' sample: Mapleton Landscaping, with the reader's decisions (fix the check entered for the wrong amount, remove the deposit entered twice, keep the stale check outstanding)", "planted",
+     "../../sample/mapleton-checking-bank-download-q1-2026.csv", "../../sample/mapleton-general-ledger.xlsx", k)
+kk, rr = key_for(strip(bank), strip(books), w.opening, begin, begin + sum(b["amount"] for b in bank), "Checking", ["Checking"], "generic", "qbo",
+                 decide=[["n0", "fix"], ["u0", "fix"], [f"o{r['stale'][0]['i']}", "reverse"]])
+assert kk["ties"] and round(kk["adjustedBank"] - k["adjustedBank"], 2) == 415.0 and round(kk["bookCorrections"] - k["bookCorrections"], 2) == 415.0, kk
+case("27", "The sample again, with the stale check reversed to a liability: it leaves the outstanding total and the books go up by the same $415.00", "planted",
+     "../../sample/mapleton-checking-bank-download-q1-2026.csv", "../../sample/mapleton-general-ledger.xlsx", kk)
+json.dump({"before": SAMPLE_BEFORE, "after": k}, open(os.path.join(HERE, "sample-expected.json"), "w"), indent=1, default=str)
 
 json.dump(KEY, open(os.path.join(HERE, "answer-key.json"), "w"), indent=1, default=str)
 print(len(KEY), "cases;", {c: (v["exceptions"], v.get("difference")) for c, v in KEY.items()})

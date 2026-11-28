@@ -1,0 +1,149 @@
+{
+ "before": {
+  "difference": 0.0,
+  "undecided": 2,
+  "adjustedBank": 112946.33,
+  "adjustedBooks": 112946.33,
+  "bankEnding": 108730.18,
+  "booksEnding": 113641.41,
+  "bankBegin": 81868.88
+ },
+ "after": {
+  "account": "Checking",
+  "accounts": [
+   "Checking"
+  ],
+  "bankLayout": "generic",
+  "booksLayout": "qbo",
+  "bankStart": "2026-01-01",
+  "bankEnd": "2026-03-31",
+  "bankLines": 62,
+  "bankBegin": 81868.88,
+  "bankEnding": 108730.18,
+  "booksEnding": 113641.41,
+  "matched": 57,
+  "batches": [
+   {
+    "bankDate": "2026-02-24",
+    "amount": 766.55,
+    "count": 3
+   }
+  ],
+  "splits": [],
+  "near": [
+   {
+    "id": "n0",
+    "kind": "check amount differs",
+    "decision": "fix",
+    "bankDate": "2026-02-15",
+    "bankAmount": -638.5,
+    "bookDate": "2026-02-10",
+    "bookAmount": -683.5,
+    "num": "1033"
+   }
+  ],
+  "duplicates": [
+   {
+    "id": "u0",
+    "date": "2026-03-06",
+    "amount": 4120.0,
+    "name": "Birch Dental Group"
+   }
+  ],
+  "outstanding": [
+   {
+    "date": "2025-08-14",
+    "num": "998",
+    "name": "Greenfield Tools",
+    "amount": -415.0,
+    "age": 229
+   },
+   {
+    "date": "2026-03-26",
+    "num": "1031",
+    "name": "Harbor Supply Co",
+    "amount": -1423.0,
+    "age": 5
+   },
+   {
+    "date": "2026-03-30",
+    "num": "1032",
+    "name": "Apex Plumbing",
+    "amount": -568.75,
+    "age": 1
+   },
+   {
+    "date": "2026-03-31",
+    "num": "",
+    "name": "Granite Schools",
+    "amount": 3186.4,
+    "age": 0
+   }
+  ],
+  "bankOnly": [
+   {
+    "date": "2026-01-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-02-28",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "MONTHLY SERVICE FEE",
+    "amount": -25.0,
+    "kind": "fee"
+   },
+   {
+    "date": "2026-03-31",
+    "desc": "INTEREST PAYMENT",
+    "amount": 18.42,
+    "kind": "interest"
+   }
+  ],
+  "clearedBefore": 35,
+  "startMode": "unique",
+  "startCandidates": 0,
+  "suggestBank": [],
+  "startLeft": 0.0,
+  "afterStatement": 1,
+  "bookCorrections": -4075.0,
+  "bankCorrections": 0.0,
+  "adjustedBank": 109509.83,
+  "adjustedBooks": 109509.83,
+  "difference": 0.0,
+  "stale": 1,
+  "oldOutstanding": 0,
+  "lateItems": 0,
+  "undecided": 0,
+  "ties": true,
+  "exceptions": [
+   "AFTER_STATEMENT",
+   "BANK_ONLY",
+   "BATCHES",
+   "BOOK_DUPLICATES",
+   "CHECK_AMOUNT_DIFFERS",
+   "STALE_CHECKS"
+  ],
+  "status": "COMPUTED",
+  "decide": [
+   [
+    "n0",
+    "fix"
+   ],
+   [
+    "u0",
+    "fix"
+   ],
+   [
+    "o0",
+    "keep"
+   ]
+  ]
+ }
+}
