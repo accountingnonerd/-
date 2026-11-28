@@ -16,6 +16,25 @@ Series 1 takes the most painful step of each process; later series take the next
 The folders in this repository are organized by process, so later series' agents for the
 same process sit beside Series 1's.
 
+## Series 2 (started 2026-11-28)
+
+Series 2 takes the next common, monthly problem in each process, from the roadmap below. Each agent
+now ships the standard set by Series 1, Agent 5: the tool, the prompt that rebuilds it
+(`PROMPT.txt`), an invented sample client with the result you should see, and two checks by fresh
+AI sessions, one rebuilding from the prompt and one following the post as a non-technical reader.
+The screens follow the four-step pattern: each step says where you are, what it is for, and
+whether the page or you acts.
+
+| Series 2 | Process | Agent | Status |
+|---|---|---|---|
+| Agent 1 | Record-to-Report | Bank reconciliation | Stage 1 |
+| Agent 2 | Order-to-Cash and Procure-to-Pay | 13-week cash flow from the AR and AP agings | planned |
+| Agent 3 | Acquire-to-Retire (financing) | Loan schedule tied to the lender statement | planned |
+| Agent 4 | Hire-to-Retire | Payroll tied to the general ledger | to be chosen in Stage 1 |
+| Agent 5 | to be chosen | Leases, or the next common problem readers ask for | to be chosen in Stage 1 |
+
+The order can change when a Stage 1 finds a candidate fails the value test.
+
 ## Common problems first (set 2026-11-15)
 
 Each agent solves a problem that most small-firm accountants meet every month in the core work,
