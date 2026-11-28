@@ -27,7 +27,7 @@ whether the page or you acts.
 
 | Series 2 | Process | Agent | Status |
 |---|---|---|---|
-| Agent 1 | Record-to-Report | Bank reconciliation | Stage 1 |
+| Agent 1 | Record-to-Report | [Bank reconciliation](record-to-report/02-why-wont-the-bank-rec-tie/) | built and tested; post awaiting approval |
 | Agent 2 | Order-to-Cash and Procure-to-Pay | 13-week cash flow from the AR and AP agings | planned |
 | Agent 3 | Acquire-to-Retire (financing) | Loan schedule tied to the lender statement | planned |
 | Agent 4 | Hire-to-Retire | Payroll tied to the general ledger | to be chosen in Stage 1 |
