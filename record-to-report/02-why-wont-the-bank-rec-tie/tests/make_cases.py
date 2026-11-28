@@ -443,13 +443,13 @@ KEY["15"] = {"title": "A credit card account: this version reconciles bank accou
 
 # ---- 16 a customer's check number on a payment received; bank items that only look like fees; a returned item
 bank16 = [L(D(2026, 1, 5), "DEPOSIT ID 300101", 120_000), L(D(2026, 1, 8), "CHECK 1052", -75_000, "1052"), L(D(2026, 1, 12), "DEBIT CARD BLUE BOTTLE COFFEE", -1_250),
-          L(D(2026, 1, 15), "ACH DEBIT ACME BUILDING MAINTENANCE", -120_000), L(D(2026, 1, 20), "RETURNED ITEM NSF", -50_000), L(D(2026, 1, 31), "MONTHLY MAINTENANCE FEE", -1_500)]
+          L(D(2026, 1, 15), "ACH DEBIT ACME BUILDING MAINTENANCE", -120_000), L(D(2026, 1, 20), "RETURNED ITEM NSF", -50_000), L(D(2026, 1, 20), "NSF RETURN ITEM FEE", -3_500), L(D(2026, 1, 31), "MONTHLY MAINTENANCE FEE", -1_500)]
 books16 = [K(D(2026, 1, 4), "Payment", "1052", "Harbor Cafe", 120_000, "Customer check 1052"), K(D(2026, 1, 6), "Check", "1052", "Apex Plumbing", -75_000),
            K(D(2026, 1, 10), "Deposit", "", "Delta Fitness", 50_000)]
 bank16.insert(2, L(D(2026, 1, 11), "DEPOSIT ID 300177", 50_000))
 k16, r16 = simple_case("16", "A customer's check number on a payment received; a coffee, a building maintenance bill and a returned check that only look like bank fees", "planted",
                        bank16, books16, 1_000_000, 1_000_000)
-assert [b["kind"] for b in k16["bankOnly"]] == ["other", "other", "returned", "fee"], k16["bankOnly"]
+assert [b["kind"] for b in k16["bankOnly"]] == ["other", "other", "returned", "fee", "fee"], k16["bankOnly"]
 assert k16["matched"] == 3 and not k16["near"], k16
 
 # ---- 17 rent paid every month: January's is missing from the books, and must not match December's

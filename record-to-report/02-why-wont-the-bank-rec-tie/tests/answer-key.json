@@ -1296,9 +1296,9 @@
   "booksLayout": "qbo",
   "bankStart": "2026-01-05",
   "bankEnd": "2026-01-31",
-  "bankLines": 7,
+  "bankLines": 8,
   "bankBegin": 10000.0,
-  "bankEnding": 9222.5,
+  "bankEnding": 9187.5,
   "booksEnding": 10950.0,
   "matched": 3,
   "batches": [],
@@ -1326,6 +1326,12 @@
     "kind": "returned"
    },
    {
+    "date": "2026-01-20",
+    "desc": "NSF RETURN ITEM FEE",
+    "amount": -35.0,
+    "kind": "fee"
+   },
+   {
     "date": "2026-01-31",
     "desc": "MONTHLY MAINTENANCE FEE",
     "amount": -15.0,
@@ -1340,8 +1346,8 @@
   "afterStatement": 0,
   "bookCorrections": 0.0,
   "bankCorrections": 0.0,
-  "adjustedBank": 9222.5,
-  "adjustedBooks": 9222.5,
+  "adjustedBank": 9187.5,
+  "adjustedBooks": 9187.5,
   "difference": 0.0,
   "stale": 0,
   "oldOutstanding": 0,

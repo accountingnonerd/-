@@ -454,7 +454,7 @@ function setsAdding(items, target, minn, maxn, stopAt){       // binary-counter 
 }
 function bankKind(b){
   if (b.amount > 0 && /\binterest\b/i.test(b.desc) && !/charge/i.test(b.desc)) return "interest";
-  if (/\bnsf\b|returned item|return item|chargeback/i.test(b.desc)) return "returned";
+  if (/\bnsf\b|returned item|return item|chargeback/i.test(b.desc) && !/\bfee\b/i.test(b.desc)) return "returned";
   if (b.amount < 0 && /service charge|monthly (?:service |maintenance )?fee|maintenance fee|account fee|wire (?:transfer )?fee|overdraft|analysis fee|atm fee|\bfee\b/i.test(b.desc)) return "fee";
   return "other";
 }

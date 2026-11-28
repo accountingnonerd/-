@@ -59,7 +59,7 @@ Money is integer cents, positive = money into the account. "Old" means dated bef
    only: unmatched bank lines (less ticked step 4 lines), plus undecided near misses. Kinds: fee
    (money out, the description says service charge, monthly fee, maintenance fee, account fee,
    wire fee, overdraft, analysis fee, atm fee or the word fee), interest (money in, the word
-   interest), returned item (NSF, returned item, return item, chargeback), other.
+   interest), returned item (NSF, returned item, return item, chargeback, but not a fee), other.
 6. The proof. Adjusted bank = bank ending balance + outstanding + bank-side corrections. Adjusted
    books = books' balance at the end date + bank-only + book-side corrections. Difference = adjusted
    bank - adjusted books.
@@ -84,7 +84,7 @@ def check_no(b):
 def digits_perm(a, b): return sorted(str(abs(a))) == sorted(str(abs(b)))
 def bank_kind(b):
     if b["amount"] > 0 and re.search(r"\binterest\b", b["desc"], re.I) and not re.search(r"charge", b["desc"], re.I): return "interest"
-    if RET_RE.search(b["desc"]): return "returned"
+    if RET_RE.search(b["desc"]) and not re.search(r"\bfee\b", b["desc"], re.I): return "returned"
     if b["amount"] < 0 and FEE_RE.search(b["desc"]): return "fee"
     return "other"
 
